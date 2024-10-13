@@ -1,17 +1,14 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faBook,
 	faClock,
 	faChalkboardTeacher,
-	faUserPlus,
-	faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import "./ClassLogForm.css";
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import TextInput from "../ui/TextInput/TextInput";
-import CreatableSelect from "react-select/creatable";
 import DropdownSelect from "../ui/DropdownSelect/DropdownSelect";
+import AbsentStudentsSelect from "../ui/AbsentStudentsSelect/AbsentStudentsSelect";
 
 const ClassLogForm = () => {
 	const [absentStudents, setAbsentStudents] = useState([]);
@@ -112,31 +109,15 @@ const ClassLogForm = () => {
 					value={lectureTitle}
 					onChange={(e) => setLectureTitle(e.target.value)}
 				/>
-				<div className="form-group">
-					<label>
-						<FontAwesomeIcon icon={faUserPlus} /> Absent Students
-					</label>
-					{notification && <div className="notification">{notification}</div>}
-					<CreatableSelect
-						isClearable
-						isSearchable
-						onChange={addAbsentStudent}
-						options={studentOptions}
-						value={studentInput}
-						placeholder="Type to search students..."
-					/>
-					{absentStudents.map((student, index) => (
-						<div key={index} className="student-name">
-							{student}
-							<button
-								onClick={() => removeAbsentStudent(index)}
-								className="remove-student-btn"
-							>
-								<FontAwesomeIcon icon={faTrash} />
-							</button>
-						</div>
-					))}
-				</div>
+				{notification && <div className="notification">{notification}</div>}
+				<AbsentStudentsSelect
+					studentOptions={studentOptions}
+					absentStudents={absentStudents}
+					setAbsentStudents={setAbsentStudents}
+					studentInput={studentInput}
+					setStudentInput={setStudentInput}
+					setNotification={setNotification}
+				/>
 				<PrimaryButton title="Log Class" onClick={handleSubmit} />
 			</div>
 		</>
