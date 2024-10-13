@@ -1,0 +1,13 @@
+:root {
+	--primary-color: #04abfd; /* Primary blue */
+	--text-color: #333; /* Main text color */
+	--bg-color: #fff; /* Background color */
+	--hover-color: #0390d8; /* Slightly darker blue for hover states */
+}
+
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+	color: var(--text-color);
+	background-color: var(--bg-color);
+}
