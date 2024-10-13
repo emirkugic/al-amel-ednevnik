@@ -10,7 +10,7 @@
 
 .class-log-form h2 {
 	text-align: center;
-	background: #3a88e9;
+	background: #04abfd;
 	color: white;
 	padding: 10px;
 	border-radius: 8px 8px 0 0;
@@ -46,6 +46,12 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	transition: box-shadow 0.3s, background-color 0.2s;
+}
+
+.student-name:hover {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	background-color: #e9ecef;
 }
 
 .add-student {
@@ -94,7 +100,7 @@
 
 .log-class-btn {
 	width: 100%;
-	background: #3a88e9;
+	background: #04abfd;
 	color: white;
 	border: none;
 	padding: 15px;

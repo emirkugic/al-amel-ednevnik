@@ -20,6 +20,7 @@ const ClassLogForm = () => {
 	const [notification, setNotification] = useState("");
 
 	const studentOptions = [
+		{ value: "Emir Kugic", label: "Emir Kugic" },
 		{ value: "John Doe", label: "John Doe" },
 		{ value: "Sue Storm", label: "Sue Storm" },
 		{ value: "Chris Hemsworth", label: "Chris Hemsworth" },
