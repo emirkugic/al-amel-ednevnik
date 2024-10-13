@@ -1,6 +1,13 @@
+// React Imports
 import React from "react";
+
+// Third-party Components
 import Select from "react-select";
+
+// Icon Imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// Style Imports
 import "./DropdownSelect.css";
 
 const DropdownSelect = ({

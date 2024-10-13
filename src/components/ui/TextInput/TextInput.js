@@ -1,5 +1,5 @@
 import React from "react";
-import "./TextInput.css"; // Import the dedicated CSS file for the text input
+import "./TextInput.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const TextInput = ({ label, icon, placeholder, value, onChange }) => {

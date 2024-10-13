@@ -1,16 +1,22 @@
+// React and State Management
 import React, { useState } from "react";
+
+// Icons
 import {
 	faBook,
 	faClock,
 	faChalkboardTeacher,
-	faCalendar,
 	faGraduationCap,
 } from "@fortawesome/free-solid-svg-icons";
-import "./ClassLogForm.css";
+
+// Component Imports
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import TextInput from "../ui/TextInput/TextInput";
 import DropdownSelect from "../ui/DropdownSelect/DropdownSelect";
 import AbsentStudentsSelect from "../ui/AbsentStudentsSelect/AbsentStudentsSelect";
+
+// Styles
+import "./ClassLogForm.css";
 
 const ClassLogForm = () => {
 	const [absentStudents, setAbsentStudents] = useState([]);
@@ -70,7 +76,6 @@ const ClassLogForm = () => {
 			classSequence,
 		};
 		console.log("Submitting data:", data);
-		// Placeholder for actual API call
 		// fetch("API_ENDPOINT", {
 		//  method: "POST",
 		//  headers: { "Content-Type": "application/json" },

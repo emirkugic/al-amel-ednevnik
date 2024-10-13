@@ -1,7 +1,14 @@
+// React Imports
 import React from "react";
+
+// Third-party Components
 import CreatableSelect from "react-select/creatable";
+
+// Icon Imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+
+// Style Imports
 import "./AbsentStudentsSelect.css";
 
 const AbsentStudentsSelect = ({
@@ -13,26 +20,26 @@ const AbsentStudentsSelect = ({
 	setNotification,
 }) => {
 	const addAbsentStudent = (option) => {
-		if (option) {
-			if (!absentStudents.includes(option.value)) {
-				setAbsentStudents([...absentStudents, option.value]);
-				setStudentInput(null); // Clear input after adding
-				setNotification(""); // Clear any existing notifications
-			} else {
-				setNotification(
-					"Duplicate entry: You cannot report the same student absent multiple times for the same period."
-				);
-				setTimeout(() => {
-					setNotification("");
-				}, 3000);
-			}
+		if (option && !absentStudents.includes(option.value)) {
+			setAbsentStudents((prev) => [...prev, option.value]);
+			setStudentInput(null);
+			setNotification("");
+		} else {
+			setNotification(
+				"Duplicate entry: You cannot report the same student absent multiple times for the same period."
+			);
+			setTimeout(() => {
+				setNotification("");
+			}, 3000);
 		}
 	};
 
 	const removeAbsentStudent = (index) => {
-		const newAbsentStudents = [...absentStudents];
-		newAbsentStudents.splice(index, 1);
-		setAbsentStudents(newAbsentStudents);
+		setAbsentStudents((prev) => {
+			const newAbsentStudents = [...prev];
+			newAbsentStudents.splice(index, 1);
+			return newAbsentStudents;
+		});
 	};
 
 	return (
