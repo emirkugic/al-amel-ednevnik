@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import CreatableSelect from "react-select/creatable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,6 +13,10 @@ import "./ClassLogForm.css";
 const ClassLogForm = () => {
 	const [absentStudents, setAbsentStudents] = useState([]);
 	const [studentInput, setStudentInput] = useState(null);
+	const [subject, setSubject] = useState("");
+	const [classHour, setClassHour] = useState("");
+	const [lectureTitle, setLectureTitle] = useState("");
+	const [classSequence, setClassSequence] = useState("1"); // This will be fetched from backend
 	const [notification, setNotification] = useState("");
 
 	const studentOptions = [
@@ -28,9 +32,13 @@ const ClassLogForm = () => {
 	];
 
 	const classHours = [
-		{ value: "hour1", label: "1st Hour" },
-		{ value: "hour2", label: "2nd Hour" },
-		{ value: "hour3", label: "3rd Hour" },
+		{ value: "1", label: "1st Hour" },
+		{ value: "2", label: "2nd Hour" },
+		{ value: "3", label: "3rd Hour" },
+		{ value: "4", label: "4th Hour" },
+		{ value: "5", label: "5th Hour" },
+		{ value: "6", label: "6th Hour" },
+		{ value: "7", label: "7th Hour" },
 	];
 
 	const addAbsentStudent = (option) => {
@@ -56,6 +64,23 @@ const ClassLogForm = () => {
 		setAbsentStudents(newAbsentStudents);
 	};
 
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		const data = {
+			subject,
+			classHour,
+			lectureTitle,
+			absentStudents,
+			classSequence,
+		};
+		console.log(data);
+		// fetch("API_ENDPOINT", {
+		// 	method: "POST",
+		// 	headers: { "Content-Type": "application/json" },
+		// 	body: JSON.stringify(data),
+		// });
+	};
+
 	return (
 		<div className="class-log-form">
 			<h2>Teacher's Class Log</h2>
@@ -63,19 +88,32 @@ const ClassLogForm = () => {
 				<label>
 					<FontAwesomeIcon icon={faBook} /> Subject
 				</label>
-				<CreatableSelect options={subjects} placeholder="Select subject" />
+				<CreatableSelect
+					options={subjects}
+					placeholder="Select subject"
+					onChange={(e) => setSubject(e.value)}
+				/>
 			</div>
 			<div className="form-group">
 				<label>
 					<FontAwesomeIcon icon={faClock} /> Class Hour
 				</label>
-				<CreatableSelect options={classHours} placeholder="Select class hour" />
+				<CreatableSelect
+					options={classHours}
+					placeholder="Select class hour"
+					onChange={(e) => setClassHour(e.value)}
+				/>
 			</div>
 			<div className="form-group">
 				<label>
 					<FontAwesomeIcon icon={faChalkboardTeacher} /> Lecture Title
 				</label>
-				<input type="text" placeholder="Enter today's lecture title" />
+				<input
+					type="text"
+					placeholder="Enter today's lecture title"
+					value={lectureTitle}
+					onChange={(e) => setLectureTitle(e.target.value)}
+				/>
 			</div>
 			<div className="form-group">
 				{notification && <div className="notification">{notification}</div>}
@@ -104,9 +142,11 @@ const ClassLogForm = () => {
 			</div>
 			<div className="class-sequence">
 				<label>Class Sequence:</label>
-				<span>1</span>
+				<span>{classSequence}</span>
 			</div>
-			<button className="log-class-btn">Log Class</button>
+			<button onClick={handleSubmit} className="log-class-btn">
+				Log Class
+			</button>
 		</div>
 	);
 };
