@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./DropdownSelect.css"; // This will be the CSS file for styling
+import "./DropdownSelect.css";
 
 const DropdownSelect = ({
 	label,

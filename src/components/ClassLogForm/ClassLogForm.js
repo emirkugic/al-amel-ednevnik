@@ -3,6 +3,8 @@ import {
 	faBook,
 	faClock,
 	faChalkboardTeacher,
+	faCalendar,
+	faGraduationCap,
 } from "@fortawesome/free-solid-svg-icons";
 import "./ClassLogForm.css";
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
@@ -18,6 +20,7 @@ const ClassLogForm = () => {
 	const [lectureTitle, setLectureTitle] = useState("");
 	const [classSequence, setClassSequence] = useState("1"); // This will be fetched from backend
 	const [notification, setNotification] = useState("");
+	const [gradeOptions, setGradeOptions] = useState("");
 
 	const studentOptions = [
 		{ value: "Emir Kugic", label: "Emir Kugic" },
@@ -43,28 +46,20 @@ const ClassLogForm = () => {
 		{ value: "7", label: "7th Hour" },
 	];
 
-	const addAbsentStudent = (option) => {
-		if (option) {
-			if (!absentStudents.includes(option.value)) {
-				setAbsentStudents([...absentStudents, option.value]);
-				setStudentInput(null);
-				setNotification(""); // Clear notification if any
-			} else {
-				setNotification(
-					"Duplicate entry: You cannot report the same student absent multiple times for the same period."
-				);
-				setTimeout(() => {
-					setNotification("");
-				}, 3000); // Notification will disappear after 3 seconds
-			}
-		}
-	};
-
-	const removeAbsentStudent = (index) => {
-		const newAbsentStudents = [...absentStudents];
-		newAbsentStudents.splice(index, 1);
-		setAbsentStudents(newAbsentStudents);
-	};
+	const classYears = [
+		{ value: "1", label: "1st Grade" },
+		{ value: "2", label: "2nd Grade" },
+		{ value: "3", label: "3rd Grade" },
+		{ value: "4", label: "4th Grade" },
+		{ value: "5", label: "5th Grade" },
+		{ value: "6", label: "6th Grade" },
+		{ value: "7", label: "7th Grade" },
+		{ value: "8", label: "8th Grade" },
+		{ value: "9", label: "9th Grade" },
+		{ value: "10", label: "10th Grade" },
+		{ value: "11", label: "11th Grade" },
+		{ value: "12", label: "12th Grade" },
+	];
 
 	const handleSubmit = () => {
 		const data = {
@@ -85,6 +80,7 @@ const ClassLogForm = () => {
 
 	return (
 		<>
+			<h2>Title</h2>
 			<div className="class-log-form">
 				<DropdownSelect
 					label="Subject"
@@ -94,14 +90,28 @@ const ClassLogForm = () => {
 					onChange={(e) => setSubject(e.value)}
 					options={subjects}
 				/>
-				<DropdownSelect
-					label="Class Hour"
-					icon={faClock}
-					placeholder="Select class hour"
-					value={classHour}
-					onChange={(e) => setClassHour(e.value)}
-					options={classHours}
-				/>
+
+				<div className="dropdown-row">
+					<DropdownSelect
+						className="dropdown-select"
+						label="Class Hour"
+						icon={faClock}
+						placeholder="Select class hour"
+						value={classHour}
+						onChange={(e) => setClassHour(e.value)}
+						options={classHours}
+					/>
+					<DropdownSelect
+						className="dropdown-select"
+						label="Class Year"
+						icon={faGraduationCap}
+						placeholder="Select class year"
+						value={gradeOptions}
+						onChange={(e) => setGradeOptions(e.value)}
+						options={classYears}
+					/>
+				</div>
+
 				<TextInput
 					label="Lecture Title"
 					icon={faChalkboardTeacher}
@@ -109,7 +119,8 @@ const ClassLogForm = () => {
 					value={lectureTitle}
 					onChange={(e) => setLectureTitle(e.target.value)}
 				/>
-				{notification && <div className="notification">{notification}</div>}
+
+				{notification && <p className="notification">{notification}</p>}
 				<AbsentStudentsSelect
 					studentOptions={studentOptions}
 					absentStudents={absentStudents}
@@ -118,8 +129,10 @@ const ClassLogForm = () => {
 					setStudentInput={setStudentInput}
 					setNotification={setNotification}
 				/>
+
 				<PrimaryButton title="Log Class" onClick={handleSubmit} />
 			</div>
+			<h2>bottom</h2>
 		</>
 	);
 };

@@ -42,3 +42,55 @@
 	margin-left: 10px;
 	font-size: 1.2em;
 }
+
+/* ClassLogForm.css */
+.dropdown-row {
+	display: flex;
+	justify-content: space-between; /* Adjusts the space between the child elements */
+	margin-bottom: 15px; /* Adds some space below the row for spacing */
+	gap: 15px;
+}
+
+.dropdown-select {
+	flex: 1; /* Ensures each dropdown can grow to fill the space */
+	margin: 0 5px; /* Small margin for visual separation */
+}
+
+@media (max-width: 768px) {
+	.dropdown-row {
+		flex-direction: column;
+	}
+
+	.dropdown-select {
+		margin: 0 0 10px 0;
+	}
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	width: 100%; /* Ensures form group takes full width */
+	margin-bottom: 15px; /* Consistent spacing */
+}
+
+.form-group label {
+	display: flex;
+	align-items: center;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+.form-group label svg {
+	margin-right: 8px; /* Space between icon and label text */
+}
+
+/* Ensure the class-log-form container is appropriately styled */
+.class-log-form {
+	background: #ffffff;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	padding: 20px;
+	max-width: 500px; /* Adjust this width if the form needs more space */
+	margin: auto;
+	font-family: Arial, sans-serif;
+}
