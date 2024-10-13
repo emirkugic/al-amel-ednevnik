@@ -38,6 +38,16 @@
 	border-radius: 4px;
 }
 
+.student-name {
+	background: #f3f4f6;
+	padding: 8px;
+	margin: 5px 0;
+	border-radius: 4px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
 .add-student {
 	display: flex;
 	align-items: center;
@@ -58,6 +68,16 @@
 	margin-left: 10px;
 	cursor: pointer;
 	border-radius: 4px;
+}
+
+.remove-student-btn {
+	background: #dc3545;
+	color: white;
+	border: none;
+	padding: 4px 8px;
+	cursor: pointer;
+	border-radius: 4px;
+	font-size: 0.8rem;
 }
 
 .class-sequence {
@@ -86,22 +106,4 @@
 
 .log-class-btn:hover {
 	background: #316fc5;
-}
-
-.student-name {
-	background: #f3f4f6;
-	padding: 8px;
-	margin: 5px 0;
-	border-radius: 4px;
-}
-
-.remove-student-btn {
-	background: #dc3545;
-	color: white;
-	border: none;
-	padding: 4px 8px;
-	margin-left: 10px;
-	cursor: pointer;
-	border-radius: 4px;
-	font-size: 0.8rem;
 }
