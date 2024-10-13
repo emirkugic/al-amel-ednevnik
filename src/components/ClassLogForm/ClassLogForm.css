@@ -1,3 +1,4 @@
+/* ClassLogForm.css */
 .class-log-form {
 	background: #ffffff;
 	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -16,6 +17,7 @@
 	border-radius: 8px 8px 0 0;
 }
 
+/* Updated styles for general form groups that are not select-specific */
 .form-group {
 	margin: 15px 0;
 }
@@ -29,15 +31,6 @@
 
 .form-group label svg {
 	margin-right: 8px;
-}
-
-.form-group input[type="text"] {
-	width: calc(100% - 17px);
-	height: 21px; /* Adjust height */
-	padding: 8px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	font-size: 16px; /* Add font size */
 }
 
 .student-name {
@@ -98,22 +91,6 @@
 .class-sequence span {
 	margin-left: 10px;
 	font-size: 1.2em;
-}
-
-.log-class-btn {
-	width: 100%;
-	background: #04abfd;
-	color: white;
-	border: none;
-	padding: 15px;
-	cursor: pointer;
-	border-radius: 8px;
-	font-size: 1em;
-	font-weight: bold;
-}
-
-.log-class-btn:hover {
-	background: #316fc5;
 }
 
 .notification {

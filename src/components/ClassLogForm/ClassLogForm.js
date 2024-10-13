@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import CreatableSelect from "react-select/creatable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faBook,
@@ -9,6 +8,10 @@ import {
 	faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import "./ClassLogForm.css";
+import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
+import TextInput from "../ui/TextInput/TextInput";
+import CreatableSelect from "react-select/creatable";
+import DropdownSelect from "../ui/DropdownSelect/DropdownSelect";
 
 const ClassLogForm = () => {
 	const [absentStudents, setAbsentStudents] = useState([]);
@@ -28,6 +31,7 @@ const ClassLogForm = () => {
 
 	const subjects = [
 		{ value: "math", label: "Math" },
+		{ value: "it", label: "Informatika" },
 		{ value: "science", label: "Science" },
 		{ value: "history", label: "History" },
 	];
@@ -65,8 +69,7 @@ const ClassLogForm = () => {
 		setAbsentStudents(newAbsentStudents);
 	};
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
+	const handleSubmit = () => {
 		const data = {
 			subject,
 			classHour,
@@ -74,54 +77,46 @@ const ClassLogForm = () => {
 			absentStudents,
 			classSequence,
 		};
-		console.log(data);
+		console.log("Submitting data:", data);
+		// Placeholder for actual API call
 		// fetch("API_ENDPOINT", {
-		// 	method: "POST",
-		// 	headers: { "Content-Type": "application/json" },
-		// 	body: JSON.stringify(data),
+		//  method: "POST",
+		//  headers: { "Content-Type": "application/json" },
+		//  body: JSON.stringify(data),
 		// });
 	};
 
 	return (
 		<>
 			<div className="class-log-form">
-				{/* <h2>Class Log Form</h2> */}
+				<DropdownSelect
+					label="Subject"
+					icon={faBook}
+					placeholder="Select subject"
+					value={subject}
+					onChange={(e) => setSubject(e.value)}
+					options={subjects}
+				/>
+				<DropdownSelect
+					label="Class Hour"
+					icon={faClock}
+					placeholder="Select class hour"
+					value={classHour}
+					onChange={(e) => setClassHour(e.value)}
+					options={classHours}
+				/>
+				<TextInput
+					label="Lecture Title"
+					icon={faChalkboardTeacher}
+					placeholder="Enter today's lecture title"
+					value={lectureTitle}
+					onChange={(e) => setLectureTitle(e.target.value)}
+				/>
 				<div className="form-group">
-					<label>
-						<FontAwesomeIcon icon={faBook} /> Subject
-					</label>
-					<CreatableSelect
-						options={subjects}
-						placeholder="Select subject"
-						onChange={(e) => setSubject(e.value)}
-					/>
-				</div>
-				<div className="form-group">
-					<label>
-						<FontAwesomeIcon icon={faClock} /> Class Hour
-					</label>
-					<CreatableSelect
-						options={classHours}
-						placeholder="Select class hour"
-						onChange={(e) => setClassHour(e.value)}
-					/>
-				</div>
-				<div className="form-group">
-					<label>
-						<FontAwesomeIcon icon={faChalkboardTeacher} /> Lecture Title
-					</label>
-					<input
-						type="text"
-						placeholder="Enter today's lecture title"
-						value={lectureTitle}
-						onChange={(e) => setLectureTitle(e.target.value)}
-					/>
-				</div>
-				<div className="form-group">
-					{notification && <div className="notification">{notification}</div>}
 					<label>
 						<FontAwesomeIcon icon={faUserPlus} /> Absent Students
 					</label>
+					{notification && <div className="notification">{notification}</div>}
 					<CreatableSelect
 						isClearable
 						isSearchable
@@ -142,13 +137,7 @@ const ClassLogForm = () => {
 						</div>
 					))}
 				</div>
-				<div className="class-sequence">
-					<label>Class Sequence:</label>
-					<span>{classSequence}</span>
-				</div>
-				<button onClick={handleSubmit} className="log-class-btn">
-					Log Class
-				</button>
+				<PrimaryButton title="Log Class" onClick={handleSubmit} />
 			</div>
 		</>
 	);

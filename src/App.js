@@ -1,5 +1,5 @@
 import React from "react";
-import ClassLogForm from "./ClassLogForm";
+import ClassLogForm from "./components/ClassLogForm/ClassLogForm";
 
 function App() {
 	return (
