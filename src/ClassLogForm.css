@@ -33,9 +33,11 @@
 
 .form-group input[type="text"] {
 	width: calc(100% - 17px);
+	height: 21px; /* Adjust height */
 	padding: 8px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
+	font-size: 16px; /* Add font size */
 }
 
 .student-name {

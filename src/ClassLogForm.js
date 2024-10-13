@@ -83,72 +83,74 @@ const ClassLogForm = () => {
 	};
 
 	return (
-		<div className="class-log-form">
-			<h2>Teacher's Class Log</h2>
-			<div className="form-group">
-				<label>
-					<FontAwesomeIcon icon={faBook} /> Subject
-				</label>
-				<CreatableSelect
-					options={subjects}
-					placeholder="Select subject"
-					onChange={(e) => setSubject(e.value)}
-				/>
+		<>
+			<div className="class-log-form">
+				{/* <h2>Class Log Form</h2> */}
+				<div className="form-group">
+					<label>
+						<FontAwesomeIcon icon={faBook} /> Subject
+					</label>
+					<CreatableSelect
+						options={subjects}
+						placeholder="Select subject"
+						onChange={(e) => setSubject(e.value)}
+					/>
+				</div>
+				<div className="form-group">
+					<label>
+						<FontAwesomeIcon icon={faClock} /> Class Hour
+					</label>
+					<CreatableSelect
+						options={classHours}
+						placeholder="Select class hour"
+						onChange={(e) => setClassHour(e.value)}
+					/>
+				</div>
+				<div className="form-group">
+					<label>
+						<FontAwesomeIcon icon={faChalkboardTeacher} /> Lecture Title
+					</label>
+					<input
+						type="text"
+						placeholder="Enter today's lecture title"
+						value={lectureTitle}
+						onChange={(e) => setLectureTitle(e.target.value)}
+					/>
+				</div>
+				<div className="form-group">
+					{notification && <div className="notification">{notification}</div>}
+					<label>
+						<FontAwesomeIcon icon={faUserPlus} /> Absent Students
+					</label>
+					<CreatableSelect
+						isClearable
+						isSearchable
+						onChange={addAbsentStudent}
+						options={studentOptions}
+						value={studentInput}
+						placeholder="Type to search students..."
+					/>
+					{absentStudents.map((student, index) => (
+						<div key={index} className="student-name">
+							{student}
+							<button
+								onClick={() => removeAbsentStudent(index)}
+								className="remove-student-btn"
+							>
+								<FontAwesomeIcon icon={faTrash} />
+							</button>
+						</div>
+					))}
+				</div>
+				<div className="class-sequence">
+					<label>Class Sequence:</label>
+					<span>{classSequence}</span>
+				</div>
+				<button onClick={handleSubmit} className="log-class-btn">
+					Log Class
+				</button>
 			</div>
-			<div className="form-group">
-				<label>
-					<FontAwesomeIcon icon={faClock} /> Class Hour
-				</label>
-				<CreatableSelect
-					options={classHours}
-					placeholder="Select class hour"
-					onChange={(e) => setClassHour(e.value)}
-				/>
-			</div>
-			<div className="form-group">
-				<label>
-					<FontAwesomeIcon icon={faChalkboardTeacher} /> Lecture Title
-				</label>
-				<input
-					type="text"
-					placeholder="Enter today's lecture title"
-					value={lectureTitle}
-					onChange={(e) => setLectureTitle(e.target.value)}
-				/>
-			</div>
-			<div className="form-group">
-				{notification && <div className="notification">{notification}</div>}
-				<label>
-					<FontAwesomeIcon icon={faUserPlus} /> Absent Students
-				</label>
-				<CreatableSelect
-					isClearable
-					isSearchable
-					onChange={addAbsentStudent}
-					options={studentOptions}
-					value={studentInput}
-					placeholder="Type to search students..."
-				/>
-				{absentStudents.map((student, index) => (
-					<div key={index} className="student-name">
-						{student}
-						<button
-							onClick={() => removeAbsentStudent(index)}
-							className="remove-student-btn"
-						>
-							<FontAwesomeIcon icon={faTrash} />
-						</button>
-					</div>
-				))}
-			</div>
-			<div className="class-sequence">
-				<label>Class Sequence:</label>
-				<span>{classSequence}</span>
-			</div>
-			<button onClick={handleSubmit} className="log-class-btn">
-				Log Class
-			</button>
-		</div>
+		</>
 	);
 };
 
