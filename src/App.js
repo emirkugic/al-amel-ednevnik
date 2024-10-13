@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import Sidebar from "./components/Sidebar/Sidebar";
+import ClassLogForm from "./components/ClassLogForm/ClassLogForm";
 
 const App = () => {
 	// disable right click
@@ -18,6 +19,7 @@ const App = () => {
 	return (
 		<div className="App">
 			<Sidebar />
+			{/* <ClassLogForm /> */}
 		</div>
 	);
 };
