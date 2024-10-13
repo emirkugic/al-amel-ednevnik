@@ -1,13 +1,25 @@
-import React from "react";
-import ClassLogForm from "./components/ClassLogForm/ClassLogForm";
+import React, { useEffect } from "react";
 import Sidebar from "./components/Sidebar/Sidebar";
 
-function App() {
+const App = () => {
+	// disable right click
+	useEffect(() => {
+		const handleRightClick = (event) => {
+			event.preventDefault();
+		};
+
+		document.addEventListener("contextmenu", handleRightClick);
+
+		return () => {
+			document.removeEventListener("contextmenu", handleRightClick);
+		};
+	}, []);
+
 	return (
 		<div className="App">
 			<Sidebar />
 		</div>
 	);
-}
+};
 
 export default App;
