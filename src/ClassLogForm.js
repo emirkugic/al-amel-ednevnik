@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CreatableSelect from "react-select/creatable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,6 +13,7 @@ import "./ClassLogForm.css";
 const ClassLogForm = () => {
 	const [absentStudents, setAbsentStudents] = useState([]);
 	const [studentInput, setStudentInput] = useState(null);
+	const [notification, setNotification] = useState("");
 
 	const studentOptions = [
 		{ value: "John Doe", label: "John Doe" },
@@ -33,9 +34,19 @@ const ClassLogForm = () => {
 	];
 
 	const addAbsentStudent = (option) => {
-		if (option && !absentStudents.includes(option.value)) {
-			setAbsentStudents([...absentStudents, option.value]);
-			setStudentInput(null);
+		if (option) {
+			if (!absentStudents.includes(option.value)) {
+				setAbsentStudents([...absentStudents, option.value]);
+				setStudentInput(null);
+				setNotification(""); // Clear notification if any
+			} else {
+				setNotification(
+					"Duplicate entry: You cannot report the same student absent multiple times for the same period."
+				);
+				setTimeout(() => {
+					setNotification("");
+				}, 3000); // Notification will disappear after 3 seconds
+			}
 		}
 	};
 
@@ -67,6 +78,7 @@ const ClassLogForm = () => {
 				<input type="text" placeholder="Enter today's lecture title" />
 			</div>
 			<div className="form-group">
+				{notification && <div className="notification">{notification}</div>}
 				<label>
 					<FontAwesomeIcon icon={faUserPlus} /> Absent Students
 				</label>
@@ -77,12 +89,6 @@ const ClassLogForm = () => {
 					options={studentOptions}
 					value={studentInput}
 					placeholder="Type to search students..."
-					filterOption={(option, inputValue) =>
-						option.label
-							.toLowerCase()
-							.split(" ")
-							.some((part) => part.startsWith(inputValue.toLowerCase()))
-					}
 				/>
 				{absentStudents.map((student, index) => (
 					<div key={index} className="student-name">
