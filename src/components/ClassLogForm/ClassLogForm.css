@@ -7,6 +7,7 @@
 	max-width: 500px;
 	margin: auto;
 	font-family: Arial, sans-serif;
+	width: 100%;
 }
 
 .class-log-form h2 {
@@ -62,6 +63,10 @@
 
 /* Responsive adjustments for mobile */
 @media (max-width: 768px) {
+	.class-log-form {
+		width: 90%; /* Ensure full width on mobile */
+		max-width: 100%; /* Remove the max-width restriction */
+	}
 	.dropdown-row {
 		flex-direction: column;
 	}

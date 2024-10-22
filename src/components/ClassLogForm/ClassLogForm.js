@@ -85,7 +85,6 @@ const ClassLogForm = () => {
 
 	return (
 		<>
-			<h2>Title</h2>
 			<div className="class-log-form">
 				<DropdownSelect
 					label="Subject"
@@ -101,7 +100,7 @@ const ClassLogForm = () => {
 						className="dropdown-select"
 						label="Class Hour"
 						icon={faClock}
-						placeholder="Select class hour"
+						placeholder="Select"
 						value={classHour}
 						onChange={(e) => setClassHour(e.value)}
 						options={classHours}
@@ -110,7 +109,7 @@ const ClassLogForm = () => {
 						className="dropdown-select"
 						label="Class Year"
 						icon={faGraduationCap}
-						placeholder="Select class year"
+						placeholder="Select"
 						value={gradeOptions}
 						onChange={(e) => setGradeOptions(e.value)}
 						options={classYears}
@@ -137,7 +136,6 @@ const ClassLogForm = () => {
 
 				<PrimaryButton title="Log Class" onClick={handleSubmit} />
 			</div>
-			<h2>bottom</h2>
 		</>
 	);
 };
