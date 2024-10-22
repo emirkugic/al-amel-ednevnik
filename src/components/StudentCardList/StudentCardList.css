@@ -1,7 +1,6 @@
-/* Container for the student card list */
 .student-card-list {
-	max-height: 500px; /* Set a fixed height for the container */
-	overflow-y: auto; /* Allow vertical scrolling */
+	max-height: 550px;
+	overflow-y: auto;
 	padding: 15px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 	border-radius: 8px;
@@ -11,7 +10,6 @@
 	width: 90%;
 }
 
-/* Custom scrollbar styling */
 .student-card-list::-webkit-scrollbar {
 	width: 8px;
 }
@@ -30,7 +28,6 @@
 	background-color: #555;
 }
 
-/* The student cards will be stacked vertically */
 .student-card {
 	margin-bottom: 15px;
 }

@@ -1,32 +1,28 @@
-/* General App layout styling */
 .App {
 	display: flex;
 }
 
-/* Main content area layout */
 .main-content {
-	flex-grow: 1; /* This allows the main content to take up the remaining space */
+	flex-grow: 1;
 	padding: 20px;
 	background-color: #f9f9f9;
 	min-height: 100vh;
 	box-sizing: border-box;
 }
 
-/* Ensure layout changes do not affect child components */
 .main-content > * {
 	margin: 0;
 	padding: 0;
 }
 
-/* Mobile view adjustments */
 @media (max-width: 768px) {
 	.App {
-		flex-direction: column; /* Stack Sidebar and content vertically */
+		flex-direction: column;
 		background-color: blueviolet;
 	}
 
 	.main-content {
-		margin-top: 50px; /* Add space for the top-bar in mobile view */
+		margin-top: 50px;
 		padding: 10px;
 	}
 }

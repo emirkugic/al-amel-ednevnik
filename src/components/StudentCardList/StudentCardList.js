@@ -1,9 +1,8 @@
 import React from "react";
-import StudentCard from "../StudentCard/StudentCard"; // Import the StudentCard component
-import "./StudentCardList.css"; // Import the styles for the list
+import StudentCard from "../StudentCard/StudentCard";
+import "./StudentCardList.css";
 
-const StudentCardList = () => {
-	// Sample student data
+const StudentCardList = ({ onShowGrades }) => {
 	const students = [
 		{
 			name: "Emma Thompson",
@@ -32,7 +31,6 @@ const StudentCardList = () => {
 			grade: "10th Grade",
 			imageUrl: `${process.env.PUBLIC_URL}/alamel_logo.png`,
 		},
-		// Add more students as needed
 	];
 
 	return (
@@ -47,6 +45,7 @@ const StudentCardList = () => {
 					attendance={student.attendance}
 					grade={student.grade}
 					imageUrl={student.imageUrl}
+					onShowGrades={onShowGrades}
 				/>
 			))}
 		</div>

@@ -1,7 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-	faGraduationCap,
 	faChartLine,
 	faCalendarAlt,
 	faEnvelope,
@@ -17,27 +16,21 @@ const StudentCard = ({
 	attendance,
 	grade,
 	imageUrl,
+	onShowGrades,
 }) => {
 	return (
 		<div className="student-card">
-			{/* Profile and Main Details */}
 			<div className="student-card-details">
-				{/* Profile Image */}
 				<div className="profile-image">
 					<img src={imageUrl} alt="Profile" className="profile-pic" />
 				</div>
 
-				{/* Student Info */}
 				<div className="student-info">
 					<div className="student-name-container">
 						<h3 className="student-name">{name}</h3>
 					</div>
 					<p className="student-id">ID: {id}</p>
 					<div className="student-meta">
-						{/* <p>
-							<FontAwesomeIcon icon={faGraduationCap} className="meta-icon" />{" "}
-							{className}
-						</p> */}
 						<p>
 							<FontAwesomeIcon icon={faChartLine} className="meta-icon" /> GPA:{" "}
 							{gpa}
@@ -49,18 +42,19 @@ const StudentCard = ({
 					</div>
 				</div>
 
-				{/* Grade Label */}
 				<div className="grade-label">
 					<span className="grade-badge">{grade}</span>
 				</div>
 			</div>
 
-			{/* Action Buttons */}
 			<div className="student-card-actions">
 				<button className="action-btn email-btn">
 					<FontAwesomeIcon icon={faEnvelope} className="button-icon" /> Email
 				</button>
-				<button className="action-btn grades-btn">
+				<button
+					className="action-btn grades-btn"
+					onClick={() => onShowGrades({ name, id, imageUrl })}
+				>
 					<FontAwesomeIcon icon={faFileAlt} className="button-icon" /> Grades
 				</button>
 			</div>
