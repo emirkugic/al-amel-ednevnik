@@ -16,11 +16,11 @@
 	border-radius: 10px;
 	max-width: 600px;
 	width: 90%;
-	height: 500px; /* Fixed height */
+	height: 500px;
 	padding: 20px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 	position: relative;
-	overflow: hidden; /* Prevent expansion */
+	overflow: hidden;
 }
 
 .modal-header {
@@ -50,7 +50,6 @@
 	color: #007bff;
 }
 
-/* Semester tabs with shared background */
 .tab-list-container {
 	margin-top: 20px;
 	display: flex;
@@ -80,11 +79,11 @@
 	color: #007bff;
 }
 
-/* Scrollable grades list */
 .grades-list {
 	margin-top: 20px;
-	overflow-y: auto; /* Scrollable */
-	height: 300px; /* Fixed height for the scrollable area */
+	overflow-y: auto;
+	height: 300px;
+	padding-right: 15px;
 }
 
 .subject {
@@ -119,11 +118,39 @@
 }
 
 .subject-details {
-	margin-top: 10px;
+	overflow: hidden;
+	max-height: 0;
+	transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
 	padding-left: 20px;
+	padding-top: 0;
+}
+
+.subject-details.expanded {
+	padding-top: 10px;
 }
 
 .exam-detail {
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #ddd;
+}
+
+.exam-detail:last-child {
+	border-bottom: none;
+}
+
+@media (max-width: 768px) {
+	.modal {
+		width: 100%;
+		height: 100%;
+		max-width: 100%;
+		max-height: 100%;
+	}
+
+	.grades-list {
+		height: auto;
+		max-height: 60vh;
+	}
 }

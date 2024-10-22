@@ -3,17 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faChevronDown,
 	faChevronUp,
-	faArrowUp,
-	faArrowDown,
 	faFileExport,
 } from "@fortawesome/free-solid-svg-icons";
 import "./GradesModal.css";
 
 const GradesModal = ({ student, isOpen, onClose }) => {
-	const [selectedSemester, setSelectedSemester] = useState("First"); // Default to first semester
-	const [expandedSubject, setExpandedSubject] = useState(null); // For expanding subject details
+	const [selectedSemester, setSelectedSemester] = useState("First");
+	const [expandedSubject, setExpandedSubject] = useState(null);
 
-	// Sample data
 	const semesters = {
 		First: [
 			{
@@ -59,24 +56,23 @@ const GradesModal = ({ student, isOpen, onClose }) => {
 
 	const handleSemesterChange = (semester) => {
 		setSelectedSemester(semester);
-		setExpandedSubject(null); // Close any expanded subject when switching semesters
+		setExpandedSubject(null);
 	};
 
 	const toggleSubjectDetails = (subject) => {
 		if (expandedSubject === subject) {
-			setExpandedSubject(null); // Collapse if already expanded
+			setExpandedSubject(null);
 		} else {
-			setExpandedSubject(subject); // Expand the selected subject
+			setExpandedSubject(subject);
 		}
 	};
 
-	// Calculate average grade for a subject
 	const calculateAvgGrade = (details) => {
 		const total = details.reduce((acc, curr) => acc + curr.grade, 0);
 		return (total / details.length).toFixed(2);
 	};
 
-	if (!isOpen) return null; // Don't render if modal is closed
+	if (!isOpen) return null;
 
 	return (
 		<div className="modal-overlay">
@@ -144,17 +140,23 @@ const GradesModal = ({ student, isOpen, onClose }) => {
 								</div>
 							</div>
 
-							{/* Subject details (expandable section) */}
-							{expandedSubject === subject.subject && (
-								<div className="subject-details">
-									{subject.details.map((detail, idx) => (
-										<div key={idx} className="exam-detail">
-											<p>{detail.exam}</p>
-											<p>{detail.grade}%</p>
-										</div>
-									))}
-								</div>
-							)}
+							{/* Subject details (expandable section with animation) */}
+							<div
+								className={`subject-details ${
+									expandedSubject === subject.subject ? "expanded" : ""
+								}`}
+								style={{
+									maxHeight:
+										expandedSubject === subject.subject ? "200px" : "0",
+								}}
+							>
+								{subject.details.map((detail, idx) => (
+									<div key={idx} className="exam-detail">
+										<p>{detail.exam}</p>
+										<p>{detail.grade}%</p>
+									</div>
+								))}
+							</div>
 						</div>
 					))}
 				</div>
