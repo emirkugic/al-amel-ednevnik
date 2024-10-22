@@ -1,6 +1,5 @@
 .form-group input[type="text"] {
 	width: calc(100% - 17px);
-	height: 21px;
 	padding: 8px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
@@ -30,4 +29,19 @@
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	font-size: 16px;
+}
+
+/* Input container to hold the input field and the eye icon */
+.input-container {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+/* Position the eye icon */
+.password-toggle-icon {
+	position: absolute;
+	right: 10px;
+	cursor: pointer;
+	color: #999;
 }

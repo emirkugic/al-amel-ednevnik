@@ -1,0 +1,67 @@
+/* Main container for the login form */
+.login-container {
+	background-color: #f9f9f9;
+	border-radius: 8px;
+	padding: 30px;
+	max-width: 400px;
+	margin: 50px auto;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo styling */
+.logo {
+	display: block;
+	margin: 0 auto 20px auto; /* Center the logo and add space below it */
+	max-width: 150px; /* Adjust the logo size */
+}
+
+/* Login title */
+.login-title {
+	text-align: center;
+	font-size: 24px;
+	color: #333;
+	margin-bottom: 20px;
+}
+
+/* Styling for the form itself */
+.login-form {
+	display: flex;
+	flex-direction: column;
+}
+
+/* Styling the checkbox container */
+.checkbox-container {
+	display: flex;
+	align-items: center;
+	margin: 10px 0;
+}
+
+.checkbox-container input[type="checkbox"] {
+	margin-right: 10px;
+}
+
+/* Button group styling */
+.button-group {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px;
+	gap: 10px; /* Add space between buttons */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+	.login-container {
+		width: 90%;
+		padding: 20px;
+	}
+
+	.button-group {
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.primary-btn,
+	.secondary-btn {
+		width: 100%;
+	}
+}
