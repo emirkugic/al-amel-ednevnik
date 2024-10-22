@@ -3,6 +3,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import ClassLogForm from "./components/ClassLogForm/ClassLogForm";
 import "./App.css";
 import LoginForm from "./components/LoginForm/LoginForm";
+import StudentCard from "./components/StudentCard/StudentCard";
 
 const App = () => {
 	// disable right click
@@ -20,9 +21,10 @@ const App = () => {
 
 	return (
 		<div className="App">
-			{/* <Sidebar /> */}
+			<Sidebar />
 			{/* <ClassLogForm /> */}
-			<LoginForm />
+			{/* <LoginForm /> */}
+			<StudentCard />
 		</div>
 	);
 };

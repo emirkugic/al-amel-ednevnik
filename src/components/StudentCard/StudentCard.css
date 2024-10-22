@@ -1,0 +1,171 @@
+/* Main container for the student card */
+.student-card {
+	background-color: #fff;
+	border-radius: 10px;
+	padding: 15px;
+	max-width: 500px;
+	width: 90%;
+	margin: 15px auto;
+	max-height: 250px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	transition: box-shadow 0.3s, transform 0.3s;
+	overflow: hidden;
+}
+
+.student-card:hover {
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+	transform: scale(1.01);
+}
+
+/* Student details section */
+.student-card-details {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 15px;
+}
+
+/* Profile Image */
+.profile-image {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	background-color: #e0e0e0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+	color: #777;
+	border: 2px solid #ddd;
+}
+
+.profile-pic {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 50%;
+}
+
+/* Student Info Section */
+.student-info {
+	flex-grow: 1;
+	margin-left: 15px;
+}
+
+.student-name-container {
+	background-color: #f7f7f7;
+	display: inline-block;
+	padding: 5px 10px;
+	border-radius: 8px;
+	margin-bottom: 5px;
+}
+
+.student-name {
+	font-size: 1.2rem;
+	font-weight: bold;
+	margin: 0;
+	color: #333;
+}
+
+.student-id {
+	color: #999;
+	margin: 5px 0;
+	font-size: 0.85rem;
+}
+
+/* Meta Information (Class, GPA, Attendance) */
+.student-meta {
+	display: flex;
+	flex-direction: column;
+}
+
+.student-meta p {
+	display: flex;
+	align-items: center;
+	margin: 4px 0;
+	color: #555;
+	font-size: 0.9rem;
+}
+
+.meta-icon {
+	width: 20px; /* Ensures all icons take the same space */
+	margin-right: 8px;
+	color: #555; /* Softened color */
+}
+
+/* Grade Label */
+.grade-label {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.grade-badge {
+	background-color: #e0f0ff;
+	color: #0056b3; /* Softer blue */
+	padding: 4px 12px;
+	border-radius: 16px;
+	font-size: 0.8rem;
+	text-transform: uppercase;
+}
+
+/* Action Buttons Section */
+.student-card-actions {
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.action-btn {
+	flex: 1;
+	background-color: #f8f9fa;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 10px;
+	cursor: pointer;
+	text-align: center;
+	font-size: 0.95rem;
+	transition: background-color 0.3s, border-color 0.3s;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: bold;
+	color: #555;
+}
+
+.action-btn:hover {
+	background-color: #e9ecef;
+	border-color: #ccc;
+}
+
+/* Aligning Icons with Text */
+.button-icon {
+	margin-right: 5px;
+	font-size: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.student-card {
+		padding: 12px;
+		max-height: 100%;
+	}
+
+	.student-card-details {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.student-info {
+		margin-left: 0;
+		margin-top: 10px;
+	}
+
+	.student-card-actions {
+		flex-direction: column;
+		gap: 8px;
+	}
+}

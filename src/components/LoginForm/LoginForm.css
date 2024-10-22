@@ -12,7 +12,7 @@
 .logo {
 	display: block;
 	margin: 0 auto 20px auto; /* Center the logo and add space below it */
-	max-width: 150px; /* Adjust the logo size */
+	max-width: 100px; /* Adjust the logo size */
 }
 
 /* Notification styling (same as in AbsentStudentsSelect) */
