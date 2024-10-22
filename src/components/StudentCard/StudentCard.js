@@ -34,10 +34,10 @@ const StudentCard = ({
 					</div>
 					<p className="student-id">ID: {id}</p>
 					<div className="student-meta">
-						<p>
+						{/* <p>
 							<FontAwesomeIcon icon={faGraduationCap} className="meta-icon" />{" "}
 							{className}
-						</p>
+						</p> */}
 						<p>
 							<FontAwesomeIcon icon={faChartLine} className="meta-icon" /> GPA:{" "}
 							{gpa}
