@@ -9,45 +9,49 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./StudentCard.css";
 
-const StudentCard = () => {
+const StudentCard = ({
+	name,
+	id,
+	className,
+	gpa,
+	attendance,
+	grade,
+	imageUrl,
+}) => {
 	return (
 		<div className="student-card">
 			{/* Profile and Main Details */}
 			<div className="student-card-details">
 				{/* Profile Image */}
 				<div className="profile-image">
-					<img
-						src={`${process.env.PUBLIC_URL}/alamel_logo.png`}
-						alt="Profile"
-						className="profile-pic"
-					/>
+					<img src={imageUrl} alt="Profile" className="profile-pic" />
 				</div>
 
 				{/* Student Info */}
 				<div className="student-info">
 					<div className="student-name-container">
-						<h3 className="student-name">Allah Dz S</h3>
+						<h3 className="student-name">{name}</h3>
 					</div>
-					<p className="student-id">ID: STU001</p>
+					<p className="student-id">ID: {id}</p>
 					<div className="student-meta">
 						<p>
 							<FontAwesomeIcon icon={faGraduationCap} className="meta-icon" />{" "}
-							Class X-A
+							{className}
 						</p>
 						<p>
-							<FontAwesomeIcon icon={faChartLine} className="meta-icon" /> GPA:
-							3.8
+							<FontAwesomeIcon icon={faChartLine} className="meta-icon" /> GPA:{" "}
+							{gpa}
 						</p>
 						<p>
-							<FontAwesomeIcon icon={faCalendarAlt} className="meta-icon" /> 95%
-							Attendance
+							<FontAwesomeIcon icon={faCalendarAlt} className="meta-icon" />{" "}
+							{attendance} Attendance
 						</p>
 					</div>
 				</div>
 
 				{/* Grade Label */}
 				<div className="grade-label">
-					<span className="grade-badge">10th Grade</span>
+					<span className="grade-badge">{grade}</span>
 				</div>
 			</div>
 
