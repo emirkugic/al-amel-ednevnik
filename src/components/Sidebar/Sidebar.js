@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import the hook for navigation
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faCalendarAlt,
@@ -12,27 +13,27 @@ import {
 	faBookOpen,
 	faBars,
 } from "@fortawesome/free-solid-svg-icons";
-
 import "./Sidebar.css";
 
 const Sidebar = () => {
 	const [activeItem, setActiveItem] = useState("Dashboard"); // Default active item
 	const [isMenuOpen, setIsMenuOpen] = useState(false); // To toggle mobile menu
+	const navigate = useNavigate(); // Use React Router's navigation hook
 
 	const menuItems = [
-		{ name: "Dashboard", icon: faHouse },
-		{ name: "Students", icon: faPeopleGroup },
-		{ name: "Courses", icon: faBookOpen },
-		{ name: "Schedule", icon: faCalendarAlt },
-		{ name: "Attendance", icon: faClock },
-		{ name: "Grades", icon: faChartLine },
-		{ name: "Settings", icon: faCog },
-		{ name: "Help", icon: faQuestionCircle },
+		{ name: "Dashboard", icon: faHouse, path: "/" },
+		{ name: "Students", icon: faPeopleGroup, path: "/students" },
+		{ name: "Courses", icon: faBookOpen, path: "/courses" },
+		{ name: "Schedule", icon: faCalendarAlt, path: "/schedule" },
+		{ name: "Attendance", icon: faClock, path: "/attendance" },
+		{ name: "Grades", icon: faChartLine, path: "/grades" },
+		{ name: "Settings", icon: faCog, path: "/settings" },
+		{ name: "Help", icon: faQuestionCircle, path: "/help" },
 	];
 
-	const handleItemClick = (itemName) => {
-		console.log(`${itemName} clicked`); // Log to console
-		setActiveItem(itemName); // Set the clicked item as active
+	const handleItemClick = (item) => {
+		setActiveItem(item.name); // Set the clicked item as active
+		navigate(item.path); // Navigate to the corresponding path
 		if (window.innerWidth <= 768) setIsMenuOpen(false); // Close menu on mobile
 	};
 
@@ -54,7 +55,7 @@ const Sidebar = () => {
 					<div
 						key={item.name}
 						className={`menu-item ${activeItem === item.name ? "active" : ""}`}
-						onClick={() => handleItemClick(item.name)}
+						onClick={() => handleItemClick(item)}
 					>
 						<FontAwesomeIcon
 							icon={item.icon}
@@ -65,7 +66,7 @@ const Sidebar = () => {
 				))}
 				<div
 					className="menu-item logout"
-					onClick={() => handleItemClick("Logout")}
+					onClick={() => handleItemClick({ path: "/" })}
 				>
 					<FontAwesomeIcon icon={faSignOutAlt} /> Logout
 				</div>
