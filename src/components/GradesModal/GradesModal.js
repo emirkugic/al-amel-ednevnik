@@ -3,7 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faChevronDown,
 	faChevronUp,
+	faArrowUp,
+	faArrowDown,
 	faFileExport,
+	faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import "./GradesModal.css";
 
@@ -89,7 +92,7 @@ const GradesModal = ({ student, isOpen, onClose }) => {
 						<FontAwesomeIcon icon={faFileExport} /> Export
 					</button>
 					<button className="close-btn" onClick={onClose}>
-						X
+						<FontAwesomeIcon icon={faTimes} />
 					</button>
 				</div>
 
