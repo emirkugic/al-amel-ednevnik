@@ -134,7 +134,10 @@ const ClassLogForm = () => {
 					setNotification={setNotification}
 				/>
 
-				<PrimaryButton title="Log Class" onClick={handleSubmit} />
+				{/* inside a div to center it, doesn't work otherwise...idk 🤷 */}
+				<div className="button-container">
+					<PrimaryButton title="Log Class" onClick={handleSubmit} />
+				</div>
 			</div>
 		</>
 	);
