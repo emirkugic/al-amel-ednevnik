@@ -6,39 +6,67 @@ import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
 import "./LoginForm.css";
 
 const LoginForm = () => {
-	const [username, setUsername] = useState("");
+	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [keepLoggedIn, setKeepLoggedIn] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
 
-	const handleLogin = () => {
-		console.log("Logging in:", { username, password, keepLoggedIn });
+	// Email validation using regex
+	const isValidEmail = (email) => {
+		const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return emailPattern.test(email);
+	};
+
+	const handleLogin = (e) => {
+		e.preventDefault(); // Prevent the default form submission behavior
+
+		// Check if email is valid and password is provided
+		if (!isValidEmail(email)) {
+			setErrorMessage("Please provide a valid email address.");
+			setTimeout(() => {
+				setErrorMessage(""); // Clear the error message after 3 seconds
+			}, 3000);
+			return;
+		}
+
+		if (!password) {
+			setErrorMessage("Please enter your password.");
+			setTimeout(() => {
+				setErrorMessage(""); // Clear the error message after 3 seconds
+			}, 3000);
+			return;
+		}
+
+		setErrorMessage(""); // Clear error message if validation passes
+		console.log("Logging in:", { email, password, keepLoggedIn });
 		// Add login logic here
 	};
 
 	const handleCancel = () => {
-		setUsername("");
+		setEmail("");
 		setPassword("");
 		setKeepLoggedIn(false);
+		setErrorMessage(""); // Clear the error message on cancel
 	};
 
 	return (
 		<div className="login-container">
-			{/* Add the logo image here */}
 			<img
 				src={`${process.env.PUBLIC_URL}/alamel_logo.png`}
 				alt="Logo"
 				className="logo"
 			/>
 
-			{/* <h2 className="login-title">Login</h2> */}
-			<form className="login-form">
+			{errorMessage && <p className="notification">{errorMessage}</p>}
+
+			<form className="login-form" noValidate onSubmit={handleLogin}>
 				<TextInput
-					label="Username"
+					label="Email"
 					icon={faUser}
-					placeholder="Enter your username"
-					value={username}
-					onChange={(e) => setUsername(e.target.value)}
-					type="text" // Regular text input
+					placeholder="Enter your email"
+					value={email}
+					onChange={(e) => setEmail(e.target.value)}
+					type="email"
 				/>
 				<TextInput
 					label="Password"
@@ -46,7 +74,7 @@ const LoginForm = () => {
 					placeholder="Enter your password"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
-					type="password" // Password input with eye icon
+					type="password"
 				/>
 
 				<div className="checkbox-container">
@@ -59,7 +87,7 @@ const LoginForm = () => {
 					<label htmlFor="keep-logged-in">Keep me logged in</label>
 				</div>
 				<div className="button-group">
-					<PrimaryButton title="Login" onClick={handleLogin} />
+					<PrimaryButton title="Login" />
 					<SecondaryButton title="Cancel" onClick={handleCancel} />
 				</div>
 			</form>

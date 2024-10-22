@@ -15,12 +15,16 @@
 	max-width: 150px; /* Adjust the logo size */
 }
 
-/* Login title */
-.login-title {
+/* Notification styling (same as in AbsentStudentsSelect) */
+.notification {
+	padding: 10px;
+	margin: 10px 0;
+	border-radius: 5px;
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
 	text-align: center;
-	font-size: 24px;
-	color: #333;
-	margin-bottom: 20px;
+	font-size: 0.9rem;
 }
 
 /* Styling for the form itself */
