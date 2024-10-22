@@ -14,6 +14,7 @@ import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import TextInput from "../ui/TextInput/TextInput";
 import DropdownSelect from "../ui/DropdownSelect/DropdownSelect";
 import AbsentStudentsSelect from "../ui/AbsentStudentsSelect/AbsentStudentsSelect";
+import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
 
 // Styles
 import "./ClassLogForm.css";
