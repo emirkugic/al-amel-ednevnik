@@ -1,0 +1,99 @@
+.modal-background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.7); /* Darker, more elegant background */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000; /* Make sure it's on top */
+}
+
+.grades-modal {
+	background-color: #ffffff;
+	padding: 25px;
+	border-radius: 12px;
+	width: 450px;
+	max-width: 90%; /* Responsive design */
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+	position: relative; /* So that close button positions correctly */
+}
+
+.modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h3 {
+	font-size: 1.5rem;
+	color: #333;
+	font-weight: bold;
+}
+
+.modal-body {
+	padding: 20px 0;
+	max-height: 300px;
+	overflow-y: auto; /* Ensure scrolling if there are many students */
+}
+
+.student-grade {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+	padding: 10px 15px;
+	border-radius: 8px;
+	background-color: #f9f9f9;
+	transition: background-color 0.3s ease;
+}
+
+.student-grade:hover {
+	background-color: #f0f0f0;
+}
+
+.student-grade p {
+	margin: 0;
+	font-size: 1rem;
+	color: #555;
+}
+
+.student-grade input {
+	width: 80px;
+	padding: 8px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 0.95rem;
+}
+
+.modal-footer {
+	text-align: right;
+	padding-top: 15px;
+	border-top: 1px solid #e0e0e0;
+}
+
+.close-button {
+	background: none;
+	border: none;
+	font-size: 20px;
+	cursor: pointer;
+	color: #777;
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	transition: color 0.2s ease;
+}
+
+.close-button:hover {
+	color: #333;
+}
+
+@media (max-width: 768px) {
+	.grades-modal {
+		width: 90%;
+	}
+}

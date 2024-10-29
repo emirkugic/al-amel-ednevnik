@@ -1,12 +1,14 @@
 .App {
 	display: flex;
+	min-height: 100vh; /* Make sure the app takes full height of the viewport */
 }
 
 .main-content {
 	flex-grow: 1;
 	padding: 20px;
 	background-color: #f9f9f9;
-	min-height: 100vh;
+	height: 100vh; /* Set the height of the main content to full viewport height */
+	overflow-y: auto; /* Allow scrolling inside the main content */
 	box-sizing: border-box;
 }
 
@@ -22,7 +24,8 @@
 	}
 
 	.main-content {
-		margin-top: 50px;
+		margin-top: 50px; /* Add space for the top-bar in mobile view */
 		padding: 10px;
+		height: auto; /* Auto height for mobile view */
 	}
 }

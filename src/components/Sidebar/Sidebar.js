@@ -14,6 +14,7 @@ import {
 	faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import "./Sidebar.css";
+import { faAnchorLock } from "@fortawesome/free-solid-svg-icons/faAnchorLock";
 
 const Sidebar = () => {
 	const [activeItem, setActiveItem] = useState("Dashboard"); // Default active item
@@ -29,6 +30,7 @@ const Sidebar = () => {
 		{ name: "Grades", icon: faChartLine, path: "/grades" },
 		{ name: "Settings", icon: faCog, path: "/settings" },
 		{ name: "Help", icon: faQuestionCircle, path: "/help" },
+		{ name: "Login", icon: faAnchorLock, path: "/login" },
 	];
 
 	const handleItemClick = (item) => {

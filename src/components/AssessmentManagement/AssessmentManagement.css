@@ -1,0 +1,88 @@
+.assessment-management-container {
+	background-color: #f3f4f6;
+	padding: 20px;
+	border-radius: 10px;
+	max-width: 800px;
+	margin: 50px auto;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.assessment-management {
+	background-color: white;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.assessment-management h3 {
+	font-size: 1.5rem;
+	margin-bottom: 20px;
+	color: #333;
+}
+
+.assessments-list {
+	margin-top: 30px;
+	padding-top: 10px;
+	border-top: 1px solid #e0e0e0;
+}
+
+.assessments-scrollable {
+	max-height: 300px;
+	overflow-y: auto;
+}
+
+.assessment-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px;
+	margin-bottom: 10px;
+	border-radius: 8px;
+	background-color: #f8f9fa;
+	transition: background-color 0.3s, box-shadow 0.3s;
+	cursor: pointer;
+}
+
+.assessment-info {
+	flex-grow: 1;
+}
+
+.assessment-item:hover {
+	background-color: #e9ecef;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.assessment-item p {
+	margin: 0;
+}
+
+.assessment-item strong {
+	font-weight: 600;
+	color: #343a40;
+}
+
+/* Remove button border and style trash icon */
+.delete-btn {
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+}
+
+.trash-icon {
+	color: #ff4d4f;
+	font-size: 1.2rem;
+	cursor: pointer;
+	transition: transform 0.3s ease, color 0.3s;
+}
+
+.trash-icon:hover {
+	transform: scale(1.2);
+	color: #ff3336;
+}
+
+.error-message {
+	color: red;
+	font-size: 0.9rem;
+	margin-bottom: 10px;
+}

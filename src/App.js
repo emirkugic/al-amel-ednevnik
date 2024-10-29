@@ -10,6 +10,7 @@ import Attendance from "../src/components/pages/Attendance";
 import Grades from "../src/components/pages/Grades";
 import Settings from "../src/components/pages/Settings";
 import Help from "../src/components/pages/Help";
+import Login from "./components/pages/Login";
 
 import "./App.css";
 
@@ -28,6 +29,7 @@ const App = () => {
 						<Route path="/grades" element={<Grades />} />
 						<Route path="/settings" element={<Settings />} />
 						<Route path="/help" element={<Help />} />
+						<Route path="/login" element={<Login />} />
 					</Routes>
 				</div>
 			</div>
