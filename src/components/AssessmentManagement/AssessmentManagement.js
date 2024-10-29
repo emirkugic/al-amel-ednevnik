@@ -101,7 +101,7 @@ const AssessmentManagement = () => {
 
 	return (
 		<div className="assessment-management-container">
-			<h3>{subject.replace(/-/g, " ")} - Manage Assessments</h3>
+			<h3>Manage Assessments</h3>
 			<DropdownSelect
 				label="Grade"
 				placeholder="Select Grade"

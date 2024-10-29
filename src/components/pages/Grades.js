@@ -1,11 +1,10 @@
 import React from "react";
 
-import AssessmentManagement from "../AssessmentManagement/AssessmentManagement";
-
 const Grades = () => {
 	return (
 		<div>
-			<AssessmentManagement />
+			<h1>Grades</h1>
+			<p>Grades will be shown here.</p>
 		</div>
 	);
 };
