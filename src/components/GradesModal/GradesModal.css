@@ -16,11 +16,13 @@
 	border-radius: 10px;
 	max-width: 600px;
 	width: 90%;
-	height: 500px;
+	height: 85vh; /* Set a percentage height to make it fit in the viewport */
+	display: flex;
+	flex-direction: column;
 	padding: 20px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 	position: relative;
-	overflow: hidden;
+	overflow: hidden; /* Prevent content overflow */
 }
 
 .modal-header {
@@ -99,9 +101,10 @@
 
 .grades-list {
 	margin-top: 20px;
-	overflow-y: auto;
-	height: 300px;
+	overflow-y: auto; /* Make the list scrollable */
+	flex-grow: 1; /* Ensure the grades list takes up the available space */
 	padding-right: 15px;
+	max-height: 100%; /* Allow the list to fill the modal height */
 }
 
 .subject {
@@ -144,7 +147,22 @@
 }
 
 .subject-details.expanded {
+	max-height: 300px; /* Adjust for expanded content */
 	padding-top: 10px;
+}
+
+.month-group-background {
+	background-color: #f7f7f7;
+	padding: 10px;
+	margin-bottom: 10px;
+	border-radius: 8px;
+}
+
+.month-header {
+	font-size: 1rem;
+	font-weight: bold;
+	margin-bottom: 5px;
+	color: #007bff;
 }
 
 .exam-detail {
@@ -159,21 +177,25 @@
 	border-bottom: none;
 }
 
+/* Responsive adjustments */
 @media (max-width: 768px) {
 	.modal {
 		width: 95%;
-		height: 90vh;
+		height: 85vh; /* Ensure the modal fits the viewport height */
 		padding: 15px;
 	}
 
 	.grades-list {
-		height: auto;
-		max-height: 60vh;
+		max-height: 60vh; /* Restrict height on smaller screens */
 	}
 
 	.close-btn {
 		width: 28px;
 		height: 28px;
 		font-size: 1rem;
+	}
+
+	.month-group-background {
+		padding: 8px;
 	}
 }

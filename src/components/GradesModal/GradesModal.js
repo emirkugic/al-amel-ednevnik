@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-	faChevronDown,
-	faChevronUp,
-	faArrowUp,
-	faArrowDown,
-	faFileExport,
-	faTimes,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFileExport, faTimes } from "@fortawesome/free-solid-svg-icons";
+import GradesList from "../ui/GradesList/GradesList";
 import "./GradesModal.css";
 
 const GradesModal = ({ student, isOpen, onClose }) => {
 	const [selectedSemester, setSelectedSemester] = useState("First");
-	const [expandedSubject, setExpandedSubject] = useState(null);
 
 	const semesters = {
 		First: [
@@ -20,18 +13,19 @@ const GradesModal = ({ student, isOpen, onClose }) => {
 				subject: "Mathematics",
 				teacher: "Dr. Smith",
 				details: [
-					{ exam: "1st Exam", grade: 90 },
-					{ exam: "Oral Exam", grade: 95 },
-					{ exam: "Final Exam", grade: 91 },
+					{ exam: "1st Exam", grade: 90, date: "2024-09-15" },
+					{ exam: "2nd Exam", grade: 25, date: "2024-09-20" },
+					{ exam: "Oral Exam", grade: 95, date: "2024-09-25" },
+					{ exam: "Final Exam", grade: 91, date: "2024-10-10" },
 				],
 			},
 			{
 				subject: "Physics",
 				teacher: "Mrs. Johnson",
 				details: [
-					{ exam: "1st Exam", grade: 85 },
-					{ exam: "Oral Exam", grade: 90 },
-					{ exam: "Final Exam", grade: 89 },
+					{ exam: "1st Exam", grade: 85, date: "2024-09-18" },
+					{ exam: "Oral Exam", grade: 90, date: "2024-10-10" },
+					{ exam: "Final Exam", grade: 89, date: "2024-11-20" },
 				],
 			},
 		],
@@ -40,18 +34,18 @@ const GradesModal = ({ student, isOpen, onClose }) => {
 				subject: "Mathematics",
 				teacher: "Dr. Smith",
 				details: [
-					{ exam: "1st Exam", grade: 89 },
-					{ exam: "Oral Exam", grade: 93 },
-					{ exam: "Final Exam", grade: 92 },
+					{ exam: "1st Exam", grade: 89, date: "2025-01-15" },
+					{ exam: "Oral Exam", grade: 93, date: "2025-02-10" },
+					{ exam: "Final Exam", grade: 92, date: "2025-03-12" },
 				],
 			},
 			{
 				subject: "Chemistry",
 				teacher: "Dr. Brown",
 				details: [
-					{ exam: "1st Exam", grade: 89 },
-					{ exam: "Oral Exam", grade: 92 },
-					{ exam: "Final Exam", grade: 90 },
+					{ exam: "1st Exam", grade: 89, date: "2025-01-20" },
+					{ exam: "Oral Exam", grade: 92, date: "2025-02-15" },
+					{ exam: "Final Exam", grade: 90, date: "2025-03-20" },
 				],
 			},
 		],
@@ -59,20 +53,6 @@ const GradesModal = ({ student, isOpen, onClose }) => {
 
 	const handleSemesterChange = (semester) => {
 		setSelectedSemester(semester);
-		setExpandedSubject(null);
-	};
-
-	const toggleSubjectDetails = (subject) => {
-		if (expandedSubject === subject) {
-			setExpandedSubject(null);
-		} else {
-			setExpandedSubject(subject);
-		}
-	};
-
-	const calculateAvgGrade = (details) => {
-		const total = details.reduce((acc, curr) => acc + curr.grade, 0);
-		return (total / details.length).toFixed(2);
 	};
 
 	if (!isOpen) return null;
@@ -96,7 +76,6 @@ const GradesModal = ({ student, isOpen, onClose }) => {
 					</button>
 				</div>
 
-				{/* Semester tabs with a shared background */}
 				<div className="tab-list-container">
 					<div className="tab-list-bg">
 						<button
@@ -118,51 +97,8 @@ const GradesModal = ({ student, isOpen, onClose }) => {
 					</div>
 				</div>
 
-				{/* Scrollable grades list */}
-				<div className="grades-list">
-					{semesters[selectedSemester].map((subject, index) => (
-						<div key={index} className="subject">
-							<div
-								className="subject-summary"
-								onClick={() => toggleSubjectDetails(subject.subject)}
-							>
-								<div className="subject-info">
-									<h4>{subject.subject}</h4>
-									<p>{subject.teacher}</p>
-								</div>
-								<div className="subject-grade">
-									<span>{calculateAvgGrade(subject.details)}%</span>
-									<FontAwesomeIcon
-										icon={
-											expandedSubject === subject.subject
-												? faChevronUp
-												: faChevronDown
-										}
-										className="chevron-icon"
-									/>
-								</div>
-							</div>
-
-							{/* Subject details (expandable section with animation) */}
-							<div
-								className={`subject-details ${
-									expandedSubject === subject.subject ? "expanded" : ""
-								}`}
-								style={{
-									maxHeight:
-										expandedSubject === subject.subject ? "200px" : "0",
-								}}
-							>
-								{subject.details.map((detail, idx) => (
-									<div key={idx} className="exam-detail">
-										<p>{detail.exam}</p>
-										<p>{detail.grade}%</p>
-									</div>
-								))}
-							</div>
-						</div>
-					))}
-				</div>
+				{/* Use the GradesList component */}
+				<GradesList subjects={semesters[selectedSemester]} />
 			</div>
 		</div>
 	);
