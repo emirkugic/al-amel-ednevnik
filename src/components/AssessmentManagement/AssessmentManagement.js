@@ -6,6 +6,7 @@ import AssessmentGradesModal from "../AssessmentGradesModal/AssessmentGradesModa
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./AssessmentManagement.css";
+import Notification from "../ui/Notification/Notification"; // Import Notification component
 
 const AssessmentManagement = () => {
 	const [assessments, setAssessments] = useState([]);
@@ -17,7 +18,7 @@ const AssessmentManagement = () => {
 	});
 	const [selectedAssessment, setSelectedAssessment] = useState(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [errorMessage, setErrorMessage] = useState("");
+	const [notifications, setNotifications] = useState([]); // Manage notifications
 
 	const assessmentTypes = [
 		{ value: "exam", label: "Exam" },
@@ -39,6 +40,18 @@ const AssessmentManagement = () => {
 		);
 	};
 
+	const addNotification = (type, message) => {
+		const id = Date.now();
+		setNotifications((prev) => [...prev, { id, type, description: message }]);
+
+		// Auto-remove notification after 5 seconds
+		setTimeout(() => removeNotification(id), 5000);
+	};
+
+	const removeNotification = (id) => {
+		setNotifications((prev) => prev.filter((n) => n.id !== id));
+	};
+
 	const handleAddAssessment = () => {
 		if (
 			!newAssessment.name ||
@@ -46,7 +59,7 @@ const AssessmentManagement = () => {
 			!newAssessment.weight ||
 			!newAssessment.gradeLevel
 		) {
-			setErrorMessage("Please fill out all fields");
+			addNotification("error", "Please fill out all fields");
 			return;
 		}
 
@@ -54,7 +67,8 @@ const AssessmentManagement = () => {
 		const totalWeight = calculateTotalWeight() + weight;
 
 		if (totalWeight > 100) {
-			setErrorMessage(
+			addNotification(
+				"warning",
 				`Total weight cannot exceed 100%. Current total: ${calculateTotalWeight()}%.`
 			);
 			return;
@@ -67,8 +81,6 @@ const AssessmentManagement = () => {
 			createdAt: new Date().toLocaleString(), // Capture creation time
 		};
 
-		console.log("New Assessment Created:", assessment); // Log the assessment and its creation time
-
 		setAssessments([...assessments, assessment]);
 		setNewAssessment({
 			name: "",
@@ -76,7 +88,6 @@ const AssessmentManagement = () => {
 			weight: "",
 			gradeLevel: "",
 		});
-		setErrorMessage(""); // Clear error message on successful submission
 	};
 
 	const handleDeleteAssessment = (assessmentId) => {
@@ -84,6 +95,7 @@ const AssessmentManagement = () => {
 			(assessment) => assessment.id !== assessmentId
 		);
 		setAssessments(updatedAssessments);
+		addNotification("info", "Assessment deleted successfully");
 	};
 
 	const handleOpenModal = (assessment) => {
@@ -130,9 +142,6 @@ const AssessmentManagement = () => {
 					}
 				/>
 
-				{/* Error Message */}
-				{errorMessage && <p className="error-message">{errorMessage}</p>}
-
 				{/* Add Assessment Button */}
 				<PrimaryButton title="Add Assessment" onClick={handleAddAssessment} />
 
@@ -174,6 +183,12 @@ const AssessmentManagement = () => {
 						onClose={() => setIsModalOpen(false)}
 					/>
 				)}
+
+				{/* Pass notifications and removeNotification function to Notification component */}
+				<Notification
+					notifications={notifications}
+					removeNotification={removeNotification}
+				/>
 			</div>
 		</div>
 	);
