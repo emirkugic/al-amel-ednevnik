@@ -1,6 +1,6 @@
 import React from "react";
-import "./SubjectList.css";
 import SubjectPill from "../ui/SubjectPill/SubjectPill";
+import "./SubjectList.css";
 
 const SubjectList = () => {
 	const courses = [
@@ -11,10 +11,19 @@ const SubjectList = () => {
 		{ title: "Chemistry", color: "#9b59b6" },
 	];
 
+	const handlePillClick = (title) => {
+		console.log(`You clicked on: ${title}`);
+	};
+
 	return (
 		<div className="subject-list">
 			{courses.map((course, index) => (
-				<SubjectPill key={index} color={course.color} title={course.title} />
+				<SubjectPill
+					key={index}
+					color={course.color}
+					title={course.title}
+					onClick={handlePillClick}
+				/>
 			))}
 		</div>
 	);

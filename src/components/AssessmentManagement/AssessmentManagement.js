@@ -1,14 +1,15 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom"; // To capture the subject from the URL
 import DropdownSelect from "../ui/DropdownSelect/DropdownSelect";
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import TextInput from "../ui/TextInput/TextInput";
-import AssessmentGradesModal from "../AssessmentGradesModal/AssessmentGradesModal";
+import "./AssessmentManagement.css";
+import Notification from "../ui/Notification/Notification";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import "./AssessmentManagement.css";
-import Notification from "../ui/Notification/Notification"; // Import Notification component
 
 const AssessmentManagement = () => {
+	const { subject } = useParams(); // Capture the subject name from the URL
 	const [assessments, setAssessments] = useState([]);
 	const [newAssessment, setNewAssessment] = useState({
 		name: "",
@@ -16,9 +17,7 @@ const AssessmentManagement = () => {
 		points: "",
 		gradeLevel: "",
 	});
-	const [selectedAssessment, setSelectedAssessment] = useState(null);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [notifications, setNotifications] = useState([]); // Manage notifications
+	const [notifications, setNotifications] = useState([]);
 
 	const assessmentTypes = [
 		{ value: "exam", label: "Exam" },
@@ -44,7 +43,6 @@ const AssessmentManagement = () => {
 		const id = Date.now();
 		setNotifications((prev) => [...prev, { id, type, description: message }]);
 
-		// Auto-remove notification after 5 seconds
 		setTimeout(() => removeNotification(id), 5000);
 	};
 
@@ -81,7 +79,7 @@ const AssessmentManagement = () => {
 			id: Date.now(),
 			...newAssessment,
 			points: points,
-			createdAt: new Date().toLocaleString(), // Capture creation time
+			createdAt: new Date().toLocaleString(),
 		};
 
 		setAssessments([...assessments, assessment]);
@@ -101,99 +99,76 @@ const AssessmentManagement = () => {
 		addNotification("info", "Assessment deleted successfully");
 	};
 
-	const handleOpenModal = (assessment) => {
-		setSelectedAssessment(assessment);
-		setIsModalOpen(true);
-	};
-
 	return (
 		<div className="assessment-management-container">
-			<div className="assessment-management">
-				<h3>Assessments</h3>
+			<h3>{subject.replace(/-/g, " ")} - Manage Assessments</h3>
+			<DropdownSelect
+				label="Grade"
+				placeholder="Select Grade"
+				options={gradeLevels}
+				value={newAssessment.gradeLevel}
+				onChange={(option) =>
+					setNewAssessment({ ...newAssessment, gradeLevel: option.value })
+				}
+			/>
+			<TextInput
+				label="Assessment Name"
+				placeholder="Enter assessment name"
+				value={newAssessment.name}
+				onChange={(e) =>
+					setNewAssessment({ ...newAssessment, name: e.target.value })
+				}
+			/>
+			<DropdownSelect
+				label="Type"
+				placeholder="Select Type"
+				options={assessmentTypes}
+				value={newAssessment.type}
+				onChange={(option) =>
+					setNewAssessment({ ...newAssessment, type: option.value })
+				}
+			/>
+			<TextInput
+				label="Points"
+				placeholder="Enter points"
+				value={newAssessment.points}
+				onChange={(e) =>
+					setNewAssessment({ ...newAssessment, points: e.target.value })
+				}
+			/>
 
-				<DropdownSelect
-					label="Grade"
-					placeholder="Select Grade"
-					options={gradeLevels}
-					value={newAssessment.gradeLevel}
-					onChange={(option) =>
-						setNewAssessment({ ...newAssessment, gradeLevel: option.value })
-					}
-				/>
+			<PrimaryButton title="Add Assessment" onClick={handleAddAssessment} />
 
-				<TextInput
-					label="Assessment Name"
-					placeholder="Enter assessment name"
-					value={newAssessment.name}
-					onChange={(e) =>
-						setNewAssessment({ ...newAssessment, name: e.target.value })
-					}
-				/>
-				<DropdownSelect
-					label="Type"
-					placeholder="Select Type"
-					options={assessmentTypes}
-					value={newAssessment.type}
-					onChange={(option) =>
-						setNewAssessment({ ...newAssessment, type: option.value })
-					}
-				/>
-
-				<TextInput
-					label="Points"
-					placeholder="Enter points"
-					value={newAssessment.points}
-					onChange={(e) =>
-						setNewAssessment({ ...newAssessment, points: e.target.value })
-					}
-				/>
-
-				{/* Add Assessment Button */}
-				<PrimaryButton title="Add Assessment" onClick={handleAddAssessment} />
-
-				<div className="assessments-list">
-					<h4>Current Assessments (Total points: {calculateTotalPoints()}):</h4>
-					<div className="assessments-scrollable">
-						{assessments.map((assessment) => (
-							<div key={assessment.id} className="assessment-item">
-								<div
-									className="assessment-info"
-									onClick={() => handleOpenModal(assessment)}
-								>
-									<p>
-										<strong>{assessment.name}</strong> - {assessment.type}
-									</p>
-									<p>
-										{assessment.points}% of total grade for{" "}
-										{assessment.gradeLevel}
-									</p>
-									<p>Created on: {assessment.createdAt}</p>
-								</div>
-								{/* Trash Can Icon for Deletion */}
-								<button
-									className="delete-btn"
-									onClick={() => handleDeleteAssessment(assessment.id)}
-								>
-									<FontAwesomeIcon icon={faTrash} className="trash-icon" />
-								</button>
+			<div className="assessments-list">
+				<h4>Current Assessments (Total points: {calculateTotalPoints()}):</h4>
+				<div className="assessments-scrollable">
+					{assessments.map((assessment) => (
+						<div key={assessment.id} className="assessment-item">
+							<div className="assessment-info">
+								<p>
+									<strong>{assessment.name}</strong> - {assessment.type}
+								</p>
+								<p>
+									{assessment.points}% of total grade for{" "}
+									{assessment.gradeLevel}
+								</p>
+								<p>Created on: {assessment.createdAt}</p>
 							</div>
-						))}
-					</div>
+							<button
+								className="delete-btn"
+								onClick={() => handleDeleteAssessment(assessment.id)}
+							>
+								<FontAwesomeIcon icon={faTrash} className="trash-icon" />
+							</button>
+						</div>
+					))}
 				</div>
-
-				{isModalOpen && selectedAssessment && (
-					<AssessmentGradesModal
-						assessment={selectedAssessment}
-						onClose={() => setIsModalOpen(false)}
-					/>
-				)}
-
-				{/* Pass notifications and removeNotification function to Notification component */}
-				<Notification
-					notifications={notifications}
-					removeNotification={removeNotification}
-				/>
 			</div>
+
+			<Notification
+				notifications={notifications}
+				removeNotification={removeNotification}
+			/>
 		</div>
 	);
 };

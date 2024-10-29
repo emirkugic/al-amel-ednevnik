@@ -16,6 +16,7 @@ import Grades from "../src/components/pages/Grades";
 import Settings from "../src/components/pages/Settings";
 import Help from "../src/components/pages/Help";
 import Login from "./components/pages/Login";
+import AssessmentManagement from "./components/AssessmentManagement/AssessmentManagement";
 
 import "./App.css";
 
@@ -37,6 +38,7 @@ const App = () => {
 					<Route path="/settings" element={<Settings />} />
 					<Route path="/help" element={<Help />} />
 					<Route path="/login" element={<Login />} />
+					<Route path="/courses/:subject" element={<AssessmentManagement />} />
 				</Routes>
 			</div>
 		</div>
