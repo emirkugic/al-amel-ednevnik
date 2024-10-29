@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import GradesList from "../ui/GradesList/GradesList";
+import ClassLogForm from "../ClassLogForm/ClassLogForm";
 
 const Dashboard = () => {
 	// Initial selected semester state
@@ -77,8 +78,11 @@ const Dashboard = () => {
 			<br />
 			<br />
 
+			{/* Render the Classlogform component */}
+			<ClassLogForm />
+
 			{/* Render the GradesList outside the modal */}
-			<GradesList subjects={semesters[selectedSemester]} />
+			{/* <GradesList subjects={semesters[selectedSemester]} /> */}
 		</div>
 	);
 };

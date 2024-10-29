@@ -13,7 +13,7 @@ const AssessmentManagement = () => {
 	const [newAssessment, setNewAssessment] = useState({
 		name: "",
 		type: "",
-		weight: "",
+		points: "",
 		gradeLevel: "",
 	});
 	const [selectedAssessment, setSelectedAssessment] = useState(null);
@@ -33,9 +33,9 @@ const AssessmentManagement = () => {
 		label: `${i + 1}${["st", "nd", "rd"][((i + 1) % 10) - 1] || "th"} Grade`,
 	}));
 
-	const calculateTotalWeight = () => {
+	const calculateTotalPoints = () => {
 		return assessments.reduce(
-			(total, assessment) => total + assessment.weight,
+			(total, assessment) => total + assessment.points,
 			0
 		);
 	};
@@ -56,20 +56,23 @@ const AssessmentManagement = () => {
 		if (
 			!newAssessment.name ||
 			!newAssessment.type ||
-			!newAssessment.weight ||
+			!newAssessment.points ||
 			!newAssessment.gradeLevel
 		) {
 			addNotification("error", "Please fill out all fields");
 			return;
 		}
 
-		const weight = parseInt(newAssessment.weight);
-		const totalWeight = calculateTotalWeight() + weight;
+		const points = parseInt(newAssessment.points);
+		const totalpoints = calculateTotalPoints() + points;
 
-		if (totalWeight > 100) {
+		if (totalpoints > 100) {
 			addNotification(
 				"warning",
-				`Total weight cannot exceed 100%. Current total: ${calculateTotalWeight()}%.`
+				<>
+					Total points cannot exceed 100. <br />
+					Current total: {calculateTotalPoints()}.
+				</>
 			);
 			return;
 		}
@@ -77,7 +80,7 @@ const AssessmentManagement = () => {
 		const assessment = {
 			id: Date.now(),
 			...newAssessment,
-			weight: weight,
+			points: points,
 			createdAt: new Date().toLocaleString(), // Capture creation time
 		};
 
@@ -85,7 +88,7 @@ const AssessmentManagement = () => {
 		setNewAssessment({
 			name: "",
 			type: "",
-			weight: "",
+			points: "",
 			gradeLevel: "",
 		});
 	};
@@ -107,6 +110,17 @@ const AssessmentManagement = () => {
 		<div className="assessment-management-container">
 			<div className="assessment-management">
 				<h3>Assessments</h3>
+
+				<DropdownSelect
+					label="Grade"
+					placeholder="Select Grade"
+					options={gradeLevels}
+					value={newAssessment.gradeLevel}
+					onChange={(option) =>
+						setNewAssessment({ ...newAssessment, gradeLevel: option.value })
+					}
+				/>
+
 				<TextInput
 					label="Assessment Name"
 					placeholder="Enter assessment name"
@@ -124,21 +138,13 @@ const AssessmentManagement = () => {
 						setNewAssessment({ ...newAssessment, type: option.value })
 					}
 				/>
-				<DropdownSelect
-					label="Grade"
-					placeholder="Select Grade"
-					options={gradeLevels}
-					value={newAssessment.gradeLevel}
-					onChange={(option) =>
-						setNewAssessment({ ...newAssessment, gradeLevel: option.value })
-					}
-				/>
+
 				<TextInput
-					label="Weight (%)"
-					placeholder="Enter weight in %"
-					value={newAssessment.weight}
+					label="Points"
+					placeholder="Enter points"
+					value={newAssessment.points}
 					onChange={(e) =>
-						setNewAssessment({ ...newAssessment, weight: e.target.value })
+						setNewAssessment({ ...newAssessment, points: e.target.value })
 					}
 				/>
 
@@ -146,9 +152,7 @@ const AssessmentManagement = () => {
 				<PrimaryButton title="Add Assessment" onClick={handleAddAssessment} />
 
 				<div className="assessments-list">
-					<h4>
-						Current Assessments (Total Weight: {calculateTotalWeight()}%):
-					</h4>
+					<h4>Current Assessments (Total points: {calculateTotalPoints()}):</h4>
 					<div className="assessments-scrollable">
 						{assessments.map((assessment) => (
 							<div key={assessment.id} className="assessment-item">
@@ -160,7 +164,7 @@ const AssessmentManagement = () => {
 										<strong>{assessment.name}</strong> - {assessment.type}
 									</p>
 									<p>
-										{assessment.weight}% of total grade for{" "}
+										{assessment.points}% of total grade for{" "}
 										{assessment.gradeLevel}
 									</p>
 									<p>Created on: {assessment.createdAt}</p>
