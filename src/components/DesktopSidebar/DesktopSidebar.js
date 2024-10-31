@@ -28,7 +28,7 @@ const DesktopSidebar = () => {
 				{ title: "Comp Sci", path: "/courses/compsci" },
 			],
 		},
-		{ title: "Schedule", icon: faCalendarAlt, route: "/schedule" },
+		// { title: "Schedule", icon: faCalendarAlt, route: "/schedule" },
 		{ title: "Attendance", icon: faClock, route: "/attendance" },
 		{ title: "Grades", icon: faChartLine, route: "/grades" },
 		{ title: "Settings", icon: faCog, route: "/settings" },
