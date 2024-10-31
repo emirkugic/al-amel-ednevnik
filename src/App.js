@@ -6,6 +6,7 @@ import {
 	useLocation,
 } from "react-router-dom";
 import Sidebar from "./components/Sidebar/Sidebar";
+import DesktopSidebar from "./components/DesktopSidebar/DesktopSidebar";
 
 import Dashboard from "../src/components/pages/Dashboard";
 import Students from "../src/components/pages/Students";
@@ -26,7 +27,7 @@ const App = () => {
 
 	return (
 		<div className="App">
-			{location.pathname !== "/login" && <Sidebar />}
+			{location.pathname !== "/login" && <DesktopSidebar />}
 
 			<div className="main-content">
 				<Routes>

@@ -1,31 +1,27 @@
 .App {
 	display: flex;
-	min-height: 100vh; /* Make sure the app takes full height of the viewport */
+	min-height: 100vh;
 }
 
 .main-content {
 	flex-grow: 1;
 	padding: 20px;
 	background-color: #f9f9f9;
-	height: 100vh; /* Set the height of the main content to full viewport height */
-	overflow-y: auto; /* Allow scrolling inside the main content */
+	margin-left: 250px; /* Makes room for the sidebar */
+	height: 100vh;
+	overflow-y: auto;
 	box-sizing: border-box;
-}
-
-.main-content > * {
-	margin: 0;
-	padding: 0;
 }
 
 @media (max-width: 768px) {
 	.App {
 		flex-direction: column;
-		background-color: blueviolet;
 	}
 
 	.main-content {
-		margin-top: 50px; /* Add space for the top-bar in mobile view */
+		margin-left: 0;
+		margin-top: 50px; /* Make space for top bar in mobile */
 		padding: 10px;
-		height: auto; /* Auto height for mobile view */
+		height: auto;
 	}
 }

@@ -1,0 +1,61 @@
+.desktop-sidebar-button-container {
+	display: flex;
+	flex-direction: column;
+}
+
+.desktop-sidebar-button {
+	padding: 10px 15px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	font-size: 16px;
+	color: #333;
+	border-radius: 8px;
+	transition: background-color 0.3s;
+	position: relative;
+}
+
+.desktop-sidebar-button:hover {
+	background-color: #f0f0f0;
+}
+
+.desktop-sidebar-button.active {
+	font-weight: bold;
+	background-color: #e6e6e6;
+	color: #04abfd;
+}
+
+.button-icon {
+	font-size: 20px;
+	margin-right: 10px;
+}
+
+.button-title {
+	flex-grow: 1;
+}
+
+.chevron-icon {
+	margin-left: auto;
+	font-size: 14px;
+}
+
+.dropdown {
+	background-color: #ffffff;
+	padding-left: 30px;
+	margin-top: 5px;
+}
+
+.dropdown-item {
+	padding: 8px 0;
+	cursor: pointer;
+	color: #333;
+	font-size: 14px;
+	transition: background-color 0.3s;
+	border-radius: 8px;
+	padding-left: 15px;
+	margin-bottom: 5px;
+}
+
+.dropdown-item:hover {
+	background-color: #f0f0f0;
+}

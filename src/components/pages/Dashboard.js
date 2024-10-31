@@ -72,14 +72,14 @@ const Dashboard = () => {
 
 	return (
 		<div>
-			<h2>Dashboard</h2>
+			{/* <h2>Dashboard</h2>
 			<p>Welcome to the Dashboard</p>
 			<br />
 			<br />
-			<br />
+			<br /> */}
 
 			{/* Render the Classlogform component */}
-			<ClassLogForm />
+			{/* <ClassLogForm /> */}
 
 			{/* Render the GradesList outside the modal */}
 			{/* <GradesList subjects={semesters[selectedSemester]} /> */}

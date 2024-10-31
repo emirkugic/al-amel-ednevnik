@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+
 import AssessmentGradesModal from "../AssessmentGradesModal/AssessmentGradesModal";
 import AssessmentManagement from "../AssessmentManagement/AssessmentManagement";
 import ClassLogForm from "../ClassLogForm/ClassLogForm";
@@ -16,10 +18,15 @@ import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
 import SubjectPill from "../ui/SubjectPill/SubjectPill";
 import TextInput from "../ui/TextInput/TextInput";
+import DesktopSidebarButton from "../ui/DesktopSidebarButton/DesktopSidebarButton";
 
 const Develop = () => {
 	const [isGradesModalOpen, setGradesModalOpen] = useState(false);
 	const [notifications, setNotifications] = useState([]);
+
+	const handleButtonClick = (buttonName) => {
+		console.log(`${buttonName} button clicked`);
+	};
 
 	const handleNotification = () => {
 		const id = Date.now();
@@ -63,6 +70,13 @@ const Develop = () => {
 			<br />
 
 			{/* Display individual components */}
+			<DesktopSidebarButton
+				title="Develop"
+				icon={faSignOutAlt}
+				route="/develop"
+				isActive={false}
+				onClick={() => handleButtonClick("Develop")}
+			/>
 			<PrimaryButton title="Primary Button" />
 			<SecondaryButton title="Secondary Button" />
 			<TextInput label="Text Input" placeholder="Enter text here" />

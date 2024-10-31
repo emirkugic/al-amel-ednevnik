@@ -1,0 +1,32 @@
+.desktop-sidebar {
+	width: 250px;
+	height: 100vh;
+	background-color: #ffffff;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	user-select: none;
+	box-sizing: border-box;
+}
+
+.sidebar-logo {
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+.sidebar-menu {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	flex-grow: 1; /* Allows the menu to grow and push the logout button down */
+}
+
+.logout-container {
+	margin-top: auto; /* Moves the logout button to the bottom */
+	padding-top: 20px;
+}
