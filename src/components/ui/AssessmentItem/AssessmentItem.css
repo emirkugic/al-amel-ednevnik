@@ -1,0 +1,48 @@
+.assessment-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px;
+	margin-bottom: 10px;
+	border-radius: 8px;
+	background-color: #f8f9fa;
+	transition: background-color 0.3s, box-shadow 0.3s;
+	cursor: pointer;
+}
+
+.assessment-info {
+	flex-grow: 1;
+}
+
+.assessment-item:hover {
+	background-color: #e9ecef;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.assessment-item p {
+	margin: 0;
+}
+
+.assessment-item strong {
+	font-weight: 600;
+	color: #343a40;
+}
+
+.delete-btn {
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+}
+
+.trash-icon {
+	color: #ff4d4f;
+	font-size: 1.2rem;
+	cursor: pointer;
+	transition: transform 0.3s ease, color 0.3s;
+}
+
+.trash-icon:hover {
+	transform: scale(1.2);
+	color: #ff3336;
+}

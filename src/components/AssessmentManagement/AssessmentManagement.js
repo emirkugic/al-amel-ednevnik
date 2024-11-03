@@ -1,25 +1,27 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom"; // To capture the subject from the URL
+import { useParams } from "react-router-dom";
 import DropdownSelect from "../ui/DropdownSelect/DropdownSelect";
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import TextInput from "../ui/TextInput/TextInput";
-import "./AssessmentManagement.css";
 import Notification from "../ui/Notification/Notification";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import AssessmentItem from "../ui/AssessmentItem/AssessmentItem";
+import "./AssessmentManagement.css";
 
 const AssessmentManagement = () => {
-	const { subject } = useParams(); // Capture the subject name from the URL
-	const [assessments, setAssessments] = useState([]);
+	const { subject } = useParams();
+	const [assessments, setAssessments] = useState({});
 	const [newAssessment, setNewAssessment] = useState({
 		name: "",
-		type: "",
+		type: "", // Set as empty to force selection
 		points: "",
 		gradeLevel: "",
 	});
+	const [selectedGrade, setSelectedGrade] = useState("");
 	const [notifications, setNotifications] = useState([]);
 
 	const assessmentTypes = [
+		{ value: "", label: "Please select a type" }, // Default placeholder option
+		{ value: "activity", label: "Activity" },
 		{ value: "exam", label: "Exam" },
 		{ value: "quiz", label: "Quiz" },
 		{ value: "homework", label: "Homework" },
@@ -27,13 +29,20 @@ const AssessmentManagement = () => {
 		{ value: "oral_exam", label: "Oral Exam" },
 	];
 
-	const gradeLevels = Array.from({ length: 12 }, (_, i) => ({
-		value: (i + 1).toString(),
-		label: `${i + 1}${["st", "nd", "rd"][((i + 1) % 10) - 1] || "th"} Grade`,
-	}));
+	const gradeLevels = Array.from({ length: 12 }, (_, i) => {
+		const gradeNumber = i + 1;
+		const suffix = [11, 12, 13].includes(gradeNumber)
+			? "th"
+			: ["st", "nd", "rd"][(gradeNumber % 10) - 1] || "th";
+
+		return {
+			value: gradeNumber.toString(),
+			label: `${gradeNumber}${suffix} Grade`,
+		};
+	});
 
 	const calculateTotalPoints = () => {
-		return assessments.reduce(
+		return (assessments[selectedGrade] || []).reduce(
 			(total, assessment) => total + assessment.points,
 			0
 		);
@@ -42,7 +51,6 @@ const AssessmentManagement = () => {
 	const addNotification = (type, message) => {
 		const id = Date.now();
 		setNotifications((prev) => [...prev, { id, type, description: message }]);
-
 		setTimeout(() => removeNotification(id), 5000);
 	};
 
@@ -53,18 +61,18 @@ const AssessmentManagement = () => {
 	const handleAddAssessment = () => {
 		if (
 			!newAssessment.name ||
-			!newAssessment.type ||
+			!newAssessment.type || // Ensure type is selected
 			!newAssessment.points ||
-			!newAssessment.gradeLevel
+			!selectedGrade
 		) {
 			addNotification("error", "Please fill out all fields");
 			return;
 		}
 
 		const points = parseInt(newAssessment.points);
-		const totalpoints = calculateTotalPoints() + points;
+		const totalPoints = calculateTotalPoints() + points;
 
-		if (totalpoints > 100) {
+		if (totalPoints > 100) {
 			addNotification(
 				"warning",
 				<>
@@ -82,35 +90,47 @@ const AssessmentManagement = () => {
 			createdAt: new Date().toLocaleString(),
 		};
 
-		setAssessments([...assessments, assessment]);
+		setAssessments((prev) => ({
+			...prev,
+			[selectedGrade]: [...(prev[selectedGrade] || []), assessment],
+		}));
+
+		// Reset new assessment fields after adding
 		setNewAssessment({
 			name: "",
-			type: "",
+			type: "", // Reset type to empty, forcing re-selection
 			points: "",
 			gradeLevel: "",
 		});
 	};
 
 	const handleDeleteAssessment = (assessmentId) => {
-		const updatedAssessments = assessments.filter(
-			(assessment) => assessment.id !== assessmentId
-		);
-		setAssessments(updatedAssessments);
+		setAssessments((prev) => ({
+			...prev,
+			[selectedGrade]: (prev[selectedGrade] || []).filter(
+				(assessment) => assessment.id !== assessmentId
+			),
+		}));
 		addNotification("info", "Assessment deleted successfully");
 	};
 
 	return (
 		<div className="assessment-management-container">
-			<h3>Manage Assessments</h3>
+			<h3>
+				Manage Assessments for{" "}
+				{subject.charAt(0).toUpperCase() + subject.slice(1)}
+			</h3>
+
 			<DropdownSelect
 				label="Grade"
 				placeholder="Select Grade"
 				options={gradeLevels}
-				value={newAssessment.gradeLevel}
-				onChange={(option) =>
-					setNewAssessment({ ...newAssessment, gradeLevel: option.value })
-				}
+				value={selectedGrade}
+				onChange={(option) => {
+					setSelectedGrade(option.value);
+				}}
 			/>
+
 			<TextInput
 				label="Assessment Name"
 				placeholder="Enter assessment name"
@@ -140,27 +160,18 @@ const AssessmentManagement = () => {
 			<PrimaryButton title="Add Assessment" onClick={handleAddAssessment} />
 
 			<div className="assessments-list">
-				<h4>Current Assessments (Total points: {calculateTotalPoints()}):</h4>
+				<h4>Assessments for {selectedGrade} Grade</h4>
 				<div className="assessments-scrollable">
-					{assessments.map((assessment) => (
-						<div key={assessment.id} className="assessment-item">
-							<div className="assessment-info">
-								<p>
-									<strong>{assessment.name}</strong> - {assessment.type}
-								</p>
-								<p>
-									{assessment.points}% of total grade for{" "}
-									{assessment.gradeLevel}
-								</p>
-								<p>Created on: {assessment.createdAt}</p>
-							</div>
-							<button
-								className="delete-btn"
-								onClick={() => handleDeleteAssessment(assessment.id)}
-							>
-								<FontAwesomeIcon icon={faTrash} className="trash-icon" />
-							</button>
-						</div>
+					{(assessments[selectedGrade] || []).map((assessment) => (
+						<AssessmentItem
+							key={assessment.id}
+							name={assessment.name}
+							type={assessment.type}
+							points={assessment.points}
+							gradeLevel={selectedGrade}
+							createdAt={assessment.createdAt}
+							onDelete={() => handleDeleteAssessment(assessment.id)}
+						/>
 					))}
 				</div>
 			</div>
