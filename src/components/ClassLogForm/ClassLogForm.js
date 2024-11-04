@@ -44,13 +44,13 @@ const ClassLogForm = () => {
 	];
 
 	const classHours = [
-		{ value: "1", label: "1st Hour" },
-		{ value: "2", label: "2nd Hour" },
-		{ value: "3", label: "3rd Hour" },
-		{ value: "4", label: "4th Hour" },
-		{ value: "5", label: "5th Hour" },
-		{ value: "6", label: "6th Hour" },
-		{ value: "7", label: "7th Hour" },
+		{ value: "1", label: "1st Period" },
+		{ value: "2", label: "2nd Period" },
+		{ value: "3", label: "3rd Period" },
+		{ value: "4", label: "4th Period" },
+		{ value: "5", label: "5th Period" },
+		{ value: "6", label: "6th Period" },
+		{ value: "7", label: "7th Period" },
 	];
 
 	const classYears = [
@@ -99,7 +99,7 @@ const ClassLogForm = () => {
 				<div className="dropdown-row">
 					<DropdownSelect
 						className="dropdown-select"
-						label="Class Hour"
+						label="Period"
 						icon={faClock}
 						placeholder="Select"
 						value={classHour}
@@ -108,7 +108,7 @@ const ClassLogForm = () => {
 					/>
 					<DropdownSelect
 						className="dropdown-select"
-						label="Class Year"
+						label="Class"
 						icon={faGraduationCap}
 						placeholder="Select"
 						value={gradeOptions}

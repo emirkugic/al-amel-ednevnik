@@ -1,0 +1,43 @@
+.timetable-widget {
+	max-width: 300px;
+	background-color: #ffffff;
+	border-radius: 12px;
+	padding: 15px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	font-family: Arial, sans-serif;
+	color: #333;
+	margin-top: 20px;
+}
+
+.timetable {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.timetable-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
+	border-radius: 8px;
+	background-color: #f4f4f4;
+	transition: background-color 0.3s ease;
+	font-size: 0.9em;
+	color: #5a5a5a;
+}
+
+.timetable-row.current-period {
+	background-color: #cce4f6; /* New highlight color for the current period */
+	color: #007acc; /* New text color */
+	font-weight: bold;
+}
+
+.timetable-time {
+	font-weight: bold;
+	color: #007acc;
+}
+
+.timetable-label {
+	color: #5a5a5a;
+}

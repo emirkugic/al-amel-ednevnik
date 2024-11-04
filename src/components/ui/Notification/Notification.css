@@ -2,7 +2,7 @@
 	position: fixed;
 	top: 20px;
 	right: 20px;
-	z-index: 1000;
+	z-index: 9999; /* Higher z-index to ensure it appears above all other elements */
 	display: flex;
 	flex-direction: column;
 	gap: 10px;

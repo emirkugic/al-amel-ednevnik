@@ -13,6 +13,13 @@
 	box-sizing: border-box;
 }
 
-.right-sidebar-desktop .calendar-widget {
+.right-sidebar-desktop .timetable-widget {
 	margin-top: 20px;
+}
+
+/* Hide the sidebar on mobile view (screen width less than 768px) */
+@media (max-width: 768px) {
+	.right-sidebar-desktop {
+		display: none;
+	}
 }
