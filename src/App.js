@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Sidebar from "./components/Sidebar/Sidebar";
 import DesktopSidebar from "./components/DesktopSidebar/DesktopSidebar";
+import RightSidebarDesktop from "./components/RightSidebarDesktop/RightSidebarDesktop";
 
 import Dashboard from "../src/components/pages/Dashboard";
 import Students from "../src/components/pages/Students";
@@ -28,7 +29,6 @@ const App = () => {
 	return (
 		<div className="App">
 			{location.pathname !== "/login" && <DesktopSidebar />}
-
 			<div className="main-content">
 				<Routes>
 					<Route path="/" element={<Dashboard />} />
@@ -47,6 +47,7 @@ const App = () => {
 					/>
 				</Routes>
 			</div>
+			{location.pathname !== "/login" && <RightSidebarDesktop />}
 		</div>
 	);
 };

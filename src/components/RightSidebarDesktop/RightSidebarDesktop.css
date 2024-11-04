@@ -1,0 +1,18 @@
+.right-sidebar-desktop {
+	width: 350px;
+	height: 100vh;
+	background-color: #ffffff;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 1000;
+	user-select: none;
+	box-sizing: border-box;
+}
+
+.right-sidebar-desktop .calendar-widget {
+	margin-top: 20px;
+}
