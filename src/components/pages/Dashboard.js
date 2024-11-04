@@ -79,7 +79,7 @@ const Dashboard = () => {
 			<br /> */}
 
 			{/* Render the Classlogform component */}
-			{/* <ClassLogForm /> */}
+			<ClassLogForm />
 
 			{/* Render the GradesList outside the modal */}
 			{/* <GradesList subjects={semesters[selectedSemester]} /> */}

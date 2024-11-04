@@ -1,185 +1,164 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import DropdownSelect from "../ui/DropdownSelect/DropdownSelect";
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
-import TextInput from "../ui/TextInput/TextInput";
-import Notification from "../ui/Notification/Notification";
-import AssessmentItem from "../ui/AssessmentItem/AssessmentItem";
 import "./AssessmentManagement.css";
 
 const AssessmentManagement = () => {
-	const { subject } = useParams();
-	const [assessments, setAssessments] = useState({});
-	const [newAssessment, setNewAssessment] = useState({
-		name: "",
-		type: "", // Set as empty to force selection
-		points: "",
-		gradeLevel: "",
-	});
-	const [selectedGrade, setSelectedGrade] = useState("");
-	const [notifications, setNotifications] = useState([]);
+	const [assessments, setAssessments] = useState([]);
+	const [className, setClassName] = useState("1st Grade");
+	const [title, setTitle] = useState("");
+	const [type, setType] = useState("Exam");
+	const [points, setPoints] = useState("");
+	const [date, setDate] = useState(new Date().toISOString().substring(0, 10));
 
-	const assessmentTypes = [
-		{ value: "", label: "Please select a type" }, // Default placeholder option
-		{ value: "activity", label: "Activity" },
-		{ value: "exam", label: "Exam" },
-		{ value: "quiz", label: "Quiz" },
-		{ value: "homework", label: "Homework" },
-		{ value: "project", label: "Project" },
-		{ value: "oral_exam", label: "Oral Exam" },
-	];
+	const addAssessment = () => {
+		const selectedDate = new Date(date);
+		const semester = getSemester(selectedDate);
+		const month = selectedDate.toLocaleString("default", { month: "long" });
+		const semesterKey = `${className} - ${semester}`;
 
-	const gradeLevels = Array.from({ length: 12 }, (_, i) => {
-		const gradeNumber = i + 1;
-		const suffix = [11, 12, 13].includes(gradeNumber)
-			? "th"
-			: ["st", "nd", "rd"][(gradeNumber % 10) - 1] || "th";
+		const semesterTotal = assessments
+			.filter((assessment) => assessment.semesterKey === semesterKey)
+			.reduce((sum, assessment) => sum + parseInt(assessment.points), 0);
 
-		return {
-			value: gradeNumber.toString(),
-			label: `${gradeNumber}${suffix} Grade`,
-		};
-	});
-
-	const calculateTotalPoints = () => {
-		return (assessments[selectedGrade] || []).reduce(
-			(total, assessment) => total + assessment.points,
-			0
-		);
-	};
-
-	const addNotification = (type, message) => {
-		const id = Date.now();
-		setNotifications((prev) => [...prev, { id, type, description: message }]);
-		setTimeout(() => removeNotification(id), 5000);
-	};
-
-	const removeNotification = (id) => {
-		setNotifications((prev) => prev.filter((n) => n.id !== id));
-	};
-
-	const handleAddAssessment = () => {
-		if (
-			!newAssessment.name ||
-			!newAssessment.type || // Ensure type is selected
-			!newAssessment.points ||
-			!selectedGrade
-		) {
-			addNotification("error", "Please fill out all fields");
-			return;
+		if (semesterTotal + parseInt(points) <= 100) {
+			const newAssessment = {
+				className,
+				title,
+				type,
+				points: parseInt(points),
+				date,
+				month,
+				semesterKey,
+			};
+			setAssessments([...assessments, newAssessment]);
+			clearForm();
+		} else {
+			alert(`Total points for ${className} in ${semester} cannot exceed 100.`);
 		}
-
-		const points = parseInt(newAssessment.points);
-		const totalPoints = calculateTotalPoints() + points;
-
-		if (totalPoints > 100) {
-			addNotification(
-				"warning",
-				<>
-					Total points cannot exceed 100. <br />
-					Current total: {calculateTotalPoints()}.
-				</>
-			);
-			return;
-		}
-
-		const assessment = {
-			id: Date.now(),
-			...newAssessment,
-			points: points,
-			createdAt: new Date().toLocaleString(),
-		};
-
-		setAssessments((prev) => ({
-			...prev,
-			[selectedGrade]: [...(prev[selectedGrade] || []), assessment],
-		}));
-
-		// Reset new assessment fields after adding
-		setNewAssessment({
-			name: "",
-			type: "", // Reset type to empty, forcing re-selection
-			points: "",
-			gradeLevel: "",
-		});
 	};
 
-	const handleDeleteAssessment = (assessmentId) => {
-		setAssessments((prev) => ({
-			...prev,
-			[selectedGrade]: (prev[selectedGrade] || []).filter(
-				(assessment) => assessment.id !== assessmentId
-			),
-		}));
-		addNotification("info", "Assessment deleted successfully");
+	const getSemester = (date) => {
+		const month = date.getMonth() + 1;
+		return month >= 9 || month <= 12 ? "First Semester" : "Second Semester";
 	};
+
+	const clearForm = () => {
+		setClassName("1st Grade");
+		setTitle("");
+		setType("Exam");
+		setPoints("");
+		setDate(new Date().toISOString().substring(0, 10));
+	};
+
+	const groupedAssessments = assessments.reduce((acc, assessment) => {
+		const { semesterKey, month } = assessment;
+		if (!acc[semesterKey]) acc[semesterKey] = {};
+		if (!acc[semesterKey][month]) acc[semesterKey][month] = [];
+		acc[semesterKey][month].push(assessment);
+		return acc;
+	}, {});
 
 	return (
-		<div className="assessment-management-container">
-			<h3>
-				Manage Assessments for{" "}
-				{subject.charAt(0).toUpperCase() + subject.slice(1)}
-			</h3>
-
-			<DropdownSelect
-				label="Grade"
-				placeholder="Select Grade"
-				options={gradeLevels}
-				value={selectedGrade}
-				onChange={(option) => {
-					setSelectedGrade(option.value);
-				}}
-			/>
-
-			<TextInput
-				label="Assessment Name"
-				placeholder="Enter assessment name"
-				value={newAssessment.name}
-				onChange={(e) =>
-					setNewAssessment({ ...newAssessment, name: e.target.value })
-				}
-			/>
-			<DropdownSelect
-				label="Type"
-				placeholder="Select Type"
-				options={assessmentTypes}
-				value={newAssessment.type}
-				onChange={(option) =>
-					setNewAssessment({ ...newAssessment, type: option.value })
-				}
-			/>
-			<TextInput
-				label="Points"
-				placeholder="Enter points"
-				value={newAssessment.points}
-				onChange={(e) =>
-					setNewAssessment({ ...newAssessment, points: e.target.value })
-				}
-			/>
-
-			<PrimaryButton title="Add Assessment" onClick={handleAddAssessment} />
-
-			<div className="assessments-list">
-				<h4>Assessments for {selectedGrade} Grade</h4>
-				<div className="assessments-scrollable">
-					{(assessments[selectedGrade] || []).map((assessment) => (
-						<AssessmentItem
-							key={assessment.id}
-							name={assessment.name}
-							type={assessment.type}
-							points={assessment.points}
-							gradeLevel={selectedGrade}
-							createdAt={assessment.createdAt}
-							onDelete={() => handleDeleteAssessment(assessment.id)}
-						/>
-					))}
-				</div>
+		<div className="assessment-management">
+			<h2>Assessment Management</h2>
+			<div className="form-container">
+				<select
+					value={className}
+					onChange={(e) => setClassName(e.target.value)}
+				>
+					<option value="1st Grade">1st Grade</option>
+					<option value="2nd Grade">2nd Grade</option>
+					<option value="3rd Grade">3rd Grade</option>
+					<option value="4th Grade">4th Grade</option>
+					<option value="5th Grade">5th Grade</option>
+					<option value="6th Grade">6th Grade</option>
+					<option value="7th Grade">7th Grade</option>
+					<option value="8th Grade">8th Grade</option>
+					<option value="9th Grade">9th Grade</option>
+					<option value="10th Grade">10th Grade</option>
+					<option value="11th Grade">11th Grade</option>
+					<option value="12th Grade">12th Grade</option>
+				</select>
+				<input
+					type="text"
+					placeholder="Assessment Title"
+					value={title}
+					onChange={(e) => setTitle(e.target.value)}
+				/>
+				<select value={type} onChange={(e) => setType(e.target.value)}>
+					<option value="Exam">Exam</option>
+					<option value="Project">Project</option>
+					<option value="Homework">Homework</option>
+					<option value="Quiz">Quiz</option>
+				</select>
+				<input
+					type="number"
+					placeholder="Points (out of 100)"
+					value={points}
+					onChange={(e) => setPoints(e.target.value)}
+					max="100"
+				/>
+				<input
+					type="date"
+					value={date}
+					onChange={(e) => setDate(e.target.value)}
+				/>
+				<PrimaryButton title="Add Assessment" onClick={addAssessment} />
 			</div>
 
-			<Notification
-				notifications={notifications}
-				removeNotification={removeNotification}
-			/>
+			<div className="assessment-list">
+				{Object.keys(groupedAssessments).length > 0 ? (
+					Object.entries(groupedAssessments).map(([semesterKey, months]) => {
+						const semesterTotal = Object.values(months)
+							.flat()
+							.reduce((sum, assessment) => sum + assessment.points, 0);
+
+						return (
+							<div key={semesterKey} className="assessment-semester">
+								<h3>{semesterKey}</h3>
+								<div className="points-summary">
+									<div className="progress-bar">
+										<div
+											className="progress-fill"
+											style={{ width: `${(semesterTotal / 100) * 100}%` }}
+										></div>
+									</div>
+									<span>{semesterTotal}/100 Points</span>
+								</div>
+
+								{Object.entries(months).map(([month, assessments]) => (
+									<div key={month} className="assessment-month">
+										<h4>{month}</h4>
+										{assessments.map((assessment, index) => (
+											<div key={index} className="assessment-item">
+												<div className="assessment-details">
+													<span>
+														<strong>Class:</strong> {assessment.className}
+													</span>
+													<span>
+														<strong>Title:</strong> {assessment.title}
+													</span>
+													<span>
+														<strong>Type:</strong> {assessment.type}
+													</span>
+													<span>
+														<strong>Points:</strong> {assessment.points}
+													</span>
+													<span>
+														<strong>Date:</strong> {assessment.date}
+													</span>
+												</div>
+											</div>
+										))}
+									</div>
+								))}
+							</div>
+						);
+					})
+				) : (
+					<p>No assessments created yet.</p>
+				)}
+			</div>
 		</div>
 	);
 };

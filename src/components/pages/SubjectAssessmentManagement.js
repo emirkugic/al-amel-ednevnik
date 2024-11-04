@@ -7,7 +7,7 @@ const SubjectAssessmentManagement = () => {
 
 	return (
 		<div className="subject-assessment-management">
-			<h2>{subject.replace(/-/g, " ")} </h2>
+			{/* <h2>{subject.replace(/-/g, " ")} </h2> */}
 			<AssessmentManagement />
 		</div>
 	);

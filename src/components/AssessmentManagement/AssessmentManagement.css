@@ -1,88 +1,147 @@
-.assessment-management-container {
-	background-color: #f3f4f6;
-	padding: 20px;
-	border-radius: 10px;
-	max-width: 800px;
-	margin: 50px auto;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
 .assessment-management {
-	background-color: white;
+	max-width: 800px;
+	margin: auto;
 	padding: 20px;
-	border-radius: 8px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.assessment-management h3 {
-	font-size: 1.5rem;
-	margin-bottom: 20px;
+	font-family: Arial, sans-serif;
 	color: #333;
 }
 
-.assessments-list {
-	margin-top: 30px;
-	padding-top: 10px;
-	border-top: 1px solid #e0e0e0;
+h2 {
+	text-align: center;
+	color: #444;
+	margin-bottom: 20px;
 }
 
-.assessments-scrollable {
-	max-height: 300px;
-	overflow-y: auto;
+.form-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-bottom: 20px;
+	background-color: #f8f8f8;
+	padding: 15px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container select,
+.form-container input,
+.form-container button {
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	flex: 1;
+	font-size: 14px;
+}
+
+.form-container button {
+	background-color: #007bff;
+	color: white;
+	border: none;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.form-container button:hover {
+	background-color: #0056b3;
+}
+
+.assessment-list {
+	margin-top: 20px;
+}
+
+.assessment-semester {
+	margin-top: 20px;
+}
+
+.assessment-semester h3 {
+	color: #555;
+	background-color: #f1f1f1;
+	padding: 10px;
+	border-radius: 5px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.points-summary {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 10px 0;
+}
+
+.progress-bar {
+	flex: 1;
+	height: 8px;
+	background-color: #ddd;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.progress-fill {
+	height: 100%;
+	background-color: #4caf50;
+	transition: width 0.3s ease;
+}
+
+.assessment-month {
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #f9f9f9;
+	border: 1px solid #e2e2e2;
+	border-radius: 5px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.assessment-month h4 {
+	color: #666;
+	margin-bottom: 5px;
 }
 
 .assessment-item {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	background-color: #fff;
 	padding: 15px;
-	margin-bottom: 10px;
+	border: 1px solid #e2e2e2;
 	border-radius: 8px;
-	background-color: #f8f9fa;
-	transition: background-color 0.3s, box-shadow 0.3s;
-	cursor: pointer;
-}
-
-.assessment-info {
-	flex-grow: 1;
-}
-
-.assessment-item:hover {
-	background-color: #e9ecef;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-.assessment-item p {
-	margin: 0;
-}
-
-.assessment-item strong {
-	font-weight: 600;
-	color: #343a40;
-}
-
-/* Remove button border and style trash icon */
-.delete-btn {
-	background: none;
-	border: none;
-	padding: 0;
-	cursor: pointer;
-}
-
-.trash-icon {
-	color: #ff4d4f;
-	font-size: 1.2rem;
-	cursor: pointer;
-	transition: transform 0.3s ease, color 0.3s;
-}
-
-.trash-icon:hover {
-	transform: scale(1.2);
-	color: #ff3336;
-}
-
-.error-message {
-	color: red;
-	font-size: 0.9rem;
 	margin-bottom: 10px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.assessment-details {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	font-size: 14px;
+}
+
+.assessment-details span {
+	color: #666;
+}
+
+.edit-button {
+	margin-top: 10px;
+	padding: 5px 10px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+	background-color: #0056b3;
+}
+
+.cancel-edit {
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #e74c3c;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.cancel-edit:hover {
+	background-color: #c0392b;
 }
