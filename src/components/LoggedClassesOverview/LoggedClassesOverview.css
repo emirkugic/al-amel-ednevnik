@@ -172,3 +172,19 @@
 .attendance-info:hover::after {
 	opacity: 1;
 }
+
+.sort-button {
+	background-color: #007acc;
+	color: white;
+	border: none;
+	padding: 10px 15px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-weight: bold;
+	transition: background-color 0.3s;
+	margin-left: 10px;
+}
+
+.sort-button:hover {
+	background-color: #005a99;
+}

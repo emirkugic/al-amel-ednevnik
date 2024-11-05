@@ -5,6 +5,7 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedGrade, setSelectedGrade] = useState("All Grades");
 	const [currentPage, setCurrentPage] = useState(1);
+	const [sortOrder, setSortOrder] = useState("desc"); // Default to newest sequence first
 	const logsPerPage = 10;
 
 	// Use initialLogs if no logs are explicitly passed
@@ -23,13 +24,24 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 		return matchesSearch && matchesGrade;
 	});
 
+	// Sort logs based on sequence and selected order
+	const sortedLogs = filteredLogs.sort((a, b) => {
+		const sequenceA = parseInt(a.sequence, 10);
+		const sequenceB = parseInt(b.sequence, 10);
+		return sortOrder === "asc" ? sequenceA - sequenceB : sequenceB - sequenceA;
+	});
+
 	// Pagination calculations
 	const indexOfLastLog = currentPage * logsPerPage;
 	const indexOfFirstLog = indexOfLastLog - logsPerPage;
-	const currentLogs = filteredLogs.slice(indexOfFirstLog, indexOfLastLog);
+	const currentLogs = sortedLogs.slice(indexOfFirstLog, indexOfLastLog);
 	const totalPages = Math.ceil(filteredLogs.length / logsPerPage);
 
 	const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+	const toggleSortOrder = () => {
+		setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+	};
 
 	return (
 		<div className="logged-classes-overview">
@@ -42,15 +54,9 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 					value={searchQuery}
 					onChange={(e) => setSearchQuery(e.target.value)}
 				/>
-				<select
-					onChange={(e) => setSelectedGrade(e.target.value)}
-					value={selectedGrade}
-				>
-					<option value="All Grades">All Grades</option>
-					<option value="10-A">10-A</option>
-					<option value="11-B">11-B</option>
-					<option value="12-A">12-A</option>
-				</select>
+				<button onClick={toggleSortOrder} className="sort-button">
+					{sortOrder === "asc" ? "Oldest First" : "Newest First"}
+				</button>
 				<button className="export-button">Export Logs</button>
 			</div>
 			<table className="log-table">
@@ -76,12 +82,12 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 							</td>
 							<td>{log.period}</td>
 							<td>{log.lectureTitle}</td>
-							<td>{`${log.sequenceNumber || index + 1} / ${logs.length}`}</td>
+							<td>{`${log.sequence} / ${logs.length}`}</td>
 							<td>
 								<div
 									className="attendance-info"
-									data-tooltip={` ${
-										log.absentStudents.join(", ") || "All present"
+									data-tooltip={`Absent Students: ${
+										log.absentStudents.join(", ") || "None"
 									}`}
 								>
 									{`${log.attendance.present} / ${log.attendance.total}`}
