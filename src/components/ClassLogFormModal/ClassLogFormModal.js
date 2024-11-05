@@ -1,31 +1,24 @@
-// React and State Management
 import React, { useState } from "react";
-
-// Icons
 import {
 	faBook,
 	faClock,
 	faChalkboardTeacher,
 	faGraduationCap,
 } from "@fortawesome/free-solid-svg-icons";
-
-// Component Imports
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import TextInput from "../ui/TextInput/TextInput";
 import DropdownSelect from "../ui/DropdownSelect/DropdownSelect";
 import AbsentStudentsSelect from "../ui/AbsentStudentsSelect/AbsentStudentsSelect";
 import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
+import "./ClassLogFormModal.css";
 
-// Styles
-import "./ClassLogForm.css";
-
-const ClassLogForm = () => {
+const ClassLogFormModal = ({ onClose }) => {
 	const [absentStudents, setAbsentStudents] = useState([]);
 	const [studentInput, setStudentInput] = useState(null);
 	const [subject, setSubject] = useState("");
 	const [classHour, setClassHour] = useState("");
 	const [lectureTitle, setLectureTitle] = useState("");
-	const [classSequence, setClassSequence] = useState("1"); // This will be fetched from backend
+	const [classSequence, setClassSequence] = useState("1");
 	const [notification, setNotification] = useState("");
 	const [gradeOptions, setGradeOptions] = useState("");
 
@@ -77,16 +70,12 @@ const ClassLogForm = () => {
 			classSequence,
 		};
 		console.log("Submitting data:", data);
-		// fetch("API_ENDPOINT", {
-		//  method: "POST",
-		//  headers: { "Content-Type": "application/json" },
-		//  body: JSON.stringify(data),
-		// });
+		onClose();
 	};
 
 	return (
-		<>
-			<div className="class-log-form">
+		<div className="class-log-form-modal">
+			<div className="modal-content">
 				<DropdownSelect
 					label="Subject"
 					icon={faBook}
@@ -135,14 +124,13 @@ const ClassLogForm = () => {
 					setNotification={setNotification}
 				/>
 
-				{/* inside a div to center it, doesn't work otherwise...idk 🤷 */}
 				<div className="button-container">
-					<SecondaryButton title="Cancel" />
+					<SecondaryButton title="Cancel" onClick={onClose} />
 					<PrimaryButton title="Log Class" onClick={handleSubmit} />
 				</div>
 			</div>
-		</>
+		</div>
 	);
 };
 
-export default ClassLogForm;
+export default ClassLogFormModal;

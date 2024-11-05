@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import "./LoggedClassesOverview.css";
+import ClassLogFormModal from "../ClassLogFormModal/ClassLogFormModal";
 
 const LoggedClassesOverview = ({ initialLogs = [] }) => {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedGrade, setSelectedGrade] = useState("All Grades");
 	const [currentPage, setCurrentPage] = useState(1);
 	const [sortOrder, setSortOrder] = useState("desc"); // Default to descending order
+	const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
 	const logsPerPage = 10;
 
 	// Use initialLogs if no logs are explicitly passed
@@ -43,6 +45,14 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 		setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
 	};
 
+	const handleLogClass = () => {
+		setIsModalOpen(true); // Open the modal
+	};
+
+	const closeModal = () => {
+		setIsModalOpen(false); // Close the modal
+	};
+
 	return (
 		<div className="logged-classes-overview">
 			<h2>Class Logs</h2>
@@ -58,7 +68,11 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 					{sortOrder === "asc" ? "Oldest First" : "Newest First"}
 				</button>
 				<button className="export-button">Export Logs</button>
+				<button className="log-class-button" onClick={handleLogClass}>
+					Log class
+				</button>
 			</div>
+
 			<div className="data-table-container">
 				<table className="log-table">
 					<thead>
@@ -87,8 +101,8 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 								<td>
 									<div
 										className="attendance-info"
-										data-tooltip={`Absent Students: ${
-											log.absentStudents.join(", ") || "None"
+										data-tooltip={`${
+											log.absentStudents.join(", ") || "All present"
 										}`}
 									>
 										{`${log.attendance.present} / ${log.attendance.total}`}
@@ -103,6 +117,7 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 					</tbody>
 				</table>
 			</div>
+
 			<div className="pagination">
 				<div>
 					Showing {indexOfFirstLog + 1} to{" "}
@@ -133,6 +148,9 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 					</button>
 				</div>
 			</div>
+
+			{/* Modal */}
+			{isModalOpen && <ClassLogFormModal onClose={closeModal} />}
 		</div>
 	);
 };

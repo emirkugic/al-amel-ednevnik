@@ -19,6 +19,7 @@ import Settings from "../src/components/pages/Settings";
 import Help from "../src/components/pages/Help";
 import Login from "./components/pages/Login";
 import SubjectAssessmentManagement from "./components/pages/SubjectAssessmentManagement";
+import Lectures from "./components/pages/Lectures";
 import Develop from "./components/pages/Develop";
 
 import "./App.css";
@@ -37,6 +38,7 @@ const App = () => {
 					<Route path="/schedule" element={<Schedule />} />
 					<Route path="/attendance" element={<Attendance />} />
 					<Route path="/grades" element={<Grades />} />
+					<Route path="/lectures" element={<Lectures />} />
 					<Route path="/settings" element={<Settings />} />
 					<Route path="/help" element={<Help />} />
 					<Route path="/login" element={<Login />} />

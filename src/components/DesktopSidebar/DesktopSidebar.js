@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-	faCalendarAlt,
 	faChartLine,
 	faCog,
 	faQuestionCircle,
@@ -31,6 +30,7 @@ const DesktopSidebar = () => {
 		// { title: "Schedule", icon: faCalendarAlt, route: "/schedule" },
 		{ title: "Attendance", icon: faClock, route: "/attendance" },
 		{ title: "Grades", icon: faChartLine, route: "/grades" },
+		{ title: "Lectures", icon: faBookOpen, route: "/lectures" },
 		{ title: "Settings", icon: faCog, route: "/settings" },
 		{ title: "Help", icon: faQuestionCircle, route: "/help" },
 	];
