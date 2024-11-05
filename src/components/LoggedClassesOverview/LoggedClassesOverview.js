@@ -86,8 +86,8 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 							<td>
 								<div
 									className="attendance-info"
-									data-tooltip={`Absent Students: ${
-										log.absentStudents.join(", ") || "None"
+									data-tooltip={`${
+										log.absentStudents.join(", ") || "No absent students"
 									}`}
 								>
 									{`${log.attendance.present} / ${log.attendance.total}`}

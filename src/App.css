@@ -7,10 +7,9 @@
 	flex-grow: 1;
 	padding: 20px;
 	background-color: #f9f9f9;
-	margin-left: 250px; /* Space for the left sidebar */
-	margin-right: 350px; /* Adjusted space for the right sidebar */
-	margin-top: 60px; /* Adjust for the top bar if present */
-	height: calc(100vh - 60px); /* Subtract height of the top bar */
+	margin-left: 250px;
+	margin-right: 350px;
+	/* height: calc(100vh - 60px); */
 	overflow-y: auto;
 	box-sizing: border-box;
 }
@@ -23,7 +22,7 @@
 	.main-content {
 		margin-left: 0;
 		margin-right: 0;
-		margin-top: 50px; /* Adjust for the top bar on mobile */
+		margin-top: 50px;
 		padding: 10px;
 		height: auto;
 	}
