@@ -78,11 +78,18 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 							<td>{log.lectureTitle}</td>
 							<td>{`${log.sequenceNumber || index + 1} / ${logs.length}`}</td>
 							<td>
-								{`${log.attendance || 28} / ${log.totalStudents || 30}`}
-								<br />
-								<span className="absent-count">
-									{log.absentStudents.length} absent
-								</span>
+								<div
+									className="attendance-info"
+									data-tooltip={` ${
+										log.absentStudents.join(", ") || "All present"
+									}`}
+								>
+									{`${log.attendance.present} / ${log.attendance.total}`}
+									<br />
+									<span className="absent-count">
+										{log.attendance.absent} absent
+									</span>
+								</div>
 							</td>
 						</tr>
 					))}

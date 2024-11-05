@@ -1,3 +1,15 @@
+.main-content {
+	flex-grow: 1;
+	padding: 20px;
+	background-color: #f9f9f9;
+	margin-left: 250px; /* Space for the left sidebar */
+	margin-right: 350px; /* Adjusted space for the right sidebar */
+	margin-top: 0; /* Remove the top margin to align it with the top */
+	height: 100vh; /* Fill the entire viewport height */
+	overflow-y: auto;
+	box-sizing: border-box;
+}
+
 .logged-classes-overview {
 	max-width: 900px;
 	margin: 0 auto;
@@ -131,4 +143,32 @@
 .page-controls button:disabled {
 	cursor: not-allowed;
 	color: #ccc;
+}
+
+.attendance-info {
+	position: relative;
+	cursor: pointer;
+}
+
+.attendance-info::after {
+	content: attr(data-tooltip);
+	position: absolute;
+	top: 50%;
+	right: 100%; /* Position the tooltip on the left */
+	transform: translateY(-50%);
+	background-color: #333;
+	color: #fff;
+	padding: 5px;
+	border-radius: 4px;
+	white-space: nowrap;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	font-size: 0.8em;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	pointer-events: none;
+	margin-right: 8px; /* Add a small space between tooltip and element */
+}
+
+.attendance-info:hover::after {
+	opacity: 1;
 }
