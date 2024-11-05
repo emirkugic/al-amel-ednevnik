@@ -1,0 +1,134 @@
+.logged-classes-overview {
+	max-width: 900px;
+	margin: 0 auto;
+	background-color: #ffffff;
+	padding: 20px;
+	border-radius: 12px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	font-family: Arial, sans-serif;
+	color: #333;
+}
+
+.logged-classes-overview h2 {
+	margin-bottom: 5px;
+	color: #333;
+	font-size: 1.5em;
+}
+
+.logged-classes-overview p {
+	color: #666;
+	font-size: 0.9em;
+	margin-bottom: 20px;
+}
+
+.controls {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+.controls input[type="text"] {
+	flex-grow: 1;
+	padding: 8px;
+	border-radius: 6px;
+	border: 1px solid #ddd;
+	font-size: 0.9em;
+}
+
+.controls select {
+	padding: 8px;
+	border-radius: 6px;
+	border: 1px solid #ddd;
+	font-size: 0.9em;
+}
+
+.export-button {
+	background-color: #007acc;
+	color: white;
+	border: none;
+	padding: 10px 15px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-weight: bold;
+	transition: background-color 0.3s;
+}
+
+.export-button:hover {
+	background-color: #005a99;
+}
+
+.log-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 15px;
+}
+
+.log-table th,
+.log-table td {
+	padding: 10px;
+	text-align: left;
+	font-size: 0.9em;
+	border-bottom: 1px solid #eee;
+	color: #333;
+}
+
+.log-table th {
+	font-weight: bold;
+	color: #666;
+}
+
+.subject-grade {
+	display: flex;
+	flex-direction: column;
+}
+
+.subject-grade strong {
+	color: #333;
+	font-size: 1em;
+}
+
+.subject-grade span {
+	color: #888;
+	font-size: 0.8em;
+}
+
+.absent-count {
+	font-size: 0.8em;
+	color: #999;
+}
+
+.pagination {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 20px;
+	font-size: 0.9em;
+	color: #666;
+}
+
+.page-controls button {
+	background-color: #f4f4f4;
+	color: #007acc;
+	border: 1px solid #ddd;
+	padding: 5px 10px;
+	border-radius: 4px;
+	margin: 0 2px;
+	cursor: pointer;
+	font-size: 0.9em;
+	transition: background-color 0.3s;
+}
+
+.page-controls button:hover {
+	background-color: #e8eaf6;
+}
+
+.page-controls button.active {
+	background-color: #007acc;
+	color: white;
+}
+
+.page-controls button:disabled {
+	cursor: not-allowed;
+	color: #ccc;
+}

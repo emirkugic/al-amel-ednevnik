@@ -8,8 +8,9 @@
 	padding: 20px;
 	background-color: #f9f9f9;
 	margin-left: 250px; /* Space for the left sidebar */
-	margin-right: 250px; /* Space for the right sidebar */
-	height: 100vh;
+	margin-right: 350px; /* Adjusted space for the right sidebar */
+	margin-top: 60px; /* Adjust for the top bar if present */
+	height: calc(100vh - 60px); /* Subtract height of the top bar */
 	overflow-y: auto;
 	box-sizing: border-box;
 }
@@ -22,7 +23,7 @@
 	.main-content {
 		margin-left: 0;
 		margin-right: 0;
-		margin-top: 50px; /* Space for top bar in mobile */
+		margin-top: 50px; /* Adjust for the top bar on mobile */
 		padding: 10px;
 		height: auto;
 	}
