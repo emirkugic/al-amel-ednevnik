@@ -5,7 +5,7 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedGrade, setSelectedGrade] = useState("All Grades");
 	const [currentPage, setCurrentPage] = useState(1);
-	const [sortOrder, setSortOrder] = useState("desc"); // Default to newest sequence first
+	const [sortOrder, setSortOrder] = useState("desc"); // Default to descending order
 	const logsPerPage = 10;
 
 	// Use initialLogs if no logs are explicitly passed
@@ -59,48 +59,50 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 				</button>
 				<button className="export-button">Export Logs</button>
 			</div>
-			<table className="log-table">
-				<thead>
-					<tr>
-						<th>Date</th>
-						<th>Subject & Grade</th>
-						<th>Period</th>
-						<th>Lecture Title</th>
-						<th>Sequence</th>
-						<th>Attendance</th>
-					</tr>
-				</thead>
-				<tbody>
-					{currentLogs.map((log, index) => (
-						<tr key={index}>
-							<td>{log.date}</td>
-							<td>
-								<div className="subject-grade">
-									<strong>{log.subject || "Mathematics"}</strong>
-									<span>{log.grade || "10-A"}</span>
-								</div>
-							</td>
-							<td>{log.period}</td>
-							<td>{log.lectureTitle}</td>
-							<td>{`${log.sequence} / ${logs.length}`}</td>
-							<td>
-								<div
-									className="attendance-info"
-									data-tooltip={`${
-										log.absentStudents.join(", ") || "No absent students"
-									}`}
-								>
-									{`${log.attendance.present} / ${log.attendance.total}`}
-									<br />
-									<span className="absent-count">
-										{log.attendance.absent} absent
-									</span>
-								</div>
-							</td>
+			<div className="data-table-container">
+				<table className="log-table">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Subject & Grade</th>
+							<th>Period</th>
+							<th>Lecture Title</th>
+							<th>Sequence</th>
+							<th>Attendance</th>
 						</tr>
-					))}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						{currentLogs.map((log, index) => (
+							<tr key={index}>
+								<td>{log.date}</td>
+								<td>
+									<div className="subject-grade">
+										<strong>{log.subject || "Mathematics"}</strong>
+										<span>{log.grade || "10"}</span>
+									</div>
+								</td>
+								<td>{log.period}</td>
+								<td>{log.lectureTitle}</td>
+								<td>{`${log.sequence} / ${logs.length}`}</td>
+								<td>
+									<div
+										className="attendance-info"
+										data-tooltip={`Absent Students: ${
+											log.absentStudents.join(", ") || "None"
+										}`}
+									>
+										{`${log.attendance.present} / ${log.attendance.total}`}
+										<br />
+										<span className="absent-count">
+											{log.attendance.absent} absent
+										</span>
+									</div>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
 			<div className="pagination">
 				<div>
 					Showing {indexOfFirstLog + 1} to{" "}

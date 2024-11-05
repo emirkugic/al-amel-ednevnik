@@ -1,15 +1,3 @@
-.main-content {
-	flex-grow: 1;
-	padding: 20px;
-	background-color: #f9f9f9;
-	margin-left: 250px; /* Space for the left sidebar */
-	margin-right: 350px; /* Adjusted space for the right sidebar */
-	margin-top: 0; /* Remove the top margin to align it with the top */
-	height: 100vh; /* Fill the entire viewport height */
-	overflow-y: auto;
-	box-sizing: border-box;
-}
-
 .logged-classes-overview {
 	max-width: 900px;
 	margin: 0 auto;
@@ -19,18 +7,9 @@
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 	font-family: Arial, sans-serif;
 	color: #333;
-}
-
-.logged-classes-overview h2 {
-	margin-bottom: 5px;
-	color: #333;
-	font-size: 1.5em;
-}
-
-.logged-classes-overview p {
-	color: #666;
-	font-size: 0.9em;
-	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	height: 89vh; /* Fixed height */
 }
 
 .controls {
@@ -48,15 +27,8 @@
 	font-size: 0.9em;
 }
 
-.controls select {
-	padding: 8px;
-	border-radius: 6px;
-	border: 1px solid #ddd;
-	font-size: 0.9em;
-}
-
 .export-button {
-	background-color: #007acc;
+	background-color: #04abfd;
 	color: white;
 	border: none;
 	padding: 10px 15px;
@@ -67,13 +39,20 @@
 }
 
 .export-button:hover {
-	background-color: #005a99;
+	background-color: #316fc5;
+}
+
+.data-table-container {
+	flex-grow: 1;
+	overflow-y: auto;
+	border-top: 1px solid #eee;
+	border-bottom: 1px solid #eee;
+	margin-top: 10px;
 }
 
 .log-table {
 	width: 100%;
 	border-collapse: collapse;
-	margin-top: 15px;
 }
 
 .log-table th,
@@ -114,14 +93,14 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-top: 20px;
+	padding: 10px 0;
 	font-size: 0.9em;
 	color: #666;
 }
 
 .page-controls button {
 	background-color: #f4f4f4;
-	color: #007acc;
+	color: #04abfd;
 	border: 1px solid #ddd;
 	padding: 5px 10px;
 	border-radius: 4px;
@@ -136,7 +115,7 @@
 }
 
 .page-controls button.active {
-	background-color: #007acc;
+	background-color: #04abfd;
 	color: white;
 }
 
@@ -154,7 +133,7 @@
 	content: attr(data-tooltip);
 	position: absolute;
 	top: 50%;
-	right: 100%; /* Position the tooltip on the left */
+	right: 100%;
 	transform: translateY(-50%);
 	background-color: #333;
 	color: #fff;
@@ -166,15 +145,14 @@
 	opacity: 0;
 	transition: opacity 0.3s ease;
 	pointer-events: none;
-	margin-right: 8px; /* Add a small space between tooltip and element */
+	margin-right: 8px;
 }
 
 .attendance-info:hover::after {
 	opacity: 1;
 }
-
 .sort-button {
-	background-color: #007acc;
+	background-color: #04abfd;
 	color: white;
 	border: none;
 	padding: 10px 15px;
@@ -186,5 +164,5 @@
 }
 
 .sort-button:hover {
-	background-color: #005a99;
+	background-color: #316fc5;
 }
