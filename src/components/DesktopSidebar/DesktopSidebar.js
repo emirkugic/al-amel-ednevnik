@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
 	faChartLine,
 	faCog,
@@ -8,39 +9,33 @@ import {
 	faPeopleGroup,
 	faClock,
 	faBookOpen,
+	faBook,
 } from "@fortawesome/free-solid-svg-icons";
 import DesktopSidebarButton from "../ui/DesktopSidebarButton/DesktopSidebarButton";
 import "./DesktopSidebar.css";
 
 const DesktopSidebar = () => {
-	const [activeItem, setActiveItem] = useState("Dashboard");
+	const location = useLocation();
+	const [activeItem, setActiveItem] = useState("");
 
 	const menuItems = [
 		{ title: "Dashboard", icon: faHouse, route: "/" },
 		{ title: "Students", icon: faPeopleGroup, route: "/students" },
 		{
 			title: "Courses",
-			icon: faBookOpen,
+			icon: faBook,
 			route: [
 				{ title: "Math", path: "/courses/math" },
 				{ title: "Physics", path: "/courses/physics" },
 				{ title: "Comp Sci", path: "/courses/compsci" },
 			],
 		},
-		// { title: "Schedule", icon: faCalendarAlt, route: "/schedule" },
 		{ title: "Attendance", icon: faClock, route: "/attendance" },
 		{ title: "Grades", icon: faChartLine, route: "/grades" },
-		// { title: "Lectures", icon: faBookOpen, route: "/lectures" },
 		{
 			title: "Lectures",
 			icon: faBookOpen,
 			route: [
-				// { title: "1st grade", path: "/lectures" },
-				// { title: "2nd grade", path: "/lectures" },
-				// { title: "3rd grade", path: "/lectures" },
-				// { title: "4th grade", path: "/lectures" },
-				// { title: "5th grade", path: "/lectures" },
-				// { title: "6th grade", path: "/lectures" },
 				{ title: "7th grade", path: "/lectures" },
 				{ title: "8th grade", path: "/lectures" },
 				{ title: "9th grade", path: "/lectures" },
@@ -52,6 +47,20 @@ const DesktopSidebar = () => {
 		{ title: "Settings", icon: faCog, route: "/settings" },
 		{ title: "Help", icon: faQuestionCircle, route: "/help" },
 	];
+
+	useEffect(() => {
+		// Find the menu item based on the current path
+		const activeMenuItem = menuItems.find((item) =>
+			Array.isArray(item.route)
+				? item.route.some((sub) => sub.path === location.pathname)
+				: item.route === location.pathname
+		);
+
+		// If a matching item is found, set it as active
+		if (activeMenuItem) {
+			setActiveItem(activeMenuItem.title);
+		}
+	}, [location.pathname]);
 
 	const handleButtonClick = (title) => {
 		setActiveItem(title);

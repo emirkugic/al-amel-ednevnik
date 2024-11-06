@@ -126,6 +126,12 @@ const AssessmentManagement = () => {
 		return acc;
 	}, {});
 
+	const calculateMonthlyPoints = (month) => {
+		return assessments
+			.filter((assessment) => assessment.month === month)
+			.reduce((total, assessment) => total + assessment.points, 0);
+	};
+
 	return (
 		<div className="assessment-management">
 			<h2>Assessment Management</h2>
@@ -169,7 +175,12 @@ const AssessmentManagement = () => {
 			<div className="assessment-list">
 				{Object.entries(groupedAssessments).map(([month, assessments]) => (
 					<div key={month} className="assessment-month-card">
-						<h4>{month}</h4>
+						<div className="month-header">
+							<span className="month-name">{month}</span>
+							<span className="points-used-month">
+								{calculateMonthlyPoints(month)} Points
+							</span>
+						</div>
 						{assessments.map((assessment, index) => (
 							<div
 								key={index}
