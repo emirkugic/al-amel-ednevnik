@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
+import AssessmentGradesModal from "../AssessmentGradesModal/AssessmentGradesModal";
 import "./AssessmentManagement.css";
 
 const AssessmentManagement = () => {
@@ -9,6 +10,8 @@ const AssessmentManagement = () => {
 	const [type, setType] = useState("Exam");
 	const [points, setPoints] = useState("");
 	const [date, setDate] = useState(new Date().toISOString().substring(0, 10));
+	const [selectedAssessment, setSelectedAssessment] = useState(null); // New state
+	const [isModalOpen, setIsModalOpen] = useState(false); // New state
 
 	const addAssessment = () => {
 		const selectedDate = new Date(date);
@@ -48,6 +51,18 @@ const AssessmentManagement = () => {
 		setType("Exam");
 		setPoints("");
 		setDate(new Date().toISOString().substring(0, 10));
+	};
+
+	// Function to open modal
+	const openModal = (assessment) => {
+		setSelectedAssessment(assessment);
+		setIsModalOpen(true);
+	};
+
+	// Function to close modal
+	const closeModal = () => {
+		setIsModalOpen(false);
+		setSelectedAssessment(null);
 	};
 
 	const groupedAssessments = assessments.reduce((acc, assessment) => {
@@ -130,7 +145,11 @@ const AssessmentManagement = () => {
 									<div key={month} className="assessment-month">
 										<h4>{month}</h4>
 										{assessments.map((assessment, index) => (
-											<div key={index} className="assessment-item">
+											<div
+												key={index}
+												className="assessment-item"
+												onClick={() => openModal(assessment)} // Open modal on click
+											>
 												<div className="assessment-details">
 													<span>
 														<strong>Class:</strong> {assessment.className}
@@ -159,6 +178,24 @@ const AssessmentManagement = () => {
 					<p>No assessments created yet.</p>
 				)}
 			</div>
+
+			{/* Conditionally render AssessmentGradesModal */}
+			{isModalOpen && (
+				<AssessmentGradesModal
+					assessment={selectedAssessment}
+					students={
+						// Mock students data
+						[
+							{ id: 1, name: "John Doe", grade: 8 },
+							{ id: 2, name: "Jane Doe", grade: 9 },
+							{ id: 3, name: "Alice Wonderland", grade: 7 },
+							{ id: 4, name: "Bobs Burgers", grade: 6 },
+							{ id: 5, name: "Emir Kugić", grade: 5 },
+						]
+					}
+					onClose={closeModal}
+				/>
+			)}
 		</div>
 	);
 };
