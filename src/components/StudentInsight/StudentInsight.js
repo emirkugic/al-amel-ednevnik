@@ -1,7 +1,10 @@
 import React from "react";
+import { useState } from "react";
+
 import "./StudentInsight.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus, faFileExport } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 
 const StudentInsight = () => {
 	const students = [
@@ -87,6 +90,12 @@ const StudentInsight = () => {
 		},
 	];
 
+	const [openMenuId, setOpenMenuId] = useState(null);
+
+	const toggleMenu = (id) => {
+		setOpenMenuId((prevId) => (prevId === id ? null : id));
+	};
+
 	return (
 		<div className="student-insight">
 			<h2>Class 12 Overview</h2>
@@ -124,45 +133,78 @@ const StudentInsight = () => {
 				</div>
 			</div>
 
-			<table className="student-table">
-				<thead>
-					<tr>
-						<th>Student</th>
-						<th>Contact</th>
-						<th>Attendance</th>
-						<th>Grade</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{students.map((student) => (
-						<tr key={student.id}>
-							<td>
-								<div className="student-info">
-									<div className="student-avatar">
-										{/* Placeholder avatar */}
-										<span>{student.name[0]}</span>
-									</div>
-									<div>
-										<div>{student.name}</div>
-										<div className="student-id">ID: {student.id}</div>
-									</div>
-								</div>
-							</td>
-							<td>
-								<div>{student.email}</div>
-								<div>{student.phone}</div>
-							</td>
-							<td className="attendance">{student.attendance}</td>
-							<td className="grade">{student.grade}</td>
-							<td>
-								<button className="view-details">View Details</button>
-								<button className="contact">Contact</button>
-							</td>
+			<div className="student-list-container">
+				<table className="student-table">
+					<thead>
+						<tr>
+							<th>Student</th>
+							<th>Contact</th>
+							<th>Attendance</th>
+							<th>Grade</th>
+							<th>Actions</th>
 						</tr>
-					))}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						{students.map((student) => (
+							<tr key={student.id}>
+								<td>
+									<div className="student-info">
+										<div className="student-avatar">
+											<span>{student.name[0]}</span>
+										</div>
+										<div>
+											<div>{student.name}</div>
+											<div className="student-id">ID: {student.id}</div>
+										</div>
+									</div>
+								</td>
+								<td>
+									<div>{student.email}</div>
+									<div>{student.phone}</div>
+								</td>
+								<td className="attendance">{student.attendance}</td>
+								<td className="grade">{student.grade}</td>
+								<td>
+									<div className="action-menu">
+										<button
+											className="menu-button"
+											onClick={() => toggleMenu(student.id)}
+										>
+											<FontAwesomeIcon icon={faEllipsisV} />
+										</button>
+										{openMenuId === student.id && (
+											<div className="dropdown-menu">
+												<button
+													onClick={() =>
+														alert(`Viewing details for ${student.name}`)
+													}
+												>
+													View Details
+												</button>
+												<button
+													onClick={() => alert(`Contacting ${student.name}`)}
+												>
+													Contact
+												</button>
+												<button
+													onClick={() => alert(`Editing ${student.name}`)}
+												>
+													Edit
+												</button>
+												<button
+													onClick={() => alert(`Deleting ${student.name}`)}
+												>
+													Delete
+												</button>
+											</div>
+										)}
+									</div>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
 		</div>
 	);
 };

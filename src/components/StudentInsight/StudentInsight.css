@@ -6,6 +6,11 @@
 	margin: auto;
 	background-color: #fff;
 	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+	height: 89vh;
+	overflow: hidden;
 }
 
 h2 {
@@ -24,6 +29,12 @@ h2 {
 	grid-template-columns: repeat(4, 1fr);
 	gap: 10px;
 	margin-bottom: 20px;
+	position: sticky;
+	top: 0;
+	background-color: #fff;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	z-index: 100;
 }
 
 .card {
@@ -49,7 +60,12 @@ h2 {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 20px;
+	margin-bottom: 15px;
+	position: sticky;
+	top: 85px;
+	background-color: #fff;
+	padding: 10px 0;
+	z-index: 100;
 }
 
 .search-controls input {
@@ -65,41 +81,73 @@ h2 {
 	gap: 10px;
 }
 
-.manage-grades,
-.add-student,
-.export {
+/* Manage Grades Button */
+.manage-grades {
+	background-color: #555;
+	color: #fff;
 	padding: 8px 15px;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
 	font-size: 0.9rem;
+	transition: background-color 0.3s ease;
 }
 
-.manage-grades {
+.manage-grades:hover {
 	background-color: #333;
-	color: #fff;
 }
 
+/* Add Student Button */
 .add-student {
 	background-color: #04abfd;
 	color: #fff;
+	padding: 8px 15px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 0.9rem;
 	display: flex;
 	align-items: center;
 	gap: 5px;
+	transition: background-color 0.3s ease;
 }
 
+.add-student:hover {
+	background-color: #316fc5;
+}
+
+/* Export Button */
 .export {
 	background-color: #f0f0f0;
 	color: #333;
+	padding: 8px 15px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 0.9rem;
 	display: flex;
 	align-items: center;
 	gap: 5px;
+	transition: background-color 0.3s ease;
+}
+
+.export:hover {
+	background-color: #e0e0e0;
+}
+
+.student-list-container {
+	flex-grow: 1;
+	overflow-y: auto;
+	background-color: #f9f9f9;
+	padding: 10px;
+	border-radius: 8px;
+	margin-top: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .student-table {
 	width: 100%;
 	border-collapse: collapse;
-	margin-top: 20px;
 }
 
 .student-table th,
@@ -111,7 +159,7 @@ h2 {
 }
 
 .student-table th {
-	background-color: #f9f9f9;
+	background-color: #f1f1f1;
 	font-weight: bold;
 }
 
@@ -149,45 +197,83 @@ h2 {
 	font-weight: bold;
 }
 
-.view-details,
+.view-details {
+	padding: 6px 12px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 0.8rem;
+	color: #fff;
+	background-color: #04abfd;
+	transition: background-color 0.3s ease;
+}
+
+.view-details:hover {
+	background-color: #316fc5;
+}
+
 .contact {
 	padding: 6px 12px;
 	border: 1px solid #ddd;
 	border-radius: 5px;
 	cursor: pointer;
 	font-size: 0.8rem;
-	margin-right: 5px;
-}
-
-.view-details {
-	background-color: #04abfd;
-	color: #fff;
-	border-color: #04abfd;
-}
-
-.contact {
-	background-color: #f9f9f9;
 	color: #333;
+	background-color: #f9f9f9;
+	transition: background-color 0.3s ease;
 }
 
-.view-details:hover,
 .contact:hover {
-	opacity: 0.9;
+	background-color: #e0e0e0;
 }
 
-/*  */
-/* .primary-btn {
-	width: 200px;
-	background: #04abfd;
-	color: white;
+/* Three-dot menu button */
+.menu-button {
+	background: none;
 	border: none;
-	padding: 15px;
 	cursor: pointer;
-	border-radius: 8px;
-	font-size: 1em;
-	font-weight: bold;
+	color: #666;
+	font-size: 1.2rem;
+	position: relative;
+	padding: 4px;
+	transition: color 0.3s;
 }
 
-.primary-btn:hover {
-	background: #316fc5;
-} */
+.menu-button:hover {
+	color: #04abfd;
+}
+
+/* Dropdown menu styling */
+.action-menu {
+	position: relative;
+}
+
+.dropdown-menu {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	padding: 8px 0;
+	width: 150px;
+	z-index: 10;
+}
+
+.dropdown-menu button {
+	width: 100%;
+	background: none;
+	border: none;
+	padding: 10px 15px;
+	text-align: left;
+	cursor: pointer;
+	font-size: 0.9rem;
+	color: #333;
+	transition: background-color 0.3s ease;
+}
+
+.dropdown-menu button:hover {
+	background-color: #f0f0f0;
+	color: #04abfd;
+}
