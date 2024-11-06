@@ -1,14 +1,20 @@
 .assessment-management {
-	max-width: 800px;
-	margin: auto;
-	padding: 20px;
 	font-family: Arial, sans-serif;
 	color: #333;
+	padding: 20px;
+	max-width: 900px;
+	margin: auto;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
 }
 
 h2 {
 	text-align: center;
-	color: #444;
+	color: #333;
+	font-size: 1.8rem;
 	margin-bottom: 20px;
 }
 
@@ -17,7 +23,7 @@ h2 {
 	flex-wrap: wrap;
 	gap: 10px;
 	margin-bottom: 20px;
-	background-color: #f8f8f8;
+	background-color: #f9f9f9;
 	padding: 15px;
 	border-radius: 8px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -39,14 +45,15 @@ h2 {
 
 .assessment-semester {
 	margin-top: 20px;
-}
-
-.assessment-semester h3 {
-	color: #555;
 	background-color: #f1f1f1;
 	padding: 10px;
 	border-radius: 5px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.assessment-semester h3 {
+	color: #555;
+	font-weight: bold;
 }
 
 .points-summary {
@@ -82,6 +89,8 @@ h2 {
 .assessment-month h4 {
 	color: #666;
 	margin-bottom: 5px;
+	font-size: 1rem;
+	font-weight: bold;
 }
 
 .assessment-item {
@@ -91,6 +100,12 @@ h2 {
 	border-radius: 8px;
 	margin-bottom: 10px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.assessment-item:hover {
+	background-color: #f0f0f0;
 }
 
 .assessment-details {
@@ -104,15 +119,40 @@ h2 {
 	color: #666;
 }
 
-.edit-button {
-	margin-top: 10px;
-	padding: 5px 10px;
-	background-color: #007bff;
+/* Primary Button */
+.primary-btn {
+	background-color: #04abfd;
 	color: white;
 	border: none;
-	border-radius: 4px;
+	padding: 10px 15px;
+	border-radius: 6px;
 	cursor: pointer;
-	transition: background-color 0.3s ease;
+	font-weight: bold;
+	font-size: 0.9rem;
+	transition: background-color 0.3s;
+	margin-top: 10px;
+}
+
+.primary-btn:hover {
+	background-color: #316fc5;
+}
+
+/* Modal Styles */
+.edit-button,
+.cancel-edit {
+	margin-top: 10px;
+	padding: 10px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-weight: bold;
+	font-size: 0.9rem;
+	color: #fff;
+	transition: background-color 0.3s;
+}
+
+.edit-button {
+	background-color: #007bff;
 }
 
 .edit-button:hover {
@@ -120,14 +160,7 @@ h2 {
 }
 
 .cancel-edit {
-	margin-top: 10px;
-	padding: 10px;
 	background-color: #e74c3c;
-	color: white;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
 }
 
 .cancel-edit:hover {

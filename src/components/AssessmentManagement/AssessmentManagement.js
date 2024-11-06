@@ -4,7 +4,64 @@ import AssessmentGradesModal from "../AssessmentGradesModal/AssessmentGradesModa
 import "./AssessmentManagement.css";
 
 const AssessmentManagement = () => {
-	const [assessments, setAssessments] = useState([]);
+	const [assessments, setAssessments] = useState([
+		// Pre-existing data for September, October, and November
+		{
+			className: "1st Grade",
+			title: "Math Quiz",
+			type: "Quiz",
+			points: 10,
+			date: "2024-09-15",
+			month: "September",
+			semesterKey: "1st Grade - First Semester",
+		},
+		{
+			className: "1st Grade",
+			title: "Math Project",
+			type: "Project",
+			points: 10,
+			date: "2024-09-28",
+			month: "September",
+			semesterKey: "1st Grade - First Semester",
+		},
+		{
+			className: "1st Grade",
+			title: "Science Exam",
+			type: "Exam",
+			points: 10,
+			date: "2024-10-10",
+			month: "October",
+			semesterKey: "1st Grade - First Semester",
+		},
+		{
+			className: "1st Grade",
+			title: "Science Homework",
+			type: "Homework",
+			points: 10,
+			date: "2024-10-20",
+			month: "October",
+			semesterKey: "1st Grade - First Semester",
+		},
+		{
+			className: "1st Grade",
+			title: "History Quiz",
+			type: "Quiz",
+			points: 10,
+			date: "2024-11-05",
+			month: "November",
+			semesterKey: "1st Grade - First Semester",
+		},
+		{
+			className: "1st Grade",
+			title: "History Project",
+			type: "Project",
+			points: 10,
+			date: "2024-11-18",
+			month: "November",
+			semesterKey: "1st Grade - First Semester",
+		},
+	]);
+
 	const [className, setClassName] = useState("1st Grade");
 	const [title, setTitle] = useState("");
 	const [type, setType] = useState("Exam");
@@ -183,16 +240,13 @@ const AssessmentManagement = () => {
 			{isModalOpen && (
 				<AssessmentGradesModal
 					assessment={selectedAssessment}
-					students={
-						// Mock students data
-						[
-							{ id: 1, name: "John Doe", grade: 8 },
-							{ id: 2, name: "Jane Doe", grade: 9 },
-							{ id: 3, name: "Alice Wonderland", grade: 7 },
-							{ id: 4, name: "Bobs Burgers", grade: 6 },
-							{ id: 5, name: "Emir Kugić", grade: 5 },
-						]
-					}
+					students={[
+						{ id: 1, name: "John Doe", grade: 8 },
+						{ id: 2, name: "Jane Doe", grade: 9 },
+						{ id: 3, name: "Alice Wonderland", grade: 7 },
+						{ id: 4, name: "Bobs Burgers", grade: 6 },
+						{ id: 5, name: "Emir Kugić", grade: 5 },
+					]}
 					onClose={closeModal}
 				/>
 			)}
