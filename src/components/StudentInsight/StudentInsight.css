@@ -1,0 +1,193 @@
+.student-insight {
+	font-family: Arial, sans-serif;
+	color: #333;
+	padding: 20px;
+	max-width: 900px;
+	margin: auto;
+	background-color: #fff;
+	border-radius: 8px;
+}
+
+h2 {
+	color: #333;
+	font-size: 1.8rem;
+	margin-bottom: 10px;
+}
+
+.academic-year {
+	color: #666;
+	margin-bottom: 20px;
+}
+
+.overview-cards {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 10px;
+	margin-bottom: 20px;
+}
+
+.card {
+	background-color: #f9f9f9;
+	border: 1px solid #e0e0e0;
+	padding: 15px;
+	border-radius: 8px;
+	text-align: center;
+}
+
+.card span {
+	color: #666;
+	font-size: 0.9rem;
+}
+
+.card h3 {
+	margin: 5px 0 0;
+	font-size: 1.4rem;
+	color: #333;
+}
+
+.search-controls {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.search-controls input {
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	width: 200px;
+	font-size: 0.9rem;
+}
+
+.buttons {
+	display: flex;
+	gap: 10px;
+}
+
+.manage-grades,
+.add-student,
+.export {
+	padding: 8px 15px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 0.9rem;
+}
+
+.manage-grades {
+	background-color: #333;
+	color: #fff;
+}
+
+.add-student {
+	background-color: #04abfd;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.export {
+	background-color: #f0f0f0;
+	color: #333;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.student-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+}
+
+.student-table th,
+.student-table td {
+	padding: 10px;
+	border-bottom: 1px solid #e0e0e0;
+	text-align: left;
+	font-size: 0.9rem;
+}
+
+.student-table th {
+	background-color: #f9f9f9;
+	font-weight: bold;
+}
+
+.student-info {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.student-avatar {
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	background-color: #ddd;
+	color: #666;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1rem;
+	font-weight: bold;
+}
+
+.student-id {
+	color: #666;
+	font-size: 0.8rem;
+}
+
+.attendance {
+	color: #28a745;
+	font-weight: bold;
+}
+
+.grade {
+	color: #04abfd;
+	font-weight: bold;
+}
+
+.view-details,
+.contact {
+	padding: 6px 12px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 0.8rem;
+	margin-right: 5px;
+}
+
+.view-details {
+	background-color: #04abfd;
+	color: #fff;
+	border-color: #04abfd;
+}
+
+.contact {
+	background-color: #f9f9f9;
+	color: #333;
+}
+
+.view-details:hover,
+.contact:hover {
+	opacity: 0.9;
+}
+
+/*  */
+/* .primary-btn {
+	width: 200px;
+	background: #04abfd;
+	color: white;
+	border: none;
+	padding: 15px;
+	cursor: pointer;
+	border-radius: 8px;
+	font-size: 1em;
+	font-weight: bold;
+}
+
+.primary-btn:hover {
+	background: #316fc5;
+} */

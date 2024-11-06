@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import StudentCardList from "../StudentCardList/StudentCardList";
 import GradesModal from "../GradesModal/GradesModal";
+import StudentInsight from "../StudentInsight/StudentInsight";
 
 const Students = () => {
 	const [selectedStudent, setSelectedStudent] = useState(null);
@@ -18,7 +19,7 @@ const Students = () => {
 
 	return (
 		<div>
-			<StudentCardList onShowGrades={handleShowGrades} />
+			{/* <StudentCardList onShowGrades={handleShowGrades} />
 
 			{selectedStudent && (
 				<GradesModal
@@ -26,7 +27,9 @@ const Students = () => {
 					isOpen={isModalOpen}
 					onClose={handleCloseModal}
 				/>
-			)}
+			)} */}
+
+			<StudentInsight />
 		</div>
 	);
 };
