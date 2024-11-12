@@ -1,88 +1,128 @@
-import React, { useState } from "react";
-import GradesList from "../ui/GradesList/GradesList";
-import ClassLogForm from "../ClassLogForm/ClassLogForm";
+import React from "react";
+import "./Dashboard.css";
 
 const Dashboard = () => {
-	// Initial selected semester state
-	const [selectedSemester, setSelectedSemester] = useState("First");
+	const classes = [
+		{ name: "Math - Grade 9", students: 30, assessments: 5 },
+		{ name: "Science - Grade 10", students: 28, assessments: 3 },
+		{ name: "History - Grade 11", students: 25, assessments: 4 },
+	];
 
-	// Semester data
-	const semesters = {
-		First: [
-			{
-				subject: "Mathematics",
-				teacher: "Dr. Smith",
-				details: [
-					{ exam: "1st Exam", grade: 90, date: "2024-09-15" },
-					{ exam: "2nd Exam", grade: 25, date: "2024-09-20" },
-					{ exam: "Oral Exam", grade: 95, date: "2024-09-25" },
-					{ exam: "Final Exam", grade: 91, date: "2024-11-10" },
-					{ exam: "Final Exam2", grade: 92, date: "2024-11-11" },
-					{ exam: "Final Exam3", grade: 93, date: "2024-11-12" },
-					{ exam: "Final Exam4", grade: 94, date: "2024-11-13" },
-					{ exam: "Final Exam5", grade: 95, date: "2024-11-14" },
-					{ exam: "Final Exam6", grade: 96, date: "2024-11-15" },
-					{ exam: "More grades", grade: 96, date: "2024-12-15" },
-					{ exam: "More grades2", grade: 96, date: "2024-12-15" },
-					{ exam: "More grades3", grade: 96, date: "2024-12-15" },
-					{ exam: "More grades4", grade: 96, date: "2024-12-15" },
-					{ exam: "More grades5", grade: 96, date: "2024-12-15" },
-					{ exam: "More grades6", grade: 96, date: "2024-12-15" },
-					{ exam: "More grades7", grade: 96, date: "2024-12-15" },
-					{ exam: "January grades", grade: 96, date: "2024-1-15" },
-					{ exam: "January grades2", grade: 96, date: "2024-1-15" },
-					{ exam: "January grades3", grade: 96, date: "2024-1-15" },
-					{ exam: "January grades4", grade: 96, date: "2024-1-15" },
-					{ exam: "January grades5", grade: 96, date: "2024-1-15" },
-					{ exam: "January grades6", grade: 96, date: "2024-1-15" },
-					{ exam: "January grades7", grade: 96, date: "2024-1-15" },
-				],
-			},
-			{
-				subject: "Physics",
-				teacher: "Mrs. Johnson",
-				details: [
-					{ exam: "1st Exam", grade: 85, date: "2024-09-18" },
-					{ exam: "Oral Exam", grade: 90, date: "2024-10-10" },
-					{ exam: "Final Exam", grade: 89, date: "2024-11-20" },
-				],
-			},
-		],
-		Second: [
-			{
-				subject: "Mathematics",
-				teacher: "Dr. Smith",
-				details: [
-					{ exam: "1st Exam", grade: 89, date: "2025-01-15" },
-					{ exam: "Oral Exam", grade: 93, date: "2025-02-10" },
-					{ exam: "Final Exam", grade: 92, date: "2025-03-12" },
-				],
-			},
-			{
-				subject: "Chemistry",
-				teacher: "Dr. Brown",
-				details: [
-					{ exam: "1st Exam", grade: 89, date: "2025-01-20" },
-					{ exam: "Oral Exam", grade: 92, date: "2025-02-15" },
-					{ exam: "Final Exam", grade: 90, date: "2025-03-20" },
-				],
-			},
-		],
-	};
+	const events = [
+		{ title: "Math Exam", date: "2024-11-15", time: "10:00 AM" },
+		{ title: "Parent-Teacher Meeting", date: "2024-11-18", time: "4:00 PM" },
+	];
+
+	const notifications = [
+		{ type: "Alert", message: "Grade 9 Math exam grading due tomorrow!" },
+		{ type: "Info", message: "New assessment resources available in library." },
+	];
+
+	const recentActivities = [
+		{
+			teacher: "Mr. Smith",
+			action: "added a new assessment for Grade 9 Math",
+			time: "2 hours ago",
+		},
+		{
+			teacher: "Ms. Johnson",
+			action: "graded 20 assignments for Grade 10 Science",
+			time: "5 hours ago",
+		},
+	];
 
 	return (
-		<div>
-			{/* <h2>Dashboard</h2>
-			<p>Welcome to the Dashboard</p>
-			<br />
-			<br />
-			<br /> */}
+		<div className="dashboard">
+			<h2 className="dashboard-title">Teacher Dashboard</h2>
+			<div className="dashboard-container">
+				{/* Quick Stats Section */}
+				<section className="dashboard-section stats">
+					<h3>Quick Stats</h3>
+					<div className="stats-grid">
+						<div className="stat-item">
+							<h4>Classes</h4>
+							<p>{classes.length}</p>
+						</div>
+						<div className="stat-item">
+							<h4>Students</h4>
+							<p>{classes.reduce((total, cls) => total + cls.students, 0)}</p>
+						</div>
+						<div className="stat-item">
+							<h4>Assessments</h4>
+							<p>
+								{classes.reduce((total, cls) => total + cls.assessments, 0)}
+							</p>
+						</div>
+					</div>
+				</section>
 
-			{/* Render the Classlogform component */}
-			{/* <ClassLogForm /> */}
+				{/* Upcoming Events Section */}
+				<section className="dashboard-section events">
+					<h3>Upcoming Events</h3>
+					<ul className="event-list">
+						{events.map((event, index) => (
+							<li key={index} className="event-item">
+								<p className="event-title">{event.title}</p>
+								<p>
+									{event.date} at {event.time}
+								</p>
+							</li>
+						))}
+					</ul>
+				</section>
 
-			{/* Render the GradesList outside the modal */}
-			{/* <GradesList subjects={semesters[selectedSemester]} /> */}
+				{/* Notifications Section */}
+				<section className="dashboard-section notifications">
+					<h3>Notifications</h3>
+					<ul className="notification-list">
+						{notifications.map((note, index) => (
+							<li
+								key={index}
+								className={`notification-item ${note.type.toLowerCase()}`}
+							>
+								<p>{note.message}</p>
+							</li>
+						))}
+					</ul>
+				</section>
+
+				{/* Recent Activity Section */}
+				<section className="dashboard-section recent-activity">
+					<h3>Recent Activity</h3>
+					<ul className="activity-list">
+						{recentActivities.map((activity, index) => (
+							<li key={index} className="activity-item">
+								<p>
+									<strong>{activity.teacher}</strong> {activity.action}
+								</p>
+								<p className="activity-time">{activity.time}</p>
+							</li>
+						))}
+					</ul>
+				</section>
+
+				{/* Class Overview Section */}
+				<section className="dashboard-section class-overview">
+					<h3>Class Overview</h3>
+					<div className="class-list">
+						{classes.map((cls, index) => (
+							<div key={index} className="class-item">
+								<h4>{cls.name}</h4>
+								<p>Students: {cls.students}</p>
+								<p>Assessments: {cls.assessments}</p>
+								<button className="view-class-button">View Class</button>
+							</div>
+						))}
+					</div>
+				</section>
+
+				{/* Resources Section */}
+				<section className="dashboard-section resources">
+					<h3>Resources</h3>
+					<button className="resource-button">Access Library</button>
+					<button className="resource-button">Upload Document</button>
+				</section>
+			</div>
 		</div>
 	);
 };

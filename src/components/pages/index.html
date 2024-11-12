@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Schedule Creator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #3a77d2;
+        }
+        .schedule-container {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .day-section {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e1e8ef;
+            padding-bottom: 15px;
+        }
+        .day-header {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #3a77d2;
+            margin-bottom: 10px;
+        }
+        .period-entry {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .period-entry input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #d1d9df;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        .export-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #4caf50;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .export-button:hover {
+            background-color: #45a047;
+        }
+    </style>
+</head>
+<body>
+
+<h1>School Schedule Creator</h1>
+<div class="schedule-container" id="schedule-container"></div>
+<button class="export-button" onclick="exportToExcel()">Download Schedule as Excel</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<script>
+    const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    
+    // Function to convert numbers to ordinal strings
+    function ordinalSuffix(i) {
+        const j = i % 10,
+              k = i % 100;
+        if (j === 1 && k !== 11) return i + "st";
+        if (j === 2 && k !== 12) return i + "nd";
+        if (j === 3 && k !== 13) return i + "rd";
+        return i + "th";
+    }
+    
+    const grades = Array.from({ length: 12 }, (_, i) => `${ordinalSuffix(i + 1)} Grade`);
+    const scheduleContainer = document.getElementById("schedule-container");
+
+    function loadScheduleFromCache() {
+        const cachedData = localStorage.getItem("schoolSchedule");
+        return cachedData ? JSON.parse(cachedData) : {};
+    }
+
+    function saveScheduleToCache(data) {
+        localStorage.setItem("schoolSchedule", JSON.stringify(data));
+    }
+
+    function clearCache() {
+        localStorage.removeItem("schoolSchedule");
+    }
+
+    const scheduleData = loadScheduleFromCache();
+
+    function createScheduleForm() {
+        grades.forEach(grade => {
+            daysOfWeek.forEach(day => {
+                const daySection = document.createElement("div");
+                daySection.className = "day-section";
+
+                const header = document.createElement("div");
+                header.className = "day-header";
+                header.textContent = `${grade} - ${day}`;
+                daySection.appendChild(header);
+
+                for (let period = 1; period <= 7; period++) {
+                    const periodEntry = document.createElement("div");
+                    periodEntry.className = "period-entry";
+
+                    const subjectInput = document.createElement("input");
+                    subjectInput.type = "text";
+                    subjectInput.placeholder = `Period ${period} Subject`;
+                    subjectInput.value = scheduleData[`${grade}-${day}-${period}-subject`] || "";
+                    subjectInput.oninput = () => {
+                        scheduleData[`${grade}-${day}-${period}-subject`] = subjectInput.value;
+                        saveScheduleToCache(scheduleData);
+                    };
+
+                    const teacherInput = document.createElement("input");
+                    teacherInput.type = "text";
+                    teacherInput.placeholder = `Period ${period} Teacher`;
+                    teacherInput.value = scheduleData[`${grade}-${day}-${period}-teacher`] || "";
+                    teacherInput.oninput = () => {
+                        scheduleData[`${grade}-${day}-${period}-teacher`] = teacherInput.value;
+                        saveScheduleToCache(scheduleData);
+                    };
+
+                    periodEntry.appendChild(subjectInput);
+                    periodEntry.appendChild(teacherInput);
+                    daySection.appendChild(periodEntry);
+                }
+
+                scheduleContainer.appendChild(daySection);
+            });
+        });
+    }
+
+    function exportToExcel() {
+        const workbook = XLSX.utils.book_new();
+        grades.forEach(grade => {
+            const worksheetData = [["Day", "Period", "Subject", "Teacher"]];
+            daysOfWeek.forEach(day => {
+                for (let period = 1; period <= 7; period++) {
+                    const subject = scheduleData[`${grade}-${day}-${period}-subject`] || "NA";
+                    const teacher = scheduleData[`${grade}-${day}-${period}-teacher`] || "NA";
+                    worksheetData.push([day, period, subject, teacher]);
+                }
+            });
+            const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+            XLSX.utils.book_append_sheet(workbook, worksheet, grade);
+        });
+        XLSX.writeFile(workbook, "School_Schedule.xlsx");
+        clearCache();
+    }
+
+    createScheduleForm();
+</script>
+</body>
+</html>
