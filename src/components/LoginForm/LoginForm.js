@@ -1,52 +1,42 @@
+// src/components/pages/Login.js
 import React, { useState } from "react";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import TextInput from "../ui/TextInput/TextInput";
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
+import useAuth from "../../hooks/useAuth";
 import "./LoginForm.css";
 
 const LoginForm = () => {
+	const { login } = useAuth();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [keepLoggedIn, setKeepLoggedIn] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 
-	// Email validation using regex
-	const isValidEmail = (email) => {
-		const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		return emailPattern.test(email);
-	};
+	const handleLogin = async (e) => {
+		e.preventDefault();
 
-	const handleLogin = (e) => {
-		e.preventDefault(); // Prevent the default form submission behavior
-
-		// Check if email is valid and password is provided
-		if (!isValidEmail(email)) {
-			setErrorMessage("Please provide a valid email address.");
-			setTimeout(() => {
-				setErrorMessage(""); // Clear the error message after 3 seconds
-			}, 3000);
+		// Validate email and password
+		if (!email || !password) {
+			setErrorMessage("Please enter both email and password.");
+			setTimeout(() => setErrorMessage(""), 3000);
 			return;
 		}
 
-		if (!password) {
-			setErrorMessage("Please enter your password.");
-			setTimeout(() => {
-				setErrorMessage(""); // Clear the error message after 3 seconds
-			}, 3000);
-			return;
+		try {
+			await login(email, password);
+		} catch (error) {
+			setErrorMessage("Login failed. Please try again.");
+			setTimeout(() => setErrorMessage(""), 3000);
 		}
-
-		setErrorMessage(""); // Clear error message if validation passes
-		console.log("Logging in:", { email, password, keepLoggedIn });
-		// Add login logic here
 	};
 
 	const handleCancel = () => {
 		setEmail("");
 		setPassword("");
 		setKeepLoggedIn(false);
-		setErrorMessage(""); // Clear the error message on cancel
+		setErrorMessage("");
 	};
 
 	return (
@@ -56,10 +46,8 @@ const LoginForm = () => {
 				alt="Logo"
 				className="logo"
 			/>
-
 			{errorMessage && <p className="notification">{errorMessage}</p>}
-
-			<form className="login-form" noValidate onSubmit={handleLogin}>
+			<form className="login-form" onSubmit={handleLogin}>
 				<TextInput
 					label="Email"
 					icon={faUser}
@@ -76,7 +64,6 @@ const LoginForm = () => {
 					onChange={(e) => setPassword(e.target.value)}
 					type="password"
 				/>
-
 				<div className="checkbox-container">
 					<input
 						type="checkbox"
