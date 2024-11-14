@@ -12,10 +12,12 @@ import {
 	faBook,
 } from "@fortawesome/free-solid-svg-icons";
 import DesktopSidebarButton from "../ui/DesktopSidebarButton/DesktopSidebarButton";
+import useAuth from "../../hooks/useAuth"; // Import useAuth hook
 import "./DesktopSidebar.css";
 
 const DesktopSidebar = () => {
 	const location = useLocation();
+	const { logout } = useAuth(); // Access logout function from useAuth
 	const [activeItem, setActiveItem] = useState("");
 
 	const menuItems = [
@@ -66,6 +68,10 @@ const DesktopSidebar = () => {
 		setActiveItem(title);
 	};
 
+	const handleLogout = () => {
+		logout(); // Call the logout function from AuthContext
+	};
+
 	return (
 		<div className="desktop-sidebar">
 			<div className="sidebar-menu">
@@ -86,7 +92,7 @@ const DesktopSidebar = () => {
 					icon={faSignOutAlt}
 					route="/login"
 					isActive={false}
-					onClick={() => handleButtonClick("Logout")}
+					onClick={handleLogout} // Call handleLogout on click
 				/>
 			</div>
 		</div>

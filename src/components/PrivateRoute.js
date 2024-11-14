@@ -4,7 +4,9 @@ import useAuth from "../hooks/useAuth";
 
 const PrivateRoute = () => {
 	const { user } = useAuth();
-	return user ? <Outlet /> : <Navigate to="/login" />;
+	const storedUser = JSON.parse(localStorage.getItem("user"));
+
+	return user || storedUser ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;
