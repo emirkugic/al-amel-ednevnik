@@ -1,3 +1,4 @@
+// src/App.js
 import React from "react";
 import {
 	BrowserRouter as Router,
@@ -22,6 +23,7 @@ import Login from "./components/pages/Login";
 import SubjectAssessmentManagement from "./components/pages/SubjectAssessmentManagement";
 import Lectures from "./components/pages/Lectures";
 import Develop from "./components/pages/Develop";
+import Teachers from "./components/pages/Teachers"; // Add Teachers page
 
 import "./App.css";
 
@@ -46,6 +48,8 @@ const AppContent = () => {
 						<Route path="/settings" element={<Settings />} />
 						<Route path="/help" element={<Help />} />
 						<Route path="/develop" element={<Develop />} />
+						<Route path="/teachers" element={<Teachers />} />{" "}
+						{/* Admin-only route */}
 						<Route
 							path="/courses/:subject"
 							element={<SubjectAssessmentManagement />}

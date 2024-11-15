@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import {
 	faChartLine,
@@ -10,66 +10,78 @@ import {
 	faClock,
 	faBookOpen,
 	faBook,
+	faChalkboardTeacher,
 } from "@fortawesome/free-solid-svg-icons";
 import DesktopSidebarButton from "../ui/DesktopSidebarButton/DesktopSidebarButton";
-import useAuth from "../../hooks/useAuth"; // Import useAuth hook
+import useAuth from "../../hooks/useAuth";
 import "./DesktopSidebar.css";
 
 const DesktopSidebar = () => {
 	const location = useLocation();
-	const { logout } = useAuth(); // Access logout function from useAuth
+	const { user, logout } = useAuth();
 	const [activeItem, setActiveItem] = useState("");
 
-	const menuItems = [
-		{ title: "Dashboard", icon: faHouse, route: "/" },
-		{ title: "Students", icon: faPeopleGroup, route: "/students" },
-		{
-			title: "Courses",
-			icon: faBook,
-			route: [
-				{ title: "Math", path: "/courses/math" },
-				{ title: "Physics", path: "/courses/physics" },
-				{ title: "Comp Sci", path: "/courses/compsci" },
-			],
-		},
-		{ title: "Attendance", icon: faClock, route: "/attendance" },
-		{ title: "Grades", icon: faChartLine, route: "/grades" },
-		{
-			title: "Lectures",
-			icon: faBookOpen,
-			route: [
-				{ title: "7th grade", path: "/lectures" },
-				{ title: "8th grade", path: "/lectures" },
-				{ title: "9th grade", path: "/lectures" },
-				{ title: "10th grade", path: "/lectures" },
-				{ title: "11th grade", path: "/lectures" },
-				{ title: "12th grade", path: "/lectures" },
-			],
-		},
-		{ title: "Settings", icon: faCog, route: "/settings" },
-		{ title: "Help", icon: faQuestionCircle, route: "/help" },
-	];
+	const menuItems = useMemo(() => {
+		const items = [
+			{ title: "Dashboard", icon: faHouse, route: "/" },
+			{ title: "Students", icon: faPeopleGroup, route: "/students" },
+			{
+				title: "Courses",
+				icon: faBook,
+				route: [
+					{ title: "Math", path: "/courses/math" },
+					{ title: "Physics", path: "/courses/physics" },
+					{ title: "Comp Sci", path: "/courses/compsci" },
+				],
+			},
+			{ title: "Attendance", icon: faClock, route: "/attendance" },
+			{ title: "Grades", icon: faChartLine, route: "/grades" },
+			{
+				title: "Lectures",
+				icon: faBookOpen,
+				route: [
+					{ title: "7th grade", path: "/lectures" },
+					{ title: "8th grade", path: "/lectures" },
+					{ title: "9th grade", path: "/lectures" },
+					{ title: "10th grade", path: "/lectures" },
+					{ title: "11th grade", path: "/lectures" },
+					{ title: "12th grade", path: "/lectures" },
+				],
+			},
+			{ title: "Settings", icon: faCog, route: "/settings" },
+			{ title: "Help", icon: faQuestionCircle, route: "/help" },
+		];
+
+		// Conditionally add the "Teachers" button for admins
+		if (user?.role === "Admin") {
+			items.push({
+				title: "Teachers",
+				icon: faChalkboardTeacher,
+				route: "/teachers",
+			});
+		}
+
+		return items;
+	}, [user]);
 
 	useEffect(() => {
-		// Find the menu item based on the current path
 		const activeMenuItem = menuItems.find((item) =>
 			Array.isArray(item.route)
 				? item.route.some((sub) => sub.path === location.pathname)
 				: item.route === location.pathname
 		);
 
-		// If a matching item is found, set it as active
 		if (activeMenuItem) {
 			setActiveItem(activeMenuItem.title);
 		}
-	}, [location.pathname]);
+	}, [location.pathname, menuItems]);
 
 	const handleButtonClick = (title) => {
 		setActiveItem(title);
 	};
 
 	const handleLogout = () => {
-		logout(); // Call the logout function from AuthContext
+		logout();
 	};
 
 	return (
@@ -92,7 +104,7 @@ const DesktopSidebar = () => {
 					icon={faSignOutAlt}
 					route="/login"
 					isActive={false}
-					onClick={handleLogout} // Call handleLogout on click
+					onClick={handleLogout}
 				/>
 			</div>
 		</div>
