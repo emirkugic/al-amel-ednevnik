@@ -33,6 +33,7 @@ const TeacherManagement = () => {
 
 	const handleSaveTeacher = (teacherData) => {
 		if (selectedTeacher) {
+			// Update existing teacher
 			setTeachers((prevTeachers) =>
 				prevTeachers.map((teacher) =>
 					teacher.id === selectedTeacher.id
@@ -41,7 +42,8 @@ const TeacherManagement = () => {
 				)
 			);
 		} else {
-			const newTeacher = { ...teacherData, id: Date.now() };
+			// Add new teacher
+			const newTeacher = { ...teacherData, id: Date.now() }; // Temporary unique ID
 			setTeachers((prevTeachers) => [...prevTeachers, newTeacher]);
 		}
 		handleCloseModal();
@@ -59,7 +61,7 @@ const TeacherManagement = () => {
 		<div className="teacher-management">
 			<div className="header">
 				<h2>Teacher Management</h2>
-				<button className="add-button" onClick={() => handleOpenModal()}>
+				<button className="add-teacher" onClick={() => handleOpenModal()}>
 					<FontAwesomeIcon icon={faPlus} /> Add Teacher
 				</button>
 			</div>
@@ -72,7 +74,7 @@ const TeacherManagement = () => {
 						</div>
 						<div className="teacher-actions">
 							<button
-								className="details-button"
+								className="view-details"
 								onClick={() => handleOpenDetailsModal(teacher)}
 							>
 								View Details

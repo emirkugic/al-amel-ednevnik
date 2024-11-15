@@ -9,14 +9,22 @@
 	align-items: center;
 }
 
-.add-button {
-	background-color: #4caf50;
+.add-teacher {
+	background-color: #04abfd;
 	color: white;
-	padding: 10px 15px;
+	padding: 8px 15px;
 	border: none;
-	cursor: pointer;
 	border-radius: 5px;
-	font-size: 14px;
+	cursor: pointer;
+	font-size: 0.9rem;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	transition: background-color 0.3s ease;
+}
+
+.add-teacher:hover {
+	background-color: #316fc5;
 }
 
 .teacher-list {
@@ -54,27 +62,37 @@
 	gap: 10px;
 }
 
-.details-button,
-.edit-button,
-.delete-button {
-	padding: 8px 12px;
+.view-details {
+	background-color: #04abfd;
+	color: white;
+	padding: 8px 15px;
 	border: none;
-	cursor: pointer;
 	border-radius: 5px;
-	font-size: 14px;
+	cursor: pointer;
+	font-size: 0.9rem;
+	transition: background-color 0.3s ease;
 }
 
-.details-button {
-	background-color: #007bff;
-	color: white;
+.view-details:hover {
+	background-color: #316fc5;
 }
 
 .edit-button {
 	background-color: #ffc107;
 	color: black;
+	padding: 8px 15px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 0.9rem;
 }
 
 .delete-button {
 	background-color: #dc3545;
 	color: white;
+	padding: 8px 15px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 0.9rem;
 }
