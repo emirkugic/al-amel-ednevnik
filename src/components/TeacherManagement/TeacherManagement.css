@@ -1,7 +1,6 @@
-/* src/components/TeacherManagement.css */
-
 .teacher-management {
 	padding: 20px;
+	font-family: Arial, sans-serif;
 }
 
 .header {
@@ -13,36 +12,69 @@
 .add-button {
 	background-color: #4caf50;
 	color: white;
+	padding: 10px 15px;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+	font-size: 14px;
+}
+
+.teacher-list {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	margin-top: 20px;
+}
+
+.teacher-card {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	background-color: #f9f9f9;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.teacher-info h3 {
+	margin: 0;
+	font-size: 16px;
+	color: #333;
+}
+
+.teacher-info p {
+	margin: 5px 0 0;
+	color: #777;
+	font-size: 14px;
+}
+
+.teacher-actions {
+	display: flex;
+	gap: 10px;
+}
+
+.details-button,
+.edit-button,
+.delete-button {
 	padding: 8px 12px;
 	border: none;
 	cursor: pointer;
 	border-radius: 5px;
+	font-size: 14px;
 }
 
-.teacher-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-top: 20px;
+.details-button {
+	background-color: #007bff;
+	color: white;
 }
 
-.teacher-table th,
-.teacher-table td {
-	padding: 12px;
-	border: 1px solid #ddd;
-	text-align: left;
+.edit-button {
+	background-color: #ffc107;
+	color: black;
 }
 
-.teacher-table th {
-	background-color: #f2f2f2;
-}
-
-.teacher-table td button {
-	background: none;
-	border: none;
-	cursor: pointer;
-	color: #555;
-}
-
-.teacher-table td div {
-	margin-top: 4px;
+.delete-button {
+	background-color: #dc3545;
+	color: white;
 }
