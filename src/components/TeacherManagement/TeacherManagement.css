@@ -1,12 +1,23 @@
 .teacher-management {
-	padding: 20px;
 	font-family: Arial, sans-serif;
+	color: #333;
+	padding: 20px;
+	max-width: 900px;
+	margin: auto;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+	height: 89vh; /* Full screen height */
+	overflow: hidden; /* Prevent overflow */
 }
 
 .header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	margin-bottom: 20px;
 }
 
 .add-teacher {
@@ -31,7 +42,9 @@
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
-	margin-top: 20px;
+	flex-grow: 1; /* Makes the list take up available space */
+	overflow-y: auto; /* Enables scrolling for the list */
+	padding-right: 10px; /* Add some padding for scrollbar clearance */
 }
 
 .teacher-card {
@@ -40,9 +53,17 @@
 	align-items: center;
 	padding: 15px;
 	border: 1px solid #ddd;
-	border-radius: 5px;
+	border-radius: 8px;
 	background-color: #f9f9f9;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: transform 0.2s ease, box-shadow 0.2s ease,
+		background-color 0.2s ease;
+}
+
+.teacher-card:hover {
+	background-color: #f1f1f1;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	transform: translateY(-2px);
 }
 
 .teacher-info h3 {
