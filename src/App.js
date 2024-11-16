@@ -23,7 +23,8 @@ import Login from "./components/pages/Login";
 import SubjectAssessmentManagement from "./components/pages/SubjectAssessmentManagement";
 import Lectures from "./components/pages/Lectures";
 import Develop from "./components/pages/Develop";
-import Teachers from "./components/pages/Teachers"; // Add Teachers page
+import Teachers from "./components/pages/Teachers";
+import Subjects from "./components/pages/Subjects";
 
 import "./App.css";
 
@@ -49,6 +50,7 @@ const AppContent = () => {
 						<Route path="/help" element={<Help />} />
 						<Route path="/develop" element={<Develop />} />
 						<Route path="/teachers" element={<Teachers />} />{" "}
+						<Route path="/subjects" element={<Subjects />} />{" "}
 						{/* Admin-only route */}
 						<Route
 							path="/courses/:subject"

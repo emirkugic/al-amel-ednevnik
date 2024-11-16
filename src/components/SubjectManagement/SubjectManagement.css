@@ -1,0 +1,118 @@
+.subject-management {
+	padding: 20px;
+	font-family: Arial, sans-serif;
+	background-color: #fff;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.header h2 {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.header p {
+	font-size: 14px;
+	color: #666;
+}
+
+.add-subject {
+	background-color: #04abfd;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	padding: 8px 16px;
+	font-size: 14px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+.add-subject:hover {
+	background-color: #316fc5;
+}
+
+.add-subject svg {
+	margin-right: 8px;
+}
+
+.subject-list {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.subject-card {
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	padding: 16px;
+	position: relative;
+}
+
+.subject-header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 18px;
+	font-weight: bold;
+	color: #333;
+}
+
+.subject-icon {
+	color: #1d72b8;
+}
+
+.description {
+	margin: 8px 0;
+	color: #666;
+	font-size: 14px;
+}
+
+.grades {
+	font-size: 12px;
+	color: #888;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	margin: 8px 0;
+}
+
+.grade-levels {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	margin-top: 8px;
+}
+
+.grade-pill {
+	background-color: #e1ecf4;
+	color: #1d72b8;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 12px;
+}
+
+.actions {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	display: flex;
+	gap: 8px;
+}
+
+.actions button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #888;
+}
+
+.actions button:hover {
+	color: #1d72b8;
+}

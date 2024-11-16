@@ -26,7 +26,7 @@ const DesktopSidebar = () => {
 			{ title: "Dashboard", icon: faHouse, route: "/" },
 			{ title: "Students", icon: faPeopleGroup, route: "/students" },
 			{
-				title: "Courses",
+				title: "My Courses",
 				icon: faBook,
 				route: [
 					{ title: "Math", path: "/courses/math" },
@@ -54,11 +54,18 @@ const DesktopSidebar = () => {
 
 		// Conditionally add the "Teachers" button for admins
 		if (user?.role === "Admin") {
-			items.push({
-				title: "Teachers",
-				icon: faChalkboardTeacher,
-				route: "/teachers",
-			});
+			items.push(
+				{
+					title: "Teachers",
+					icon: faChalkboardTeacher,
+					route: "/teachers",
+				},
+				{
+					title: "Subjects",
+					icon: faBook,
+					route: "/subjects",
+				}
+			);
 		}
 
 		return items;
