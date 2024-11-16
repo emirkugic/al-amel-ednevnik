@@ -25,6 +25,7 @@ import Lectures from "./components/pages/Lectures";
 import Develop from "./components/pages/Develop";
 import Teachers from "./components/pages/Teachers";
 import Subjects from "./components/pages/Subjects";
+import Classes from "./components/pages/Classes";
 
 import "./App.css";
 
@@ -51,7 +52,7 @@ const AppContent = () => {
 						<Route path="/develop" element={<Develop />} />
 						<Route path="/teachers" element={<Teachers />} />{" "}
 						<Route path="/subjects" element={<Subjects />} />{" "}
-						{/* Admin-only route */}
+						<Route path="/classes" element={<Classes />} />{" "}
 						<Route
 							path="/courses/:subject"
 							element={<SubjectAssessmentManagement />}

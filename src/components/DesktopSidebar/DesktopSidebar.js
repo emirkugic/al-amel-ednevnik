@@ -64,6 +64,11 @@ const DesktopSidebar = () => {
 					title: "Subjects",
 					icon: faBook,
 					route: "/subjects",
+				},
+				{
+					title: "Classes",
+					icon: faPeopleGroup,
+					route: "/classes",
 				}
 			);
 		}
