@@ -1,6 +1,8 @@
 .class-management {
 	padding: 20px;
 	font-family: Arial, sans-serif;
+	background-color: #fff;
+	border-radius: 8px;
 }
 
 .header {
@@ -18,97 +20,64 @@
 }
 
 .grades-container {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	gap: 20px;
+	margin-top: 20px;
+}
+
+.grade-section {
 	margin-bottom: 40px;
-}
-
-.grade-card {
-	background: #fff;
-	padding: 16px;
+	border: 1px solid #ddd;
 	border-radius: 8px;
+	padding: 16px;
+	background: #fff;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	text-align: center;
 }
 
-.grade-card h3 {
-	font-size: 18px;
-	margin-bottom: 8px;
-}
-
-.grade-card .departments {
-	display: flex;
-	gap: 8px;
-	flex-wrap: wrap;
-	justify-content: center;
+.grade-title {
+	font-size: 20px;
+	font-weight: bold;
 	margin-bottom: 16px;
 }
 
-.department {
-	background: #e1ecf4;
-	color: #1d72b8;
-	padding: 4px 8px;
-	border-radius: 4px;
-	font-size: 12px;
+.departments-table {
+	width: 100%;
+	border-collapse: collapse;
 }
 
-.no-departments {
-	color: #888;
-	font-size: 12px;
+.departments-table th,
+.departments-table td {
+	border: 1px solid #ddd;
+	padding: 10px;
+	text-align: center;
 }
 
+.departments-table th {
+	background-color: #f5f5f5;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.departments-table td {
+	font-size: 14px;
+	color: #555;
+}
+
+.assign-teacher,
 .add-department {
 	background-color: #1d72b8;
 	color: white;
 	border: none;
-	padding: 8px 16px;
+	padding: 6px 12px;
 	border-radius: 4px;
 	cursor: pointer;
-	font-size: 14px;
+	font-size: 12px;
 }
 
-.students-container {
-	margin-top: 20px;
+.assign-teacher:hover,
+.add-department:hover {
+	background-color: #155a91;
 }
 
-.students-container h2 {
-	font-size: 20px;
-	margin-bottom: 10px;
-}
-
-.students-table {
+.add-department {
 	width: 100%;
-	border-collapse: collapse;
-	margin-bottom: 20px;
-}
-
-.students-table th,
-.students-table td {
-	border: 1px solid #ddd;
-	padding: 8px;
 	text-align: center;
-}
-
-.students-table th {
-	background: #f5f5f5;
-	font-weight: bold;
-}
-
-.no-students {
-	color: #888;
-	text-align: center;
-	font-size: 14px;
-}
-
-.add-student {
-	background-color: #1d72b8;
-	color: white;
-	border: none;
-	padding: 10px 20px;
-	border-radius: 4px;
-	cursor: pointer;
-	font-size: 14px;
-	display: block;
-	margin: 0 auto;
 }

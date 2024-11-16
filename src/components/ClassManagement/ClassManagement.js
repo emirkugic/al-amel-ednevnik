@@ -5,10 +5,14 @@ const ClassManagement = () => {
 	const [grades, setGrades] = useState(
 		Array.from({ length: 12 }, (_, i) => ({
 			grade: `${i + 1}`,
-			departments: [],
+			departments: [
+				{
+					name: `${i + 1}`, // Default department (e.g., "1")
+					classTeacher: "No teacher assigned",
+				},
+			],
 		}))
 	);
-	const [students, setStudents] = useState([]);
 
 	const addDepartment = (grade) => {
 		setGrades((prevGrades) =>
@@ -18,7 +22,12 @@ const ClassManagement = () => {
 							...g,
 							departments: [
 								...g.departments,
-								`${grade}${String.fromCharCode(65 + g.departments.length)}`, // Add departments like 12A, 12B
+								{
+									name: `${grade}${String.fromCharCode(
+										65 + g.departments.length
+									)}`, // Add departments like 1A, 1B
+									classTeacher: "No teacher assigned",
+								},
 							],
 					  }
 					: g
@@ -26,78 +35,54 @@ const ClassManagement = () => {
 		);
 	};
 
+	const assignTeacher = (grade, department) => {
+		// Placeholder logic for assigning a teacher
+		alert(`Assign teacher for department ${department} in Grade ${grade}`);
+	};
+
 	return (
 		<div className="class-management">
-			<div className="header">
-				<h2>Class Management</h2>
-				<p>Manage your school's grades, class departments, and students</p>
-			</div>
-
 			<div className="grades-container">
-				{grades.map((g) => (
-					<div key={g.grade} className="grade-card">
-						<h3>{g.grade} Grade</h3>
-						<p>Departments:</p>
-						<div className="departments">
-							{g.departments.length > 0 ? (
-								g.departments.map((dept, index) => (
-									<span key={index} className="department">
-										{dept}
-									</span>
-								))
-							) : (
-								<p className="no-departments">No departments</p>
-							)}
-						</div>
-						<button
-							className="add-department"
-							onClick={() => addDepartment(g.grade)}
-						>
-							+ Add Department
-						</button>
+				{grades.map((grade) => (
+					<div key={grade.grade} className="grade-section">
+						<h3 className="grade-title">{grade.grade} Grade</h3>
+						<table className="departments-table">
+							<thead>
+								<tr>
+									<th>Department</th>
+									<th>Class Teacher</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{grade.departments.map((dept, index) => (
+									<tr key={`${grade.grade}-${index}`}>
+										<td>{dept.name}</td>
+										<td>{dept.classTeacher}</td>
+										<td>
+											<button
+												className="assign-teacher"
+												onClick={() => assignTeacher(grade.grade, dept.name)}
+											>
+												Assign Teacher
+											</button>
+										</td>
+									</tr>
+								))}
+								<tr>
+									<td colSpan="3">
+										<button
+											className="add-department"
+											onClick={() => addDepartment(grade.grade)}
+										>
+											Add Department
+										</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				))}
-			</div>
-
-			<div className="students-container">
-				<h2>Students</h2>
-				<table className="students-table">
-					<thead>
-						<tr>
-							<th>First Name</th>
-							<th>Last Name</th>
-							<th>Date of Birth</th>
-							<th>Parents' Names</th>
-							<th>Emails</th>
-							<th>Place of Birth</th>
-							<th>Country</th>
-							<th>Class</th>
-						</tr>
-					</thead>
-					<tbody>
-						{students.length > 0 ? (
-							students.map((student, index) => (
-								<tr key={index}>
-									<td>{student.firstName}</td>
-									<td>{student.lastName}</td>
-									<td>{student.dob}</td>
-									<td>{student.parentsNames}</td>
-									<td>{student.emails}</td>
-									<td>{student.placeOfBirth}</td>
-									<td>{student.country}</td>
-									<td>{student.class}</td>
-								</tr>
-							))
-						) : (
-							<tr>
-								<td colSpan="8" className="no-students">
-									No students added
-								</td>
-							</tr>
-						)}
-					</tbody>
-				</table>
-				<button className="add-student">+ Add Student</button>
 			</div>
 		</div>
 	);
