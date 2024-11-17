@@ -26,6 +26,7 @@ import Develop from "./components/pages/Develop";
 import Teachers from "./components/pages/Teachers";
 import Subjects from "./components/pages/Subjects";
 import Classes from "./components/pages/Classes";
+import Parents from "./components/pages/Parents";
 
 import "./App.css";
 
@@ -53,6 +54,7 @@ const AppContent = () => {
 						<Route path="/teachers" element={<Teachers />} />{" "}
 						<Route path="/subjects" element={<Subjects />} />{" "}
 						<Route path="/classes" element={<Classes />} />{" "}
+						<Route path="/parents" element={<Parents />} />{" "}
 						<Route
 							path="/courses/:subject"
 							element={<SubjectAssessmentManagement />}
