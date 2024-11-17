@@ -1,44 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./ParentManagement.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faPlus, faEdit } from "@fortawesome/free-solid-svg-icons";
 import useAuth from "../../hooks/useAuth";
-import parentApi from "../../api/parentApi"; // Assume we have a parent API module
+import useParents from "../../hooks/useParents";
+import parentApi from "../../api/parentApi";
 
 const ParentManagement = () => {
-	const { user } = useAuth(); // Access user context for authentication
-	const [parents, setParents] = useState([]);
+	const { user } = useAuth();
+	const { parents, loading, error, addParent, updateParent, deleteParent } =
+		useParents(user?.token);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [formData, setFormData] = useState({
 		name: "",
 		surname: "",
-		username: "",
 		password: "",
 		phoneNumber: "",
 	});
 	const [selectedParent, setSelectedParent] = useState(null);
-
-	useEffect(() => {
-		if (!user || !user.token) return;
-
-		const fetchParents = async () => {
-			try {
-				const data = await parentApi.getAllParents(user.token); // Fetch all parents
-				setParents(data);
-			} catch (error) {
-				console.error("Error fetching parents:", error);
-			}
-		};
-
-		fetchParents();
-	}, [user]);
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
 		setFormData((prev) => ({
 			...prev,
 			[name]: value,
-			username: `${prev.name}${prev.surname}`.replace(/\s+/g, ""), // Auto-generate username
 		}));
 	};
 
@@ -56,7 +41,7 @@ const ParentManagement = () => {
 		const parentData = {
 			firstName: formData.name,
 			lastName: formData.surname,
-			email: `${formData.name.toLowerCase()}.${formData.surname.toLowerCase()}@example.com`, // Generate a default email if not provided
+			email: `${formData.name.toLowerCase()}.${formData.surname.toLowerCase()}@example.com`,
 			password: formData.password,
 			phoneNumber: formData.phoneNumber,
 		};
@@ -64,20 +49,17 @@ const ParentManagement = () => {
 		try {
 			if (selectedParent) {
 				// Update existing parent
-				await parentApi.updateParent(selectedParent.id, parentData, user.token);
-				setParents((prev) =>
-					prev.map((parent) =>
-						parent.id === selectedParent.id
-							? { ...parent, ...parentData }
-							: parent
-					)
+				const updatedParent = await parentApi.updateParent(
+					selectedParent.id,
+					parentData,
+					user.token
 				);
+				updateParent(updatedParent);
 			} else {
 				// Create new parent
 				const newParent = await parentApi.createParent(parentData, user.token);
-				setParents((prev) => [...prev, newParent]);
+				addParent(newParent);
 			}
-
 			handleCloseModal();
 		} catch (error) {
 			console.error("Error saving parent:", error);
@@ -88,7 +70,7 @@ const ParentManagement = () => {
 		if (window.confirm("Are you sure you want to delete this parent?")) {
 			try {
 				await parentApi.deleteParent(id, user.token);
-				setParents((prev) => prev.filter((parent) => parent.id !== id));
+				deleteParent(id);
 			} catch (error) {
 				console.error("Error deleting parent:", error);
 			}
@@ -99,14 +81,13 @@ const ParentManagement = () => {
 		setSelectedParent(parent);
 		setFormData(
 			parent
-				? { ...parent }
-				: {
-						name: "",
-						surname: "",
-						username: "",
+				? {
+						name: parent.firstName,
+						surname: parent.lastName,
 						password: "",
-						phoneNumber: "",
+						phoneNumber: parent.phoneNumber,
 				  }
+				: { name: "", surname: "", password: "", phoneNumber: "" }
 		);
 		setIsModalOpen(true);
 	};
@@ -115,6 +96,14 @@ const ParentManagement = () => {
 		setSelectedParent(null);
 		setIsModalOpen(false);
 	};
+
+	if (loading) {
+		return <div>Loading...</div>;
+	}
+
+	if (error) {
+		return <div>Error loading parents: {error.message}</div>;
+	}
 
 	return (
 		<div className="parent-management">
