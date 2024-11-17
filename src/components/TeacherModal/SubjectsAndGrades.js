@@ -1,41 +1,34 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import subjectApi from "../../api/subjectApi";
+import useAuth from "../../hooks/useAuth"; // Ensure the token is accessed via context
 import "./SubjectsAndGrades.css";
 
-const grades = [
-	"1st",
-	"2nd",
-	"3rd",
-	"4th",
-	"5th",
-	"6th",
-	"7th",
-	"8th",
-	"9th",
-	"10th",
-	"11th",
-	"12th",
-];
-
-const subjectsList = [
-	"Math",
-	"Physics",
-	"Chemistry",
-	"Biology",
-	"History",
-	"Geography",
-	"English",
-	"Computer Science",
-];
-
 const SubjectsAndGrades = ({ subjects, onSubjectsChange }) => {
+	const { user } = useAuth(); // Access the token from context
 	const [subjectInput, setSubjectInput] = useState({ subject: "", grades: [] });
 	const [isGradeDropdownOpen, setIsGradeDropdownOpen] = useState(false);
 	const [isSubjectDropdownOpen, setIsSubjectDropdownOpen] = useState(false);
+	const [availableSubjects, setAvailableSubjects] = useState([]);
 
 	const subjectDropdownRef = useRef(null);
 	const gradeDropdownRef = useRef(null);
+
+	useEffect(() => {
+		if (!user || !user.token) return;
+
+		const fetchSubjects = async () => {
+			try {
+				const fetchedSubjects = await subjectApi.getAllSubjects(user.token);
+				setAvailableSubjects(fetchedSubjects);
+			} catch (error) {
+				console.error("Failed to fetch subjects:", error);
+			}
+		};
+
+		fetchSubjects();
+	}, [user]);
 
 	// Close dropdowns when clicking outside
 	useEffect(() => {
@@ -60,7 +53,7 @@ const SubjectsAndGrades = ({ subjects, onSubjectsChange }) => {
 	}, []);
 
 	const selectSubject = (subject) => {
-		if (subjects.some((s) => s.subject === subject)) {
+		if (subjects.some((s) => s.subjectId === subject.id)) {
 			alert("This subject has already been added.");
 			return;
 		}
@@ -79,7 +72,14 @@ const SubjectsAndGrades = ({ subjects, onSubjectsChange }) => {
 
 	const addSubject = () => {
 		if (subjectInput.subject && subjectInput.grades.length > 0) {
-			const updatedSubjects = [...subjects, subjectInput];
+			const updatedSubjects = [
+				...subjects,
+				{
+					subject: subjectInput.subject.name,
+					subjectId: subjectInput.subject.id,
+					grades: subjectInput.grades,
+				},
+			];
 			onSubjectsChange(updatedSubjects);
 			setSubjectInput({ subject: "", grades: [] });
 			setIsGradeDropdownOpen(false);
@@ -100,17 +100,17 @@ const SubjectsAndGrades = ({ subjects, onSubjectsChange }) => {
 						className="dropdown-header"
 						onClick={() => setIsSubjectDropdownOpen(!isSubjectDropdownOpen)}
 					>
-						{subjectInput.subject || "Select Subject"}
+						{subjectInput.subject?.name || "Select Subject"}
 					</div>
 					{isSubjectDropdownOpen && (
 						<div className="dropdown-menu">
-							{subjectsList.map((subject) => (
+							{availableSubjects.map((subject) => (
 								<div
-									key={subject}
+									key={subject.id}
 									className="dropdown-item"
 									onClick={() => selectSubject(subject)}
 								>
-									{subject}
+									{subject.name}
 								</div>
 							))}
 						</div>
@@ -128,14 +128,18 @@ const SubjectsAndGrades = ({ subjects, onSubjectsChange }) => {
 					</div>
 					{isGradeDropdownOpen && (
 						<div className="dropdown-menu">
-							{grades.map((grade) => (
-								<label key={grade} className="dropdown-item">
+							{[...Array(12).keys()].map((grade) => (
+								<label key={grade + 1} className="dropdown-item">
 									<input
 										type="checkbox"
-										checked={subjectInput.grades.includes(grade)}
-										onChange={() => toggleGradeSelection(grade)}
+										checked={subjectInput.grades.includes(
+											(grade + 1).toString()
+										)}
+										onChange={() =>
+											toggleGradeSelection((grade + 1).toString())
+										}
 									/>
-									{grade}
+									{`${grade + 1}`}
 								</label>
 							))}
 						</div>

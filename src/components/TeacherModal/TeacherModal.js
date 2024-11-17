@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./TeacherModal.css";
 import SubjectsAndGrades from "./SubjectsAndGrades";
 
-const TeacherModal = ({ teacher, onClose, onSave }) => {
+const TeacherModal = ({ teacher, onClose, onSave, subjects }) => {
 	const [formData, setFormData] = useState({
 		name: "",
 		surname: "",

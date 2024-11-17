@@ -28,12 +28,12 @@
 	position: absolute;
 	top: 100%;
 	left: 0;
-	width: 100%; /* Matches the width of the dropdown container */
+	width: 100%;
 	background-color: #fff;
 	border: 1px solid #ddd;
 	border-radius: 5px;
 	margin-top: 5px;
-	padding: 10px 0; /* Top and bottom padding */
+	padding: 10px 0;
 	max-height: 150px;
 	overflow-y: auto;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
@@ -43,11 +43,11 @@
 .dropdown-item {
 	display: flex;
 	align-items: center;
-	width: 100%; /* Matches the width of the dropdown menu */
-	padding: 10px; /* Padding for better usability */
+	width: 100%;
+	padding: 10px;
 	font-size: 0.9rem;
 	cursor: pointer;
-	box-sizing: border-box; /* Ensures padding doesn't affect width */
+	box-sizing: border-box;
 }
 
 .dropdown-item:hover {
@@ -71,10 +71,10 @@
 }
 
 .subject-list-container {
-	max-height: 150px; /* Set a max height to make the list scrollable */
-	overflow-y: auto; /* Add scrolling when content exceeds max height */
+	max-height: 150px;
+	overflow-y: auto;
 	margin-top: 15px;
-	/* border: 1px solid #ddd; Optional border for better visual distinction */
+
 	border-radius: 5px;
 	padding: 5px;
 }

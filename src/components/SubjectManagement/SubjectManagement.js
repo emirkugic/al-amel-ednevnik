@@ -18,7 +18,7 @@ const SubjectManagement = () => {
 	const [modalData, setModalData] = useState(null);
 
 	useEffect(() => {
-		if (!user || !user.token) return; // Wait until user and token are available
+		if (!user || !user.token) return;
 
 		const fetchSubjects = async () => {
 			try {
