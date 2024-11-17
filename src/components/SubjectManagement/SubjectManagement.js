@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SubjectManagement.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,44 +8,36 @@ import {
 	faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import AddEditSubjectModal from "../AddEditSubjectModal/AddEditSubjectModal";
+import subjectApi from "../../api/subjectApi";
+import useAuth from "../../hooks/useAuth";
 
 const SubjectManagement = () => {
+	const { user } = useAuth(); // Access token from context
+	const [subjects, setSubjects] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalData, setModalData] = useState(null);
 
-	const subjects = [
-		{
-			id: 1,
-			name: "Mathematics",
-			description:
-				"Core mathematics curriculum including algebra, geometry, and calculus",
-			grades: "All grades",
-			gradeLevels: [],
-		},
-		{
-			id: 2,
-			name: "Chemistry",
-			description:
-				"General chemistry studies covering atomic structure, chemical reactions, and lab work",
-			grades: "Grades 8 - 12",
-			gradeLevels: ["Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"],
-		},
-		{
-			id: 3,
-			name: "Biology",
-			description: "Study of living organisms, ecosystems, and human anatomy",
-			grades: "Grades 9 - 12",
-			gradeLevels: ["Grade 9", "Grade 10", "Grade 11", "Grade 12"],
-		},
-	];
+	useEffect(() => {
+		if (!user || !user.token) return; // Wait until user and token are available
+
+		const fetchSubjects = async () => {
+			try {
+				const data = await subjectApi.getAllSubjects(user.token);
+				setSubjects(data);
+			} catch (error) {
+				console.error("Error fetching subjects:", error);
+			}
+		};
+		fetchSubjects();
+	}, [user]);
 
 	const openAddModal = () => {
-		setModalData(null); // Clear data for add mode
+		setModalData(null);
 		setIsModalOpen(true);
 	};
 
 	const openEditModal = (subject) => {
-		setModalData(subject); // Set data for edit mode
+		setModalData(subject);
 		setIsModalOpen(true);
 	};
 
@@ -54,15 +46,43 @@ const SubjectManagement = () => {
 		setModalData(null);
 	};
 
-	const handleSave = (subjectData) => {
-		if (modalData) {
-			// Edit logic (e.g., update the subject)
-			console.log("Updating subject:", subjectData);
-		} else {
-			// Add logic (e.g., add a new subject)
-			console.log("Adding new subject:", subjectData);
+	const handleSave = async (subjectData) => {
+		try {
+			if (modalData) {
+				// Update subject
+				await subjectApi.updateSubject(modalData.id, subjectData, user.token);
+				setSubjects((prev) =>
+					prev.map((sub) =>
+						sub.id === modalData.id ? { ...sub, ...subjectData } : sub
+					)
+				);
+			} else {
+				// Create subject
+				const newSubject = await subjectApi.createSubject(
+					subjectData,
+					user.token
+				);
+				setSubjects((prev) => [...prev, newSubject]);
+			}
+		} catch (error) {
+			console.error("Error saving subject:", error);
+		} finally {
+			closeModal();
 		}
 	};
+
+	const handleDelete = async (id) => {
+		try {
+			await subjectApi.deleteSubject(id, user.token);
+			setSubjects((prev) => prev.filter((subject) => subject.id !== id));
+		} catch (error) {
+			console.error("Error deleting subject:", error);
+		}
+	};
+
+	if (!user || !user.token) {
+		return <div>Loading...</div>; // Show a loading state while waiting for the user
+	}
 
 	return (
 		<div className="subject-management">
@@ -84,27 +104,22 @@ const SubjectManagement = () => {
 						</div>
 						<p className="description">{subject.description}</p>
 						<p className="grades">
-							<FontAwesomeIcon icon={faBook} /> {subject.grades}
+							<FontAwesomeIcon icon={faBook} /> {subject.gradeLevels.join(", ")}
 						</p>
-						<div className="grade-levels">
-							{subject.gradeLevels.map((grade, index) => (
-								<span key={index} className="grade-pill">
-									{grade}
-								</span>
-							))}
-						</div>
 						<div className="actions">
 							<button className="edit" onClick={() => openEditModal(subject)}>
 								<FontAwesomeIcon icon={faPen} />
 							</button>
-							<button className="delete">
+							<button
+								className="delete"
+								onClick={() => handleDelete(subject.id)}
+							>
 								<FontAwesomeIcon icon={faTrash} />
 							</button>
 						</div>
 					</div>
 				))}
 			</div>
-
 			{isModalOpen && (
 				<AddEditSubjectModal
 					isOpen={isModalOpen}

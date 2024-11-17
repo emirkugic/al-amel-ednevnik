@@ -4,24 +4,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const AddEditSubjectModal = ({ isOpen, onClose, onSave, initialData }) => {
-	const [subjectTitle, setSubjectTitle] = useState(initialData?.title || "");
+	const [subjectTitle, setSubjectTitle] = useState(initialData?.name || "");
 	const [description, setDescription] = useState(
 		initialData?.description || ""
 	);
 	const [selectedGrades, setSelectedGrades] = useState(
-		initialData?.grades || []
+		initialData?.gradeLevels || []
 	);
 
 	const toggleGrade = (grade) => {
 		setSelectedGrades((prevGrades) =>
-			prevGrades.includes(grade)
-				? prevGrades.filter((g) => g !== grade)
-				: [...prevGrades, grade]
+			prevGrades.includes(String(grade))
+				? prevGrades.filter((g) => g !== String(grade))
+				: [...prevGrades, String(grade)]
 		);
 	};
 
 	const handleSave = () => {
-		onSave({ title: subjectTitle, description, grades: selectedGrades });
+		onSave({ name: subjectTitle, description, gradeLevels: selectedGrades });
 		onClose();
 	};
 
@@ -30,7 +30,6 @@ const AddEditSubjectModal = ({ isOpen, onClose, onSave, initialData }) => {
 			<div className="modal-overlay">
 				<div className="modal-content">
 					<div className="modal-header">
-						{/* <h2>{initialData ? "Edit Subject" : "Add New Subject"}</h2> */}
 						<button onClick={onClose} className="close-button">
 							<FontAwesomeIcon icon={faTimes} />
 						</button>
@@ -59,7 +58,7 @@ const AddEditSubjectModal = ({ isOpen, onClose, onSave, initialData }) => {
 									<button
 										key={grade}
 										className={`grade-button ${
-											selectedGrades.includes(grade) ? "selected" : ""
+											selectedGrades.includes(String(grade)) ? "selected" : ""
 										}`}
 										onClick={() => toggleGrade(grade)}
 									>

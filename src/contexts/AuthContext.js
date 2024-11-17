@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 	const login = async (email, password) => {
 		const data = await authApi.login(email, password);
 		const decodedToken = jwtDecode(data.token);
-		console.log("Decoded token:", decodedToken); // Log the decoded token for verification
+		console.log("Decoded token:", decodedToken);
 		const userWithRole = { ...data, role: decodedToken.role };
 
 		setUser(userWithRole);
