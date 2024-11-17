@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./SubjectsAndGrades.css";
@@ -34,7 +34,36 @@ const SubjectsAndGrades = ({ subjects, onSubjectsChange }) => {
 	const [isGradeDropdownOpen, setIsGradeDropdownOpen] = useState(false);
 	const [isSubjectDropdownOpen, setIsSubjectDropdownOpen] = useState(false);
 
+	const subjectDropdownRef = useRef(null);
+	const gradeDropdownRef = useRef(null);
+
+	// Close dropdowns when clicking outside
+	useEffect(() => {
+		const handleClickOutside = (event) => {
+			if (
+				subjectDropdownRef.current &&
+				!subjectDropdownRef.current.contains(event.target)
+			) {
+				setIsSubjectDropdownOpen(false);
+			}
+			if (
+				gradeDropdownRef.current &&
+				!gradeDropdownRef.current.contains(event.target)
+			) {
+				setIsGradeDropdownOpen(false);
+			}
+		};
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
+
 	const selectSubject = (subject) => {
+		if (subjects.some((s) => s.subject === subject)) {
+			alert("This subject has already been added.");
+			return;
+		}
 		setSubjectInput({ ...subjectInput, subject });
 		setIsSubjectDropdownOpen(false);
 	};
@@ -66,7 +95,7 @@ const SubjectsAndGrades = ({ subjects, onSubjectsChange }) => {
 		<div className="subject-section">
 			<h4>Subjects and Grades</h4>
 			<div className="form-row">
-				<div className="dropdown-container">
+				<div className="dropdown-container" ref={subjectDropdownRef}>
 					<div
 						className="dropdown-header"
 						onClick={() => setIsSubjectDropdownOpen(!isSubjectDropdownOpen)}
@@ -88,7 +117,7 @@ const SubjectsAndGrades = ({ subjects, onSubjectsChange }) => {
 					)}
 				</div>
 
-				<div className="dropdown-container">
+				<div className="dropdown-container" ref={gradeDropdownRef}>
 					<div
 						className="dropdown-header"
 						onClick={() => setIsGradeDropdownOpen(!isGradeDropdownOpen)}
@@ -121,20 +150,22 @@ const SubjectsAndGrades = ({ subjects, onSubjectsChange }) => {
 					Add Subject
 				</button>
 			</div>
-			<div className="subject-list">
-				{subjects.map((subject, index) => (
-					<div key={index} className="subject-item">
-						<span>
-							{subject.subject} - Grades: {subject.grades.join(", ")}
-						</span>
-						<button
-							onClick={() => deleteSubject(index)}
-							className="delete-button"
-						>
-							<FontAwesomeIcon icon={faTrash} className="trash-icon" />
-						</button>
-					</div>
-				))}
+			<div className="subject-list-container">
+				<div className="subject-list">
+					{subjects.map((subject, index) => (
+						<div key={index} className="subject-item">
+							<span>
+								{subject.subject} - Grades: {subject.grades.join(", ")}
+							</span>
+							<button
+								onClick={() => deleteSubject(index)}
+								className="delete-button"
+							>
+								<FontAwesomeIcon icon={faTrash} className="trash-icon" />
+							</button>
+						</div>
+					))}
+				</div>
 			</div>
 		</div>
 	);
