@@ -5,26 +5,31 @@ import TeacherModal from "../TeacherModal/TeacherModal";
 import "./TeacherManagement.css";
 import teacherApi from "../../api/teacherApi";
 import subjectApi from "../../api/subjectApi";
+import departmentApi from "../../api/departmentApi";
 import useAuth from "../../hooks/useAuth";
 
 const TeacherManagement = () => {
 	const { user } = useAuth();
 	const [teachers, setTeachers] = useState([]);
 	const [subjects, setSubjects] = useState([]);
+	const [departments, setDepartments] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedTeacher, setSelectedTeacher] = useState(null);
 
+	// Fetch teachers, subjects, and departments
 	useEffect(() => {
 		if (!user || !user.token) return;
 
 		const fetchData = async () => {
 			try {
-				const [teacherData, subjectData] = await Promise.all([
+				const [teacherData, subjectData, departmentData] = await Promise.all([
 					teacherApi.getAllTeachers(user.token),
 					subjectApi.getAllSubjects(user.token),
+					departmentApi.getAllDepartments(user.token),
 				]);
 				setTeachers(teacherData);
 				setSubjects(subjectData);
+				setDepartments(departmentData);
 			} catch (error) {
 				console.error("Error fetching data:", error);
 			}
@@ -44,9 +49,10 @@ const TeacherManagement = () => {
 
 	const handleSaveTeacher = async (teacherData) => {
 		try {
-			const subjectAssignments = teacherData.subjects.map((subject) => ({
+			// Prepare teacher data for API
+			const assignedSubjects = teacherData.subjects.map((subject) => ({
 				subjectId: subject.subjectId,
-				gradeLevels: subject.grades.map((grade) => parseInt(grade, 10)),
+				departmentId: subject.departmentIds,
 			}));
 
 			const newTeacher = {
@@ -55,14 +61,15 @@ const TeacherManagement = () => {
 				email: teacherData.email,
 				loginPassword: teacherData.loginPassword,
 				gradePassword: teacherData.gradePassword,
-				subjectAssignments,
-				timetable: [],
+				assignedSubjects,
+				timetable: [], // Placeholder for timetable
 			};
 
 			if (selectedTeacher) {
-				// Update existing teacher logic if needed
+				// Update existing teacher logic (if implemented)
 				console.log("Updating teacher (not implemented yet)");
 			} else {
+				// Create new teacher
 				await teacherApi.createTeacher(newTeacher, user.token);
 				const updatedTeachers = await teacherApi.getAllTeachers(user.token);
 				setTeachers(updatedTeachers);
@@ -74,7 +81,7 @@ const TeacherManagement = () => {
 		}
 	};
 
-	const handleDelete = async (teacherId) => {
+	const handleDeleteTeacher = async (teacherId) => {
 		if (window.confirm("Are you sure you want to delete this teacher?")) {
 			try {
 				await teacherApi.deleteTeacher(teacherId, user.token);
@@ -115,7 +122,7 @@ const TeacherManagement = () => {
 							</button>
 							<button
 								className="delete-button"
-								onClick={() => handleDelete(teacher.id)}
+								onClick={() => handleDeleteTeacher(teacher.id)}
 							>
 								<FontAwesomeIcon icon={faTrashAlt} />
 							</button>
@@ -130,6 +137,7 @@ const TeacherManagement = () => {
 					onClose={handleCloseModal}
 					onSave={handleSaveTeacher}
 					subjects={subjects}
+					departments={departments}
 				/>
 			)}
 		</div>

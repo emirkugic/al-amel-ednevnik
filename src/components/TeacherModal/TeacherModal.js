@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+import SubjectsAndDepartments from "./SubjectsAndDepartments";
 import "./TeacherModal.css";
-import SubjectsAndGrades from "./SubjectsAndGrades";
 
-const TeacherModal = ({ teacher, onClose, onSave, subjects }) => {
+const TeacherModal = ({ teacher, onClose, onSave, subjects, departments }) => {
 	const [formData, setFormData] = useState({
 		name: "",
 		surname: "",
@@ -98,8 +98,10 @@ const TeacherModal = ({ teacher, onClose, onSave, subjects }) => {
 						</label>
 					</div>
 
-					<SubjectsAndGrades
+					<SubjectsAndDepartments
 						subjects={formData.subjects}
+						availableSubjects={subjects}
+						departments={departments}
 						onSubjectsChange={updateSubjects}
 					/>
 
