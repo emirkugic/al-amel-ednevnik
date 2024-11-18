@@ -1,83 +1,187 @@
 .class-management {
 	padding: 20px;
 	font-family: Arial, sans-serif;
-	background-color: #fff;
+	background-color: #f9f9f9;
 	border-radius: 8px;
-}
-
-.header {
-	margin-bottom: 20px;
-}
-
-.header h2 {
-	font-size: 24px;
-	font-weight: bold;
-}
-
-.header p {
-	color: #666;
-	font-size: 14px;
-}
-
-.grades-container {
-	margin-top: 20px;
-}
-
-.grade-section {
-	margin-bottom: 40px;
-	border: 1px solid #ddd;
-	border-radius: 8px;
-	padding: 16px;
-	background: #fff;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.grade-title {
-	font-size: 20px;
+h2 {
+	font-size: 24px;
 	font-weight: bold;
-	margin-bottom: 16px;
+	margin-bottom: 20px;
+	color: #333;
 }
 
-.departments-table {
-	width: 100%;
-	border-collapse: collapse;
+.form-row {
+	display: flex;
+	gap: 15px;
+	align-items: center;
+	margin-bottom: 20px;
 }
 
-.departments-table th,
-.departments-table td {
-	border: 1px solid #ddd;
-	padding: 10px;
-	text-align: center;
-}
-
-.departments-table th {
-	background-color: #f5f5f5;
-	font-weight: bold;
-	font-size: 14px;
-}
-
-.departments-table td {
+label {
 	font-size: 14px;
 	color: #555;
 }
 
-.assign-teacher,
-.add-department {
-	background-color: #1d72b8;
+input[type="text"] {
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	width: 150px;
+	font-size: 14px;
+}
+
+.create-class-button,
+.create-department-button {
+	padding: 10px 15px;
+	font-size: 14px;
+	background-color: #1976d2;
 	color: white;
 	border: none;
-	padding: 6px 12px;
 	border-radius: 4px;
 	cursor: pointer;
-	font-size: 12px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: background-color 0.3s ease;
 }
 
-.assign-teacher:hover,
-.add-department:hover {
-	background-color: #155a91;
+.create-class-button:hover,
+.create-department-button:hover {
+	background-color: #155a9e;
 }
 
-.add-department {
+.dropdown-container {
+	position: relative;
+	flex: 1;
+}
+
+.dropdown-header {
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background-color: #fff;
+	cursor: pointer;
+	font-size: 14px;
+}
+
+.dropdown-menu {
+	position: absolute;
+	top: 100%;
+	left: 0;
 	width: 100%;
-	text-align: center;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	z-index: 10;
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.dropdown-item {
+	padding: 8px 10px;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.dropdown-item:hover {
+	background-color: #f0f0f0;
+}
+
+.class-list {
+	margin-top: 20px;
+}
+
+.class-card {
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	margin-bottom: 20px;
+	padding: 15px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.class-card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+}
+
+.class-card-header h4 {
+	margin: 0;
+	font-size: 18px;
+	color: #333;
+}
+
+.expand-icon {
+	font-size: 16px;
+	color: #555;
+}
+
+.class-departments {
+	margin-top: 15px;
+}
+
+.class-departments h5 {
+	font-size: 16px;
+	color: #555;
+	margin-bottom: 10px;
+}
+
+.class-departments ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.class-departments ul li {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 8px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	margin-bottom: 10px;
+	background-color: #f9f9f9;
+}
+
+.delete-button {
+	background: none;
+	border: none;
+	color: #e53935;
+	cursor: pointer;
+	font-size: 16px;
+	padding: 5px;
+	border-radius: 4px;
+	transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+	background-color: rgba(229, 57, 53, 0.1);
+}
+
+.delete-class-button {
+	margin-top: 10px;
+	background: none;
+	border: none;
+	color: #e53935;
+	cursor: pointer;
+	font-size: 14px;
+	padding: 5px;
+	border-radius: 4px;
+	transition: background-color 0.3s ease;
+}
+
+.delete-class-button:hover {
+	background-color: rgba(229, 57, 53, 0.1);
+}
+
+select {
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 14px;
+	cursor: pointer;
 }
