@@ -16,6 +16,7 @@ import "./ClassManagement.css";
 const ClassManagement = () => {
 	const { user } = useAuth();
 	const [classes, setClasses] = useState([]);
+	const [departments, setDepartments] = useState([]);
 	const [subjects, setSubjects] = useState([]);
 	const [teachers, setTeachers] = useState([]);
 	const [isClassDropdownOpen, setIsClassDropdownOpen] = useState(false);
@@ -30,36 +31,25 @@ const ClassManagement = () => {
 	useEffect(() => {
 		if (!user?.token) return;
 
-		const fetchClasses = async () => {
+		const fetchData = async () => {
 			try {
-				const classData = await classApi.getAllClasses(user.token);
+				const [classData, departmentData, subjectData, teacherData] =
+					await Promise.all([
+						classApi.getAllClasses(user.token),
+						departmentApi.getAllDepartments(user.token),
+						subjectApi.getAllSubjects(user.token),
+						teacherApi.getAllTeachers(user.token),
+					]);
 				setClasses(classData);
-			} catch (error) {
-				console.error("Error fetching classes:", error);
-			}
-		};
-
-		const fetchSubjects = async () => {
-			try {
-				const subjectData = await subjectApi.getAllSubjects(user.token);
+				setDepartments(departmentData);
 				setSubjects(subjectData);
-			} catch (error) {
-				console.error("Error fetching subjects:", error);
-			}
-		};
-
-		const fetchTeachers = async () => {
-			try {
-				const teacherData = await teacherApi.getAllTeachers(user.token);
 				setTeachers(teacherData);
 			} catch (error) {
-				console.error("Error fetching teachers:", error);
+				console.error("Error fetching data:", error);
 			}
 		};
 
-		fetchClasses();
-		fetchSubjects();
-		fetchTeachers();
+		fetchData();
 	}, [user]);
 
 	const handleCreateClass = async () => {
@@ -90,15 +80,15 @@ const ClassManagement = () => {
 	};
 
 	const handleCreateDepartment = async (classId) => {
-		if (!newDepartmentName || !selectedClassTeacher) {
-			alert("Department name and class teacher are required!");
+		if (!newDepartmentName) {
+			alert("Department name is required!");
 			return;
 		}
 
 		const departmentData = {
 			classId,
 			departmentName: newDepartmentName,
-			classTeacherId: selectedClassTeacher,
+			classTeacherId: selectedClassTeacher || null,
 		};
 
 		try {
@@ -106,16 +96,7 @@ const ClassManagement = () => {
 				departmentData,
 				user.token
 			);
-			setClasses((prev) =>
-				prev.map((cls) =>
-					cls.id === classId
-						? {
-								...cls,
-								departments: [...(cls.departments || []), newDepartment],
-						  }
-						: cls
-				)
-			);
+			setDepartments((prev) => [...prev, newDepartment]);
 			setNewDepartmentName("");
 			setSelectedClassTeacher("");
 		} catch (error) {
@@ -123,22 +104,11 @@ const ClassManagement = () => {
 		}
 	};
 
-	const handleDeleteDepartment = async (classId, departmentId) => {
+	const handleDeleteDepartment = async (departmentId) => {
 		if (window.confirm("Are you sure you want to delete this department?")) {
 			try {
 				await departmentApi.deleteDepartment(departmentId, user.token);
-				setClasses((prev) =>
-					prev.map((cls) =>
-						cls.id === classId
-							? {
-									...cls,
-									departments: cls.departments.filter(
-										(d) => d.id !== departmentId
-									),
-							  }
-							: cls
-					)
-				);
+				setDepartments((prev) => prev.filter((d) => d.id !== departmentId));
 			} catch (error) {
 				console.error("Error deleting department:", error);
 			}
@@ -217,17 +187,27 @@ const ClassManagement = () => {
 							<div className="class-departments">
 								<h5>Departments</h5>
 								<ul>
-									{cls.departments?.map((dept) => (
-										<li key={dept.id}>
-											{dept.departmentName}
-											<button
-												className="delete-button"
-												onClick={() => handleDeleteDepartment(cls.id, dept.id)}
-											>
-												<FontAwesomeIcon icon={faTrash} />
-											</button>
-										</li>
-									))}
+									{departments
+										.filter((dept) => dept.classId === cls.id)
+										.map((dept) => (
+											<li key={dept.id}>
+												{dept.departmentName}{" "}
+												{dept.classTeacherId && (
+													<span>
+														(Teacher:{" "}
+														{teachers.find((t) => t.id === dept.classTeacherId)
+															?.firstName || "Unknown"}
+														)
+													</span>
+												)}
+												<button
+													className="delete-button"
+													onClick={() => handleDeleteDepartment(dept.id)}
+												>
+													<FontAwesomeIcon icon={faTrash} />
+												</button>
+											</li>
+										))}
 								</ul>
 								<div className="form-row">
 									<input
@@ -240,7 +220,7 @@ const ClassManagement = () => {
 										value={selectedClassTeacher}
 										onChange={(e) => setSelectedClassTeacher(e.target.value)}
 									>
-										<option value="">Select Class Teacher</option>
+										<option value="">No Teacher</option>
 										{teachers.map((teacher) => (
 											<option key={teacher.id} value={teacher.id}>
 												{teacher.firstName} {teacher.lastName}
