@@ -138,7 +138,6 @@ const ClassManagement = () => {
 
 	return (
 		<div className="class-management">
-			<h2>Class Management</h2>
 			<CreateClassForm
 				classInput={classInput}
 				setClassInput={setClassInput}
