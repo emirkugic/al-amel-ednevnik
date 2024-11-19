@@ -52,6 +52,34 @@ const ClassManagement = () => {
 		fetchData();
 	}, [user]);
 
+	const handleUpdateDepartmentTeacher = async (departmentId, newTeacherId) => {
+		const department = departments.find((d) => d.id === departmentId);
+		if (!department) {
+			alert("Department not found");
+			return;
+		}
+
+		const updatedDepartment = {
+			...department,
+			classTeacherId: newTeacherId || null, // Allow removing the teacher
+		};
+
+		try {
+			await departmentApi.updateDepartment(
+				departmentId,
+				updatedDepartment,
+				user.token
+			);
+			setDepartments((prev) =>
+				prev.map((d) => (d.id === departmentId ? updatedDepartment : d))
+			);
+			alert("Class teacher updated successfully!");
+		} catch (error) {
+			console.error("Error updating department:", error);
+			alert("Failed to update class teacher.");
+		}
+	};
+
 	const handleCreateClass = async () => {
 		if (!classInput.gradeLevel || classInput.subjects.length === 0) {
 			alert("Grade level and subjects are required!");
@@ -200,6 +228,22 @@ const ClassManagement = () => {
 														)
 													</span>
 												)}
+												<select
+													value={dept.classTeacherId || ""}
+													onChange={(e) =>
+														handleUpdateDepartmentTeacher(
+															dept.id,
+															e.target.value
+														)
+													}
+												>
+													<option value="">No Teacher</option>
+													{teachers.map((teacher) => (
+														<option key={teacher.id} value={teacher.id}>
+															{teacher.firstName} {teacher.lastName}
+														</option>
+													))}
+												</select>
 												<button
 													className="delete-button"
 													onClick={() => handleDeleteDepartment(dept.id)}
@@ -209,6 +253,7 @@ const ClassManagement = () => {
 											</li>
 										))}
 								</ul>
+
 								<div className="form-row">
 									<input
 										type="text"
