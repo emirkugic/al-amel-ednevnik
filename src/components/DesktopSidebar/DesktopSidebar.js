@@ -14,12 +14,69 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import DesktopSidebarButton from "../ui/DesktopSidebarButton/DesktopSidebarButton";
 import useAuth from "../../hooks/useAuth";
+import teacherApi from "../../api/teacherApi";
+import departmentApi from "../../api/departmentApi";
 import "./DesktopSidebar.css";
 
 const DesktopSidebar = () => {
 	const location = useLocation();
 	const { user, logout } = useAuth();
 	const [activeItem, setActiveItem] = useState("");
+	const [myCourses, setMyCourses] = useState([]);
+	const [myDepartments, setMyDepartments] = useState([]);
+	const [loadingDepartments, setLoadingDepartments] = useState(true);
+
+	// Fetch teacher's assigned subjects and departments
+	useEffect(() => {
+		const fetchMyCoursesAndDepartments = async () => {
+			try {
+				if (!user?.id || !user?.token) {
+					console.log("User ID or token is missing:", user);
+					return;
+				}
+
+				console.log(
+					"Fetching courses and departments for teacher ID:",
+					user.id
+				);
+
+				// Fetch teacher data
+				const teacherData = await teacherApi.getTeacherById(
+					user.id,
+					user.token
+				);
+				console.log("Fetched teacher data:", teacherData);
+
+				// Fetch departments for assigned subjects
+				const departmentPromises = teacherData.assignedSubjects.flatMap(
+					(subject) =>
+						subject.departmentId.map((deptId) =>
+							departmentApi.getDepartmentById(deptId, user.token)
+						)
+				);
+
+				const resolvedDepartments = await Promise.all(departmentPromises);
+				console.log("Fetched departments for teacher:", resolvedDepartments);
+
+				// Map departments to the sidebar route format
+				const departmentList = resolvedDepartments.map((department) => ({
+					title: department.departmentName,
+					path: `/lectures/${department.id}`,
+				}));
+
+				setMyDepartments(departmentList);
+			} catch (error) {
+				console.error(
+					"Error fetching teacher's courses or departments:",
+					error
+				);
+			} finally {
+				setLoadingDepartments(false);
+			}
+		};
+
+		fetchMyCoursesAndDepartments();
+	}, [user]);
 
 	const menuItems = useMemo(() => {
 		const items = [
@@ -28,31 +85,19 @@ const DesktopSidebar = () => {
 			{
 				title: "My Courses",
 				icon: faBook,
-				route: [
-					{ title: "Math", path: "/courses/math" },
-					{ title: "Physics", path: "/courses/physics" },
-					{ title: "Comp Sci", path: "/courses/compsci" },
-				],
+				route: myCourses,
 			},
 			{ title: "Attendance", icon: faClock, route: "/attendance" },
 			{ title: "Grades", icon: faChartLine, route: "/grades" },
 			{
 				title: "Lectures",
 				icon: faBookOpen,
-				route: [
-					{ title: "7th grade", path: "/lectures" },
-					{ title: "8th grade", path: "/lectures" },
-					{ title: "9th grade", path: "/lectures" },
-					{ title: "10th grade", path: "/lectures" },
-					{ title: "11th grade", path: "/lectures" },
-					{ title: "12th grade", path: "/lectures" },
-				],
+				route: myDepartments,
 			},
 			{ title: "Settings", icon: faCog, route: "/settings" },
 			{ title: "Help", icon: faQuestionCircle, route: "/help" },
 		];
 
-		// Conditionally add the "Teachers" button for admins
 		if (user?.role === "Admin") {
 			items.push(
 				{
@@ -79,7 +124,7 @@ const DesktopSidebar = () => {
 		}
 
 		return items;
-	}, [user]);
+	}, [user, myCourses, myDepartments]);
 
 	useEffect(() => {
 		const activeMenuItem = menuItems.find((item) =>

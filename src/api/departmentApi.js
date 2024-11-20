@@ -8,11 +8,18 @@ const departmentApi = {
 		return response.data;
 	},
 
+	getDepartmentById: async (id, token) => {
+		const response = await apiClient.get(`/Department/${id}`, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		return response.data;
+	},
+
 	createDepartment: async (departmentData, token) => {
 		const response = await apiClient.post("/Department", departmentData, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		return response.data;	
+		return response.data;
 	},
 
 	updateDepartment: async (id, departmentData, token) => {
