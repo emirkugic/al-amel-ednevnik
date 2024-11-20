@@ -15,6 +15,7 @@ import {
 import DesktopSidebarButton from "../ui/DesktopSidebarButton/DesktopSidebarButton";
 import useAuth from "../../hooks/useAuth";
 import teacherApi from "../../api/teacherApi";
+import subjectApi from "../../api/subjectApi";
 import departmentApi from "../../api/departmentApi";
 import "./DesktopSidebar.css";
 
@@ -24,58 +25,77 @@ const DesktopSidebar = () => {
 	const [activeItem, setActiveItem] = useState("");
 	const [myCourses, setMyCourses] = useState([]);
 	const [myDepartments, setMyDepartments] = useState([]);
-	const [loadingDepartments, setLoadingDepartments] = useState(true);
+	const [loadingCourses, setLoadingCourses] = useState(true);
 
-	// Fetch teacher's assigned subjects and departments
+	// Fetch teacher's assigned subjects
 	useEffect(() => {
-		const fetchMyCoursesAndDepartments = async () => {
+		const fetchMyCourses = async () => {
 			try {
 				if (!user?.id || !user?.token) {
-					console.log("User ID or token is missing:", user);
+					// console.log("User ID or token is missing:", user);
 					return;
 				}
 
-				console.log(
-					"Fetching courses and departments for teacher ID:",
-					user.id
-				);
+				// console.log("Fetching courses for teacher ID:", user.id);
+				setLoadingCourses(true);
 
 				// Fetch teacher data
 				const teacherData = await teacherApi.getTeacherById(
 					user.id,
 					user.token
 				);
-				console.log("Fetched teacher data:", teacherData);
+				// console.log("Fetched teacher data:", teacherData);
 
-				// Fetch departments for assigned subjects
-				const departmentPromises = teacherData.assignedSubjects.flatMap(
-					(subject) =>
-						subject.departmentId.map((deptId) =>
-							departmentApi.getDepartmentById(deptId, user.token)
-						)
+				// Fetch subject details for assigned subjects
+				const subjectPromises = teacherData.assignedSubjects.map((subject) =>
+					subjectApi.getSubjectById(subject.subjectId, user.token)
+				);
+
+				const resolvedSubjects = await Promise.all(subjectPromises);
+				// console.log("Fetched subjects for teacher:", resolvedSubjects);
+
+				// Map subjects to the sidebar route format
+				const courseList = resolvedSubjects.map((subject) => ({
+					title: subject.name,
+					path: `/courses/${subject.id}`,
+				}));
+
+				// console.log("Formatted course list:", courseList);
+				setMyCourses(courseList);
+
+				// Fetch departments for Lectures
+				const departmentIds = teacherData.assignedSubjects
+					.flatMap((subject) => subject.departmentId)
+					.filter((value, index, self) => self.indexOf(value) === index); // Remove duplicates
+
+				const departmentPromises = departmentIds.map((id) =>
+					departmentApi.getAllDepartments(user.token)
 				);
 
 				const resolvedDepartments = await Promise.all(departmentPromises);
-				console.log("Fetched departments for teacher:", resolvedDepartments);
+				const uniqueDepartments = resolvedDepartments
+					.flat()
+					.filter(
+						(dept, index, self) =>
+							index === self.findIndex((d) => d.id === dept.id)
+					);
 
-				// Map departments to the sidebar route format
-				const departmentList = resolvedDepartments.map((department) => ({
-					title: department.departmentName,
-					path: `/lectures/${department.id}`,
+				// console.log("Fetched departments for teacher:", uniqueDepartments);
+
+				const departmentList = uniqueDepartments.map((dept) => ({
+					title: dept.departmentName,
+					path: `/lectures/${dept.id}`,
 				}));
 
 				setMyDepartments(departmentList);
 			} catch (error) {
-				console.error(
-					"Error fetching teacher's courses or departments:",
-					error
-				);
+				console.error("Error fetching teacher's data:", error);
 			} finally {
-				setLoadingDepartments(false);
+				setLoadingCourses(false);
 			}
 		};
 
-		fetchMyCoursesAndDepartments();
+		fetchMyCourses();
 	}, [user]);
 
 	const menuItems = useMemo(() => {
