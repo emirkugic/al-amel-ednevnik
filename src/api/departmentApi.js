@@ -12,7 +12,7 @@ const departmentApi = {
 		const response = await apiClient.post("/Department", departmentData, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		return response.data;
+		return response.data;	
 	},
 
 	updateDepartment: async (id, departmentData, token) => {

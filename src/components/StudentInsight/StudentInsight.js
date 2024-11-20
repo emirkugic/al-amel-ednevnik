@@ -1,12 +1,14 @@
-import React from "react";
-import { useState } from "react";
-
-import "./StudentInsight.css";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserPlus, faFileExport } from "@fortawesome/free-solid-svg-icons";
-import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import {
+	faUserPlus,
+	faFileExport,
+	faEllipsisV,
+} from "@fortawesome/free-solid-svg-icons";
+import CreateStudentModal from "../CreateStudentModal/CreateStudentModal"; // Import the modal component
+import "./StudentInsight.css";
 
-const StudentInsight = () => {
+const StudentInsight = ({ token, departments, handleCreateStudent }) => {
 	const students = [
 		{
 			id: 1,
@@ -16,84 +18,18 @@ const StudentInsight = () => {
 			attendance: "95%",
 			grade: "8.5/10",
 		},
-		{
-			id: 2,
-			name: "Bob Smith",
-			email: "bob.s@school.edu",
-			phone: "123-456-7891",
-			attendance: "88%",
-			grade: "7.0/10",
-		},
-		{
-			id: 3,
-			name: "Carol Williams",
-			email: "carol.w@school.edu",
-			phone: "123-456-7892",
-			attendance: "92%",
-			grade: "9.0/10",
-		},
-		{
-			id: 4,
-			name: "David Brown",
-			email: "david.b@school.edu",
-			phone: "123-456-7893",
-			attendance: "84%",
-			grade: "6.5/10",
-		},
-		{
-			id: 5,
-			name: "Emma Davis",
-			email: "emma.d@school.edu",
-			phone: "123-456-7894",
-			attendance: "91%",
-			grade: "9.5/10",
-		},
-		{
-			id: 6,
-			name: "Franklin Harris",
-			email: "frank.h@school.edu",
-			phone: "123-456-7895",
-			attendance: "89%",
-			grade: "7.8/10",
-		},
-		{
-			id: 7,
-			name: "Grace Lee",
-			email: "grace.l@school.edu",
-			phone: "123-456-7896",
-			attendance: "94%",
-			grade: "8.9/10",
-		},
-		{
-			id: 8,
-			name: "Henry Thompson",
-			email: "henry.t@school.edu",
-			phone: "123-456-7897",
-			attendance: "87%",
-			grade: "7.4/10",
-		},
-		{
-			id: 9,
-			name: "Irene Wilson",
-			email: "irene.w@school.edu",
-			phone: "123-456-7898",
-			attendance: "90%",
-			grade: "8.1/10",
-		},
-		{
-			id: 10,
-			name: "Jackie Taylor",
-			email: "jackie.t@school.edu",
-			phone: "123-456-7899",
-			attendance: "93%",
-			grade: "9.0/10",
-		},
+		// Other student data...
 	];
 
 	const [openMenuId, setOpenMenuId] = useState(null);
+	const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal
 
 	const toggleMenu = (id) => {
 		setOpenMenuId((prevId) => (prevId === id ? null : id));
+	};
+
+	const handleModalClose = () => {
+		setIsModalOpen(false);
 	};
 
 	return (
@@ -124,7 +60,10 @@ const StudentInsight = () => {
 				<input type="text" placeholder="Search students..." />
 				<div className="buttons">
 					<button className="manage-grades">Manage Grades</button>
-					<button className="add-student">
+					<button
+						className="add-student"
+						onClick={() => setIsModalOpen(true)} // Open modal on click
+					>
 						<FontAwesomeIcon icon={faUserPlus} /> Add Student
 					</button>
 					<button className="export">
@@ -205,6 +144,15 @@ const StudentInsight = () => {
 					</tbody>
 				</table>
 			</div>
+
+			{/* Render the CreateStudentModal */}
+			<CreateStudentModal
+				isOpen={isModalOpen}
+				onClose={handleModalClose}
+				token={token}
+				departments={departments}
+				handleCreateStudent={handleCreateStudent}
+			/>
 		</div>
 	);
 };

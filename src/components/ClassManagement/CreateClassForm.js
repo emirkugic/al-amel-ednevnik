@@ -70,7 +70,7 @@ const CreateClassForm = ({
 								borderRadius: "4px",
 								border: "1px solid #ccc",
 								marginTop: "5px",
-								height: "38px", // Matches the dropdown height
+								height: "21px", // Matches the dropdown height
 							}}
 						/>
 					</label>
