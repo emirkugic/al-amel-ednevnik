@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 import "./ParentManagement.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt, faPlus, faEdit } from "@fortawesome/free-solid-svg-icons";
+import {
+	faTrashAlt,
+	faPlus,
+	faEdit,
+	faUser,
+	faKey,
+	faPhone,
+} from "@fortawesome/free-solid-svg-icons";
+import TextInput from "../ui/TextInput/TextInput"; // Assuming this is your custom input component
+import PrimaryButton from "../ui/PrimaryButton/PrimaryButton"; // Assuming this is your custom button component
+import SecondaryButton from "../ui/SecondaryButton/SecondaryButton"; // Assuming this is your custom button component
 import useAuth from "../../hooks/useAuth";
 import useParents from "../../hooks/useParents";
 import parentApi from "../../api/parentApi";
@@ -19,8 +29,7 @@ const ParentManagement = () => {
 	});
 	const [selectedParent, setSelectedParent] = useState(null);
 
-	const handleInputChange = (e) => {
-		const { name, value } = e.target;
+	const handleInputChange = (name, value) => {
 		setFormData((prev) => ({
 			...prev,
 			[name]: value,
@@ -143,67 +152,42 @@ const ParentManagement = () => {
 			{isModalOpen && (
 				<div className="modal-overlay">
 					<div className="modal-content">
-						<h3>{selectedParent ? "Edit Parent" : "Add Parent"}</h3>
+						<h3>{selectedParent ? "Edit Parent" : "Create a parent"}</h3>
 						<form onSubmit={(e) => e.preventDefault()}>
-							<div className="form-row">
-								<label>
-									Name:
-									<input
-										type="text"
-										name="name"
-										value={formData.name}
-										onChange={handleInputChange}
-										required
-									/>
-								</label>
-								<label>
-									Surname:
-									<input
-										type="text"
-										name="surname"
-										value={formData.surname}
-										onChange={handleInputChange}
-										required
-									/>
-								</label>
-							</div>
-							<div className="form-row">
-								<label>
-									Password:
-									<input
-										type="password"
-										name="password"
-										value={formData.password}
-										onChange={handleInputChange}
-										required
-									/>
-								</label>
-								<label>
-									Phone Number:
-									<input
-										type="text"
-										name="phoneNumber"
-										value={formData.phoneNumber}
-										onChange={handleInputChange}
-										required
-									/>
-								</label>
-							</div>
+							<TextInput
+								label="Name"
+								icon={faUser}
+								placeholder="Enter first name"
+								value={formData.name}
+								onChange={(e) => handleInputChange("name", e.target.value)}
+							/>
+							<TextInput
+								label="Surname"
+								icon={faUser}
+								placeholder="Enter last name"
+								value={formData.surname}
+								onChange={(e) => handleInputChange("surname", e.target.value)}
+							/>
+							<TextInput
+								label="Password"
+								icon={faKey}
+								placeholder="Enter password"
+								value={formData.password}
+								onChange={(e) => handleInputChange("password", e.target.value)}
+								type="password"
+							/>
+							<TextInput
+								label="Phone Number"
+								icon={faPhone}
+								placeholder="Enter phone number"
+								value={formData.phoneNumber}
+								onChange={(e) =>
+									handleInputChange("phoneNumber", e.target.value)
+								}
+							/>
 							<div className="modal-buttons">
-								<button
-									type="button"
-									className="save-button"
-									onClick={handleSaveParent}
-								>
-									Save
-								</button>
-								<button
-									type="button"
-									className="cancel-button"
-									onClick={handleCloseModal}
-								>
-									Cancel
-								</button>
+								<PrimaryButton title="Save" onClick={handleSaveParent} />
+								<SecondaryButton title="Cancel" onClick={handleCloseModal} />
 							</div>
 						</form>
 					</div>
