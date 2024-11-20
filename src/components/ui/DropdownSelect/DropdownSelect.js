@@ -20,10 +20,10 @@ const DropdownSelect = ({
 }) => {
 	return (
 		<div className="form-group">
-			<label>
-				{icon && <FontAwesomeIcon icon={icon} />}
-				{label}
-			</label>
+			<div className="dropdown-select-header">
+				{icon && <FontAwesomeIcon icon={icon} className="header-icon" />}
+				<span>{label}</span>
+			</div>
 			<Select
 				options={options}
 				placeholder={placeholder}

@@ -1,26 +1,29 @@
 .form-group input[type="text"] {
-	width: calc(100% - 17px);
+	width: 100%;
 	padding: 8px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	font-size: 16px;
 }
 
-.form-group {
-	margin: 15px 0;
-	display: flex;
-	flex-direction: column;
-}
-
-.form-group label {
-	font-weight: bold;
-	margin-bottom: 5px;
+.text-input-header {
 	display: flex;
 	align-items: center;
+	font-weight: bold;
+	margin-bottom: 8px;
+	font-size: 16px;
 }
 
-.form-group label svg {
+.header-icon {
 	margin-right: 8px;
+	font-size: 18px;
+	color: #343a40;
+}
+
+.input-container {
+	position: relative;
+	display: flex;
+	align-items: center;
 }
 
 .text-input {
@@ -31,17 +34,10 @@
 	font-size: 16px;
 }
 
-/* Input container to hold the input field and the eye icon */
-.input-container {
-	position: relative;
-	display: flex;
-	align-items: center;
-}
-
-/* Position the eye icon */
 .password-toggle-icon {
 	position: absolute;
 	right: 10px;
 	cursor: pointer;
 	color: #999;
+	font-size: 18px;
 }

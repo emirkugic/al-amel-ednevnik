@@ -44,9 +44,10 @@ const AbsentStudentsSelect = ({
 
 	return (
 		<div className="form-group">
-			<label>
-				<FontAwesomeIcon icon={faUserPlus} /> Absent Students
-			</label>
+			<div className="absent-students-header">
+				<FontAwesomeIcon icon={faUserPlus} className="header-icon" />
+				<span>Absent Students</span>
+			</div>
 			<CreatableSelect
 				isClearable
 				isSearchable

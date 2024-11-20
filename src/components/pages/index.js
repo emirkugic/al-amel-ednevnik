@@ -1,0 +1,16 @@
+export { default as Dashboard } from "./Dashboard";
+export { default as Students } from "./Students";
+export { default as Courses } from "./Courses";
+export { default as Schedule } from "./Schedule";
+export { default as Attendance } from "./Attendance";
+export { default as Grades } from "./Grades";
+export { default as Settings } from "./Settings";
+export { default as Help } from "./Help";
+export { default as Login } from "./Login";
+export { default as SubjectAssessmentManagement } from "./SubjectAssessmentManagement";
+export { default as Lectures } from "./Lectures";
+export { default as Develop } from "./Develop";
+export { default as Teachers } from "./Teachers";
+export { default as Subjects } from "./Subjects";
+export { default as Classes } from "./Classes";
+export { default as Parents } from "./Parents";

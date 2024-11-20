@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const TextInput = ({
-	label,
+	label,	
 	icon,
 	placeholder,
 	value,
@@ -20,10 +20,10 @@ const TextInput = ({
 
 	return (
 		<div className="form-group">
-			<label>
-				{icon && <FontAwesomeIcon icon={icon} />}
-				{label}
-			</label>
+			<div className="text-input-header">
+				{icon && <FontAwesomeIcon icon={icon} className="header-icon" />}
+				<span>{label}</span>
+			</div>
 			<div className="input-container">
 				<input
 					type={type === "password" && !isPasswordVisible ? "password" : "text"}
