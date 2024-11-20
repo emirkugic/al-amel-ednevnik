@@ -1,4 +1,3 @@
-// src/App.js
 import React from "react";
 import {
 	BrowserRouter as Router,
@@ -47,14 +46,14 @@ const AppContent = () => {
 						<Route path="/schedule" element={<Schedule />} />
 						<Route path="/attendance" element={<Attendance />} />
 						<Route path="/grades" element={<Grades />} />
-						<Route path="/lectures" element={<Lectures />} />
+						<Route path="/lectures/:departmentId" element={<Lectures />} />
 						<Route path="/settings" element={<Settings />} />
 						<Route path="/help" element={<Help />} />
 						<Route path="/develop" element={<Develop />} />
-						<Route path="/teachers" element={<Teachers />} />{" "}
-						<Route path="/subjects" element={<Subjects />} />{" "}
-						<Route path="/classes" element={<Classes />} />{" "}
-						<Route path="/parents" element={<Parents />} />{" "}
+						<Route path="/teachers" element={<Teachers />} />
+						<Route path="/subjects" element={<Subjects />} />
+						<Route path="/classes" element={<Classes />} />
+						<Route path="/parents" element={<Parents />} />
 						<Route
 							path="/courses/:subject"
 							element={<SubjectAssessmentManagement />}

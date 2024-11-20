@@ -107,15 +107,15 @@ const DesktopSidebar = () => {
 				icon: faBook,
 				route: myCourses,
 			},
-			{ title: "Attendance", icon: faClock, route: "/attendance" },
+			// { title: "Attendance", icon: faClock, route: "/attendance" },
 			{ title: "Grades", icon: faChartLine, route: "/grades" },
 			{
 				title: "Lectures",
 				icon: faBookOpen,
 				route: myDepartments,
 			},
-			{ title: "Settings", icon: faCog, route: "/settings" },
-			{ title: "Help", icon: faQuestionCircle, route: "/help" },
+			// { title: "Settings", icon: faCog, route: "/settings" },
+			// { title: "Help", icon: faQuestionCircle, route: "/help" },
 		];
 
 		if (user?.role === "Admin") {
