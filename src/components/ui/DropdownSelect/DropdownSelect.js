@@ -17,6 +17,7 @@ const DropdownSelect = ({
 	value,
 	onChange,
 	options,
+	isMulti = false, // New flag to toggle multi-selection
 }) => {
 	return (
 		<div className="form-group">
@@ -27,8 +28,18 @@ const DropdownSelect = ({
 			<Select
 				options={options}
 				placeholder={placeholder}
-				value={options.find((option) => option.value === value)}
-				onChange={onChange}
+				value={
+					isMulti
+						? options.filter((option) => value?.includes(option.value)) // Handle multi-selection values
+						: options.find((option) => option.value === value) // Single selection
+				}
+				onChange={
+					(selected) =>
+						isMulti
+							? onChange(selected.map((item) => item.value)) // Return array of selected values for multi-selection
+							: onChange(selected.value) // Return single value for single selection
+				}
+				isMulti={isMulti} // Enable multi-selection in the dropdown
 			/>
 		</div>
 	);
