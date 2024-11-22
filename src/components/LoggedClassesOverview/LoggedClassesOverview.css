@@ -25,6 +25,8 @@
 	border-radius: 6px;
 	border: 1px solid #ddd;
 	font-size: 0.9em;
+	height: 36px;
+	margin-bottom: 4px;
 }
 
 .export-button {
@@ -36,6 +38,7 @@
 	cursor: pointer;
 	font-weight: bold;
 	transition: background-color 0.3s;
+	height: 36px;
 }
 
 .export-button:hover {
@@ -180,4 +183,16 @@
 
 .log-class-button:hover {
 	background-color: #316fc5;
+}
+
+.subject-dropdown {
+	padding: 10px;
+	border-radius: 6px;
+	border: 1px solid #ddd;
+	font-size: 0.9em;
+	cursor: pointer;
+	width: 140px;
+	color: #333;
+	height: 36px;
+	/* margin-top: 4px; */
 }

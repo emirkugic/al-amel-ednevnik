@@ -53,11 +53,30 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 		setIsModalOpen(false); // Close the modal
 	};
 
+	// Hardcoded subject options (replace with backend data when available)
+	const subjects = ["Mathematics", "Physics", "Chemistry"];
+
+	// Automatically select the single available subject
+	const selectedSubject = subjects.length === 1 ? subjects[0] : "";
+
 	return (
 		<div className="logged-classes-overview">
 			<h2>Class Logs</h2>
 			<p>Track and manage your class sessions</p>
 			<div className="controls">
+				<select
+					className="subject-dropdown"
+					value={selectedSubject}
+					onChange={(e) => console.log(`Selected Subject: ${e.target.value}`)}
+					disabled={subjects.length === 1} // Disable dropdown if only one option
+				>
+					{subjects.length !== 1 && <option value="">Select Subject</option>}
+					{subjects.map((subject, index) => (
+						<option key={index} value={subject}>
+							{subject}
+						</option>
+					))}
+				</select>
 				<input
 					type="text"
 					placeholder="Search by subject, lecture title, or students..."
