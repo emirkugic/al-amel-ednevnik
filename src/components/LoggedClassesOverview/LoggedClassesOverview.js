@@ -8,6 +8,7 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [sortOrder, setSortOrder] = useState("desc"); // Default to descending order
 	const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+	const [selectedSubject, setSelectedSubject] = useState(""); // State for selected subject
 	const logsPerPage = 10;
 
 	// Use initialLogs if no logs are explicitly passed
@@ -50,14 +51,10 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 	};
 
 	const closeModal = () => {
-		setIsModalOpen(false); // Close the modal
+		setIsModalOpen(false);
 	};
 
-	// Hardcoded subject options (replace with backend data when available)
 	const subjects = ["Mathematics", "Physics", "Chemistry"];
-
-	// Automatically select the single available subject
-	const selectedSubject = subjects.length === 1 ? subjects[0] : "";
 
 	return (
 		<div className="logged-classes-overview">
@@ -67,7 +64,11 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 				<select
 					className="subject-dropdown"
 					value={selectedSubject}
-					onChange={(e) => console.log(`Selected Subject: ${e.target.value}`)}
+					onChange={(e) => {
+						const subject = e.target.value;
+						console.log(`Selected Subject: ${subject}`);
+						setSelectedSubject(subject); // Update state with selected subject
+					}}
 					disabled={subjects.length === 1} // Disable dropdown if only one option
 				>
 					{subjects.length !== 1 && <option value="">Select Subject</option>}
