@@ -27,16 +27,13 @@ const DesktopSidebar = () => {
 	const [myDepartments, setMyDepartments] = useState([]);
 	const [loadingCourses, setLoadingCourses] = useState(true);
 
-	// Fetch teacher's assigned subjects
 	useEffect(() => {
 		const fetchMyCourses = async () => {
 			try {
 				if (!user?.id || !user?.token) {
-					// console.log("User ID or token is missing:", user);
 					return;
 				}
 
-				// console.log("Fetching courses for teacher ID:", user.id);
 				setLoadingCourses(true);
 
 				// Fetch teacher data
@@ -44,7 +41,6 @@ const DesktopSidebar = () => {
 					user.id,
 					user.token
 				);
-				// console.log("Fetched teacher data:", teacherData);
 
 				// Fetch subject details for assigned subjects
 				const subjectPromises = teacherData.assignedSubjects.map((subject) =>
@@ -52,37 +48,30 @@ const DesktopSidebar = () => {
 				);
 
 				const resolvedSubjects = await Promise.all(subjectPromises);
-				// console.log("Fetched subjects for teacher:", resolvedSubjects);
 
 				// Map subjects to the sidebar route format
 				const courseList = resolvedSubjects.map((subject) => ({
 					title: subject.name,
 					path: `/courses/${subject.id}`,
 				}));
-
-				// console.log("Formatted course list:", courseList);
 				setMyCourses(courseList);
 
-				// Fetch departments for Lectures
-				const departmentIds = teacherData.assignedSubjects
-					.flatMap((subject) => subject.departmentId)
-					.filter((value, index, self) => self.indexOf(value) === index); // Remove duplicates
+				// Fetch only the relevant departments
+				const uniqueDepartmentIds = [
+					...new Set(
+						teacherData.assignedSubjects.flatMap(
+							(subject) => subject.departmentId
+						)
+					),
+				];
 
-				const departmentPromises = departmentIds.map((id) =>
-					departmentApi.getAllDepartments(user.token)
+				const departmentPromises = uniqueDepartmentIds.map((id) =>
+					departmentApi.getDepartmentById(id, user.token)
 				);
 
 				const resolvedDepartments = await Promise.all(departmentPromises);
-				const uniqueDepartments = resolvedDepartments
-					.flat()
-					.filter(
-						(dept, index, self) =>
-							index === self.findIndex((d) => d.id === dept.id)
-					);
 
-				// console.log("Fetched departments for teacher:", uniqueDepartments);
-
-				const departmentList = uniqueDepartments.map((dept) => ({
+				const departmentList = resolvedDepartments.map((dept) => ({
 					title: dept.departmentName,
 					path: `/lectures/${dept.id}`,
 				}));
@@ -107,15 +96,12 @@ const DesktopSidebar = () => {
 				icon: faBook,
 				route: myCourses,
 			},
-			// { title: "Attendance", icon: faClock, route: "/attendance" },
 			{ title: "Grades", icon: faChartLine, route: "/grades" },
 			{
 				title: "Lectures",
 				icon: faBookOpen,
 				route: myDepartments,
 			},
-			// { title: "Settings", icon: faCog, route: "/settings" },
-			// { title: "Help", icon: faQuestionCircle, route: "/help" },
 		];
 
 		if (user?.role === "Admin") {

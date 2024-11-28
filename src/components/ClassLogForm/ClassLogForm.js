@@ -77,11 +77,6 @@ const ClassLogForm = () => {
 			classSequence,
 		};
 		console.log("Submitting data:", data);
-		// fetch("API_ENDPOINT", {
-		//  method: "POST",
-		//  headers: { "Content-Type": "application/json" },
-		//  body: JSON.stringify(data),
-		// });
 	};
 
 	return (

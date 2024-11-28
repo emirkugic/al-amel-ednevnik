@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	faBook,
 	faClock,
@@ -10,9 +10,11 @@ import TextInput from "../ui/TextInput/TextInput";
 import DropdownSelect from "../ui/DropdownSelect/DropdownSelect";
 import AbsentStudentsSelect from "../ui/AbsentStudentsSelect/AbsentStudentsSelect";
 import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
+import studentApi from "../../api/studentApi";
+import useAuth from "../../hooks/useAuth";
 import "./ClassLogFormModal.css";
 
-const ClassLogFormModal = ({ onClose }) => {
+const ClassLogFormModal = ({ onClose, departmentId }) => {
 	const [absentStudents, setAbsentStudents] = useState([]);
 	const [studentInput, setStudentInput] = useState(null);
 	const [subject, setSubject] = useState("");
@@ -21,45 +23,35 @@ const ClassLogFormModal = ({ onClose }) => {
 	const [classSequence, setClassSequence] = useState("1");
 	const [notification, setNotification] = useState("");
 	const [gradeOptions, setGradeOptions] = useState("");
+	const [studentOptions, setStudentOptions] = useState([]);
+	const { user } = useAuth();
 
-	const studentOptions = [
-		{ value: "Emir Kugic", label: "Emir Kugic" },
-		{ value: "John Doe", label: "John Doe" },
-		{ value: "Sue Storm", label: "Sue Storm" },
-		{ value: "Chris Hemsworth", label: "Chris Hemsworth" },
-	];
+	useEffect(() => {
+		const fetchStudents = async () => {
+			console.log("Received departmentId:", departmentId); // Debug log
+			// console.log("User token:", user?.token); // Debug log
+			if (!departmentId || !user?.token) {
+				console.error("Department ID or user token is missing");
+				return;
+			}
+			try {
+				const students = await studentApi.getStudentsByDepartment(
+					departmentId,
+					user.token
+				);
+				setStudentOptions(
+					students.map((student) => ({
+						value: student.id,
+						label: `${student.firstName} ${student.lastName}`,
+					}))
+				);
+			} catch (error) {
+				console.error("Error fetching students:", error);
+			}
+		};
 
-	const subjects = [
-		{ value: "math", label: "Math" },
-		{ value: "it", label: "Informatika" },
-		{ value: "science", label: "Science" },
-		{ value: "history", label: "History" },
-	];
-
-	const classHours = [
-		{ value: "1", label: "1st Period" },
-		{ value: "2", label: "2nd Period" },
-		{ value: "3", label: "3rd Period" },
-		{ value: "4", label: "4th Period" },
-		{ value: "5", label: "5th Period" },
-		{ value: "6", label: "6th Period" },
-		{ value: "7", label: "7th Period" },
-	];
-
-	const classYears = [
-		{ value: "1", label: "1st Grade" },
-		{ value: "2", label: "2nd Grade" },
-		{ value: "3", label: "3rd Grade" },
-		{ value: "4", label: "4th Grade" },
-		{ value: "5", label: "5th Grade" },
-		{ value: "6", label: "6th Grade" },
-		{ value: "7", label: "7th Grade" },
-		{ value: "8", label: "8th Grade" },
-		{ value: "9", label: "9th Grade" },
-		{ value: "10", label: "10th Grade" },
-		{ value: "11", label: "11th Grade" },
-		{ value: "12", label: "12th Grade" },
-	];
+		fetchStudents();
+	}, [departmentId, user]);
 
 	const handleSubmit = () => {
 		const data = {
@@ -76,15 +68,6 @@ const ClassLogFormModal = ({ onClose }) => {
 	return (
 		<div className="class-log-form-modal">
 			<div className="modal-content">
-				<DropdownSelect
-					label="Subject"
-					icon={faBook}
-					placeholder="Select subject"
-					value={subject}
-					onChange={(e) => setSubject(e.value)}
-					options={subjects}
-				/>
-
 				<div className="dropdown-row">
 					<DropdownSelect
 						className="dropdown-select"
@@ -93,16 +76,21 @@ const ClassLogFormModal = ({ onClose }) => {
 						placeholder="Select"
 						value={classHour}
 						onChange={(e) => setClassHour(e.value)}
-						options={classHours}
+						options={[
+							{ value: "1", label: "1st Period" },
+							{ value: "2", label: "2nd Period" },
+						]}
 					/>
 					<DropdownSelect
-						className="dropdown-select"
-						label="Class"
-						icon={faGraduationCap}
-						placeholder="Select"
-						value={gradeOptions}
-						onChange={(e) => setGradeOptions(e.value)}
-						options={classYears}
+						label="Subject"
+						icon={faBook}
+						placeholder="Select subject"
+						value={subject}
+						onChange={(e) => setSubject(e.value)}
+						options={[
+							{ value: "math", label: "Math" },
+							{ value: "science", label: "Science" },
+						]}
 					/>
 				</div>
 

@@ -8,6 +8,16 @@ const studentApi = {
 		return response.data;
 	},
 
+	getStudentsByDepartment: async (departmentId, token) => {
+		const response = await apiClient.get(
+			`/Student/department/${departmentId}`,
+			{
+				headers: { Authorization: `Bearer ${token}` },
+			}
+		);
+		return response.data;
+	},
+
 	getStudentById: async (id, token) => {
 		const response = await apiClient.get(`/Student/${id}`, {
 			headers: { Authorization: `Bearer ${token}` },

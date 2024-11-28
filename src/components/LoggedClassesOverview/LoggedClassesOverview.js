@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./LoggedClassesOverview.css";
 import ClassLogFormModal from "../ClassLogFormModal/ClassLogFormModal";
 
-const LoggedClassesOverview = ({ initialLogs = [] }) => {
+const LoggedClassesOverview = ({ initialLogs = [], departmentId }) => {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedGrade, setSelectedGrade] = useState("All Grades");
 	const [currentPage, setCurrentPage] = useState(1);
@@ -170,7 +170,9 @@ const LoggedClassesOverview = ({ initialLogs = [] }) => {
 			</div>
 
 			{/* Modal */}
-			{isModalOpen && <ClassLogFormModal onClose={closeModal} />}
+			{isModalOpen && (
+				<ClassLogFormModal onClose={closeModal} departmentId={departmentId} />
+			)}
 		</div>
 	);
 };
