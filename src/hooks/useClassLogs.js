@@ -14,7 +14,7 @@ const useClassLogs = (user) => {
 				token
 			);
 			setClassLogs(logs);
-			localStorage.setItem("classLogs", JSON.stringify(logs));
+			localStorage.setItem("classLogs", JSON.stringify(logs)); // Still cache if needed later
 		} catch (err) {
 			setError("Failed to fetch class logs.");
 			console.error(err);
@@ -24,19 +24,13 @@ const useClassLogs = (user) => {
 	};
 
 	useEffect(() => {
-		const storedLogs = localStorage.getItem("classLogs");
 		if (user && user.token) {
-			// Fetch class logs if user is authenticated
-			if (!storedLogs) {
-				fetchClassLogs(user.token, user.id);
-			} else {
-				setClassLogs(JSON.parse(storedLogs));
-				setLoading(false);
-			}
+			// Always fetch fresh logs on mount
+			fetchClassLogs(user.token, user.id);
 		} else {
 			setClassLogs([]);
 		}
-	}, [user]);
+	}, [user]); // Fetch logs whenever the user changes (e.g., login/logout)
 
 	return { classLogs, fetchClassLogs, loading, error };
 };
