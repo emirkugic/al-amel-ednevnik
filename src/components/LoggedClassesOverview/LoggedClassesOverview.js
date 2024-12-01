@@ -14,10 +14,9 @@ const LoggedClassesOverview = ({ departmentId }) => {
 	const [sortOrder, setSortOrder] = useState("desc");
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedSubject, setSelectedSubject] = useState("");
-	const [subjects, setSubjects] = useState([]); // Dropdown options for subjects
+	const [subjects, setSubjects] = useState([]);
 	const logsPerPage = 10;
 
-	// Fetch and filter subjects based on departmentId
 	useEffect(() => {
 		const fetchSubjects = async () => {
 			if (!user?.id || !user?.token) return;
@@ -28,12 +27,10 @@ const LoggedClassesOverview = ({ departmentId }) => {
 					user.token
 				);
 
-				// Filter assigned subjects based on departmentId
 				const filteredSubjects = teacherData.assignedSubjects
-					.filter((subject) => subject.departmentId === departmentId)
+					.filter((subject) => subject.departmentId.includes(departmentId))
 					.map((subject) => subject.subjectId);
 
-				// Fetch subject details for filtered subjects
 				const subjectPromises = filteredSubjects.map((id) =>
 					subjectApi.getSubjectById(id, user.token)
 				);
@@ -54,7 +51,6 @@ const LoggedClassesOverview = ({ departmentId }) => {
 		fetchSubjects();
 	}, [user, departmentId]);
 
-	// Filter logs from ClassLogsContext by department and subject
 	const departmentLogs = classLogs.find(
 		(log) => log.departmentId === departmentId
 	);
@@ -68,7 +64,6 @@ const LoggedClassesOverview = ({ departmentId }) => {
 				subject.classLogs.map((log) => ({
 					...log,
 					subject: subject.subjectName,
-					grade: subject.grade || "N/A",
 					sequence: log.sequence || 1,
 				}))
 			)
@@ -77,19 +72,17 @@ const LoggedClassesOverview = ({ departmentId }) => {
 					log.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
 					log.lectureTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
 					log.absentStudents.some((student) =>
-						student.toLowerCase().includes(searchQuery.toLowerCase())
+						student.name.toLowerCase().includes(searchQuery.toLowerCase())
 					);
 				return matchesSearch;
 			}) || [];
 
-	// Sort logs
 	const sortedLogs = filteredLogs.sort((a, b) => {
 		const dateA = new Date(a.classDate);
 		const dateB = new Date(b.classDate);
 		return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
 	});
 
-	// Pagination
 	const indexOfLastLog = currentPage * logsPerPage;
 	const indexOfFirstLog = indexOfLastLog - logsPerPage;
 	const currentLogs = sortedLogs.slice(indexOfFirstLog, indexOfLastLog);
@@ -144,7 +137,6 @@ const LoggedClassesOverview = ({ departmentId }) => {
 								<tr>
 									<th>Date</th>
 									<th>Subject</th>
-									<th>Grade</th>
 									<th>Period</th>
 									<th>Lecture Title</th>
 									<th>Sequence</th>
@@ -156,13 +148,14 @@ const LoggedClassesOverview = ({ departmentId }) => {
 									<tr key={log.classLogId}>
 										<td>{new Date(log.classDate).toLocaleDateString()}</td>
 										<td>{log.subject}</td>
-										<td>{log.grade}</td>
 										<td>{log.period}</td>
 										<td>{log.lectureTitle}</td>
 										<td>{log.sequence}</td>
 										<td>
 											{log.absentStudents.length > 0
-												? log.absentStudents.join(", ")
+												? log.absentStudents
+														.map((student) => student.name)
+														.join(", ")
 												: "All present"}
 										</td>
 									</tr>
@@ -204,7 +197,6 @@ const LoggedClassesOverview = ({ departmentId }) => {
 						</div>
 					</div>
 
-					{/* Modal */}
 					{isModalOpen && (
 						<ClassLogFormModal
 							onClose={closeModal}
