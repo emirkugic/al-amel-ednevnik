@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
 import "./LoggedClassesOverview.css";
 import ClassLogFormModal from "../ClassLogFormModal/ClassLogFormModal";
 import teacherApi from "../../api/teacherApi";
 import subjectApi from "../../api/subjectApi";
 import useAuth from "../../hooks/useAuth";
 
-const LoggedClassesOverview = ({ initialLogs = [], departmentId }) => {
+const LoggedClassesOverview = ({ departmentId }) => {
 	const { user } = useAuth(); // Get the logged-in user info
-	const navigate = useNavigate();
-	const location = useLocation();
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedGrade, setSelectedGrade] = useState("All Grades");
 	const [currentPage, setCurrentPage] = useState(1);
@@ -17,9 +14,52 @@ const LoggedClassesOverview = ({ initialLogs = [], departmentId }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
 	const [selectedSubject, setSelectedSubject] = useState(""); // State for selected subject
 	const [subjects, setSubjects] = useState([]); // State for filtered subjects
+	const [logs, setLogs] = useState([]); // Simulated logs
 	const logsPerPage = 10;
 
-	const logs = initialLogs;
+	// Simulated backend logs data
+	const simulatedLogs = [
+		{
+			id: "1",
+			subjectId: "Math101",
+			subject: "Mathematics",
+			grade: "10",
+			date: "2024-11-01",
+			lectureTitle: "Introduction to Algebra",
+			period: 1,
+			sequence: 1,
+			attendance: { present: 25, total: 30, absent: 5 },
+			absentStudents: ["John Doe", "Jane Smith"],
+		},
+		{
+			id: "2",
+			subjectId: "Sci202",
+			subject: "Science",
+			grade: "10",
+			date: "2024-11-02",
+			lectureTitle: "Newton's Laws",
+			period: 2,
+			sequence: 2,
+			attendance: { present: 28, total: 30, absent: 2 },
+			absentStudents: ["Alice Brown"],
+		},
+		{
+			id: "3",
+			subjectId: "Math101",
+			subject: "Mathematics",
+			grade: "10",
+			date: "2024-11-03",
+			lectureTitle: "Quadratic Equations",
+			period: 3,
+			sequence: 3,
+			attendance: { present: 27, total: 30, absent: 3 },
+			absentStudents: ["Bob Green"],
+		},
+	];
+
+	useEffect(() => {
+		setLogs(simulatedLogs); // Simulate fetching logs
+	}, []);
 
 	// Fetch and filter subjects based on departmentId
 	useEffect(() => {
@@ -58,26 +98,17 @@ const LoggedClassesOverview = ({ initialLogs = [], departmentId }) => {
 		fetchSubjects();
 	}, [user, departmentId]);
 
-	const handleSubjectChange = (subjectId) => {
-		setSelectedSubject(subjectId);
-		if (subjectId) {
-			navigate(`${location.pathname}/${subjectId}`);
-		} else {
-			navigate(location.pathname); // Reset URL if no subject is selected
-		}
-	};
-
-	// Filter logs based on search query and selected grade
+	// Filter logs based on selected subject and search query
 	const filteredLogs = logs.filter((log) => {
+		const matchesSubject =
+			!selectedSubject || log.subjectId === selectedSubject;
 		const matchesSearch =
 			log.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
 			log.lectureTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
 			log.absentStudents.some((student) =>
 				student.toLowerCase().includes(searchQuery.toLowerCase())
 			);
-		const matchesGrade =
-			selectedGrade === "All Grades" || log.grade === selectedGrade;
-		return matchesSearch && matchesGrade;
+		return matchesSubject && matchesSearch;
 	});
 
 	// Sort logs based on sequence and selected order
@@ -115,10 +146,10 @@ const LoggedClassesOverview = ({ initialLogs = [], departmentId }) => {
 				<select
 					className="subject-dropdown"
 					value={selectedSubject}
-					onChange={(e) => handleSubjectChange(e.target.value)}
+					onChange={(e) => setSelectedSubject(e.target.value)}
 					disabled={subjects.length === 0}
 				>
-					<option value="">Select Subject</option>
+					<option value="">All Subjects</option>
 					{subjects.map((subject) => (
 						<option key={subject.id} value={subject.id}>
 							{subject.name}
