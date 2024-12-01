@@ -5,8 +5,8 @@ import useAuth from "../hooks/useAuth";
 export const ClassLogsContext = createContext();
 
 export const ClassLogsProvider = ({ children }) => {
-	const { user } = useAuth(); // Get user details from AuthContext
-	const { classLogs, fetchClassLogs, loading, error } = useClassLogs(user); // Use the custom hook for class logs
+	const { user } = useAuth();
+	const { classLogs, fetchClassLogs, loading, error } = useClassLogs(user);
 
 	return (
 		<ClassLogsContext.Provider

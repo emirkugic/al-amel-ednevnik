@@ -5,12 +5,12 @@ import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
 import useAuth from "../../hooks/useAuth";
 import { useContext } from "react";
-import { ClassLogsContext } from "../../contexts/ClassLogsContext"; // Import ClassLogsContext
+import { ClassLogsContext } from "../../contexts/ClassLogsContext";
 import "./LoginForm.css";
 
 const LoginForm = () => {
 	const { login } = useAuth();
-	const { fetchClassLogs } = useContext(ClassLogsContext); // Use the ClassLogsContext
+	const { fetchClassLogs } = useContext(ClassLogsContext);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [keepLoggedIn, setKeepLoggedIn] = useState(false);
@@ -19,7 +19,6 @@ const LoginForm = () => {
 	const handleLogin = async (e) => {
 		e.preventDefault();
 
-		// Validate email and password
 		if (!email || !password) {
 			setErrorMessage("Please enter both email and password.");
 			setTimeout(() => setErrorMessage(""), 3000);
