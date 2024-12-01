@@ -6,6 +6,8 @@ import {
 	useLocation,
 } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ClassLogsProvider } from "./contexts/ClassLogsContext";
+
 import PrivateRoute from "./components/PrivateRoute";
 
 import DesktopSidebar from "./components/DesktopSidebar/DesktopSidebar";
@@ -69,7 +71,9 @@ const AppContent = () => {
 const App = () => (
 	<Router>
 		<AuthProvider>
-			<AppContent />
+			<ClassLogsProvider>
+				<AppContent />
+			</ClassLogsProvider>
 		</AuthProvider>
 	</Router>
 );

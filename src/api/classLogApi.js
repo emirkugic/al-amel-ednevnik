@@ -77,6 +77,16 @@ const classLogApi = {
 		);
 		return response.data;
 	},
+
+	getClassLogsByTeacherGrouped: async (teacherId, token) => {
+		const response = await apiClient.get(
+			`/ClassLog/by-teacher-grouped?teacherId=${teacherId}`,
+			{
+				headers: { Authorization: `Bearer ${token}` },
+			}
+		);
+		return response.data;
+	},
 };
 
 export default classLogApi;

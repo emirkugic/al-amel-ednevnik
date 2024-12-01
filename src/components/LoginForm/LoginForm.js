@@ -1,14 +1,16 @@
-// src/components/pages/Login.js
 import React, { useState } from "react";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import TextInput from "../ui/TextInput/TextInput";
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
 import useAuth from "../../hooks/useAuth";
+import { useContext } from "react";
+import { ClassLogsContext } from "../../contexts/ClassLogsContext"; // Import ClassLogsContext
 import "./LoginForm.css";
 
 const LoginForm = () => {
 	const { login } = useAuth();
+	const { fetchClassLogs } = useContext(ClassLogsContext); // Use the ClassLogsContext
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [keepLoggedIn, setKeepLoggedIn] = useState(false);
@@ -25,7 +27,8 @@ const LoginForm = () => {
 		}
 
 		try {
-			await login(email, password);
+			const user = await login(email, password);
+			await fetchClassLogs(user.token, user.id);
 		} catch (error) {
 			setErrorMessage("Login failed. Please try again.");
 			setTimeout(() => setErrorMessage(""), 3000);
