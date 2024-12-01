@@ -1,37 +1,32 @@
 import React, { useState, useEffect } from "react";
 import {
-	faBook,
 	faClock,
 	faChalkboardTeacher,
-	faGraduationCap,
+	faListNumeric,
 } from "@fortawesome/free-solid-svg-icons";
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import TextInput from "../ui/TextInput/TextInput";
 import DropdownSelect from "../ui/DropdownSelect/DropdownSelect";
 import AbsentStudentsSelect from "../ui/AbsentStudentsSelect/AbsentStudentsSelect";
 import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
+import classLogApi from "../../api/classLogApi";
 import studentApi from "../../api/studentApi";
 import useAuth from "../../hooks/useAuth";
 import "./ClassLogFormModal.css";
 
-const ClassLogFormModal = ({ onClose, departmentId }) => {
+const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 	const [absentStudents, setAbsentStudents] = useState([]);
-	const [studentInput, setStudentInput] = useState(null);
-	const [subject, setSubject] = useState("");
 	const [classHour, setClassHour] = useState("");
 	const [lectureTitle, setLectureTitle] = useState("");
 	const [classSequence, setClassSequence] = useState("1");
 	const [notification, setNotification] = useState("");
-	const [gradeOptions, setGradeOptions] = useState("");
 	const [studentOptions, setStudentOptions] = useState([]);
 	const { user } = useAuth();
 
 	useEffect(() => {
 		const fetchStudents = async () => {
-			console.log("Received departmentId:", departmentId); // Debug log
-			// console.log("User token:", user?.token); // Debug log
 			if (!departmentId || !user?.token) {
-				console.error("Department ID or user token is missing");
+				setNotification("Error: Missing department ID or user token.");
 				return;
 			}
 			try {
@@ -46,23 +41,46 @@ const ClassLogFormModal = ({ onClose, departmentId }) => {
 					}))
 				);
 			} catch (error) {
-				console.error("Error fetching students:", error);
+				setNotification("Error fetching students. Please try again.");
 			}
 		};
 
 		fetchStudents();
 	}, [departmentId, user]);
 
-	const handleSubmit = () => {
-		const data = {
-			subject,
-			classHour,
+	const handleSubmit = async () => {
+		if (!classHour || !lectureTitle || !subjectId) {
+			console.log("Class Hour:", classHour);
+			console.log("Lecture Title:", lectureTitle);
+			console.log("Subject ID:", subjectId);
+			console.log(
+				"Absent Students:",
+				absentStudents.map((s) => s.value)
+			);
+
+			setNotification("Please fill in all required fields.");
+			return;
+		}
+
+		const classLogData = {
+			departmentId,
+			subjectId,
+			teacherId: user?.id,
 			lectureTitle,
-			absentStudents,
-			classSequence,
+			lectureType: "Lecture", // Assuming this is static
+			classDate: new Date().toISOString(),
+			period: classHour,
+			absentStudentIds: absentStudents.map((s) => s.value),
 		};
-		console.log("Submitting data:", data);
-		onClose();
+
+		try {
+			await classLogApi.createClassLogWithAbsences(classLogData, user.token);
+			setNotification("Class log created successfully!");
+			onClose();
+		} catch (error) {
+			console.error("Error creating class log:", error);
+			setNotification("Error creating class log. Please try again.");
+		}
 	};
 
 	return (
@@ -75,7 +93,10 @@ const ClassLogFormModal = ({ onClose, departmentId }) => {
 						icon={faClock}
 						placeholder="Select"
 						value={classHour}
-						onChange={(e) => setClassHour(e.value)}
+						onChange={(value) => {
+							console.log("Selected Period:", value);
+							setClassHour(value);
+						}}
 						options={[
 							{ value: "1", label: "1st Period" },
 							{ value: "2", label: "2nd Period" },
@@ -86,16 +107,11 @@ const ClassLogFormModal = ({ onClose, departmentId }) => {
 							{ value: "7", label: "7th Period" },
 						]}
 					/>
-					<DropdownSelect
-						label="Subject"
-						icon={faBook}
-						placeholder="Select subject"
-						value={subject}
-						onChange={(e) => setSubject(e.value)}
-						options={[
-							{ value: "math", label: "Math" },
-							{ value: "science", label: "Science" },
-						]}
+					<TextInput
+						label="Class Sequence"
+						icon={faListNumeric}
+						value={classSequence}
+						onChange={(e) => setClassSequence(e.target.value)}
 					/>
 				</div>
 
@@ -108,13 +124,11 @@ const ClassLogFormModal = ({ onClose, departmentId }) => {
 				/>
 
 				{notification && <p className="notification">{notification}</p>}
+
 				<AbsentStudentsSelect
 					studentOptions={studentOptions}
 					absentStudents={absentStudents}
 					setAbsentStudents={setAbsentStudents}
-					studentInput={studentInput}
-					setStudentInput={setStudentInput}
-					setNotification={setNotification}
 				/>
 
 				<div className="button-container">

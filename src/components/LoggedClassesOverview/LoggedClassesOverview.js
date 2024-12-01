@@ -91,8 +91,16 @@ const LoggedClassesOverview = ({ departmentId }) => {
 	const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 	const toggleSortOrder = () =>
 		setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
-	const handleLogClass = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
+
+	const handleLogClass = () => {
+		if (!selectedSubject) {
+			alert("No subject selected. Cannot open modal.");
+			return;
+		}
+		console.log("Opening modal with Subject ID:", selectedSubject); // Debugging log
+		setIsModalOpen(true);
+	};
 
 	return (
 		<div className="logged-classes-overview">

@@ -1,13 +1,9 @@
-// React Imports
 import React from "react";
 
-// Third-party Components
 import Select from "react-select";
 
-// Icon Imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-// Style Imports
 import "./DropdownSelect.css";
 
 const DropdownSelect = ({
@@ -17,7 +13,7 @@ const DropdownSelect = ({
 	value,
 	onChange,
 	options,
-	isMulti = false, // New flag to toggle multi-selection
+	isMulti = false,
 }) => {
 	return (
 		<div className="form-group">
@@ -30,16 +26,15 @@ const DropdownSelect = ({
 				placeholder={placeholder}
 				value={
 					isMulti
-						? options.filter((option) => value?.includes(option.value)) // Handle multi-selection values
-						: options.find((option) => option.value === value) // Single selection
+						? options.filter((option) => value?.includes(option.value))
+						: options.find((option) => option.value === value)
 				}
-				onChange={
-					(selected) =>
-						isMulti
-							? onChange(selected.map((item) => item.value)) // Return array of selected values for multi-selection
-							: onChange(selected.value) // Return single value for single selection
+				onChange={(selected) =>
+					isMulti
+						? onChange(selected.map((item) => item.value))
+						: onChange(selected.value)
 				}
-				isMulti={isMulti} // Enable multi-selection in the dropdown
+				isMulti={isMulti}
 			/>
 		</div>
 	);
