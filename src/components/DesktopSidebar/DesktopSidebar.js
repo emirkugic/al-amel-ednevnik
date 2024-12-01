@@ -72,7 +72,7 @@ const DesktopSidebar = () => {
 				const resolvedDepartments = await Promise.all(departmentPromises);
 
 				const departmentList = resolvedDepartments.map((dept) => ({
-					title: dept.departmentName,
+					title: dept.departmentName + " razred",
 					path: `/lectures/${dept.id}`,
 				}));
 
