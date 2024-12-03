@@ -37,12 +37,17 @@ const LoggedClassesOverview = ({ departmentId }) => {
 
 				const resolvedSubjects = await Promise.all(subjectPromises);
 
-				setSubjects(
-					resolvedSubjects.map((subject) => ({
-						id: subject.id,
-						name: subject.name,
-					}))
-				);
+				const subjectsList = resolvedSubjects.map((subject) => ({
+					id: subject.id,
+					name: subject.name,
+				}));
+
+				setSubjects(subjectsList);
+
+				// Automatically select the first subject
+				if (subjectsList.length > 0) {
+					setSelectedSubject(subjectsList[0].id);
+				}
 			} catch (error) {
 				console.error("Error fetching subjects:", error);
 			}
@@ -57,9 +62,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 
 	const filteredLogs =
 		departmentLogs?.subjects
-			.filter(
-				(subject) => !selectedSubject || subject.subjectId === selectedSubject
-			)
+			.filter((subject) => subject.subjectId === selectedSubject)
 			.flatMap((subject) =>
 				subject.classLogs.map((log) => ({
 					...log,
@@ -98,13 +101,16 @@ const LoggedClassesOverview = ({ departmentId }) => {
 			alert("No subject selected. Cannot open modal.");
 			return;
 		}
-		console.log("Opening modal with Subject ID:", selectedSubject); // Debugging log
 		setIsModalOpen(true);
 	};
 
+	const selectedSubjectName = subjects.find(
+		(subject) => subject.id === selectedSubject
+	)?.name;
+
 	return (
 		<div className="logged-classes-overview">
-			<h2>Class Logs</h2>
+			<h2>Class Logs for {selectedSubjectName || "Loading..."}</h2>
 			<p>Track and manage your class sessions</p>
 			{loading && <p>Loading class logs...</p>}
 			{error && <p>Error: {error}</p>}
@@ -115,9 +121,8 @@ const LoggedClassesOverview = ({ departmentId }) => {
 							className="subject-dropdown"
 							value={selectedSubject}
 							onChange={(e) => setSelectedSubject(e.target.value)}
-							disabled={subjects.length === 0}
+							disabled={subjects.length <= 1}
 						>
-							<option value="">All Subjects</option>
 							{subjects.map((subject) => (
 								<option key={subject.id} value={subject.id}>
 									{subject.name}
