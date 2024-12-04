@@ -18,7 +18,7 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 	const [absentStudents, setAbsentStudents] = useState([]);
 	const [classHour, setClassHour] = useState("");
 	const [lectureTitle, setLectureTitle] = useState("");
-	const [classSequence, setClassSequence] = useState("1");
+	const [classSequence, setClassSequence] = useState("");
 	const [notification, setNotification] = useState("");
 	const [studentOptions, setStudentOptions] = useState([]);
 	const { user } = useAuth();
@@ -50,18 +50,11 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 
 	const handleSubmit = async () => {
 		if (!classHour || !lectureTitle || !subjectId) {
-			console.log("Class Hour:", classHour);
-			console.log("Lecture Title:", lectureTitle);
-			console.log("Subject ID:", subjectId);
-			console.log(
-				"Absent Students:",
-				absentStudents.map((s) => s.value)
-			);
-
 			setNotification("Please fill in all required fields.");
 			return;
 		}
 
+		// Construct the class log data with optional sequence
 		const classLogData = {
 			departmentId,
 			subjectId,
@@ -71,8 +64,9 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 			classDate: new Date().toISOString(),
 			period: classHour,
 			absentStudentIds: absentStudents.map((s) => s.value),
+			...(classSequence && { sequence: parseInt(classSequence, 10) }), // Optional sequence
 		};
-
+		console.log("Class log data:", classLogData);
 		try {
 			await classLogApi.createClassLogWithAbsences(classLogData, user.token);
 			setNotification("Class log created successfully!");
@@ -93,10 +87,7 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 						icon={faClock}
 						placeholder="Select"
 						value={classHour}
-						onChange={(value) => {
-							console.log("Selected Period:", value);
-							setClassHour(value);
-						}}
+						onChange={(value) => setClassHour(value)}
 						options={[
 							{ value: "1", label: "1st Period" },
 							{ value: "2", label: "2nd Period" },
@@ -108,8 +99,10 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 						]}
 					/>
 					<TextInput
-						label="Class Sequence"
+						className="text-input"
+						label="Ordinal number"
 						icon={faListNumeric}
+						placeholder="Optional"
 						value={classSequence}
 						onChange={(e) => setClassSequence(e.target.value)}
 					/>

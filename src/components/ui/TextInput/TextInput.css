@@ -10,7 +10,7 @@
 	display: flex;
 	align-items: center;
 	font-weight: bold;
-	margin-bottom: 8px;
+	/* margin-bottom: 0px; */
 	font-size: 16px;
 }
 
@@ -28,10 +28,12 @@
 
 .text-input {
 	width: 100%;
-	padding: 8px;
+	padding: 8px 12px; /* Match the padding used by react-select */
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	font-size: 16px;
+	height: 39px; /* Ensure a consistent height with the dropdown */
+	box-sizing: border-box; /* Include padding and border in height calculation */
 }
 
 .password-toggle-icon {

@@ -42,10 +42,21 @@
 	justify-content: space-between;
 	gap: 10px;
 	margin-bottom: 15px;
+	align-items: center; /* Ensures vertical alignment */
 }
 
-.dropdown-select {
+.dropdown-select,
+.text-input {
 	flex: 1;
+}
+
+.text-input input {
+	height: 100%; /* Ensure the input matches the height of the dropdown */
+	padding: 10px;
+	box-sizing: border-box;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 16px;
 }
 
 .button-container {
