@@ -17,6 +17,28 @@
 	color: #343a40;
 }
 
+.absent-students-list {
+	margin-top: 10px;
+}
+
+.absent-students-list.scrollable {
+	max-height: 90px; /* Restricts height when scrollable */
+	overflow-y: auto;
+}
+
+.absent-students-list.scrollable::-webkit-scrollbar {
+	width: 6px;
+}
+
+.absent-students-list.scrollable::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 4px;
+}
+
+.absent-students-list.scrollable::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
 .student-name {
 	background: #f3f4f6;
 	padding: 8px;

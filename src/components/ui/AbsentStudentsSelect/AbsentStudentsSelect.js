@@ -38,6 +38,12 @@ const AbsentStudentsSelect = ({
 		});
 	};
 
+	// Filter options to exclude already selected students
+	const filteredOptions = studentOptions.filter(
+		(option) =>
+			!absentStudents.some((student) => student.value === option.value)
+	);
+
 	return (
 		<div className="form-group">
 			<div className="absent-students-header">
@@ -48,21 +54,27 @@ const AbsentStudentsSelect = ({
 				isClearable
 				isSearchable
 				onChange={addAbsentStudent}
-				options={studentOptions}
+				options={filteredOptions}
 				value={studentInput}
 				placeholder="Type to search students..."
 			/>
-			{absentStudents.map((student, index) => (
-				<div key={index} className="student-name">
-					{student.label}
-					<button
-						onClick={() => removeAbsentStudent(index)}
-						className="remove-student-btn"
-					>
-						<FontAwesomeIcon icon={faTrash} />
-					</button>
-				</div>
-			))}
+			<div
+				className={`absent-students-list ${
+					absentStudents.length > 2 ? "scrollable" : ""
+				}`}
+			>
+				{absentStudents.map((student, index) => (
+					<div key={index} className="student-name">
+						<span>{student.label}</span>
+						<button
+							onClick={() => removeAbsentStudent(index)}
+							className="remove-student-btn"
+						>
+							<FontAwesomeIcon icon={faTrash} />
+						</button>
+					</div>
+				))}
+			</div>
 		</div>
 	);
 };
