@@ -5,10 +5,14 @@ import teacherApi from "../../api/teacherApi";
 import subjectApi from "../../api/subjectApi";
 import useAuth from "../../hooks/useAuth";
 import { ClassLogsContext } from "../../contexts/ClassLogsContext";
+import classLogApi from "../../api/classLogApi"; // Add API for delete functionality
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const LoggedClassesOverview = ({ departmentId }) => {
 	const { user } = useAuth();
-	const { classLogs, loading, error } = useContext(ClassLogsContext);
+	const { classLogs, loading, error, setClassLogs } =
+		useContext(ClassLogsContext);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
 	const [sortOrder, setSortOrder] = useState("desc");
@@ -104,6 +108,36 @@ const LoggedClassesOverview = ({ departmentId }) => {
 		setIsModalOpen(true);
 	};
 
+	const handleDeleteLog = async (logId) => {
+		if (!window.confirm("Are you sure you want to delete this log?")) return;
+		try {
+			await classLogApi.deleteClassLog(logId, user.token); // Replace with your delete API
+			// Update the classLogs context after deletion
+			setClassLogs((prevLogs) =>
+				prevLogs.map((log) =>
+					log.departmentId === departmentId
+						? {
+								...log,
+								subjects: log.subjects.map((subject) =>
+									subject.subjectId === selectedSubject
+										? {
+												...subject,
+												classLogs: subject.classLogs.filter(
+													(classLog) => classLog.classLogId !== logId
+												),
+										  }
+										: subject
+								),
+						  }
+						: log
+				)
+			);
+		} catch (error) {
+			console.error("Error deleting class log:", error);
+			alert("Failed to delete class log. Please try again.");
+		}
+	};
+
 	const selectedSubjectName = subjects.find(
 		(subject) => subject.id === selectedSubject
 	)?.name;
@@ -154,10 +188,11 @@ const LoggedClassesOverview = ({ departmentId }) => {
 									<th>Lecture Title</th>
 									<th>Sequence</th>
 									<th>Absent Students</th>
+									<th>Actions</th>
 								</tr>
 							</thead>
 							<tbody>
-								{currentLogs.map((log, index) => (
+								{currentLogs.map((log) => (
 									<tr key={log.classLogId}>
 										<td>{new Date(log.classDate).toLocaleDateString()}</td>
 										<td>{log.subject}</td>
@@ -179,6 +214,14 @@ const LoggedClassesOverview = ({ departmentId }) => {
 													{log.absentStudents?.length || 0} absent
 												</span>
 											</div>
+										</td>
+										<td>
+											<button
+												className="delete-log-button"
+												onClick={() => handleDeleteLog(log.classLogId)}
+											>
+												<FontAwesomeIcon icon={faTrash} />
+											</button>
 										</td>
 									</tr>
 								))}

@@ -206,3 +206,15 @@
 	color: #333;
 	height: 36px;
 }
+
+.delete-log-button {
+	background: transparent;
+	border: none;
+	color: #dc3545;
+	cursor: pointer;
+	font-size: 0.8rem;
+}
+
+.delete-log-button:hover {
+	color: #a71d2a;
+}

@@ -6,11 +6,12 @@ export const ClassLogsContext = createContext();
 
 export const ClassLogsProvider = ({ children }) => {
 	const { user } = useAuth();
-	const { classLogs, fetchClassLogs, loading, error } = useClassLogs(user);
+	const { classLogs, fetchClassLogs, loading, error, setClassLogs } =
+		useClassLogs(user);
 
 	return (
 		<ClassLogsContext.Provider
-			value={{ classLogs, fetchClassLogs, loading, error }}
+			value={{ classLogs, fetchClassLogs, setClassLogs, loading, error }}
 		>
 			{children}
 		</ClassLogsContext.Provider>

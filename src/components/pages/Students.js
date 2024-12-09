@@ -29,7 +29,8 @@ const Students = () => {
 				/>
 			)} */}
 
-			<StudentInsight />
+			{/* <StudentInsight /> */}
+			<h1>Coming soon</h1>
 		</div>
 	);
 };
