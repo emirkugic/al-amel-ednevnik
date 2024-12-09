@@ -165,11 +165,20 @@ const LoggedClassesOverview = ({ departmentId }) => {
 										<td>{log.lectureTitle}</td>
 										<td>{log.sequence}</td>
 										<td>
-											{log.absentStudents.length > 0
-												? log.absentStudents
-														.map((student) => student.name)
-														.join(", ")
-												: "All present"}
+											<div
+												className="attendance-info"
+												data-tooltip={`${
+													(log.absentStudents &&
+														log.absentStudents
+															.map((student) => student.name)
+															.join("\n")) ||
+													"All present"
+												}`}
+											>
+												<span className="absent-count">
+													{log.absentStudents?.length || 0} absent
+												</span>
+											</div>
 										</td>
 									</tr>
 								))}
