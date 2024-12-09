@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import authApi from "../api/authApi";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 export const AuthContext = createContext();
 
@@ -15,14 +15,24 @@ export const AuthProvider = ({ children }) => {
 		const storedUser = JSON.parse(localStorage.getItem("user"));
 		if (storedUser && storedUser.token) {
 			const decodedToken = jwtDecode(storedUser.token);
-			const userWithRoleAndId = {
-				...storedUser,
-				role: decodedToken.role,
-				id: decodedToken.unique_name,
-			};
-			setUser(userWithRoleAndId);
-			setAssignedSubjects(storedUser.assignedSubjects || []);
-			setTimetable(storedUser.timetable || []);
+
+			// Check if the token is expired
+			if (decodedToken.exp * 1000 < Date.now()) {
+				logout();
+			} else {
+				const userWithRoleAndId = {
+					...storedUser,
+					role: decodedToken.role,
+					id: decodedToken.unique_name,
+				};
+				setUser(userWithRoleAndId);
+				setAssignedSubjects(storedUser.assignedSubjects || []);
+				setTimetable(storedUser.timetable || []);
+
+				// Set a timeout to automatically log out the user when the token expires
+				const timeout = decodedToken.exp * 1000 - Date.now();
+				setTimeout(logout, timeout);
+			}
 		}
 	}, []);
 
@@ -43,6 +53,11 @@ export const AuthProvider = ({ children }) => {
 			"user",
 			JSON.stringify({ ...userWithRoleAndId, ...data })
 		);
+
+		//automatically log out the user when the token expires
+		const timeout = decodedToken.exp * 1000 - Date.now();
+		setTimeout(logout, timeout);
+
 		navigate("/");
 	};
 
