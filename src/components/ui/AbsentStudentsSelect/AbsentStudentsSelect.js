@@ -1,14 +1,7 @@
-// React Imports
 import React from "react";
-
-// Third-party Components
 import CreatableSelect from "react-select/creatable";
-
-// Icon Imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
-
-// Style Imports
 import "./AbsentStudentsSelect.css";
 
 const AbsentStudentsSelect = ({
@@ -20,8 +13,11 @@ const AbsentStudentsSelect = ({
 	setNotification,
 }) => {
 	const addAbsentStudent = (option) => {
-		if (option && !absentStudents.includes(option.value)) {
-			setAbsentStudents((prev) => [...prev, option.value]);
+		if (
+			option &&
+			!absentStudents.some((student) => student.value === option.value)
+		) {
+			setAbsentStudents((prev) => [...prev, option]);
 			setStudentInput(null);
 			setNotification("");
 		} else {
@@ -58,7 +54,7 @@ const AbsentStudentsSelect = ({
 			/>
 			{absentStudents.map((student, index) => (
 				<div key={index} className="student-name">
-					{student}
+					{student.label}
 					<button
 						onClick={() => removeAbsentStudent(index)}
 						className="remove-student-btn"

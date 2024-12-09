@@ -21,6 +21,7 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 	const [classSequence, setClassSequence] = useState("");
 	const [notification, setNotification] = useState("");
 	const [studentOptions, setStudentOptions] = useState([]);
+	const [studentInput, setStudentInput] = useState(null); // Added for handling input
 	const { user } = useAuth();
 
 	useEffect(() => {
@@ -54,17 +55,16 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 			return;
 		}
 
-		// Construct the class log data with optional sequence
 		const classLogData = {
 			departmentId,
 			subjectId,
 			teacherId: user?.id,
 			lectureTitle,
-			lectureType: "Lecture", // Assuming this is static
+			lectureType: "Lecture",
 			classDate: new Date().toISOString(),
 			period: classHour,
 			absentStudentIds: absentStudents.map((s) => s.value),
-			...(classSequence && { sequence: parseInt(classSequence, 10) }), // Optional sequence
+			...(classSequence && { sequence: parseInt(classSequence, 10) }),
 		};
 		console.log("Class log data:", classLogData);
 		try {
@@ -122,6 +122,9 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 					studentOptions={studentOptions}
 					absentStudents={absentStudents}
 					setAbsentStudents={setAbsentStudents}
+					studentInput={studentInput}
+					setStudentInput={setStudentInput}
+					setNotification={setNotification}
 				/>
 
 				<div className="button-container">

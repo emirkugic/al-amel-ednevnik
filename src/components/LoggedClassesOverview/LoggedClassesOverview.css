@@ -156,8 +156,8 @@
 }
 
 .absent-count {
-	font-size: 0.9em; /* Matches other table cell text size */
-	color: #333; /* Matches other text color in table cells */
+	font-size: 0.9em;
+	color: #333;
 }
 
 .attendance-info:hover::after {
