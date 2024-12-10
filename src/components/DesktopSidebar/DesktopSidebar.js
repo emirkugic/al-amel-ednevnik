@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import {
+	faBars,
+	faTimes,
 	faChartLine,
-	faCog,
-	faQuestionCircle,
 	faSignOutAlt,
 	faHouse,
 	faPeopleGroup,
-	faClock,
 	faBookOpen,
 	faBook,
 	faChalkboardTeacher,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DesktopSidebarButton from "../ui/DesktopSidebarButton/DesktopSidebarButton";
 import useAuth from "../../hooks/useAuth";
 import teacherApi from "../../api/teacherApi";
@@ -26,6 +26,7 @@ const DesktopSidebar = () => {
 	const [myCourses, setMyCourses] = useState([]);
 	const [myDepartments, setMyDepartments] = useState([]);
 	const [loadingCourses, setLoadingCourses] = useState(true);
+	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 	useEffect(() => {
 		const fetchMyCourses = async () => {
@@ -36,27 +37,23 @@ const DesktopSidebar = () => {
 
 				setLoadingCourses(true);
 
-				// Fetch teacher data
 				const teacherData = await teacherApi.getTeacherById(
 					user.id,
 					user.token
 				);
 
-				// Fetch subject details for assigned subjects
 				const subjectPromises = teacherData.assignedSubjects.map((subject) =>
 					subjectApi.getSubjectById(subject.subjectId, user.token)
 				);
 
 				const resolvedSubjects = await Promise.all(subjectPromises);
 
-				// Map subjects to the sidebar route format
 				const courseList = resolvedSubjects.map((subject) => ({
 					title: subject.name,
 					path: `/courses/${subject.id}`,
 				}));
 				setMyCourses(courseList);
 
-				// Fetch only the relevant departments
 				const uniqueDepartmentIds = [
 					...new Set(
 						teacherData.assignedSubjects.flatMap(
@@ -144,38 +141,58 @@ const DesktopSidebar = () => {
 		}
 	}, [location.pathname, menuItems]);
 
-	const handleButtonClick = (title) => {
+	const handleButtonClick = (title, route) => {
 		setActiveItem(title);
+		if (window.innerWidth <= 768) {
+			setIsSidebarOpen(false);
+		}
 	};
 
 	const handleLogout = () => {
 		logout();
+		if (window.innerWidth <= 768) {
+			setIsSidebarOpen(false);
+		}
+	};
+
+	const toggleSidebar = () => {
+		setIsSidebarOpen((prev) => !prev);
 	};
 
 	return (
-		<div className="desktop-sidebar">
-			<div className="sidebar-menu">
-				{menuItems.map((item) => (
-					<DesktopSidebarButton
-						key={item.title}
-						title={item.title}
-						icon={item.icon}
-						route={item.route}
-						isActive={activeItem === item.title}
-						onClick={() => handleButtonClick(item.title)}
-					/>
-				))}
-			</div>
-			<div className="logout-container">
-				<DesktopSidebarButton
-					title="Logout"
-					icon={faSignOutAlt}
-					route="/login"
-					isActive={false}
-					onClick={handleLogout}
+		<>
+			<div className="topbar">
+				<FontAwesomeIcon
+					icon={isSidebarOpen ? faTimes : faBars}
+					className="hamburger-icon"
+					onClick={toggleSidebar}
 				/>
+				<span className="topbar-title">Dashboard</span>
 			</div>
-		</div>
+			<div className={`desktop-sidebar ${isSidebarOpen ? "open" : ""}`}>
+				<div className="sidebar-menu">
+					{menuItems.map((item) => (
+						<DesktopSidebarButton
+							key={item.title}
+							title={item.title}
+							icon={item.icon}
+							route={item.route}
+							isActive={activeItem === item.title}
+							onClick={() => handleButtonClick(item.title, item.route)}
+						/>
+					))}
+				</div>
+				<div className="logout-container">
+					<DesktopSidebarButton
+						title="Logout"
+						icon={faSignOutAlt}
+						route="/login"
+						isActive={false}
+						onClick={handleLogout}
+					/>
+				</div>
+			</div>
+		</>
 	);
 };
 
