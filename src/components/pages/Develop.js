@@ -80,6 +80,11 @@ const Develop = () => {
 			<PrimaryButton title="Primary Button" />
 			<SecondaryButton title="Secondary Button" />
 			<TextInput label="Text Input" placeholder="Enter text here" />
+			<TextInput
+				label={"Password"}
+				type="password"
+				placeholder="Enter password"
+			/>
 			<DropdownSelect
 				label="Dropdown Select"
 				placeholder="Select an option"

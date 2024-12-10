@@ -1,4 +1,10 @@
-.form-group input[type="text"] {
+.form-group {
+	width: 100%;
+	margin-bottom: 16px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
 	width: 100%;
 	padding: 8px;
 	border: 1px solid #ccc;
@@ -10,8 +16,8 @@
 	display: flex;
 	align-items: center;
 	font-weight: bold;
-	/* margin-bottom: 0px; */
 	font-size: 16px;
+	margin-bottom: 8px;
 }
 
 .header-icon {
@@ -20,26 +26,33 @@
 	color: #343a40;
 }
 
-.input-container {
+.text-input-container {
 	position: relative;
 	display: flex;
 	align-items: center;
+	width: 100%;
 }
 
 .text-input {
 	width: 100%;
-	padding: 8px 12px; /* Match the padding used by react-select */
+	padding: 8px 36px 8px 12px; /* Adjust padding for the icon */
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	font-size: 16px;
-	height: 39px; /* Ensure a consistent height with the dropdown */
-	box-sizing: border-box; /* Include padding and border in height calculation */
+	height: 39px;
+	box-sizing: border-box;
 }
 
 .password-toggle-icon {
 	position: absolute;
-	right: 10px;
+	right: 12px; /* Adjust this to align the icon horizontally */
+	top: 55%;
+	transform: translateY(-50%);
 	cursor: pointer;
 	color: #999;
 	font-size: 18px;
+}
+
+.password-toggle-icon:hover {
+	color: #555;
 }

@@ -13,7 +13,6 @@ const TextInput = ({
 }) => {
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-	// Toggle the password visibility
 	const togglePasswordVisibility = () => {
 		setIsPasswordVisible(!isPasswordVisible);
 	};
