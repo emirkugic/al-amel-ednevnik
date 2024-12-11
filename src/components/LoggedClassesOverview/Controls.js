@@ -18,6 +18,7 @@ const Controls = ({
 				value={selectedSubject}
 				onChange={(e) => setSelectedSubject(e.target.value)}
 				disabled={subjects.length <= 1}
+				aria-label="Select Subject"
 			>
 				{subjects.map((subject) => (
 					<option key={subject.id} value={subject.id}>
@@ -25,19 +26,33 @@ const Controls = ({
 					</option>
 				))}
 			</select>
-			<input
-				type="text"
-				placeholder="Search by subject, lecture title, or students..."
-				value={searchQuery}
-				onChange={(e) => setSearchQuery(e.target.value)}
-			/>
-			<button onClick={toggleSortOrder} className="sort-button">
-				{sortOrder === "asc" ? "Oldest First" : "Newest First"}
-			</button>
-			<button className="export-button">Export Logs</button>
+
 			<button className="log-class-button" onClick={handleLogClass}>
 				Log class
 			</button>
+
+			<input
+				type="text"
+				placeholder="Search..."
+				value={searchQuery}
+				onChange={(e) => setSearchQuery(e.target.value)}
+				aria-label="Search"
+				className="search-input"
+			/>
+
+			<div className="sort-export-group">
+				<button
+					onClick={toggleSortOrder}
+					className="sort-button"
+					aria-label="Toggle Sort Order"
+				>
+					{sortOrder === "asc" ? "Oldest First" : "Newest First"}
+				</button>
+
+				<button className="export-button" aria-label="Export Logs">
+					Export
+				</button>
+			</div>
 		</div>
 	);
 };

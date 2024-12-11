@@ -1,18 +1,71 @@
 .controls {
 	display: flex;
+	flex-wrap: wrap;
 	gap: 10px;
-	align-items: center;
 	margin-bottom: 15px;
+	align-items: center;
+	justify-content: flex-start;
 }
 
-.controls input[type="text"] {
-	flex-grow: 1;
+.subject-dropdown {
+	padding: 10px;
+	border-radius: 6px;
+	border: 1px solid #ddd;
+	font-size: 0.9em;
+	cursor: pointer;
+	width: 140px;
+	color: #333;
+	height: 36px;
+	background-color: #fff;
+}
+
+.log-class-button {
+	background-color: #04abfd;
+	color: white;
+	border: none;
+	padding: 10px 15px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-weight: bold;
+	transition: background-color 0.3s;
+	white-space: nowrap;
+}
+
+.log-class-button:hover {
+	background-color: #316fc5;
+}
+
+.search-input {
+	flex: 1 1 auto;
+	min-width: 180px;
 	padding: 8px;
 	border-radius: 6px;
 	border: 1px solid #ddd;
 	font-size: 0.9em;
 	height: 36px;
-	margin-bottom: 4px;
+	/*? Don't remove this margin-top: -0px, I don't know why but it looks better with this */
+	margin-top: -0px;
+}
+
+.sort-export-group {
+	display: flex;
+	gap: 10px;
+}
+
+.sort-button {
+	background-color: #04abfd;
+	color: white;
+	border: none;
+	padding: 10px 15px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-weight: bold;
+	transition: background-color 0.3s;
+	white-space: nowrap;
+}
+
+.sort-button:hover {
+	background-color: #316fc5;
 }
 
 .export-button {
@@ -25,50 +78,43 @@
 	font-weight: bold;
 	transition: background-color 0.3s;
 	height: 36px;
+	white-space: nowrap;
 }
 
 .export-button:hover {
 	background-color: #316fc5;
 }
 
-.sort-button {
-	background-color: #04abfd;
-	color: white;
-	border: none;
-	padding: 10px 15px;
-	border-radius: 6px;
-	cursor: pointer;
-	font-weight: bold;
-	transition: background-color 0.3s;
-	margin-left: 10px;
-}
+@media (max-width: 600px) {
+	.controls {
+		flex-direction: column;
+		align-items: stretch;
+	}
 
-.sort-button:hover {
-	background-color: #316fc5;
-}
+	.subject-dropdown,
+	.log-class-button {
+		width: 100%;
+	}
 
-.log-class-button {
-	background-color: #04abfd;
-	color: white;
-	border: none;
-	padding: 10px 15px;
-	border-radius: 6px;
-	cursor: pointer;
-	font-weight: bold;
-	transition: background-color 0.3s;
-}
+	.subject-dropdown {
+		margin-bottom: 10px;
+	}
 
-.log-class-button:hover {
-	background-color: #316fc5;
-}
+	.search-input {
+		/* width: 100%;
+		margin-bottom: 10px; */
+		/* TODO: fix width not being 100% :( */
+		display: none;
+	}
 
-.subject-dropdown {
-	padding: 10px;
-	border-radius: 6px;
-	border: 1px solid #ddd;
-	font-size: 0.9em;
-	cursor: pointer;
-	width: 140px;
-	color: #333;
-	height: 36px;
+	.sort-export-group {
+		width: 100%;
+	}
+
+	.sort-button,
+	.export-button {
+		flex: 1;
+		width: auto;
+		display: inline-block;
+	}
 }
