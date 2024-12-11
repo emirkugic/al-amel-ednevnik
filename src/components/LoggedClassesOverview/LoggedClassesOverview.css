@@ -11,3 +11,13 @@
 	flex-direction: column;
 	height: 89vh;
 }
+
+@media (max-width: 600px) {
+	.logged-classes-overview {
+		height: 100%;
+	}
+}
+
+.pagination {
+	margin-top: auto;
+}

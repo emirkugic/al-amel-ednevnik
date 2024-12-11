@@ -49,7 +49,6 @@ const LoggedClassesOverview = ({ departmentId }) => {
 
 				setSubjects(subjectsList);
 
-				// Automatically select the first subject
 				if (subjectsList.length > 0) {
 					setSelectedSubject(subjectsList[0].id);
 				}

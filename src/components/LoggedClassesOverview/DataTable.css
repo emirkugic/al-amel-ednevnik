@@ -1,9 +1,14 @@
+.data-table-wrapper {
+	position: relative;
+}
+
+/* Desktop (default) */
 .data-table-container {
 	flex-grow: 1;
-	overflow-y: auto;
 	border-top: 1px solid #eee;
 	border-bottom: 1px solid #eee;
 	margin-top: 10px;
+	overflow: hidden;
 }
 
 .log-table {
@@ -23,4 +28,56 @@
 .log-table th {
 	font-weight: bold;
 	color: #666;
+}
+
+/* The mobile log list is hidden by default on large screens */
+.log-list {
+	display: none;
+}
+
+/* Mobile view (max-width: 600px): Hide the table, show the list */
+@media (max-width: 600px) {
+	.data-table-container {
+		display: none; /* Hide table on mobile */
+	}
+
+	.log-list {
+		display: block;
+		margin-top: 10px;
+	}
+
+	.log-list-item {
+		background: #fff;
+		border: 1px solid #eee;
+		border-radius: 8px;
+		padding: 15px;
+		margin-bottom: 15px;
+		cursor: pointer;
+	}
+
+	.log-item-row {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 5px;
+	}
+
+	.log-item-label {
+		font-weight: bold;
+		margin-right: 10px;
+		color: #333;
+		font-size: 0.9em;
+	}
+
+	.log-item-row span:last-child {
+		color: #444;
+		font-size: 0.9em;
+	}
+
+	.log-item-more {
+		text-align: right;
+		color: #04abfd;
+		font-size: 0.85em;
+		margin-top: 5px;
+		font-style: italic;
+	}
 }
