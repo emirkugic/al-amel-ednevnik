@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
 	faClock,
 	faChalkboardTeacher,
@@ -12,6 +12,7 @@ import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
 import classLogApi from "../../api/classLogApi";
 import studentApi from "../../api/studentApi";
 import useAuth from "../../hooks/useAuth";
+import { ClassLogsContext } from "../../contexts/ClassLogsContext";
 import "./ClassLogFormModal.css";
 
 const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
@@ -21,8 +22,8 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 	const [classSequence, setClassSequence] = useState("");
 	const [notification, setNotification] = useState("");
 	const [studentOptions, setStudentOptions] = useState([]);
-	const [studentInput, setStudentInput] = useState(null); // Added for handling input
 	const { user } = useAuth();
+	const { setClassLogs } = useContext(ClassLogsContext);
 
 	useEffect(() => {
 		const fetchStudents = async () => {
@@ -66,9 +67,39 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 			absentStudentIds: absentStudents.map((s) => s.value),
 			...(classSequence && { sequence: parseInt(classSequence, 10) }),
 		};
-		console.log("Class log data:", classLogData);
+
 		try {
-			await classLogApi.createClassLogWithAbsences(classLogData, user.token);
+			const newClassLog = await classLogApi.createClassLogWithAbsences(
+				classLogData,
+				user.token
+			);
+
+			// Update the context with the new log
+			setClassLogs((prevLogs) =>
+				prevLogs.map((log) =>
+					log.departmentId === departmentId
+						? {
+								...log,
+								subjects: log.subjects.map((subject) =>
+									subject.subjectId === subjectId
+										? {
+												...subject,
+												classLogs: [
+													...subject.classLogs,
+													{
+														...newClassLog, // Use the full object returned by the API
+														classLogId: newClassLog.id, // Map `id` to `classLogId` for consistency
+														subjectName: subject.name,
+													},
+												],
+										  }
+										: subject
+								),
+						  }
+						: log
+				)
+			);
+
 			setNotification("Class log created successfully!");
 			onClose();
 		} catch (error) {
@@ -122,9 +153,6 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 					studentOptions={studentOptions}
 					absentStudents={absentStudents}
 					setAbsentStudents={setAbsentStudents}
-					studentInput={studentInput}
-					setStudentInput={setStudentInput}
-					setNotification={setNotification}
 				/>
 
 				<div className="button-container">

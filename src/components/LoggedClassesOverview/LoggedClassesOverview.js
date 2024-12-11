@@ -110,9 +110,9 @@ const LoggedClassesOverview = ({ departmentId }) => {
 
 	const handleDeleteLog = async (logId) => {
 		if (!window.confirm("Are you sure you want to delete this log?")) return;
+
 		try {
-			await classLogApi.deleteClassLog(logId, user.token); // Replace with your delete API
-			// Update the classLogs context after deletion
+			await classLogApi.deleteClassLog(logId, user.token);
 			setClassLogs((prevLogs) =>
 				prevLogs.map((log) =>
 					log.departmentId === departmentId
