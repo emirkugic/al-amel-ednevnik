@@ -1,0 +1,49 @@
+.delete-log-button {
+	background: transparent;
+	border: none;
+	color: #dc3545;
+	cursor: pointer;
+	font-size: 0.8rem;
+}
+
+.delete-log-button:hover {
+	color: #a71d2a;
+}
+
+.attendance-info {
+	position: relative;
+	cursor: pointer;
+	display: inline-block;
+}
+
+.attendance-info::after {
+	content: attr(data-tooltip);
+	position: absolute;
+	top: 50%;
+	right: 110%;
+	transform: translateY(-50%);
+	background-color: #333;
+	color: #fff;
+	padding: 10px;
+	border-radius: 6px;
+	white-space: pre-wrap;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	font-size: 0.9em;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+	min-width: 170%;
+	max-width: 300px;
+	z-index: 10;
+	text-align: left;
+}
+
+.attendance-info:hover::after {
+	opacity: 1;
+	visibility: visible;
+}
+
+.absent-count {
+	font-size: 0.9em;
+	color: #333;
+}

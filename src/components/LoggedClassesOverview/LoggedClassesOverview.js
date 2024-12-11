@@ -5,9 +5,10 @@ import teacherApi from "../../api/teacherApi";
 import subjectApi from "../../api/subjectApi";
 import useAuth from "../../hooks/useAuth";
 import { ClassLogsContext } from "../../contexts/ClassLogsContext";
-import classLogApi from "../../api/classLogApi"; // Add API for delete functionality
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import classLogApi from "../../api/classLogApi";
+import Controls from "./Controls";
+import DataTable from "./DataTable";
+import Pagination from "./Pagination";
 
 const LoggedClassesOverview = ({ departmentId }) => {
 	const { user } = useAuth();
@@ -150,117 +151,30 @@ const LoggedClassesOverview = ({ departmentId }) => {
 			{error && <p>Error: {error}</p>}
 			{!loading && !error && (
 				<>
-					<div className="controls">
-						<select
-							className="subject-dropdown"
-							value={selectedSubject}
-							onChange={(e) => setSelectedSubject(e.target.value)}
-							disabled={subjects.length <= 1}
-						>
-							{subjects.map((subject) => (
-								<option key={subject.id} value={subject.id}>
-									{subject.name}
-								</option>
-							))}
-						</select>
-						<input
-							type="text"
-							placeholder="Search by subject, lecture title, or students..."
-							value={searchQuery}
-							onChange={(e) => setSearchQuery(e.target.value)}
-						/>
-						<button onClick={toggleSortOrder} className="sort-button">
-							{sortOrder === "asc" ? "Oldest First" : "Newest First"}
-						</button>
-						<button className="export-button">Export Logs</button>
-						<button className="log-class-button" onClick={handleLogClass}>
-							Log class
-						</button>
-					</div>
+					<Controls
+						subjects={subjects}
+						selectedSubject={selectedSubject}
+						setSelectedSubject={setSelectedSubject}
+						searchQuery={searchQuery}
+						setSearchQuery={setSearchQuery}
+						sortOrder={sortOrder}
+						toggleSortOrder={toggleSortOrder}
+						handleLogClass={handleLogClass}
+					/>
 
-					<div className="data-table-container">
-						<table className="log-table">
-							<thead>
-								<tr>
-									<th>Date</th>
-									<th>Subject</th>
-									<th>Period</th>
-									<th>Lecture Title</th>
-									<th>Sequence</th>
-									<th>Absent Students</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								{currentLogs.map((log) => (
-									<tr key={log.classLogId}>
-										<td>{new Date(log.classDate).toLocaleDateString()}</td>
-										<td>{log.subject}</td>
-										<td>{log.period}</td>
-										<td>{log.lectureTitle}</td>
-										<td>{log.sequence}</td>
-										<td>
-											<div
-												className="attendance-info"
-												data-tooltip={`${
-													(log.absentStudents &&
-														log.absentStudents
-															.map((student) => student.name)
-															.join("\n")) ||
-													"All present"
-												}`}
-											>
-												<span className="absent-count">
-													{log.absentStudents?.length || 0} absent
-												</span>
-											</div>
-										</td>
-										<td>
-											<button
-												className="delete-log-button"
-												onClick={() => handleDeleteLog(log.classLogId)}
-											>
-												<FontAwesomeIcon icon={faTrash} />
-											</button>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
+					<DataTable
+						currentLogs={currentLogs}
+						handleDeleteLog={handleDeleteLog}
+					/>
 
-					<div className="pagination">
-						<div>
-							Showing {indexOfFirstLog + 1} to{" "}
-							{Math.min(indexOfLastLog, filteredLogs.length)} of{" "}
-							{filteredLogs.length} entries
-						</div>
-						<div className="page-controls">
-							<button
-								onClick={() => handlePageChange(currentPage - 1)}
-								disabled={currentPage === 1}
-							>
-								«
-							</button>
-							{Array.from({ length: totalPages }, (_, i) => i + 1).map(
-								(page) => (
-									<button
-										key={page}
-										onClick={() => handlePageChange(page)}
-										className={page === currentPage ? "active" : ""}
-									>
-										{page}
-									</button>
-								)
-							)}
-							<button
-								onClick={() => handlePageChange(currentPage + 1)}
-								disabled={currentPage === totalPages}
-							>
-								»
-							</button>
-						</div>
-					</div>
+					<Pagination
+						currentPage={currentPage}
+						totalPages={totalPages}
+						handlePageChange={handlePageChange}
+						indexOfFirstLog={indexOfFirstLog}
+						indexOfLastLog={indexOfLastLog}
+						filteredLogsLength={filteredLogs.length}
+					/>
 
 					{isModalOpen && (
 						<ClassLogFormModal
