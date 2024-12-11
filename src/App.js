@@ -33,11 +33,12 @@ import "./App.css";
 
 const AppContent = () => {
 	const location = useLocation();
+	const isLoginPage = location.pathname === "/login";
 
 	return (
 		<div className="App">
-			{location.pathname !== "/login" && <DesktopSidebar />}
-			<div className="main-content">
+			{!isLoginPage && <DesktopSidebar />}
+			<div className={`main-content ${isLoginPage ? "no-margins" : ""}`}>
 				<Routes>
 					<Route path="/login" element={<Login />} />
 
@@ -63,7 +64,7 @@ const AppContent = () => {
 					</Route>
 				</Routes>
 			</div>
-			{location.pathname !== "/login" && <RightSidebarDesktop />}
+			{!isLoginPage && <RightSidebarDesktop />}
 		</div>
 	);
 };

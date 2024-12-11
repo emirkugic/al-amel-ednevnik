@@ -66,7 +66,7 @@ const LoginForm = () => {
 					onChange={(e) => setPassword(e.target.value)}
 					type="password"
 				/>
-				<div className="checkbox-container">
+				{/* <div className="checkbox-container">
 					<input
 						type="checkbox"
 						id="keep-logged-in"
@@ -74,7 +74,7 @@ const LoginForm = () => {
 						onChange={(e) => setKeepLoggedIn(e.target.checked)}
 					/>
 					<label htmlFor="keep-logged-in">Keep me logged in</label>
-				</div>
+				</div> */}
 				<div className="button-group">
 					<PrimaryButton title="Login" />
 					<SecondaryButton title="Cancel" onClick={handleCancel} />

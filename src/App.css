@@ -9,9 +9,13 @@
 	background-color: #f9f9f9;
 	margin-left: 160px;
 	margin-right: 350px;
-	/* height: calc(100vh - 60px); */
 	overflow-y: auto;
 	box-sizing: border-box;
+}
+
+.main-content.no-margins {
+	margin-left: 0;
+	margin-right: 0;
 }
 
 @media (max-width: 768px) {
