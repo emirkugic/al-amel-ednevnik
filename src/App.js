@@ -22,12 +22,13 @@ import Settings from "./components/pages/Settings";
 import Help from "./components/pages/Help";
 import Login from "./components/pages/Login";
 import SubjectAssessmentManagement from "./components/pages/SubjectAssessmentManagement";
-import Lectures from "./components/pages/Lectures";
 import Develop from "./components/pages/Develop";
 import Teachers from "./components/pages/Teachers";
 import Subjects from "./components/pages/Subjects";
 import Classes from "./components/pages/Classes";
 import Parents from "./components/pages/Parents";
+
+import { Lectures } from "./pages/index.js";
 
 import "./App.css";
 

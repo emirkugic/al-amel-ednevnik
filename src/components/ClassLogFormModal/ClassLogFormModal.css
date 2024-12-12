@@ -43,16 +43,19 @@
 	justify-content: space-between;
 	gap: 10px;
 	margin-bottom: 15px;
-	align-items: center; /* Ensures vertical alignment */
+	align-items: center;
 }
 
 .dropdown-select,
 .text-input {
 	flex: 1;
 }
+.text-input {
+	margin-top: -2px;
+}
 
 .text-input input {
-	height: 100%; /* Ensure the input matches the height of the dropdown */
+	height: 100%;
 	padding: 10px;
 	box-sizing: border-box;
 	border: 1px solid #ccc;
@@ -74,7 +77,6 @@
 	margin-top: 10px;
 }
 
-/* Loading bar at the top of the modal */
 .loading-bar {
 	position: absolute;
 	top: 0;
