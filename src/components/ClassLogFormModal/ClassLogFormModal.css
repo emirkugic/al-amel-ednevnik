@@ -19,6 +19,7 @@
 	width: 90%;
 	max-width: 400px;
 	font-family: Arial, sans-serif;
+	position: relative;
 }
 
 .modal-content h2 {
@@ -73,9 +74,42 @@
 	margin-top: 10px;
 }
 
-/* Responsive adjustments */
+/* Loading bar at the top of the modal */
+.loading-bar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 4px;
+	width: 0;
+	background-color: #04abfd;
+	animation: loadingAnimation 2s infinite;
+	border-radius: 2px;
+}
+
+@keyframes loadingAnimation {
+	0% {
+		width: 0;
+		left: 0;
+	}
+	50% {
+		width: 80%;
+		left: 10%;
+	}
+	100% {
+		width: 0;
+		left: 0;
+	}
+}
+
 @media (max-width: 768px) {
 	.dropdown-row {
 		flex-direction: column;
+	}
+}
+
+@media (max-width: 400px) {
+	.modal-content {
+		margin-left: 15px;
+		margin-right: 15px;
 	}
 }

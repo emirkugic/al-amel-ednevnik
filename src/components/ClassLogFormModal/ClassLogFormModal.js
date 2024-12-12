@@ -24,6 +24,7 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 	const [studentOptions, setStudentOptions] = useState([]);
 	const { user } = useAuth();
 	const { setClassLogs } = useContext(ClassLogsContext);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchStudents = async () => {
@@ -68,6 +69,7 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 			...(classSequence && { sequence: parseInt(classSequence, 10) }),
 		};
 
+		setIsLoading(true);
 		try {
 			const newClassLog = await classLogApi.createClassLogWithAbsences(
 				classLogData,
@@ -87,8 +89,8 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 												classLogs: [
 													...subject.classLogs,
 													{
-														...newClassLog, // Use the full object returned by the API
-														classLogId: newClassLog.id, // Map `id` to `classLogId` for consistency
+														...newClassLog,
+														classLogId: newClassLog.id,
 														subjectName: subject.name,
 													},
 												],
@@ -105,12 +107,16 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 		} catch (error) {
 			console.error("Error creating class log:", error);
 			setNotification("Error creating class log. Please try again.");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
 	return (
 		<div className="class-log-form-modal">
 			<div className="modal-content">
+				{isLoading && <div className="loading-bar"></div>}
+
 				<div className="dropdown-row">
 					<DropdownSelect
 						className="dropdown-select"
@@ -156,8 +162,16 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 				/>
 
 				<div className="button-container">
-					<SecondaryButton title="Cancel" onClick={onClose} />
-					<PrimaryButton title="Log Class" onClick={handleSubmit} />
+					<SecondaryButton
+						title="Cancel"
+						onClick={onClose}
+						disabled={isLoading}
+					/>
+					<PrimaryButton
+						title="Log Class"
+						onClick={handleSubmit}
+						disabled={isLoading}
+					/>
 				</div>
 			</div>
 		</div>
