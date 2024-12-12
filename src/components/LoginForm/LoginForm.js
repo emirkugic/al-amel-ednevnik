@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import TextInput from "../ui/TextInput/TextInput";
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
 import useAuth from "../../hooks/useAuth";
-import { useContext } from "react";
 import { ClassLogsContext } from "../../contexts/ClassLogsContext";
 import "./LoginForm.css";
 
@@ -15,6 +14,7 @@ const LoginForm = () => {
 	const [password, setPassword] = useState("");
 	const [keepLoggedIn, setKeepLoggedIn] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -25,12 +25,15 @@ const LoginForm = () => {
 			return;
 		}
 
+		setIsLoading(true);
 		try {
 			const user = await login(email, password);
 			await fetchClassLogs(user.token, user.id);
 		} catch (error) {
 			setErrorMessage("Login failed. Please try again.");
 			setTimeout(() => setErrorMessage(""), 3000);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -43,6 +46,7 @@ const LoginForm = () => {
 
 	return (
 		<div className="login-container">
+			{isLoading && <div className="loading-bar"></div>}
 			<img
 				src={`${process.env.PUBLIC_URL}/alamel_logo.png`}
 				alt="Logo"
@@ -76,8 +80,12 @@ const LoginForm = () => {
 					<label htmlFor="keep-logged-in">Keep me logged in</label>
 				</div> */}
 				<div className="button-group">
-					<PrimaryButton title="Login" />
-					<SecondaryButton title="Cancel" onClick={handleCancel} />
+					<PrimaryButton title="Login" disabled={isLoading} />
+					<SecondaryButton
+						title="Cancel"
+						onClick={handleCancel}
+						disabled={isLoading}
+					/>
 				</div>
 			</form>
 		</div>
