@@ -1,117 +1,229 @@
 .assessment-management {
 	font-family: Arial, sans-serif;
 	color: #333;
+	background: #fafafa;
 	padding: 20px;
-	max-width: 900px;
-	margin: auto;
-	background-color: #fff;
-	border-radius: 8px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	min-height: 100vh;
 }
 
-h2 {
-	text-align: center;
+.ram-header {
+	margin-bottom: 15px;
+}
+
+.ram-title {
+	margin: 0;
+	font-size: 2rem;
 	color: #333;
-	font-size: 1.8rem;
-	margin-bottom: 20px;
+	font-weight: 600;
 }
 
-.points-used {
-	text-align: center;
-	font-size: 1.2rem;
-	color: #04abfd;
-	margin-bottom: 10px;
-	font-weight: bold;
+.ram-subtitle {
+	margin: 5px 0 0;
+	font-size: 0.9rem;
+	color: #555;
 }
 
-.form-container {
+.ram-nav-bar {
 	display: flex;
-	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 20px;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+}
+
+.ram-tabs {
+	display: flex;
 	gap: 10px;
-	margin-bottom: 20px;
-	background-color: #f9f9f9;
-	padding: 15px;
+}
+
+.ram-tab {
+	background: transparent;
+	border: none;
+	padding: 10px 15px;
+	font-size: 0.9rem;
+	cursor: pointer;
 	border-radius: 8px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	color: #555;
+	transition: background 0.2s;
 }
 
-.form-container select,
-.form-container input,
-.form-container button {
-	padding: 10px;
-	border: 1px solid #ddd;
-	border-radius: 5px;
-	flex: 1;
-	font-size: 14px;
+.ram-tab:hover {
+	background: #f2f2f2;
 }
 
-.assessment-list {
+.ram-tab.active {
+	background: #04abfd;
+	color: #fff;
+	font-weight: 600;
+}
+
+.ram-actions {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.ram-total-points {
+	font-size: 0.9rem;
+	color: #333;
+}
+
+.ram-total-points strong {
+	color: #04abfd;
+}
+
+.ram-content {
+	background: #fff;
+	padding: 20px;
+	border-radius: 12px;
+	border: 1px solid #eee;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 	margin-top: 20px;
 }
 
-.assessment-month-card {
-	background-color: #f5f5f5;
-	border: 1px solid #ddd;
-	border-radius: 8px;
-	padding: 15px;
-	margin-bottom: 20px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.ram-month-block {
+	margin-bottom: 30px;
 }
 
-.assessment-month-card h4 {
-	margin: 0;
-	color: #333;
-	font-size: 1.2rem;
-	margin-bottom: 10px;
-	border-bottom: 1px solid #ddd;
-	padding-bottom: 5px;
-}
-
-.assessment-item {
+.ram-month-header {
 	display: flex;
-	align-items: center;
 	justify-content: space-between;
-	padding: 10px;
-	border-bottom: 1px solid #e0e0e0;
-	cursor: pointer;
+	align-items: center;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
 }
 
-.assessment-item:hover {
-	background-color: #f0f0f0;
-	border-radius: 5px;
-	transition: background-color 0.3s ease;
+.ram-month-header h3 {
+	margin: 0;
+	font-size: 1.2rem;
+	color: #333;
 }
 
-.assessment-details {
+.ram-month-points {
+	font-size: 0.9rem;
+	color: #04abfd;
+	font-weight: 600;
+}
+
+.ram-assessment-list {
 	display: flex;
 	flex-direction: column;
-	gap: 3px;
-	font-size: 0.9rem;
+	gap: 10px;
+}
+
+.ram-assessment-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
+	border: 1px solid #eee;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.ram-assessment-item:hover {
+	background: #f9f9f9;
+}
+
+.ram-assessment-title {
+	margin: 0;
+	font-size: 1rem;
+	color: #333;
+	font-weight: 600;
+}
+
+.ram-assessment-type {
+	font-size: 0.8rem;
 	color: #666;
 }
 
-.assessment-details span {
-	font-weight: 500;
-	color: #333;
-}
-
-.month-header {
+.ram-assessment-info {
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding-bottom: 5px;
-	border-bottom: 1px solid #ddd;
-	margin-bottom: 10px;
-	background-color: transparent;
+	flex-direction: column;
+	gap: 3px;
 }
 
-.month-name {
-	font-size: 1.2rem;
+.ram-assessment-points {
+	font-size: 0.9rem;
+	color: #04abfd;
+	font-weight: 600;
+}
+
+.ram-empty-month {
+	font-size: 0.9rem;
+	color: #777;
+	font-style: italic;
+	padding: 10px 0;
+}
+
+.ram-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.3);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 999;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+.ram-modal {
+	background: #fff;
+	border-radius: 10px;
+	max-width: 400px;
+	width: 100%;
+	padding: 20px;
+	position: relative;
+}
+
+.ram-modal h3 {
+	margin-top: 0;
+	margin-bottom: 20px;
+	font-size: 1.4rem;
 	color: #333;
 }
 
-.points-used-month {
-	font-size: 1.1rem;
-	color: #04abfd;
-	font-weight: bold;
+.ram-modal-form label {
+	display: block;
+	margin-bottom: 15px;
+	font-size: 0.9rem;
+	color: #333;
+}
+
+.ram-modal-form select,
+.ram-modal-form input {
+	width: 100%;
+	padding: 8px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	margin-top: 5px;
+	font-size: 0.9rem;
+}
+
+.ram-modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 20px;
+	gap: 10px;
+}
+
+.ram-cancel-btn {
+	background: transparent;
+	border: none;
+	font-size: 0.9rem;
+	color: #555;
+	cursor: pointer;
+	padding: 8px 12px;
+	border-radius: 5px;
+}
+
+.ram-cancel-btn:hover {
+	background: #eee;
 }
