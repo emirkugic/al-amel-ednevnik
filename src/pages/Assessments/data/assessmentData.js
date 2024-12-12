@@ -1,0 +1,73 @@
+export const grades = [
+	"1st Grade",
+	"2nd Grade",
+	"3rd Grade",
+	"4th Grade",
+	"5th Grade",
+	"6th Grade",
+	"7th Grade",
+	"8th Grade",
+	"9th Grade",
+	"10th Grade",
+	"11th Grade",
+	"12th Grade",
+];
+
+export const assessmentTypes = ["Exam", "Quiz", "Project", "Homework", "Oral"];
+
+export const assessments = [
+	{
+		className: "1st Grade",
+		title: "Math Quiz",
+		type: "Quiz",
+		points: 10,
+		date: "2024-09-15",
+		month: "September",
+		semesterKey: "1st Grade - First Semester",
+	},
+	{
+		className: "1st Grade",
+		title: "Math Project",
+		type: "Project",
+		points: 10,
+		date: "2024-09-28",
+		month: "September",
+		semesterKey: "1st Grade - First Semester",
+	},
+	{
+		className: "1st Grade",
+		title: "Science Exam",
+		type: "Exam",
+		points: 10,
+		date: "2024-10-10",
+		month: "October",
+		semesterKey: "1st Grade - First Semester",
+	},
+	{
+		className: "1st Grade",
+		title: "Science Homework",
+		type: "Homework",
+		points: 10,
+		date: "2024-10-20",
+		month: "October",
+		semesterKey: "1st Grade - First Semester",
+	},
+	{
+		className: "1st Grade",
+		title: "History Quiz",
+		type: "Quiz",
+		points: 10,
+		date: "2024-11-05",
+		month: "November",
+		semesterKey: "1st Grade - First Semester",
+	},
+	{
+		className: "1st Grade",
+		title: "History Project",
+		type: "Project",
+		points: 10,
+		date: "2024-11-18",
+		month: "November",
+		semesterKey: "1st Grade - First Semester",
+	},
+];

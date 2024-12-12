@@ -21,14 +21,13 @@ import Grades from "./components/pages/Grades";
 import Settings from "./components/pages/Settings";
 import Help from "./components/pages/Help";
 import Login from "./components/pages/Login";
-import SubjectAssessmentManagement from "./components/pages/SubjectAssessmentManagement";
 import Develop from "./components/pages/Develop";
 import Teachers from "./components/pages/Teachers";
 import Subjects from "./components/pages/Subjects";
 import Classes from "./components/pages/Classes";
 import Parents from "./components/pages/Parents";
 
-import { Lectures } from "./pages/index.js";
+import { Lectures, Assessments } from "./pages/index.js";
 
 import "./App.css";
 
@@ -50,7 +49,6 @@ const AppContent = () => {
 						<Route path="/schedule" element={<Schedule />} />
 						<Route path="/attendance" element={<Attendance />} />
 						<Route path="/grades" element={<Grades />} />
-						<Route path="/lectures/:departmentId" element={<Lectures />} />
 						<Route path="/settings" element={<Settings />} />
 						<Route path="/help" element={<Help />} />
 						<Route path="/develop" element={<Develop />} />
@@ -58,10 +56,9 @@ const AppContent = () => {
 						<Route path="/subjects" element={<Subjects />} />
 						<Route path="/classes" element={<Classes />} />
 						<Route path="/parents" element={<Parents />} />
-						<Route
-							path="/courses/:subject"
-							element={<SubjectAssessmentManagement />}
-						/>
+
+						<Route path="/lectures/:departmentId" element={<Lectures />} />
+						<Route path="/courses/:subject" element={<Assessments />} />
 					</Route>
 				</Routes>
 			</div>

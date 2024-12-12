@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import AssessmentManagement from "../AssessmentManagement/AssessmentManagement"; // Reuse core AssessmentManagement functionality
+import AssessmentManagement from "./components/AssessmentManagement/AssessmentManagement"; // Reuse core AssessmentManagement functionality
 
 const SubjectAssessmentManagement = () => {
 	const { subject } = useParams(); // Capture the subject name from the URL

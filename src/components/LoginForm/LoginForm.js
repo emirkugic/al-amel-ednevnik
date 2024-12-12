@@ -7,6 +7,8 @@ import useAuth from "../../hooks/useAuth";
 import { ClassLogsContext } from "../../contexts/ClassLogsContext";
 import "./LoginForm.css";
 
+import { logo } from "../../assets/";
+
 const LoginForm = () => {
 	const { login } = useAuth();
 	const { fetchClassLogs } = useContext(ClassLogsContext);
@@ -47,11 +49,7 @@ const LoginForm = () => {
 	return (
 		<div className="login-container">
 			{isLoading && <div className="loading-bar"></div>}
-			<img
-				src={`${process.env.PUBLIC_URL}/alamel_logo.png`}
-				alt="Logo"
-				className="logo"
-			/>
+			<img src={logo} alt="Logo" className="logo" />
 			{errorMessage && <p className="notification">{errorMessage}</p>}
 			<form className="login-form" onSubmit={handleLogin}>
 				<TextInput

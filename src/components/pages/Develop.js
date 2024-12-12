@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
-import AssessmentGradesModal from "../AssessmentGradesModal/AssessmentGradesModal";
-import AssessmentManagement from "../AssessmentManagement/AssessmentManagement";
+import AssessmentGradesModal from "../../pages/Assessments/components/AssessmentGradesModal/AssessmentGradesModal";
+import AssessmentManagement from "../../pages/Assessments/components/AssessmentManagement/AssessmentManagement";
 import ClassLogForm from "../ClassLogForm/ClassLogForm";
 import GradesModal from "../GradesModal/GradesModal";
 import LoginForm from "../LoginForm/LoginForm";
@@ -19,6 +19,8 @@ import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
 import SubjectPill from "../ui/SubjectPill/SubjectPill";
 import TextInput from "../ui/TextInput/TextInput";
 import DesktopSidebarButton from "../ui/DesktopSidebarButton/DesktopSidebarButton";
+
+import { logo } from "../../assets/";
 
 const Develop = () => {
 	const [isGradesModalOpen, setGradesModalOpen] = useState(false);
@@ -44,7 +46,7 @@ const Develop = () => {
 		{
 			id: 1,
 			name: "John Doe",
-			imageUrl: `${process.env.PUBLIC_URL}/alamel_logo.png`,
+			imageUrl: logo,
 		},
 	];
 	const grades = [{ subject: "Math", score: 85 }];
@@ -111,7 +113,7 @@ const Develop = () => {
 				student={{
 					id: "001",
 					name: "John Doe",
-					imageUrl: `${process.env.PUBLIC_URL}/alamel_logo.png`,
+					imageUrl: logo,
 					grades: grades,
 				}}
 				isOpen={true}
@@ -130,10 +132,7 @@ const Develop = () => {
 			<SubjectList />
 
 			<StudentCardList students={students} />
-			<StudentCard
-				name="John Doe"
-				imageUrl={`${process.env.PUBLIC_URL}/alamel_logo.png`}
-			/>
+			<StudentCard name="John Doe" imageUrl={logo} />
 
 			<ClassLogForm />
 			<LoginForm />
@@ -152,7 +151,7 @@ const Develop = () => {
 				student={{
 					id: "STU001",
 					name: "Emma Thompson",
-					imageUrl: `${process.env.PUBLIC_URL}/alamel_logo.png`,
+					imageUrl: logo,
 				}}
 				isOpen={isGradesModalOpen}
 				onClose={() => setGradesModalOpen(false)}

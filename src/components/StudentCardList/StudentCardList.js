@@ -2,6 +2,8 @@ import React from "react";
 import StudentCard from "../StudentCard/StudentCard";
 import "./StudentCardList.css";
 
+import { logo } from "../../assets/";
+
 const StudentCardList = ({ onShowGrades }) => {
 	const students = [
 		{
@@ -11,7 +13,7 @@ const StudentCardList = ({ onShowGrades }) => {
 			gpa: 3.8,
 			attendance: "95%",
 			grade: "10th Grade",
-			imageUrl: `${process.env.PUBLIC_URL}/alamel_logo.png`,
+			imageUrl: logo,
 		},
 		{
 			name: "John Doe",
@@ -20,7 +22,7 @@ const StudentCardList = ({ onShowGrades }) => {
 			gpa: 3.5,
 			attendance: "93%",
 			grade: "10th Grade",
-			imageUrl: `${process.env.PUBLIC_URL}/alamel_logo.png`,
+			imageUrl: logo,
 		},
 		{
 			name: "Sarah Connor",
@@ -29,7 +31,7 @@ const StudentCardList = ({ onShowGrades }) => {
 			gpa: 3.9,
 			attendance: "97%",
 			grade: "10th Grade",
-			imageUrl: `${process.env.PUBLIC_URL}/alamel_logo.png`,
+			imageUrl: logo,
 		},
 	];
 
