@@ -1,2 +1,2 @@
-export { default as "Lectures" } from "./Lectures/Lectures.js";
-export { default as "Assessments" } from "./Assessments/Assessments.js";
+export { default as "LecturesPage" } from "./LecturesPage/LecturesPage.js";
+export { default as "AssessmentPage" } from "./Assessments/AssessmentsPage.js";
