@@ -6,6 +6,7 @@ import {
 	assessments as initialAssessments,
 } from "../../data/assessmentData";
 import Controls from "./Controls/Controls";
+import AssessmentsAccordionList from "./AssessmentsAccordionList/AssessmentsAccordionList";
 import "./AssessmentManagement.css";
 
 const FIRST_SEMESTER_MONTHS = ["September", "October", "November", "December"];
@@ -14,7 +15,6 @@ const SECOND_SEMESTER_MONTHS = ["February", "March", "April", "May", "June"];
 const AssessmentManagement = () => {
 	const [assessments, setAssessments] = useState(initialAssessments);
 
-	// Determine current semester based on today's date
 	const today = new Date();
 	const currentMonth = today.getMonth() + 1;
 	const defaultSemester =
@@ -104,13 +104,6 @@ const AssessmentManagement = () => {
 
 	return (
 		<div className="assessment-management">
-			<div className="ram-header">
-				<h2 className="ram-title">Assessments</h2>
-				<p className="ram-subtitle">
-					Manage and track assessments by class and semester
-				</p>
-			</div>
-
 			<div className="ram-container">
 				{/* Tabs Row */}
 				<div className="ram-tab-row">
@@ -154,49 +147,12 @@ const AssessmentManagement = () => {
 					/>
 				</div>
 
-				{/* Assessments List */}
-				<div className="ram-content">
-					{monthsToDisplay.map((month) => {
-						const monthAssessments = groupedAssessments[month] || [];
-						return (
-							<div key={month} className="ram-month-block">
-								<div className="ram-month-header">
-									<h3>{month}</h3>
-									<span className="ram-month-points">
-										{monthAssessments.reduce((sum, a) => sum + a.points, 0)} pts
-									</span>
-								</div>
-								{monthAssessments.length === 0 ? (
-									<div className="ram-empty-month">
-										No assessments this month
-									</div>
-								) : (
-									<div className="ram-assessment-list">
-										{monthAssessments.map((assessment, idx) => (
-											<div
-												key={idx}
-												className="ram-assessment-item"
-												onClick={() => openGradesModal(assessment)}
-											>
-												<div className="ram-assessment-info">
-													<h4 className="ram-assessment-title">
-														{assessment.title}
-													</h4>
-													<span className="ram-assessment-type">
-														{assessment.type}
-													</span>
-												</div>
-												<div className="ram-assessment-points">
-													{assessment.points} pts
-												</div>
-											</div>
-										))}
-									</div>
-								)}
-							</div>
-						);
-					})}
-				</div>
+				{/* Assessments Accordion List */}
+				<AssessmentsAccordionList
+					monthsToDisplay={monthsToDisplay}
+					groupedAssessments={groupedAssessments}
+					openGradesModal={openGradesModal}
+				/>
 			</div>
 
 			{isGradesModalOpen && (

@@ -1,11 +1,3 @@
-.assessment-management {
-	font-family: Arial, sans-serif;
-	color: #333;
-	background: #fafafa;
-	padding: 20px;
-	min-height: 100vh;
-}
-
 .ram-header {
 	margin-bottom: 15px;
 }
@@ -24,22 +16,18 @@
 }
 
 .ram-container {
-	background: #fff;
 	border-radius: 12px;
-	border: 1px solid #eee;
-	margin-top: 20px;
 	overflow: hidden;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 	display: flex;
 	flex-direction: column;
+	padding: 10px;
 }
 
 .ram-tab-row {
-	background: #f9f9f9;
 	display: flex;
 	align-items: flex-end;
 	border-bottom: 1px solid #ddd;
-	padding-left: 10px;
+	/* padding-left: 10px; */
 }
 
 .ram-tabs {
@@ -50,7 +38,7 @@
 }
 
 .ram-tab {
-	background: #f9f9f9;
+	background: #f2f2f2;
 	border: none;
 	padding: 10px 15px;
 	font-size: 0.9rem;
