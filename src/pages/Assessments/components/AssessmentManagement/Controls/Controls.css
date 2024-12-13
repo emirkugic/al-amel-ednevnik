@@ -1,0 +1,25 @@
+.controls-container {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.controls-container select,
+.controls-container input {
+	padding: 8px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	font-size: 0.9rem;
+}
+
+.controls-total-points {
+	font-size: 0.9rem;
+	color: #333;
+	margin-left: auto;
+	margin-right: 10px;
+}
+
+.controls-total-points strong {
+	color: #04abfd;
+}
