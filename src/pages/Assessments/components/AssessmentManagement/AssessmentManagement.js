@@ -16,8 +16,8 @@ const SECOND_SEMESTER_MONTHS = ["February", "March", "April", "May", "June"];
 const AssessmentManagement = () => {
 	const { subject } = useParams();
 
-	console.log("Route URL:", window.location.pathname); // Logs the route URL
-	console.log("Course ID from Params:", subject); // Logs the course_id from URL params
+	// console.log("Route URL:", window.location.pathname); // Logs the route URL
+	// console.log("Course ID from Params:", subject); // Logs the course_id from URL params
 
 	const [assessments, setAssessments] = useState(initialAssessments);
 
