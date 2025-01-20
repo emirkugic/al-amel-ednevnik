@@ -145,14 +145,13 @@ const AssessmentManagement = () => {
 						totalPoints={totalPoints}
 						addAssessment={addAssessment}
 					/>
+					{/* Assessments Accordion List */}
+					<AssessmentsAccordionList
+						monthsToDisplay={monthsToDisplay}
+						groupedAssessments={groupedAssessments}
+						openGradesModal={openGradesModal}
+					/>
 				</div>
-
-				{/* Assessments Accordion List */}
-				<AssessmentsAccordionList
-					monthsToDisplay={monthsToDisplay}
-					groupedAssessments={groupedAssessments}
-					openGradesModal={openGradesModal}
-				/>
 			</div>
 
 			{isGradesModalOpen && (
