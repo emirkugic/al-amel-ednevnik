@@ -1,67 +1,57 @@
 import React from "react";
+import useAuth from "../../../../../hooks/useAuth";
 import PrimaryButton from "../../../../../components/ui/PrimaryButton/PrimaryButton";
 import "./Controls.css";
 
-const Controls = ({
-	grades,
-	assessmentTypes,
-	className,
-	setClassName,
-	title,
-	setTitle,
-	type,
-	setType,
-	points,
-	setPoints,
-	date,
-	setDate,
-	totalPoints,
-	addAssessment,
-}) => {
+const Controls = ({ course_id }) => {
+	const { assignedSubjects } = useAuth();
+
+	console.log("Assigned Subjects:", assignedSubjects);
+	console.log("Course ID:", course_id);
+
+	if (!assignedSubjects || assignedSubjects.length === 0) {
+		return <div>Loading assigned subjects...</div>;
+	}
+
+	const currentSubject = assignedSubjects.find(
+		(subject) => subject.subjectId === course_id
+	);
+
+	if (!currentSubject) {
+		return <div>No subject found for the given course ID.</div>;
+	}
+
+	const departmentIds = currentSubject.departmentId || [];
+
 	return (
 		<div className="controls-container">
-			<select value={className} onChange={(e) => setClassName(e.target.value)}>
-				{grades.map((grade) => (
-					<option key={grade} value={grade}>
-						{grade}
+			<select>
+				{departmentIds.map((deptId) => (
+					<option key={deptId} value={deptId}>
+						{deptId}
 					</option>
 				))}
 			</select>
 
-			<input
-				type="text"
-				placeholder="Title"
-				value={title}
-				onChange={(e) => setTitle(e.target.value)}
-			/>
+			<input type="text" placeholder="Title" />
 
-			<select value={type} onChange={(e) => setType(e.target.value)}>
-				{assessmentTypes.map((t) => (
-					<option key={t} value={t}>
-						{t}
+			<select>
+				{["Exam", "Quiz", "Project", "Homework", "Oral"].map((type) => (
+					<option key={type} value={type}>
+						{type}
 					</option>
 				))}
 			</select>
 
-			<input
-				type="number"
-				placeholder="Points"
-				value={points}
-				onChange={(e) => setPoints(e.target.value)}
-				max="100"
-			/>
+			<input type="number" placeholder="Points" max="100" />
 
-			<input
-				type="date"
-				value={date}
-				onChange={(e) => setDate(e.target.value)}
-			/>
+			<input type="date" />
 
 			<span className="controls-total-points">
-				Used: <strong>{totalPoints} / 100</strong>
+				Used: <strong>0 / 100</strong>
 			</span>
 
-			<PrimaryButton title="Add Assessment" onClick={addAssessment} />
+			<PrimaryButton title="Add Assessment" />
 		</div>
 	);
 };

@@ -1,18 +1,24 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import Controls from "./Controls/Controls";
+import AssessmentsAccordionList from "./AssessmentsAccordionList/AssessmentsAccordionList";
 import AssessmentGradesModal from "../AssessmentGradesModal/AssessmentGradesModal";
 import {
 	grades,
 	assessmentTypes,
 	assessments as initialAssessments,
 } from "../../data/assessmentData";
-import Controls from "./Controls/Controls";
-import AssessmentsAccordionList from "./AssessmentsAccordionList/AssessmentsAccordionList";
 import "./AssessmentManagement.css";
 
 const FIRST_SEMESTER_MONTHS = ["September", "October", "November", "December"];
 const SECOND_SEMESTER_MONTHS = ["February", "March", "April", "May", "June"];
 
 const AssessmentManagement = () => {
+	const { subject } = useParams();
+
+	console.log("Route URL:", window.location.pathname); // Logs the route URL
+	console.log("Course ID from Params:", subject); // Logs the course_id from URL params
+
 	const [assessments, setAssessments] = useState(initialAssessments);
 
 	const today = new Date();
@@ -29,7 +35,6 @@ const AssessmentManagement = () => {
 	const [type, setType] = useState("Exam");
 	const [points, setPoints] = useState("");
 	const [date, setDate] = useState(new Date().toISOString().substring(0, 10));
-
 	const [selectedAssessment, setSelectedAssessment] = useState(null);
 	const [isGradesModalOpen, setIsGradesModalOpen] = useState(false);
 
@@ -130,6 +135,7 @@ const AssessmentManagement = () => {
 				{/* Controls Row */}
 				<div className="ram-options-row">
 					<Controls
+						course_id={subject} // Pass the course_id to Controls
 						grades={grades}
 						assessmentTypes={assessmentTypes}
 						className={className}
