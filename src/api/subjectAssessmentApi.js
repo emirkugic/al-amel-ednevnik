@@ -8,9 +8,21 @@ const subjectAssessmentApi = {
 		return response.data;
 	},
 
-	getAssessmentById: async (id, token) => {
-		const response = await apiClient.get(`/SubjectAssessment/${id}`, {
+	getFilteredAssessments: async (
+		teacherId,
+		subjectId,
+		departmentId,
+		schoolYearStart,
+		token
+	) => {
+		const response = await apiClient.get("/SubjectAssessment/filtered", {
 			headers: { Authorization: `Bearer ${token}` },
+			params: {
+				teacherId,
+				subjectId,
+				departmentId,
+				schoolYearStart,
+			},
 		});
 		return response.data;
 	},

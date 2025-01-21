@@ -1,31 +1,55 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import subjectAssessmentApi from "../api/subjectAssessmentApi";
 
 const useAssessments = (token) => {
 	const [assessments, setAssessments] = useState([]);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 
-	useEffect(() => {
-		if (!token) return;
+	// const fetchAllAssessments = async () => {
+	//   try {
+	//     setLoading(true);
+	//     const data = await subjectAssessmentApi.getAllAssessments(token);
+	//     setAssessments(data);
+	//   } catch (err) {
+	//     console.error("Error fetching assessments:", err);
+	//     setError(err);
+	//   } finally {
+	//     setLoading(false);
+	//   }
+	// };
 
-		const fetchAssessments = async () => {
-			try {
-				setLoading(true);
-				const data = await subjectAssessmentApi.getAllAssessments(token);
-				setAssessments(data);
-			} catch (err) {
-				console.error("Error fetching assessments:", err);
-				setError(err);
-			} finally {
-				setLoading(false);
-			}
-		};
+	const fetchFilteredAssessments = async (
+		teacherId,
+		subjectId,
+		departmentId,
+		schoolYearStart
+	) => {
+		try {
+			setLoading(true);
+			console.log("Fetching filtered assessments with params:", {
+				teacherId,
+				subjectId,
+				departmentId,
+				schoolYearStart,
+			});
+			const response = await subjectAssessmentApi.getFilteredAssessments(
+				teacherId,
+				subjectId,
+				departmentId,
+				schoolYearStart,
+				token
+			);
+			setAssessments(response);
+		} catch (err) {
+			console.error("Error fetching filtered assessments:", err);
+			setError(err);
+		} finally {
+			setLoading(false);
+		}
+	};
 
-		fetchAssessments();
-	}, [token]);
-
-	const addAssessment = async (newAssessment, token) => {
+	const addAssessment = async (newAssessment) => {
 		try {
 			const created = await subjectAssessmentApi.createAssessment(
 				newAssessment,
@@ -38,37 +62,14 @@ const useAssessments = (token) => {
 		}
 	};
 
-	const updateAssessment = async (id, updatedAssessment, token) => {
-		try {
-			const updated = await subjectAssessmentApi.updateAssessment(
-				id,
-				updatedAssessment,
-				token
-			);
-			setAssessments((prev) => prev.map((a) => (a.id === id ? updated : a)));
-		} catch (err) {
-			console.error("Error updating assessment:", err);
-			setError(err);
-		}
-	};
-
-	const deleteAssessment = async (id, token) => {
-		try {
-			await subjectAssessmentApi.deleteAssessment(id, token);
-			setAssessments((prev) => prev.filter((a) => a.id !== id));
-		} catch (err) {
-			console.error("Error deleting assessment:", err);
-			setError(err);
-		}
-	};
-
 	return {
 		assessments,
 		loading,
 		error,
+		fetchFilteredAssessments,
 		addAssessment,
-		updateAssessment,
-		deleteAssessment,
+		// If needed, expose fetchAllAssessments or call it
+		// fetchAllAssessments,
 	};
 };
 

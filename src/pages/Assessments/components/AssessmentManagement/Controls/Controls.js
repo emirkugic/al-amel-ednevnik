@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import useAuth from "../../../../../hooks/useAuth";
-import useAssessments from "../../../../../hooks/useAssessments";
 import departmentApi from "../../../../../api/departmentApi";
 import PrimaryButton from "../../../../../components/ui/PrimaryButton/PrimaryButton";
 import "./Controls.css";
@@ -9,8 +8,6 @@ const Controls = ({
 	course_id,
 	grades,
 	assessmentTypes,
-	className,
-	setClassName,
 	title,
 	setTitle,
 	type,
@@ -19,32 +16,30 @@ const Controls = ({
 	setPoints,
 	date,
 	setDate,
-	totalPoints,
-	addAssessmentCallback, // Callback to refresh assessments list after adding
+	addAssessmentCallback,
+
+	// Brought in from parent now
+	selectedDepartment,
+	setSelectedDepartment,
 }) => {
 	const { user, assignedSubjects } = useAuth();
-	const { addAssessment } = useAssessments(user?.token);
 	const [departmentNames, setDepartmentNames] = useState([]);
-	const [selectedDepartment, setSelectedDepartment] = useState("");
 	const [loading, setLoading] = useState(false);
 
-	// Find the subject based on the course_id
+	// Find assigned subject by course_id
 	const currentSubject = assignedSubjects.find(
 		(subject) => subject.subjectId === course_id
 	);
-
 	const departmentIds = currentSubject ? currentSubject.departmentId : [];
 
+	// Fetch department names
 	useEffect(() => {
 		const fetchDepartmentNames = async () => {
 			try {
 				setLoading(true);
-
-				// Fetch names for all department IDs
 				const promises = departmentIds.map((id) =>
 					departmentApi.getDepartmentById(id, user?.token)
 				);
-
 				const departments = await Promise.all(promises);
 				const names = departments.map((dept) => ({
 					id: dept.id,
@@ -52,8 +47,9 @@ const Controls = ({
 				}));
 				setDepartmentNames(names);
 
-				if (names.length > 0) {
-					setSelectedDepartment(names[0].id); // Default to the first department
+				// If parent's department is empty and we have at least one dept, set it
+				if (!selectedDepartment && names.length > 0) {
+					setSelectedDepartment(names[0].id);
 				}
 			} catch (error) {
 				console.error("Error fetching department names:", error);
@@ -65,25 +61,29 @@ const Controls = ({
 		if (departmentIds.length > 0) {
 			fetchDepartmentNames();
 		}
-	}, [departmentIds, user?.token]);
+	}, [
+		departmentIds,
+		course_id,
+		user?.token,
+		selectedDepartment,
+		setSelectedDepartment,
+	]);
 
+	// Handle adding new assessment
 	const handleAddAssessment = async () => {
 		if (
 			!selectedDepartment ||
 			!course_id ||
-			!user?.id ||
 			!title ||
 			!type ||
 			!points ||
 			!date
 		) {
-			alert("Please fill in all the fields.");
+			alert("Please fill in all fields.");
 			return;
 		}
 
-		const isoDate = new Date(date).toISOString();
-		const formattedDate = isoDate.slice(0, 19) + "+00:00"; // Format date with timezone offset
-
+		const formattedDate = new Date(date).toISOString();
 		const newAssessment = {
 			departmentId: selectedDepartment,
 			subjectId: course_id,
@@ -94,39 +94,33 @@ const Controls = ({
 			date: formattedDate,
 		};
 
-		// Log the request body for debugging
-		// console.log(
-		// 	"Debugging Request Body:",
-		// 	JSON.stringify(newAssessment, null, 2)
-		// );
-
-		// API call is disabled for debugging
 		try {
-			await addAssessment(newAssessment, user.token); // Add the assessment using the hook
-			alert("Assessment created successfully.");
-			if (addAssessmentCallback) {
-				addAssessmentCallback(); // Refresh assessments list if needed
-			}
-			// Clear form fields after success
+			await addAssessmentCallback(newAssessment);
 			setTitle("");
 			setType("Exam");
 			setPoints("");
 			setDate(new Date().toISOString().substring(0, 10));
 		} catch (err) {
 			console.error("Error adding assessment:", err);
-			alert("Failed to create assessment. Please try again.");
 		}
 	};
 
 	return (
 		<div className="controls-container">
+			{/* Department Dropdown */}
 			{loading ? (
 				<p>Loading departments...</p>
 			) : (
 				<select
-					value={selectedDepartment}
-					onChange={(e) => setSelectedDepartment(e.target.value)}
+					// Use the parent's selectedDepartment
+					value={selectedDepartment || ""}
+					onChange={(e) => {
+						setSelectedDepartment(e.target.value);
+					}}
 				>
+					<option value="" disabled>
+						-- Select Department --
+					</option>
 					{departmentNames.map((dept) => (
 						<option key={dept.id} value={dept.id}>
 							{dept.name}
@@ -135,6 +129,7 @@ const Controls = ({
 				</select>
 			)}
 
+			{/* Input Fields */}
 			<input
 				type="text"
 				placeholder="Title"
@@ -164,10 +159,7 @@ const Controls = ({
 				onChange={(e) => setDate(e.target.value)}
 			/>
 
-			<span className="controls-total-points">
-				Used: <strong>{totalPoints} / 100</strong>
-			</span>
-
+			{/* Add Assessment Button */}
 			<PrimaryButton title="Add Assessment" onClick={handleAddAssessment} />
 		</div>
 	);
