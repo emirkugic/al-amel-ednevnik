@@ -1,6 +1,7 @@
 import apiClient from "./apiClient";
 
 const subjectAssessmentApi = {
+	// Get all assessments (not used by default, but handy if you need it)
 	getAllAssessments: async (token) => {
 		const response = await apiClient.get("/SubjectAssessment", {
 			headers: { Authorization: `Bearer ${token}` },
@@ -8,6 +9,7 @@ const subjectAssessmentApi = {
 		return response.data;
 	},
 
+	// Get filtered assessments
 	getFilteredAssessments: async (
 		teacherId,
 		subjectId,
@@ -27,6 +29,7 @@ const subjectAssessmentApi = {
 		return response.data;
 	},
 
+	// Create a new assessment
 	createAssessment: async (assessmentData, token) => {
 		const response = await apiClient.post(
 			"/SubjectAssessment",
@@ -38,6 +41,7 @@ const subjectAssessmentApi = {
 		return response.data;
 	},
 
+	// Update an existing assessment by ID
 	updateAssessment: async (id, assessmentData, token) => {
 		const response = await apiClient.put(
 			`/SubjectAssessment/${id}`,
@@ -49,6 +53,7 @@ const subjectAssessmentApi = {
 		return response.data;
 	},
 
+	// Delete an assessment by ID
 	deleteAssessment: async (id, token) => {
 		await apiClient.delete(`/SubjectAssessment/${id}`, {
 			headers: { Authorization: `Bearer ${token}` },
