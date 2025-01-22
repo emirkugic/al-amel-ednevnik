@@ -1,22 +1,23 @@
 import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import "./AssessmentsAccordionList.css";
 
 const AssessmentsAccordionList = ({
 	monthsToDisplay,
 	groupedAssessments,
 	openGradesModal,
-	onUpdate, // new
-	onDelete, // new
+	onUpdate,
+	onDelete,
 }) => {
 	const [expandedMonths, setExpandedMonths] = useState(() => {
 		const initialState = {};
 		monthsToDisplay.forEach((m) => {
-			initialState[m] = true; // all open by default
+			initialState[m] = true;
 		});
 		return initialState;
 	});
 
-	// Track which assessment is in "edit mode"
 	const [editAssessmentId, setEditAssessmentId] = useState(null);
 	const [editTitle, setEditTitle] = useState("");
 	const [editPoints, setEditPoints] = useState("");
@@ -25,16 +26,13 @@ const AssessmentsAccordionList = ({
 		setExpandedMonths((prev) => ({ ...prev, [month]: !prev[month] }));
 	};
 
-	// Start editing a specific assessment
 	const handleEditClick = (assessment, e) => {
-		// Prevent opening the grades modal
 		e.stopPropagation();
 		setEditAssessmentId(assessment.id);
 		setEditTitle(assessment.title);
 		setEditPoints(assessment.points);
 	};
 
-	// Cancel editing
 	const handleCancelEdit = (e) => {
 		e.stopPropagation();
 		setEditAssessmentId(null);
@@ -42,23 +40,19 @@ const AssessmentsAccordionList = ({
 		setEditPoints("");
 	};
 
-	// Save the edited changes
 	const handleSaveEdit = (originalAssessment, e) => {
 		e.stopPropagation();
-
 		const updated = {
 			...originalAssessment,
 			title: editTitle,
 			points: editPoints,
 		};
-
 		onUpdate(originalAssessment.id, updated);
 		setEditAssessmentId(null);
 		setEditTitle("");
 		setEditPoints("");
 	};
 
-	// Delete the assessment
 	const handleDelete = (id, e) => {
 		e.stopPropagation();
 		onDelete(id);
@@ -106,49 +100,45 @@ const AssessmentsAccordionList = ({
 									</div>
 								) : (
 									<div className="ram-assessment-list">
-										{monthAssessments.map((assessment, idx) => {
-											// If this item is in edit mode:
+										{monthAssessments.map((assessment) => {
 											const isEditing = assessment.id === editAssessmentId;
 
 											if (isEditing) {
 												return (
 													<div
 														key={assessment.id}
-														className="ram-assessment-item"
-														style={{ backgroundColor: "#f8f8f8" }}
-														onClick={(e) => e.stopPropagation()} // disable the modal open
+														className="ram-assessment-item ram-edit-mode"
+														onClick={(e) => e.stopPropagation()}
 													>
-														<div className="ram-edit-fields">
-															<input
-																type="text"
-																value={editTitle}
-																onChange={(e) => setEditTitle(e.target.value)}
-																style={{ marginRight: "10px" }}
-															/>
-															<input
-																type="number"
-																value={editPoints}
-																onChange={(e) => setEditPoints(e.target.value)}
-																style={{ width: "60px" }}
-															/>
-
-															<button
-																style={{ marginLeft: "10px" }}
-																onClick={(e) => handleSaveEdit(assessment, e)}
-															>
-																Save
-															</button>
-															<button
-																onClick={handleCancelEdit}
-																style={{ marginLeft: "5px" }}
-															>
-																Cancel
-															</button>
-														</div>
+														<input
+															type="text"
+															value={editTitle}
+															onChange={(e) => setEditTitle(e.target.value)}
+															className="ram-edit-input"
+															placeholder="Title"
+														/>
+														<input
+															type="number"
+															value={editPoints}
+															onChange={(e) => setEditPoints(e.target.value)}
+															className="ram-edit-input"
+															placeholder="Points"
+														/>
+														<button
+															className="ram-btn ram-save-btn"
+															onClick={(e) => handleSaveEdit(assessment, e)}
+														>
+															Save
+														</button>
+														<button
+															className="ram-btn ram-cancel-btn"
+															onClick={handleCancelEdit}
+														>
+															Cancel
+														</button>
 													</div>
 												);
 											} else {
-												// Normal (non-edit) display
 												return (
 													<div
 														key={assessment.id}
@@ -163,24 +153,20 @@ const AssessmentsAccordionList = ({
 																{assessment.type}
 															</span>
 														</div>
-
 														<div className="ram-assessment-points">
 															{assessment.points} pts
 														</div>
-
 														<div className="ram-assessment-actions">
-															<button
+															<FontAwesomeIcon
+																icon={faEdit}
+																className="ram-action-icon"
 																onClick={(e) => handleEditClick(assessment, e)}
-																style={{ marginRight: "6px" }}
-															>
-																Edit
-															</button>
-															<button
+															/>
+															<FontAwesomeIcon
+																icon={faTrash}
+																className="ram-action-icon ram-delete-icon"
 																onClick={(e) => handleDelete(assessment.id, e)}
-																style={{ color: "red" }}
-															>
-																Delete
-															</button>
+															/>
 														</div>
 													</div>
 												);
