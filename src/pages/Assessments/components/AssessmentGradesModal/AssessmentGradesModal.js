@@ -25,6 +25,11 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 	}, [grades]);
 
 	const handleGradeChange = (studentId, grade) => {
+		// Ensure the grade does not exceed the maximum assessment points
+		if (Number(grade) > Number(assessment.points)) {
+			alert(`Grade cannot exceed the maximum points (${assessment.points})`);
+			return;
+		}
 		setLocalGrades({ ...localGrades, [studentId]: grade });
 		setEditing({ ...editing, [studentId]: true });
 	};
@@ -41,11 +46,6 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 			});
 		} else if (gradeToUpdate.grade !== localGrades[studentId]) {
 			// Update the existing grade using the correct gradeId
-			console.log(
-				"Updating grade:",
-				gradeToUpdate.gradeId,
-				localGrades[studentId]
-			); // Debugging log
 			await updateGrade(gradeToUpdate.gradeId, {
 				id: gradeToUpdate.gradeId, // Include ID explicitly
 				subjectAssessmentId: assessment.id,
@@ -78,7 +78,7 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 										<input
 											type="number"
 											min="1"
-											max="10"
+											max={assessment.points}
 											value={localGrades[grade.studentId]}
 											onChange={(e) =>
 												handleGradeChange(grade.studentId, e.target.value)

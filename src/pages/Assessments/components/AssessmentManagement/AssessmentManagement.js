@@ -136,8 +136,8 @@ const AssessmentManagement = () => {
 			{isGradesModalOpen && (
 				<AssessmentGradesModal
 					assessment={selectedAssessment}
+					token={user?.token}
 					onClose={closeGradesModal}
-					students={studentsAndGrades}
 				/>
 			)}
 		</div>

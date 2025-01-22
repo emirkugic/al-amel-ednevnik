@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./AssessmentsAccordionList.css";
@@ -9,13 +9,15 @@ const AssessmentsAccordionList = ({
 	openGradesModal,
 	onDelete,
 }) => {
-	const [expandedMonths, setExpandedMonths] = useState(() => {
+	const [expandedMonths, setExpandedMonths] = useState({});
+
+	useEffect(() => {
 		const initialState = {};
 		monthsToDisplay.forEach((m) => {
 			initialState[m] = true;
 		});
-		return initialState;
-	});
+		setExpandedMonths(initialState);
+	}, [monthsToDisplay]);
 
 	const toggleMonth = (month) => {
 		setExpandedMonths((prev) => ({ ...prev, [month]: !prev[month] }));
