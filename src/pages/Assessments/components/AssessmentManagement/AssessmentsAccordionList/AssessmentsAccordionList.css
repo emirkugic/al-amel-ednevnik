@@ -165,3 +165,12 @@
 .ram-cancel-btn:hover {
 	background: #c82333;
 }
+
+.ram-disabled-icon {
+	color: #aaa;
+	cursor: not-allowed;
+}
+
+.ram-disabled-icon:hover {
+	color: #aaa;
+}

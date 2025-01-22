@@ -26,11 +26,35 @@ const AssessmentsAccordionList = ({
 		setExpandedMonths((prev) => ({ ...prev, [month]: !prev[month] }));
 	};
 
+	const isEditable = (assessmentDate) => {
+		const now = new Date();
+		const assessmentDateObj = new Date(assessmentDate);
+
+		const nowUTC = Date.UTC(
+			now.getUTCFullYear(),
+			now.getUTCMonth(),
+			now.getUTCDate()
+		);
+		const assessmentUTC = Date.UTC(
+			assessmentDateObj.getUTCFullYear(),
+			assessmentDateObj.getUTCMonth(),
+			assessmentDateObj.getUTCDate()
+		);
+
+		const daysDiff = (nowUTC - assessmentUTC) / (1000 * 60 * 60 * 24);
+
+		return daysDiff <= 5 && daysDiff >= 0;
+	};
+
 	const handleEditClick = (assessment, e) => {
 		e.stopPropagation();
-		setEditAssessmentId(assessment.id);
-		setEditTitle(assessment.title);
-		setEditPoints(assessment.points);
+		if (isEditable(assessment.date)) {
+			setEditAssessmentId(assessment.id);
+			setEditTitle(assessment.title);
+			setEditPoints(assessment.points);
+		} else {
+			alert("This assessment is older than 5 days and cannot be edited.");
+		}
 	};
 
 	const handleCancelEdit = (e) => {
@@ -159,7 +183,11 @@ const AssessmentsAccordionList = ({
 														<div className="ram-assessment-actions">
 															<FontAwesomeIcon
 																icon={faEdit}
-																className="ram-action-icon"
+																className={`ram-action-icon ${
+																	isEditable(assessment.date)
+																		? ""
+																		: "ram-disabled-icon"
+																}`}
 																onClick={(e) => handleEditClick(assessment, e)}
 															/>
 															<FontAwesomeIcon

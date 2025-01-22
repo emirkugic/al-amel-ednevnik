@@ -137,7 +137,7 @@ const AssessmentManagement = () => {
 							}`}
 							onClick={() => setSelectedSemester("Second Semester")}
 						>
-							2nd Semester (Feb - June)
+							2nd Semester (Feb - Aug)
 						</button>
 					</div>
 				</div>
