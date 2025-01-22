@@ -13,19 +13,23 @@
 
 .modal-content {
 	background-color: #fff;
-	padding: 20px;
+	/* padding: 20px; */
 	border-radius: 8px;
 	width: 600px;
 	max-width: 90%;
+	max-height: 80vh;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 	font-family: Arial, sans-serif;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden; 
 }
 
 .modal-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 20px;
+	/* margin-bottom: 20px; */
 }
 
 .modal-header h2 {
@@ -86,10 +90,16 @@
 	color: #ff9933;
 }
 
+/* Scrollable content */
 .student-table {
 	width: 100%;
 	border-collapse: collapse;
-	margin-bottom: 10px;
+	/* margin-bottom: 10px; */
+	overflow-y: auto;
+}
+
+.modal-content {
+	overflow-y: auto;
 }
 
 .student-table th,

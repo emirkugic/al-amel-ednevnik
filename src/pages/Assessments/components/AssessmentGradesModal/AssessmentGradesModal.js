@@ -1,79 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faSave } from "@fortawesome/free-solid-svg-icons";
 import "./AssessmentGradesModal.css";
+import useGrades from "../../../../hooks/useGrades";
 
-const AssessmentGradesModal = ({ assessment, students, onClose }) => {
-	const [grades, setGrades] = useState(
-		students.reduce((acc, student) => {
-			acc[student.studentId] = student.grade || "";
-			return acc;
-		}, {})
-	);
+const AssessmentGradesModal = ({ assessment, token, onClose }) => {
+	const { grades, fetchGrades, updateGrade, createGrade } = useGrades(token);
 	const [editing, setEditing] = useState({});
+	const [localGrades, setLocalGrades] = useState({});
+
+	useEffect(() => {
+		if (assessment) {
+			fetchGrades(assessment.id);
+		}
+	}, [assessment]);
+
+	useEffect(() => {
+		setLocalGrades(
+			grades.reduce((acc, grade) => {
+				acc[grade.studentId] = grade.grade || "";
+				return acc;
+			}, {})
+		);
+	}, [grades]);
 
 	const handleGradeChange = (studentId, grade) => {
-		setGrades({ ...grades, [studentId]: grade });
+		setLocalGrades({ ...localGrades, [studentId]: grade });
 		setEditing({ ...editing, [studentId]: true });
 	};
 
-	const saveGrade = (studentId) => {
-		// Add logic to save or update grades here
+	const saveGrade = async (studentId) => {
+		const gradeToUpdate = grades.find((g) => g.studentId === studentId);
+
+		if (!gradeToUpdate || !gradeToUpdate.gradeId) {
+			// If no grade exists, create a new one
+			await createGrade({
+				studentId,
+				subjectAssessmentId: assessment.id,
+				grade: localGrades[studentId],
+			});
+		} else if (gradeToUpdate.grade !== localGrades[studentId]) {
+			// Update the existing grade using the correct gradeId
+			console.log(
+				"Updating grade:",
+				gradeToUpdate.gradeId,
+				localGrades[studentId]
+			); // Debugging log
+			await updateGrade(gradeToUpdate.gradeId, {
+				id: gradeToUpdate.gradeId, // Include ID explicitly
+				subjectAssessmentId: assessment.id,
+				studentId,
+				grade: localGrades[studentId],
+			});
+		}
+
 		setEditing({ ...editing, [studentId]: false });
 	};
-
-	const classAverage = (
-		students
-			.filter((student) => student.grade !== null)
-			.reduce((sum, student) => sum + parseFloat(student.grade || 0), 0) /
-		students.filter((student) => student.grade !== null).length
-	).toFixed(2);
-
-	const highestGrade = Math.max(
-		...students.map((student) => parseFloat(student.grade || 0))
-	);
-
-	const lowestGrade = Math.min(
-		...students
-			.filter((student) => student.grade !== null)
-			.map((student) => parseFloat(student.grade || 0))
-	);
-
-	const passingRate = (
-		(students.filter((student) => student.grade >= 6).length /
-			students.length) *
-		100
-	).toFixed(2);
 
 	return (
 		<div className="modal-overlay" onClick={onClose}>
 			<div className="modal-content" onClick={(e) => e.stopPropagation()}>
-				<div className="modal-header">
-					<h2>Grades for {assessment.title}</h2>
-					<button className="close-button" onClick={onClose}>
-						✕
-					</button>
-				</div>
-
-				<div className="stats">
-					<div className="stat-box average">
-						<span>Class Average</span>
-						<h3>{classAverage}</h3>
-					</div>
-					<div className="stat-box highest">
-						<span>Highest Grade</span>
-						<h3>{highestGrade}</h3>
-					</div>
-					<div className="stat-box lowest">
-						<span>Lowest Grade</span>
-						<h3>{lowestGrade}</h3>
-					</div>
-					<div className="stat-box passing">
-						<span>Passing Rate</span>
-						<h3>{passingRate}%</h3>
-					</div>
-				</div>
-
+				<h2>Grades for {assessment.title}</h2>
 				<table className="student-table">
 					<thead>
 						<tr>
@@ -83,28 +70,28 @@ const AssessmentGradesModal = ({ assessment, students, onClose }) => {
 						</tr>
 					</thead>
 					<tbody>
-						{students.map((student) => (
-							<tr key={student.studentId}>
-								<td>{student.studentName}</td>
+						{grades.map((grade) => (
+							<tr key={grade.gradeId || grade.studentId}>
+								<td>{grade.studentName}</td>
 								<td>
-									{editing[student.studentId] ? (
+									{editing[grade.studentId] ? (
 										<input
 											type="number"
 											min="1"
 											max="10"
-											value={grades[student.studentId]}
+											value={localGrades[grade.studentId]}
 											onChange={(e) =>
-												handleGradeChange(student.studentId, e.target.value)
+												handleGradeChange(grade.studentId, e.target.value)
 											}
 										/>
 									) : (
-										grades[student.studentId] || "Not Graded"
+										localGrades[grade.studentId] || "Not Graded"
 									)}
 								</td>
 								<td>
-									{editing[student.studentId] ? (
+									{editing[grade.studentId] ? (
 										<button
-											onClick={() => saveGrade(student.studentId)}
+											onClick={() => saveGrade(grade.studentId)}
 											className="action-button save"
 										>
 											<FontAwesomeIcon icon={faSave} />
@@ -112,7 +99,7 @@ const AssessmentGradesModal = ({ assessment, students, onClose }) => {
 									) : (
 										<button
 											onClick={() =>
-												setEditing({ ...editing, [student.studentId]: true })
+												setEditing({ ...editing, [grade.studentId]: true })
 											}
 											className="action-button edit"
 										>

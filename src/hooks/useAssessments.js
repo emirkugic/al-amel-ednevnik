@@ -29,12 +29,6 @@ const useAssessments = (token) => {
 	) => {
 		try {
 			setLoading(true);
-			console.log("Fetching filtered assessments with params:", {
-				teacherId,
-				subjectId,
-				departmentId,
-				schoolYearStart,
-			});
 			const response = await subjectAssessmentApi.getFilteredAssessments(
 				teacherId,
 				subjectId,
@@ -110,6 +104,7 @@ const useAssessments = (token) => {
 					assessmentId,
 					token
 				);
+			console.log("Students and grades fetched:", response);
 			return response; // Return the fetched data
 		} catch (err) {
 			console.error("Error fetching students and grades:", err);
@@ -118,7 +113,6 @@ const useAssessments = (token) => {
 			setLoading(false);
 		}
 	};
-
 
 	return {
 		assessments,
@@ -130,8 +124,6 @@ const useAssessments = (token) => {
 		updateAssessment,
 		deleteAssessment,
 		fetchStudentsAndGrades,
-
-		
 	};
 };
 
