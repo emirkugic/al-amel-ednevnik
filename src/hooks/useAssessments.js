@@ -102,6 +102,24 @@ const useAssessments = (token) => {
 		}
 	};
 
+	const fetchStudentsAndGrades = async (assessmentId) => {
+		try {
+			setLoading(true);
+			const response =
+				await subjectAssessmentApi.getStudentsAndGradesByAssessment(
+					assessmentId,
+					token
+				);
+			return response; // Return the fetched data
+		} catch (err) {
+			console.error("Error fetching students and grades:", err);
+			setError(err);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+
 	return {
 		assessments,
 		loading,
@@ -111,6 +129,9 @@ const useAssessments = (token) => {
 		addAssessment,
 		updateAssessment,
 		deleteAssessment,
+		fetchStudentsAndGrades,
+
+		
 	};
 };
 

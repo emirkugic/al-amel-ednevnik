@@ -6,7 +6,7 @@ import "./AssessmentGradesModal.css";
 const AssessmentGradesModal = ({ assessment, students, onClose }) => {
 	const [grades, setGrades] = useState(
 		students.reduce((acc, student) => {
-			acc[student.id] = student.grade || "";
+			acc[student.studentId] = student.grade || "";
 			return acc;
 		}, {})
 	);
@@ -22,16 +22,34 @@ const AssessmentGradesModal = ({ assessment, students, onClose }) => {
 		setEditing({ ...editing, [studentId]: false });
 	};
 
-	const classAverage = 6.1;
-	const highestGrade = 9.5;
-	const lowestGrade = 1.0;
-	const passingRate = 60;
+	const classAverage = (
+		students
+			.filter((student) => student.grade !== null)
+			.reduce((sum, student) => sum + parseFloat(student.grade || 0), 0) /
+		students.filter((student) => student.grade !== null).length
+	).toFixed(2);
+
+	const highestGrade = Math.max(
+		...students.map((student) => parseFloat(student.grade || 0))
+	);
+
+	const lowestGrade = Math.min(
+		...students
+			.filter((student) => student.grade !== null)
+			.map((student) => parseFloat(student.grade || 0))
+	);
+
+	const passingRate = (
+		(students.filter((student) => student.grade >= 6).length /
+			students.length) *
+		100
+	).toFixed(2);
 
 	return (
 		<div className="modal-overlay" onClick={onClose}>
 			<div className="modal-content" onClick={(e) => e.stopPropagation()}>
 				<div className="modal-header">
-					{/* <h2>Student Grade Management</h2> */}
+					<h2>Grades for {assessment.title}</h2>
 					<button className="close-button" onClick={onClose}>
 						✕
 					</button>
@@ -60,55 +78,43 @@ const AssessmentGradesModal = ({ assessment, students, onClose }) => {
 					<thead>
 						<tr>
 							<th>Name</th>
-							<th>Points (1-10)</th>
-							<th>Progress</th>
+							<th>Grade</th>
 							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
 						{students.map((student) => (
-							<tr key={student.id}>
-								<td>{student.name}</td>
-								<td
-									className="grade"
-									style={{ color: getGradeColor(grades[student.id]) }}
-								>
-									{editing[student.id] ? (
+							<tr key={student.studentId}>
+								<td>{student.studentName}</td>
+								<td>
+									{editing[student.studentId] ? (
 										<input
 											type="number"
 											min="1"
 											max="10"
-											value={grades[student.id]}
+											value={grades[student.studentId]}
 											onChange={(e) =>
-												handleGradeChange(student.id, e.target.value)
+												handleGradeChange(student.studentId, e.target.value)
 											}
 										/>
 									) : (
-										grades[student.id]
+										grades[student.studentId] || "Not Graded"
 									)}
 								</td>
 								<td>
-									<div className="progress-bar">
-										<div
-											className="progress-fill"
-											style={{ width: `${(grades[student.id] / 10) * 100}%` }}
-										></div>
-									</div>
-								</td>
-								<td>
-									{editing[student.id] ? (
+									{editing[student.studentId] ? (
 										<button
+											onClick={() => saveGrade(student.studentId)}
 											className="action-button save"
-											onClick={() => saveGrade(student.id)}
 										>
 											<FontAwesomeIcon icon={faSave} />
 										</button>
 									) : (
 										<button
-											className="action-button edit"
 											onClick={() =>
-												setEditing({ ...editing, [student.id]: true })
+												setEditing({ ...editing, [student.studentId]: true })
 											}
+											className="action-button edit"
 										>
 											<FontAwesomeIcon icon={faPen} />
 										</button>
@@ -118,22 +124,9 @@ const AssessmentGradesModal = ({ assessment, students, onClose }) => {
 						))}
 					</tbody>
 				</table>
-
-				<p className="grading-scale">
-					Grading Scale: 1-5 (Failing), 6-7 (Satisfactory), 8-9 (Good), 10
-					(Excellent)
-				</p>
 			</div>
 		</div>
 	);
-};
-
-// Helper function to determine grade color based on value
-const getGradeColor = (grade) => {
-	if (grade >= 8) return "green";
-	if (grade >= 6) return "blue";
-	if (grade >= 4) return "orange";
-	return "red";
 };
 
 export default AssessmentGradesModal;

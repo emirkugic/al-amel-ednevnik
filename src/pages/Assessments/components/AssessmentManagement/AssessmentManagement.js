@@ -6,8 +6,6 @@ import AssessmentGradesModal from "../AssessmentGradesModal/AssessmentGradesModa
 import useAuth from "../../../../hooks/useAuth";
 import useAssessments from "../../../../hooks/useAssessments";
 import "./AssessmentManagement.css";
-import "../../data/assessmentData.js";
-import { testStudents } from "../../data/assessmentData.js";
 
 const FIRST_SEMESTER_MONTHS = ["September", "October", "November", "December"];
 const SECOND_SEMESTER_MONTHS = ["February", "March", "April", "May", "June"];
@@ -32,24 +30,17 @@ const AssessmentManagement = () => {
 		addAssessment,
 		updateAssessment,
 		deleteAssessment,
+		fetchStudentsAndGrades,
 	} = useAssessments(user?.token);
 
 	const [selectedDepartment, setSelectedDepartment] = useState("");
-
-	const [selectedSemester, setSelectedSemester] = useState(() => {
-		const today = new Date();
-		const currentMonth = today.getMonth() + 1;
-		// If currentMonth is Sep-Dec (>=9) or Jan (1) then pick first semester
-		return currentMonth >= 9 || currentMonth <= 12
-			? "First Semester"
-			: "Second Semester";
-	});
-
+	const [selectedSemester, setSelectedSemester] = useState("First Semester");
 	const [title, setTitle] = useState("");
 	const [type, setType] = useState("Exam");
 	const [points, setPoints] = useState("");
 	const [date, setDate] = useState(new Date().toISOString().substring(0, 10));
 	const [selectedAssessment, setSelectedAssessment] = useState(null);
+	const [studentsAndGrades, setStudentsAndGrades] = useState([]);
 	const [isGradesModalOpen, setIsGradesModalOpen] = useState(false);
 
 	const { start } = calculateSchoolYear();
@@ -60,49 +51,23 @@ const AssessmentManagement = () => {
 		}
 	}, [user?.id, subject, selectedDepartment, start]);
 
-	// Add new assessment
-	const handleAddAssessment = async (newAssessment) => {
+	const openGradesModal = async (assessment) => {
 		try {
-			await addAssessment(newAssessment);
-			setTitle("");
-			setType("Exam");
-			setPoints("");
-			setDate(new Date().toISOString().substring(0, 10));
+			setSelectedAssessment(assessment);
+			const students = await fetchStudentsAndGrades(assessment.id); // Fetch students and grades
+			setStudentsAndGrades(students);
+			setIsGradesModalOpen(true);
 		} catch (err) {
-			console.error("Error adding assessment:", err);
+			console.error("Error opening grades modal:", err);
 		}
-	};
-
-	// Update an existing assessment
-	const handleUpdateAssessment = async (id, updatedAssessment) => {
-		try {
-			await updateAssessment(id, updatedAssessment);
-		} catch (err) {
-			console.error("Error updating assessment:", err);
-		}
-	};
-
-	// Delete an existing assessment
-	const handleDeleteAssessment = async (id) => {
-		try {
-			await deleteAssessment(id);
-		} catch (err) {
-			console.error("Error deleting assessment:", err);
-		}
-	};
-
-	// Grades modal
-	const openGradesModal = (assessment) => {
-		setSelectedAssessment(assessment);
-		setIsGradesModalOpen(true);
 	};
 
 	const closeGradesModal = () => {
 		setIsGradesModalOpen(false);
 		setSelectedAssessment(null);
+		setStudentsAndGrades([]);
 	};
 
-	// Group assessments by month
 	const groupedAssessments = assessments.reduce((acc, assessment) => {
 		const monthName = new Date(assessment.date).toLocaleString("default", {
 			month: "long",
@@ -112,7 +77,6 @@ const AssessmentManagement = () => {
 		return acc;
 	}, {});
 
-	// Decide which months to display
 	const monthsToDisplay =
 		selectedSemester === "First Semester"
 			? FIRST_SEMESTER_MONTHS
@@ -121,7 +85,6 @@ const AssessmentManagement = () => {
 	return (
 		<div className="assessment-management">
 			<div className="ram-container">
-				{/* Semester Tabs */}
 				<div className="ram-tab-row">
 					<div className="ram-tabs">
 						<button
@@ -143,7 +106,6 @@ const AssessmentManagement = () => {
 					</div>
 				</div>
 
-				{/* Controls for adding new assessment */}
 				<div className="ram-options-row">
 					<Controls
 						course_id={subject}
@@ -157,17 +119,16 @@ const AssessmentManagement = () => {
 						setPoints={setPoints}
 						date={date}
 						setDate={setDate}
-						addAssessmentCallback={handleAddAssessment}
+						addAssessmentCallback={addAssessment}
 						selectedDepartment={selectedDepartment}
 						setSelectedDepartment={setSelectedDepartment}
 					/>
 
-					{/* Accordion List of Assessments */}
 					<AssessmentsAccordionList
 						monthsToDisplay={monthsToDisplay}
 						groupedAssessments={groupedAssessments}
 						openGradesModal={openGradesModal}
-						onDelete={handleDeleteAssessment}
+						onDelete={deleteAssessment}
 					/>
 				</div>
 			</div>
@@ -176,8 +137,7 @@ const AssessmentManagement = () => {
 				<AssessmentGradesModal
 					assessment={selectedAssessment}
 					onClose={closeGradesModal}
-					students={testStudents}
-					/* Provide an array here, or real data if you have it */
+					students={studentsAndGrades}
 				/>
 			)}
 		</div>

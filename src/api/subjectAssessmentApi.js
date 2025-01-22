@@ -59,6 +59,17 @@ const subjectAssessmentApi = {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 	},
+
+	// Fetch students and grades for a specific assessment
+	getStudentsAndGradesByAssessment: async (assessmentId, token) => {
+		const response = await apiClient.get(
+			`/AssessmentGrade/by-assessment/${assessmentId}`,
+			{
+				headers: { Authorization: `Bearer ${token}` },
+			}
+		);
+		return response.data;
+	},
 };
 
 export default subjectAssessmentApi;
