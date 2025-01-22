@@ -15,59 +15,9 @@ export const grades = [
 
 export const assessmentTypes = ["Exam", "Quiz", "Project", "Homework", "Oral"];
 
-export const assessments = [
-	{
-		className: "1st Grade",
-		title: "Math Quiz",
-		type: "Quiz",
-		points: 10,
-		date: "2024-09-15",
-		month: "September",
-		semesterKey: "1st Grade - First Semester",
-	},
-	{
-		className: "1st Grade",
-		title: "Math Project",
-		type: "Project",
-		points: 10,
-		date: "2024-09-28",
-		month: "September",
-		semesterKey: "1st Grade - First Semester",
-	},
-	{
-		className: "1st Grade",
-		title: "Science Exam",
-		type: "Exam",
-		points: 10,
-		date: "2024-10-10",
-		month: "October",
-		semesterKey: "1st Grade - First Semester",
-	},
-	{
-		className: "1st Grade",
-		title: "Science Homework",
-		type: "Homework",
-		points: 10,
-		date: "2024-10-20",
-		month: "October",
-		semesterKey: "1st Grade - First Semester",
-	},
-	{
-		className: "1st Grade",
-		title: "History Quiz",
-		type: "Quiz",
-		points: 10,
-		date: "2024-11-05",
-		month: "November",
-		semesterKey: "1st Grade - First Semester",
-	},
-	{
-		className: "1st Grade",
-		title: "History Project",
-		type: "Project",
-		points: 10,
-		date: "2024-11-18",
-		month: "November",
-		semesterKey: "1st Grade - First Semester",
-	},
+export const testStudents = [
+	{ id: 1, name: "John Smith", grade: 8 },
+	{ id: 2, name: "Jane Doe", grade: 5 },
+	{ id: 3, name: "Alice Johnson", grade: 9 },
+	{ id: 4, name: "Mark Taylor", grade: 6 },
 ];

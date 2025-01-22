@@ -6,6 +6,8 @@ import AssessmentGradesModal from "../AssessmentGradesModal/AssessmentGradesModa
 import useAuth from "../../../../hooks/useAuth";
 import useAssessments from "../../../../hooks/useAssessments";
 import "./AssessmentManagement.css";
+import "../../data/assessmentData.js";
+import { testStudents } from "../../data/assessmentData.js";
 
 const FIRST_SEMESTER_MONTHS = ["September", "October", "November", "December"];
 const SECOND_SEMESTER_MONTHS = ["February", "March", "April", "May", "June"];
@@ -32,12 +34,12 @@ const AssessmentManagement = () => {
 		deleteAssessment,
 	} = useAssessments(user?.token);
 
-	// Department state is managed here (see previous solution)
 	const [selectedDepartment, setSelectedDepartment] = useState("");
 
 	const [selectedSemester, setSelectedSemester] = useState(() => {
 		const today = new Date();
 		const currentMonth = today.getMonth() + 1;
+		// If currentMonth is Sep-Dec (>=9) or Jan (1) then pick first semester
 		return currentMonth >= 9 || currentMonth <= 12
 			? "First Semester"
 			: "Second Semester";
@@ -71,17 +73,16 @@ const AssessmentManagement = () => {
 		}
 	};
 
-	// Editing an existing assessment
+	// Update an existing assessment
 	const handleUpdateAssessment = async (id, updatedAssessment) => {
 		try {
 			await updateAssessment(id, updatedAssessment);
-			// No need to manually refetch if your hook updates state automatically.
 		} catch (err) {
 			console.error("Error updating assessment:", err);
 		}
 	};
 
-	// Deleting an existing assessment
+	// Delete an existing assessment
 	const handleDeleteAssessment = async (id) => {
 		try {
 			await deleteAssessment(id);
@@ -101,7 +102,7 @@ const AssessmentManagement = () => {
 		setSelectedAssessment(null);
 	};
 
-	// Group assessments by month for display
+	// Group assessments by month
 	const groupedAssessments = assessments.reduce((acc, assessment) => {
 		const monthName = new Date(assessment.date).toLocaleString("default", {
 			month: "long",
@@ -137,12 +138,12 @@ const AssessmentManagement = () => {
 							}`}
 							onClick={() => setSelectedSemester("Second Semester")}
 						>
-							2nd Semester (Feb - Aug)
+							2nd Semester (Feb - June)
 						</button>
 					</div>
 				</div>
 
-				{/* Controls */}
+				{/* Controls for adding new assessment */}
 				<div className="ram-options-row">
 					<Controls
 						course_id={subject}
@@ -161,12 +162,11 @@ const AssessmentManagement = () => {
 						setSelectedDepartment={setSelectedDepartment}
 					/>
 
-					{/* Accordion: pass update/delete callbacks */}
+					{/* Accordion List of Assessments */}
 					<AssessmentsAccordionList
 						monthsToDisplay={monthsToDisplay}
 						groupedAssessments={groupedAssessments}
 						openGradesModal={openGradesModal}
-						onUpdate={handleUpdateAssessment}
 						onDelete={handleDeleteAssessment}
 					/>
 				</div>
@@ -176,6 +176,8 @@ const AssessmentManagement = () => {
 				<AssessmentGradesModal
 					assessment={selectedAssessment}
 					onClose={closeGradesModal}
+					students={testStudents}
+					/* Provide an array here, or real data if you have it */
 				/>
 			)}
 		</div>
