@@ -45,15 +45,19 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 				grade: localGrades[studentId],
 			});
 		} else if (gradeToUpdate.grade !== localGrades[studentId]) {
-			// Update the existing grade using the correct gradeId
+			// Update the existing grade
 			await updateGrade(gradeToUpdate.gradeId, {
-				id: gradeToUpdate.gradeId, // Include ID explicitly
+				id: gradeToUpdate.gradeId,
 				subjectAssessmentId: assessment.id,
 				studentId,
 				grade: localGrades[studentId],
 			});
 		}
 
+		// Re-fetch all grades so new or updated items show correct data (esp. name)
+		await fetchGrades(assessment.id);
+
+		// Turn off editing mode for this student
 		setEditing({ ...editing, [studentId]: false });
 	};
 
