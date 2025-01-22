@@ -123,54 +123,5 @@
 }
 
 .ram-action-icon:hover {
-	color: #007bff;
-}
-
-.ram-delete-icon:hover {
 	color: red;
-}
-
-.ram-edit-input {
-	margin: 5px;
-	padding: 8px 10px;
-	border: 1px solid #ddd;
-	border-radius: 5px;
-	font-size: 0.9rem;
-	width: 150px;
-}
-
-.ram-btn {
-	padding: 5px 12px;
-	border-radius: 5px;
-	border: none;
-	font-size: 0.9rem;
-	cursor: pointer;
-	transition: background 0.2s ease;
-}
-
-.ram-save-btn {
-	background: #28a745;
-	color: #fff;
-}
-
-.ram-save-btn:hover {
-	background: #218838;
-}
-
-.ram-cancel-btn {
-	background: #dc3545;
-	color: #fff;
-}
-
-.ram-cancel-btn:hover {
-	background: #c82333;
-}
-
-.ram-disabled-icon {
-	color: #aaa;
-	cursor: not-allowed;
-}
-
-.ram-disabled-icon:hover {
-	color: #aaa;
 }
