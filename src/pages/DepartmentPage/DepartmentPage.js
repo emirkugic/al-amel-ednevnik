@@ -3,11 +3,10 @@ import "./DepartmentPage.css";
 import useAuth from "../../hooks/useAuth"; // Assuming useAuth provides the user and token
 
 const DepartmentPage = () => {
-	const { user } = useAuth(); // Retrieve the logged-in user's token
+	const { user } = useAuth(); // user could be null on refresh if not yet loaded
 	const [classLogs, setClassLogs] = useState({});
 	const [students, setStudents] = useState([]);
 
-	// Fetch class logs
 	useEffect(() => {
 		const fetchClassLogs = async () => {
 			try {
@@ -16,7 +15,7 @@ const DepartmentPage = () => {
 					{
 						method: "GET",
 						headers: {
-							Authorization: `Bearer ${user.token}`, // Include JWT token
+							Authorization: `Bearer ${user.token}`,
 							Accept: "*/*",
 						},
 					}
@@ -32,10 +31,12 @@ const DepartmentPage = () => {
 			}
 		};
 
-		fetchClassLogs();
-	}, [user.token]);
+		// IMPORTANT: only fetch if token is available
+		if (user?.token) {
+			fetchClassLogs();
+		}
+	}, [user?.token]);
 
-	// Fetch students
 	useEffect(() => {
 		const fetchStudents = async () => {
 			try {
@@ -44,7 +45,7 @@ const DepartmentPage = () => {
 					{
 						method: "GET",
 						headers: {
-							Authorization: `Bearer ${user.token}`, // Include JWT token
+							Authorization: `Bearer ${user.token}`,
 							Accept: "*/*",
 						},
 					}
@@ -60,8 +61,16 @@ const DepartmentPage = () => {
 			}
 		};
 
-		fetchStudents();
-	}, [user.token]);
+		// ALSO only fetch if token is present
+		if (user?.token) {
+			fetchStudents();
+		}
+	}, [user?.token]);
+
+	// If the user is null or token is missing, show a loading or “please log in” message
+	if (!user?.token) {
+		return <p>Please log in or wait while we load your data...</p>;
+	}
 
 	return (
 		<div className="department-page">
