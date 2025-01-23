@@ -27,7 +27,7 @@ import Subjects from "./components/pages/Subjects";
 import Classes from "./components/pages/Classes";
 import Parents from "./components/pages/Parents";
 
-import { LecturesPage, AssessmentPage } from "./pages/index.js";
+import { LecturesPage, AssessmentPage, DepartmentPage } from "./pages/index.js";
 
 import "./App.css";
 
@@ -59,6 +59,10 @@ const AppContent = () => {
 
 						<Route path="/lectures/:departmentId" element={<LecturesPage />} />
 						<Route path="/courses/:subject" element={<AssessmentPage />} />
+						<Route
+							path="/department/:departmentId"
+							element={<DepartmentPage />}
+						/>
 					</Route>
 				</Routes>
 			</div>

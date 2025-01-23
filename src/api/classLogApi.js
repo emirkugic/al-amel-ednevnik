@@ -67,8 +67,7 @@ const classLogApi = {
 		return response.data;
 	},
 
-	// Get logged classes by department grouped by subject
-	getLoggedClassesByDepartmentGroupedBySubject: async (departmentId, token) => {
+	getClassLogsByDepartment: async (departmentId, token) => {
 		const response = await apiClient.get(
 			`/ClassLog/by-department-grouped-by-subject?departmentId=${departmentId}`,
 			{

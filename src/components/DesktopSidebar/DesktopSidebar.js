@@ -99,6 +99,11 @@ const DesktopSidebar = () => {
 				icon: faBookOpen,
 				route: myDepartments,
 			},
+			{
+				title: "My Department",
+				icon: faChalkboardTeacher,
+				route: "/department/testID",
+			},
 		];
 
 		if (user?.role === "Admin") {
