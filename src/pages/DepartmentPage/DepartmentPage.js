@@ -1,51 +1,30 @@
 import React, { useEffect, useState } from "react";
 import "./DepartmentPage.css";
-import useAuth from "../../hooks/useAuth"; // Assuming useAuth provides the user and token
+import useAuth from "../../hooks/useAuth";
+import useClassLogsByDepartment from "../../hooks/useClassLogsByDepartment"; // New hook
 
 const DepartmentPage = () => {
-	const { user } = useAuth(); // user could be null on refresh if not yet loaded
-	const [classLogs, setClassLogs] = useState({});
+	const { user } = useAuth();
+	const departmentId = "673b98de6d216a12b56d0c2b";
+
+	// Using the new hook
+	const {
+		classLogs,
+		loading: classLogsLoading,
+		error: classLogsError,
+	} = useClassLogsByDepartment(user, departmentId);
+
 	const [students, setStudents] = useState([]);
-
-	useEffect(() => {
-		const fetchClassLogs = async () => {
-			try {
-				const response = await fetch(
-					"http://localhost:5155/api/ClassLog/by-department-grouped-by-subject?departmentId=673b98de6d216a12b56d0c2b",
-					{
-						method: "GET",
-						headers: {
-							Authorization: `Bearer ${user.token}`,
-							Accept: "*/*",
-						},
-					}
-				);
-				if (response.ok) {
-					const data = await response.json();
-					setClassLogs(data);
-				} else {
-					console.error("Failed to fetch class logs:", response.statusText);
-				}
-			} catch (error) {
-				console.error("Error fetching class logs:", error);
-			}
-		};
-
-		// IMPORTANT: only fetch if token is available
-		if (user?.token) {
-			fetchClassLogs();
-		}
-	}, [user?.token]);
 
 	useEffect(() => {
 		const fetchStudents = async () => {
 			try {
 				const response = await fetch(
-					"http://localhost:5155/api/Student/department/673b98de6d216a12b56d0c2b",
+					`http://localhost:5155/api/Student/department/${departmentId}`,
 					{
 						method: "GET",
 						headers: {
-							Authorization: `Bearer ${user.token}`,
+							Authorization: `Bearer ${user?.token}`,
 							Accept: "*/*",
 						},
 					}
@@ -61,13 +40,11 @@ const DepartmentPage = () => {
 			}
 		};
 
-		// ALSO only fetch if token is present
 		if (user?.token) {
 			fetchStudents();
 		}
-	}, [user?.token]);
+	}, [user?.token, departmentId]);
 
-	// If the user is null or token is missing, show a loading or “please log in” message
 	if (!user?.token) {
 		return <p>Please log in or wait while we load your data...</p>;
 	}
@@ -79,42 +56,52 @@ const DepartmentPage = () => {
 			{/* Class Logs Section */}
 			<section className="class-logs-section">
 				<h2>Class Logs</h2>
-				{Object.keys(classLogs).length > 0 ? (
-					Object.entries(classLogs).map(([subject, logs]) => (
-						<div key={subject} className="subject-block">
-							<h3>{subject}</h3>
-							<table>
-								<thead>
-									<tr>
-										<th>Date</th>
-										<th>Period</th>
-										<th>Lecture Title</th>
-										<th>Ordinal Number</th>
-										<th>Absent Students</th>
-									</tr>
-								</thead>
-								<tbody>
-									{logs.map((log) => (
-										<tr key={log.classLog.id}>
-											<td>
-												{new Date(log.classLog.classDate).toLocaleDateString()}
-											</td>
-											<td>{log.classLog.period}</td>
-											<td>{log.classLog.lectureTitle}</td>
-											<td>{log.classLog.sequence}</td>
-											<td>
-												{log.absentStudents.length > 0
-													? log.absentStudents.join(", ")
-													: "None"}
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						</div>
-					))
-				) : (
-					<p>No class logs available.</p>
+
+				{classLogsLoading && <p>Loading class logs...</p>}
+				{classLogsError && <p>Error: {classLogsError}</p>}
+
+				{!classLogsLoading && !classLogsError && (
+					<>
+						{Object.keys(classLogs).length > 0 ? (
+							Object.entries(classLogs).map(([subject, logs]) => (
+								<div key={subject} className="subject-block">
+									<h3>{subject}</h3>
+									<table>
+										<thead>
+											<tr>
+												<th>Date</th>
+												<th>Period</th>
+												<th>Lecture Title</th>
+												<th>Ordinal Number</th>
+												<th>Absent Students</th>
+											</tr>
+										</thead>
+										<tbody>
+											{logs.map((log) => (
+												<tr key={log.classLog.id}>
+													<td>
+														{new Date(
+															log.classLog.classDate
+														).toLocaleDateString()}
+													</td>
+													<td>{log.classLog.period}</td>
+													<td>{log.classLog.lectureTitle}</td>
+													<td>{log.classLog.sequence}</td>
+													<td>
+														{log.absentStudents.length > 0
+															? log.absentStudents.join(", ")
+															: "None"}
+													</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</div>
+							))
+						) : (
+							<p>No class logs available.</p>
+						)}
+					</>
 				)}
 			</section>
 
