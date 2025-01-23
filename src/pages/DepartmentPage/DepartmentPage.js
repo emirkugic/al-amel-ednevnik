@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./DepartmentPage.css";
+import useAuth from "../../hooks/useAuth"; // Assuming useAuth provides the user and token
 
 const DepartmentPage = () => {
+	const { user } = useAuth(); // Retrieve the logged-in user's token
 	const [classLogs, setClassLogs] = useState({});
 	const [students, setStudents] = useState([]);
 
@@ -10,34 +12,56 @@ const DepartmentPage = () => {
 		const fetchClassLogs = async () => {
 			try {
 				const response = await fetch(
-					"http://localhost:5155/api/ClassLog/by-department-grouped-by-subject?departmentId=673b98de6d216a12b56d0c2b"
+					"http://localhost:5155/api/ClassLog/by-department-grouped-by-subject?departmentId=673b98de6d216a12b56d0c2b",
+					{
+						method: "GET",
+						headers: {
+							Authorization: `Bearer ${user.token}`, // Include JWT token
+							Accept: "*/*",
+						},
+					}
 				);
-				const data = await response.json();
-				setClassLogs(data);
+				if (response.ok) {
+					const data = await response.json();
+					setClassLogs(data);
+				} else {
+					console.error("Failed to fetch class logs:", response.statusText);
+				}
 			} catch (error) {
 				console.error("Error fetching class logs:", error);
 			}
 		};
 
 		fetchClassLogs();
-	}, []);
+	}, [user.token]);
 
 	// Fetch students
 	useEffect(() => {
 		const fetchStudents = async () => {
 			try {
 				const response = await fetch(
-					"http://localhost:5155/api/Student/department/673b98de6d216a12b56d0c2b"
+					"http://localhost:5155/api/Student/department/673b98de6d216a12b56d0c2b",
+					{
+						method: "GET",
+						headers: {
+							Authorization: `Bearer ${user.token}`, // Include JWT token
+							Accept: "*/*",
+						},
+					}
 				);
-				const data = await response.json();
-				setStudents(data);
+				if (response.ok) {
+					const data = await response.json();
+					setStudents(data);
+				} else {
+					console.error("Failed to fetch students:", response.statusText);
+				}
 			} catch (error) {
 				console.error("Error fetching students:", error);
 			}
 		};
 
 		fetchStudents();
-	}, []);
+	}, [user.token]);
 
 	return (
 		<div className="department-page">

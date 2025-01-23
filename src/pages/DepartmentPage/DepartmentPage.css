@@ -3,19 +3,19 @@
 	background: #f9f9f9;
 }
 
-h1 {
+.department-page h1 {
 	font-size: 2rem;
 	color: #333;
 	margin-bottom: 20px;
 }
 
-h2 {
+.department-page h2 {
 	font-size: 1.5rem;
 	color: #555;
 	margin-top: 30px;
 }
 
-.subject-block {
+.department-page .subject-block {
 	margin-bottom: 30px;
 	background: #fff;
 	padding: 20px;
@@ -23,44 +23,45 @@ h2 {
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.subject-block h3 {
+.department-page .subject-block h3 {
 	font-size: 1.3rem;
 	color: #007bff;
 	margin-bottom: 15px;
 }
 
-table {
+.department-page table {
 	width: 100%;
 	border-collapse: collapse;
 	background: #fff;
 }
 
-table th,
-table td {
+.department-page table th,
+.department-page table td {
 	padding: 10px 15px;
 	text-align: left;
 	border: 1px solid #ddd;
 }
 
-table th {
+.department-page table th {
 	background: #f4f4f4;
 	font-weight: bold;
 }
 
-table tr:nth-child(even) {
+.department-page table tr:nth-child(even) {
 	background: #f9f9f9;
 }
 
-table tr:hover {
+.department-page table tr:hover {
 	background: #f1f1f1;
 }
 
-.students-section,
-.class-logs-section {
+.department-page .students-section,
+.department-page .class-logs-section {
 	margin-top: 30px;
 }
 
-p {
+.department-page p {
 	color: #777;
 	font-size: 1rem;
+	text-align: center;
 }

@@ -23,6 +23,22 @@ const useClassLogs = (user) => {
 		}
 	};
 
+	const fetchClassLogsByDepartment = async (token, departmentId) => {
+		try {
+			setLoading(true);
+			const data = await classLogApi.getClassLogsByDepartment(
+				departmentId,
+				token
+			);
+			setClassLogs(data);
+		} catch (err) {
+			console.error("Error fetching class logs by department:", err);
+			setError(err);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	useEffect(() => {
 		if (user && user.token) {
 			fetchClassLogs(user.token, user.id);
@@ -31,7 +47,14 @@ const useClassLogs = (user) => {
 		}
 	}, [user]);
 
-	return { classLogs, fetchClassLogs, setClassLogs, loading, error }; // Expose setClassLogs
+	return {
+		classLogs,
+		fetchClassLogs,
+		setClassLogs,
+		fetchClassLogsByDepartment,
+		loading,
+		error,
+	};
 };
 
 export default useClassLogs;

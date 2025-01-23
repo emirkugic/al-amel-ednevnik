@@ -1,30 +1,33 @@
 import { useState, useEffect } from "react";
 import studentApi from "../api/studentApi";
 
-const useStudents = (token) => {
+const useStudents = (departmentId, token) => {
 	const [students, setStudents] = useState([]);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 
 	useEffect(() => {
-		if (!token) return;
+		if (!departmentId || !token) return;
 
-		const fetchStudents = async () => {
+		const fetchStudentsByDepartment = async () => {
 			try {
 				setLoading(true);
-				const data = await studentApi.getAllStudents(token);
+				const data = await studentApi.getStudentsByDepartment(
+					departmentId,
+					token
+				);
 				setStudents(data);
 				setError(null);
 			} catch (err) {
+				setError(err.response?.data?.message || "Failed to fetch students.");
 				console.error("Error fetching students:", err);
-				setError(err);
 			} finally {
 				setLoading(false);
 			}
 		};
 
-		fetchStudents();
-	}, [token]);
+		fetchStudentsByDepartment();
+	}, [departmentId, token]);
 
 	const addStudent = (newStudent) => {
 		setStudents((prev) => [...prev, newStudent]);
@@ -42,7 +45,14 @@ const useStudents = (token) => {
 		setStudents((prev) => prev.filter((student) => student.id !== id));
 	};
 
-	return { students, loading, error, addStudent, updateStudent, deleteStudent };
+	return {
+		students,
+		loading,
+		error,
+		addStudent,
+		updateStudent,
+		deleteStudent,
+	};
 };
 
 export default useStudents;
