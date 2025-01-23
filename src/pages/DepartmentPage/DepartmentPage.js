@@ -1,49 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./DepartmentPage.css";
 import useAuth from "../../hooks/useAuth";
-import useClassLogsByDepartment from "../../hooks/useClassLogsByDepartment"; // New hook
+import useClassLogsByDepartment from "../../hooks/useClassLogsByDepartment";
+import useStudents from "../../hooks/useStudents";
 
 const DepartmentPage = () => {
 	const { user } = useAuth();
 	const departmentId = "673b98de6d216a12b56d0c2b";
 
-	// Using the new hook
 	const {
 		classLogs,
 		loading: classLogsLoading,
 		error: classLogsError,
 	} = useClassLogsByDepartment(user, departmentId);
 
-	const [students, setStudents] = useState([]);
-
-	useEffect(() => {
-		const fetchStudents = async () => {
-			try {
-				const response = await fetch(
-					`http://localhost:5155/api/Student/department/${departmentId}`,
-					{
-						method: "GET",
-						headers: {
-							Authorization: `Bearer ${user?.token}`,
-							Accept: "*/*",
-						},
-					}
-				);
-				if (response.ok) {
-					const data = await response.json();
-					setStudents(data);
-				} else {
-					console.error("Failed to fetch students:", response.statusText);
-				}
-			} catch (error) {
-				console.error("Error fetching students:", error);
-			}
-		};
-
-		if (user?.token) {
-			fetchStudents();
-		}
-	}, [user?.token, departmentId]);
+	const {
+		students,
+		loading: studentsLoading,
+		error: studentsError,
+	} = useStudents(departmentId, user?.token);
 
 	if (!user?.token) {
 		return <p>Please log in or wait while we load your data...</p>;
@@ -108,31 +83,41 @@ const DepartmentPage = () => {
 			{/* Students Section */}
 			<section className="students-section">
 				<h2>Students</h2>
-				{students.length > 0 ? (
-					<table>
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Date of Birth</th>
-								<th>Country</th>
-								<th>Citizenship</th>
-								<th>Place of Birth</th>
-							</tr>
-						</thead>
-						<tbody>
-							{students.map((student) => (
-								<tr key={student.id}>
-									<td>{`${student.firstName} ${student.lastName}`}</td>
-									<td>{new Date(student.dateOfBirth).toLocaleDateString()}</td>
-									<td>{student.country}</td>
-									<td>{student.citizenship}</td>
-									<td>{student.placeOfBirth}</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-				) : (
-					<p>No students available.</p>
+
+				{studentsLoading && <p>Loading students...</p>}
+				{studentsError && <p>Error: {studentsError}</p>}
+
+				{!studentsLoading && !studentsError && (
+					<>
+						{students.length > 0 ? (
+							<table>
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Date of Birth</th>
+										<th>Country</th>
+										<th>Citizenship</th>
+										<th>Place of Birth</th>
+									</tr>
+								</thead>
+								<tbody>
+									{students.map((student) => (
+										<tr key={student.id}>
+											<td>{`${student.firstName} ${student.lastName}`}</td>
+											<td>
+												{new Date(student.dateOfBirth).toLocaleDateString()}
+											</td>
+											<td>{student.country}</td>
+											<td>{student.citizenship}</td>
+											<td>{student.placeOfBirth}</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						) : (
+							<p>No students available.</p>
+						)}
+					</>
 				)}
 			</section>
 		</div>
