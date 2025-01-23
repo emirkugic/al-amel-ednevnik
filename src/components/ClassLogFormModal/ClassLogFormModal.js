@@ -15,12 +15,40 @@ import useAuth from "../../hooks/useAuth";
 import { ClassLogsContext } from "../../contexts/ClassLogsContext";
 import "./ClassLogFormModal.css";
 
+const getWorkWeekDates = () => {
+	const today = new Date();
+	const currentDay = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+	const monday = new Date(today);
+	monday.setDate(today.getDate() - (currentDay === 0 ? 6 : currentDay - 1)); // Adjust to Monday
+	const dates = [];
+
+	for (let i = 0; i < 5; i++) {
+		const date = new Date(monday);
+		date.setDate(monday.getDate() + i);
+
+		// Only add days up to today
+		if (date <= today) {
+			dates.push({
+				value: date.toISOString().split("T")[0], // YYYY-MM-DD format
+				label: date.toLocaleDateString("en-US", { weekday: "long" }),
+			});
+		}
+	}
+
+	return dates;
+};
+
 const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
-	const [absentStudents, setAbsentStudents] = useState([]);
+	const weekDays = getWorkWeekDates();
+	const [selectedDay, setSelectedDay] = useState(
+		weekDays.find((day) => day.value === new Date().toISOString().split("T")[0])
+			?.value || null
+	);
 	const [classHour, setClassHour] = useState("");
 	const [lectureTitle, setLectureTitle] = useState("");
 	const [classSequence, setClassSequence] = useState("");
 	const [notification, setNotification] = useState("");
+	const [absentStudents, setAbsentStudents] = useState([]);
 	const [studentOptions, setStudentOptions] = useState([]);
 	const { user } = useAuth();
 	const { setClassLogs } = useContext(ClassLogsContext);
@@ -52,7 +80,7 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 	}, [departmentId, user]);
 
 	const handleSubmit = async () => {
-		if (!classHour || !lectureTitle || !subjectId) {
+		if (!selectedDay || !classHour || !lectureTitle || !subjectId) {
 			setNotification("Please fill in all required fields.");
 			return;
 		}
@@ -63,7 +91,7 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 			teacherId: user?.id,
 			lectureTitle,
 			lectureType: "Lecture",
-			classDate: new Date().toISOString(),
+			classDate: selectedDay,
 			period: classHour,
 			absentStudentIds: absentStudents.map((s) => s.value),
 			...(classSequence && { sequence: parseInt(classSequence, 10) }),
@@ -76,7 +104,6 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 				user.token
 			);
 
-			// Update the context with the new log
 			setClassLogs((prevLogs) =>
 				prevLogs.map((log) =>
 					log.departmentId === departmentId
@@ -116,6 +143,15 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 		<div className="class-log-form-modal">
 			<div className="modal-content">
 				{isLoading && <div className="loading-bar"></div>}
+
+				<DropdownSelect
+					className="dropdown-select"
+					label="Day of the Week"
+					placeholder="Select a day"
+					value={selectedDay}
+					onChange={(value) => setSelectedDay(value)}
+					options={weekDays}
+				/>
 
 				<div className="dropdown-row">
 					<DropdownSelect
