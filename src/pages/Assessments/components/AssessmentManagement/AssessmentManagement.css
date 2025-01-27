@@ -16,7 +16,6 @@
 .ram-tabs {
 	display: flex;
 	gap: 5px;
-	/* border-bottom: 1px solid #ddd;  */
 }
 
 .ram-tab {
@@ -47,7 +46,7 @@
 
 .ram-tab.active::after,
 .ram-tab.active::before {
-	display: none; /* Disable pseudo-elements causing extra lines */
+	display: none;
 }
 
 .ram-options-row {

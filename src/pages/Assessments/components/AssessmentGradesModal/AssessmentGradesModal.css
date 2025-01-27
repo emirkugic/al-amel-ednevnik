@@ -13,7 +13,6 @@
 
 .modal-content {
 	background-color: #fff;
-	border-radius: 8px;
 	padding: 20px;
 	width: 600px;
 	max-width: 90%;
@@ -25,9 +24,14 @@
 	overflow-y: auto;
 }
 
+.modal-content h2 {
+	transform: translate(0, -20px);
+}
+
 .student-table {
 	width: 100%;
 	border-collapse: collapse;
+	transform: translate(0, -37px);
 }
 
 .student-table th,
