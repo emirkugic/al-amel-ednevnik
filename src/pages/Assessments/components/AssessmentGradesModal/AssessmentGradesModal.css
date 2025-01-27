@@ -13,8 +13,8 @@
 
 .modal-content {
 	background-color: #fff;
-	/* padding: 20px; */
 	border-radius: 8px;
+	padding: 20px;
 	width: 600px;
 	max-width: 90%;
 	max-height: 80vh;
@@ -22,84 +22,12 @@
 	font-family: Arial, sans-serif;
 	display: flex;
 	flex-direction: column;
-	overflow: hidden; 
+	overflow-y: auto;
 }
 
-.modal-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	/* margin-bottom: 20px; */
-}
-
-.modal-header h2 {
-	margin: 0;
-	color: #333;
-}
-
-.close-button {
-	background: none;
-	border: none;
-	font-size: 1.5rem;
-	cursor: pointer;
-}
-
-.stats {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 20px;
-}
-
-.stat-box {
-	flex: 1;
-	padding: 10px;
-	border-radius: 8px;
-	text-align: center;
-	margin: 0 5px;
-}
-
-.stat-box span {
-	display: block;
-	font-size: 0.9rem;
-	color: #666;
-	margin-bottom: 5px;
-}
-
-.stat-box h3 {
-	margin: 0;
-	font-size: 1.5rem;
-}
-
-.stat-box.average {
-	background-color: #e0ebff;
-	color: #0066cc;
-}
-
-.stat-box.highest {
-	background-color: #e0ffe0;
-	color: #33cc33;
-}
-
-.stat-box.lowest {
-	background-color: #ffe0e0;
-	color: #cc3333;
-}
-
-.stat-box.passing {
-	background-color: #fff5e0;
-	color: #ff9933;
-}
-
-/* Scrollable content */
 .student-table {
 	width: 100%;
 	border-collapse: collapse;
-	/* margin-bottom: 10px; */
-	overflow-y: auto;
-}
-
-.modal-content {
-	overflow-y: auto;
 }
 
 .student-table th,
@@ -113,28 +41,6 @@
 .student-table th {
 	background-color: #f4f4f4;
 	font-weight: bold;
-}
-
-.grade input {
-	width: 50px;
-	text-align: center;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	padding: 5px;
-}
-
-.progress-bar {
-	width: 100px;
-	height: 8px;
-	background-color: #ddd;
-	border-radius: 4px;
-	overflow: hidden;
-}
-
-.progress-fill {
-	height: 100%;
-	background-color: #4caf50;
-	transition: width 0.3s ease;
 }
 
 .action-button {
@@ -157,11 +63,4 @@
 
 .action-button:hover {
 	background-color: #f0f0f0;
-}
-
-.grading-scale {
-	margin-top: 10px;
-	font-size: 0.85rem;
-	color: #666;
-	text-align: center;
 }
