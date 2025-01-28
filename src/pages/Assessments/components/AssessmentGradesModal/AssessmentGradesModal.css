@@ -8,13 +8,15 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	z-index: 11000;
+	z-index: 2000;
 }
 
 .modal-content {
 	background-color: #fff;
-	padding: 20px;
+	position: relative;
+	padding: 0;
 	width: 600px;
+	height: 500px;
 	max-width: 90%;
 	max-height: 80vh;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -25,13 +27,23 @@
 }
 
 .modal-content h2 {
+	padding: 20px;
+	margin: 0;
+	background-color: #007bff;
+	color: #fff;
+	font-size: 1.5rem;
 	transform: translate(0, -20px);
 }
 
 .student-table {
 	width: 100%;
 	border-collapse: collapse;
-	transform: translate(0, -37px);
+	margin: 0;
+	position: absolute;
+	top: 60px;
+	left: 0;
+	right: 0;
+	transform: translate(0, -15px);
 }
 
 .student-table th,

@@ -89,21 +89,21 @@ const DesktopSidebar = () => {
 			{ title: "Dashboard", icon: faHouse, route: "/" },
 			{ title: "Students", icon: faPeopleGroup, route: "/students" },
 			{
-				title: "My Courses",
+				title: "Grades",
 				icon: faBook,
 				route: myCourses,
 			},
-			{ title: "Grades", icon: faChartLine, route: "/grades" },
+			// { title: "Grades", icon: faChartLine, route: "/grades" },
 			{
 				title: "Lectures",
 				icon: faBookOpen,
 				route: myDepartments,
 			},
-			{
-				title: "My Department",
-				icon: faChalkboardTeacher,
-				route: "/department/testID",
-			},
+			// {
+			// 	title: "My Department",
+			// 	icon: faChalkboardTeacher,
+			// 	route: "/department/testID",
+			// },
 		];
 
 		if (user?.role === "Admin") {
