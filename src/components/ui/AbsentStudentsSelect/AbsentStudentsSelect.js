@@ -8,8 +8,6 @@ const AbsentStudentsSelect = ({
 	studentOptions,
 	absentStudents,
 	setAbsentStudents,
-	studentInput,
-	setStudentInput,
 	setNotification,
 }) => {
 	const addAbsentStudent = (option) => {
@@ -18,7 +16,6 @@ const AbsentStudentsSelect = ({
 			!absentStudents.some((student) => student.value === option.value)
 		) {
 			setAbsentStudents((prev) => [...prev, option]);
-			setStudentInput(null);
 			setNotification("");
 		} else {
 			setNotification(
@@ -38,7 +35,6 @@ const AbsentStudentsSelect = ({
 		});
 	};
 
-	// Filter options to exclude already selected students
 	const filteredOptions = studentOptions.filter(
 		(option) =>
 			!absentStudents.some((student) => student.value === option.value)
@@ -55,7 +51,6 @@ const AbsentStudentsSelect = ({
 				isSearchable
 				onChange={addAbsentStudent}
 				options={filteredOptions}
-				value={studentInput}
 				placeholder="Type to search students..."
 			/>
 			<div

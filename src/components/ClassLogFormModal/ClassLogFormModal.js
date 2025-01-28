@@ -195,6 +195,7 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 					studentOptions={studentOptions}
 					absentStudents={absentStudents}
 					setAbsentStudents={setAbsentStudents}
+					setNotification={setNotification} // Pass the notification setter
 				/>
 
 				<div className="button-container">
