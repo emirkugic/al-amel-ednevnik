@@ -15,7 +15,6 @@ import RightSidebarDesktop from "./components/RightSidebarDesktop/RightSidebarDe
 import Dashboard from "./components/pages/Dashboard";
 import Students from "./components/pages/Students";
 import Courses from "./components/pages/Courses";
-import Schedule from "./components/pages/Schedule";
 import Attendance from "./components/pages/Attendance";
 import Grades from "./components/pages/Grades";
 import Settings from "./components/pages/Settings";
@@ -51,7 +50,6 @@ const AppContent = () => {
 						<Route path="/" element={<Dashboard />} />
 						<Route path="/students" element={<Students />} />
 						<Route path="/courses" element={<Courses />} />
-						<Route path="/schedule" element={<Schedule />} />
 						<Route path="/attendance" element={<Attendance />} />
 						<Route path="/grades" element={<Grades />} />
 						<Route path="/settings" element={<Settings />} />
