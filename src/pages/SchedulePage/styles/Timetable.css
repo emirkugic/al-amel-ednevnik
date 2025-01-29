@@ -1,14 +1,48 @@
-.timetable-container {
-	padding: 20px;
-	background-color: #f8f9fa;
-	font-family: Arial, sans-serif;
+.combined-view {
+	overflow-x: auto;
+	margin-top: 20px;
+}
+
+.combined-table {
+	width: 100%;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+.combined-table th,
+.combined-table td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	font-size: 14px;
+}
+
+.combined-table th {
+	background-color: #f4f4f4;
+	font-weight: bold;
 	color: #333;
 }
 
+.combined-table .teacher-cell {
+	background-color: #f1f3f5;
+	font-weight: bold;
+	text-align: left;
+}
+
+.combined-table .filled {
+	background-color: #e9f7ef;
+	color: #333;
+	font-weight: bold;
+}
+
+.combined-table .empty {
+	background-color: #f8d7da;
+	color: #adb5bd;
+}
+
 .group-selector {
+	margin: 20px 0;
 	display: flex;
 	align-items: center;
-	margin-bottom: 20px;
 	gap: 10px;
 }
 
@@ -16,99 +50,4 @@
 	padding: 8px;
 	border-radius: 5px;
 	border: 1px solid #ddd;
-}
-
-.grouped-timetables {
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-}
-
-.group-card {
-	background-color: #ffffff;
-	border: 1px solid #ddd;
-	border-radius: 10px;
-	padding: 15px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.group-title {
-	font-size: 18px;
-	font-weight: bold;
-	margin-bottom: 15px;
-	color: #495057;
-}
-
-.group-title span {
-	color: #007bff;
-}
-
-.day-cards {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-}
-
-.day-card {
-	background-color: #f1f3f5;
-	padding: 10px;
-	border-radius: 8px;
-	border: 1px solid #e9ecef;
-}
-
-.day-card h3 {
-	font-size: 16px;
-	font-weight: bold;
-	color: #6c757d;
-	margin-bottom: 10px;
-}
-
-.periods {
-	display: grid;
-	grid-template-columns: repeat(7, 1fr);
-	gap: 10px;
-}
-
-.period {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 10px;
-	border-radius: 8px;
-	border: 1px solid #dee2e6;
-	background-color: #ffffff;
-	text-align: center;
-	transition: all 0.3s ease;
-}
-
-.period.filled {
-	background-color: #e9f7ef;
-	border-color: #c3e6cb;
-}
-
-.period.empty {
-	background-color: #f8d7da;
-	border-color: #f5c6cb;
-}
-
-.period:hover {
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-	transform: translateY(-2px);
-}
-
-.subject {
-	font-weight: bold;
-	font-size: 14px;
-	color: #495057;
-}
-
-.details {
-	font-size: 12px;
-	color: #6c757d;
-}
-
-.no-class {
-	font-size: 12px;
-	color: #adb5bd;
 }
