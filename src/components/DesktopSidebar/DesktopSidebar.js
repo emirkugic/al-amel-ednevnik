@@ -8,6 +8,9 @@ import {
 	faHouse,
 	faPeopleGroup,
 	faBookOpen,
+	faCalendarAlt,
+	faCalendarCheck,
+	faTable,
 	faBook,
 	faChalkboardTeacher,
 } from "@fortawesome/free-solid-svg-icons";
@@ -103,6 +106,11 @@ const DesktopSidebar = () => {
 				title: "My Department",
 				icon: faChalkboardTeacher,
 				route: "/department/testID",
+			},
+			{
+				title: "Schedule",
+				icon: faCalendarAlt,
+				route: "/schedule",
 			},
 		];
 

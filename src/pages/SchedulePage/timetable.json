@@ -1,0 +1,3964 @@
+{
+    "Data": [
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Monday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Monday",
+            "Period": 2,
+            "Subject": "Geologija",
+            "SubjectId": 10,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Monday",
+            "Period": 3,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Tuesday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Tuesday",
+            "Period": 2,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Tuesday",
+            "Period": 3,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Tuesday",
+            "Period": 5,
+            "Subject": "Društvo",
+            "SubjectId": 4,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Wednesday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Wednesday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Wednesday",
+            "Period": 4,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Wednesday",
+            "Period": 6,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Thursday",
+            "Period": 1,
+            "Subject": "Geologija",
+            "SubjectId": 10,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Thursday",
+            "Period": 3,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Thursday",
+            "Period": 4,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Thursday",
+            "Period": 5,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Friday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Friday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Friday",
+            "Period": 3,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Friday",
+            "Period": 4,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Aisha",
+            "TeacherId": 0,
+            "Day": "Friday",
+            "Period": 5,
+            "Subject": "Muzička kultura",
+            "SubjectId": 19,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Monday",
+            "Period": 1,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Monday",
+            "Period": 4,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Monday",
+            "Period": 5,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Monday",
+            "Period": 7,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Tuesday",
+            "Period": 1,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Tuesday",
+            "Period": 3,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Tuesday",
+            "Period": 5,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Tuesday",
+            "Period": 6,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Tuesday",
+            "Period": 7,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Wednesday",
+            "Period": 2,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Wednesday",
+            "Period": 3,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Wednesday",
+            "Period": 6,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Wednesday",
+            "Period": 7,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Thursday",
+            "Period": 1,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Thursday",
+            "Period": 3,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Thursday",
+            "Period": 4,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Thursday",
+            "Period": 6,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Thursday",
+            "Period": 7,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Friday",
+            "Period": 3,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Amela",
+            "TeacherId": 1,
+            "Day": "Friday",
+            "Period": 4,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Monday",
+            "Period": 1,
+            "Subject": "Fizika",
+            "SubjectId": 8,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Monday",
+            "Period": 4,
+            "Subject": "Fizika",
+            "SubjectId": 8,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Monday",
+            "Period": 5,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Tuesday",
+            "Period": 1,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Tuesday",
+            "Period": 2,
+            "Subject": "Odjeljenska zajednica",
+            "SubjectId": 20,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Tuesday",
+            "Period": 3,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Tuesday",
+            "Period": 5,
+            "Subject": "Fizika",
+            "SubjectId": 8,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Tuesday",
+            "Period": 6,
+            "Subject": "Fizika",
+            "SubjectId": 8,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Wednesday",
+            "Period": 1,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Wednesday",
+            "Period": 2,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Wednesday",
+            "Period": 3,
+            "Subject": "Fizika",
+            "SubjectId": 8,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Wednesday",
+            "Period": 4,
+            "Subject": "Fizika",
+            "SubjectId": 8,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Wednesday",
+            "Period": 5,
+            "Subject": "Fizika",
+            "SubjectId": 8,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Thursday",
+            "Period": 3,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Thursday",
+            "Period": 4,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Thursday",
+            "Period": 5,
+            "Subject": "Fizika",
+            "SubjectId": 8,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Thursday",
+            "Period": 6,
+            "Subject": "Fizika",
+            "SubjectId": 8,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Friday",
+            "Period": 1,
+            "Subject": "Fizika",
+            "SubjectId": 8,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Friday",
+            "Period": 2,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Friday",
+            "Period": 3,
+            "Subject": "Fizika",
+            "SubjectId": 8,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Amina",
+            "TeacherId": 2,
+            "Day": "Friday",
+            "Period": 4,
+            "Subject": "Fizika",
+            "SubjectId": 8,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Dđenana",
+            "TeacherId": 3,
+            "Day": "Wednesday",
+            "Period": 2,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Monday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Monday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Monday",
+            "Period": 3,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Monday",
+            "Period": 5,
+            "Subject": "Društvo",
+            "SubjectId": 4,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Tuesday",
+            "Period": 1,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Tuesday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Tuesday",
+            "Period": 3,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Tuesday",
+            "Period": 6,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Wednesday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Wednesday",
+            "Period": 3,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Wednesday",
+            "Period": 4,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Wednesday",
+            "Period": 5,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Thursday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Thursday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Thursday",
+            "Period": 3,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Thursday",
+            "Period": 6,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Friday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Friday",
+            "Period": 2,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Friday",
+            "Period": 3,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Dženana",
+            "TeacherId": 4,
+            "Day": "Friday",
+            "Period": 5,
+            "Subject": "Muzička kultura",
+            "SubjectId": 19,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Emir",
+            "TeacherId": 5,
+            "Day": "Monday",
+            "Period": 2,
+            "Subject": "Informatika",
+            "SubjectId": 14,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Emir",
+            "TeacherId": 5,
+            "Day": "Monday",
+            "Period": 6,
+            "Subject": "Informatika",
+            "SubjectId": 14,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Emir",
+            "TeacherId": 5,
+            "Day": "Monday",
+            "Period": 7,
+            "Subject": "Informatika",
+            "SubjectId": 14,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Emir",
+            "TeacherId": 5,
+            "Day": "Tuesday",
+            "Period": 3,
+            "Subject": "Informatika",
+            "SubjectId": 14,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Emir",
+            "TeacherId": 5,
+            "Day": "Tuesday",
+            "Period": 5,
+            "Subject": "Informatika",
+            "SubjectId": 14,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Emir",
+            "TeacherId": 5,
+            "Day": "Tuesday",
+            "Period": 7,
+            "Subject": "Informatika",
+            "SubjectId": 14,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Emir",
+            "TeacherId": 5,
+            "Day": "Wednesday",
+            "Period": 3,
+            "Subject": "Informatika",
+            "SubjectId": 14,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Emir",
+            "TeacherId": 5,
+            "Day": "Wednesday",
+            "Period": 6,
+            "Subject": "Informatika",
+            "SubjectId": 14,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Emir",
+            "TeacherId": 5,
+            "Day": "Thursday",
+            "Period": 3,
+            "Subject": "Informatika",
+            "SubjectId": 14,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Emir",
+            "TeacherId": 5,
+            "Day": "Thursday",
+            "Period": 6,
+            "Subject": "Informatika",
+            "SubjectId": 14,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Emir",
+            "TeacherId": 5,
+            "Day": "Thursday",
+            "Period": 7,
+            "Subject": "Informatika",
+            "SubjectId": 14,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Emir",
+            "TeacherId": 5,
+            "Day": "Friday",
+            "Period": 3,
+            "Subject": "Informatika",
+            "SubjectId": 14,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Monday",
+            "Period": 2,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Monday",
+            "Period": 3,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Monday",
+            "Period": 4,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Monday",
+            "Period": 6,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Monday",
+            "Period": 7,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Tuesday",
+            "Period": 1,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Tuesday",
+            "Period": 5,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Tuesday",
+            "Period": 6,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Tuesday",
+            "Period": 7,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Wednesday",
+            "Period": 2,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Wednesday",
+            "Period": 4,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Wednesday",
+            "Period": 5,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Wednesday",
+            "Period": 7,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Thursday",
+            "Period": 1,
+            "Subject": "Odjeljenska zajednica",
+            "SubjectId": 20,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Thursday",
+            "Period": 2,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Thursday",
+            "Period": 4,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Thursday",
+            "Period": 5,
+            "Subject": "Vjeronuka",
+            "SubjectId": 26,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Thursday",
+            "Period": 7,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Friday",
+            "Period": 1,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Friday",
+            "Period": 4,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Haifa",
+            "TeacherId": 6,
+            "Day": "Friday",
+            "Period": 5,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Monday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Monday",
+            "Period": 4,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Monday",
+            "Period": 5,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Monday",
+            "Period": 6,
+            "Subject": "Odjeljenska zajednica",
+            "SubjectId": 20,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Monday",
+            "Period": 7,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Tuesday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Tuesday",
+            "Period": 4,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Tuesday",
+            "Period": 5,
+            "Subject": "Muzička kultura",
+            "SubjectId": 19,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Tuesday",
+            "Period": 7,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Wednesday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Wednesday",
+            "Period": 3,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Wednesday",
+            "Period": 5,
+            "Subject": "Muzička kultura",
+            "SubjectId": 19,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Wednesday",
+            "Period": 7,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Thursday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Thursday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Thursday",
+            "Period": 5,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Thursday",
+            "Period": 6,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Thursday",
+            "Period": 7,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Friday",
+            "Period": 1,
+            "Subject": "Muzička kultura",
+            "SubjectId": 19,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Friday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Friday",
+            "Period": 3,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Friday",
+            "Period": 4,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Husam",
+            "TeacherId": 7,
+            "Day": "Friday",
+            "Period": 5,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Monday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Monday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Monday",
+            "Period": 5,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Monday",
+            "Period": 6,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Monday",
+            "Period": 7,
+            "Subject": "Muzička kultura",
+            "SubjectId": 19,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Tuesday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Tuesday",
+            "Period": 3,
+            "Subject": "Muzička kultura",
+            "SubjectId": 19,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Tuesday",
+            "Period": 4,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Tuesday",
+            "Period": 6,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Tuesday",
+            "Period": 7,
+            "Subject": "Odjeljenska zajednica",
+            "SubjectId": 20,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Wednesday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Wednesday",
+            "Period": 5,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Wednesday",
+            "Period": 6,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Wednesday",
+            "Period": 7,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Thursday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Thursday",
+            "Period": 3,
+            "Subject": "Muzička kultura",
+            "SubjectId": 19,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Thursday",
+            "Period": 4,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Thursday",
+            "Period": 5,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Thursday",
+            "Period": 6,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Friday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Friday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Isa",
+            "TeacherId": 8,
+            "Day": "Friday",
+            "Period": 4,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Lejla",
+            "TeacherId": 9,
+            "Day": "Monday",
+            "Period": 7,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Lejla",
+            "TeacherId": 9,
+            "Day": "Tuesday",
+            "Period": 6,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Lejla",
+            "TeacherId": 9,
+            "Day": "Wednesday",
+            "Period": 4,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Lejla",
+            "TeacherId": 9,
+            "Day": "Thursday",
+            "Period": 1,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Monday",
+            "Period": 1,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Monday",
+            "Period": 3,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Monday",
+            "Period": 4,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Monday",
+            "Period": 6,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Tuesday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Tuesday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Tuesday",
+            "Period": 3,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Tuesday",
+            "Period": 4,
+            "Subject": "Društvo",
+            "SubjectId": 4,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Tuesday",
+            "Period": 6,
+            "Subject": "Muzička kultura",
+            "SubjectId": 19,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Wednesday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Wednesday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Wednesday",
+            "Period": 6,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Thursday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Thursday",
+            "Period": 2,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Thursday",
+            "Period": 3,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Friday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Friday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Lilas",
+            "TeacherId": 10,
+            "Day": "Friday",
+            "Period": 3,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Monday",
+            "Period": 1,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Monday",
+            "Period": 3,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Monday",
+            "Period": 4,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Tuesday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Tuesday",
+            "Period": 2,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Tuesday",
+            "Period": 4,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Tuesday",
+            "Period": 5,
+            "Subject": "Muzička kultura",
+            "SubjectId": 19,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Wednesday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Wednesday",
+            "Period": 2,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Wednesday",
+            "Period": 3,
+            "Subject": "Društvo",
+            "SubjectId": 4,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Wednesday",
+            "Period": 4,
+            "Subject": "Odjeljinska zajednica",
+            "SubjectId": 21,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Wednesday",
+            "Period": 6,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Thursday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Thursday",
+            "Period": 3,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Thursday",
+            "Period": 5,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Thursday",
+            "Period": 7,
+            "Subject": "Vjeronauka",
+            "SubjectId": 25,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Friday",
+            "Period": 1,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Friday",
+            "Period": 2,
+            "Subject": "Arapski jezik",
+            "SubjectId": 0,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Menal",
+            "TeacherId": 11,
+            "Day": "Friday",
+            "Period": 4,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Monday",
+            "Period": 2,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Monday",
+            "Period": 3,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Monday",
+            "Period": 4,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Monday",
+            "Period": 6,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Monday",
+            "Period": 7,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Tuesday",
+            "Period": 2,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Tuesday",
+            "Period": 5,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Tuesday",
+            "Period": 6,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Tuesday",
+            "Period": 7,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Wednesday",
+            "Period": 2,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Wednesday",
+            "Period": 3,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Wednesday",
+            "Period": 6,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Thursday",
+            "Period": 6,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Thursday",
+            "Period": 7,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Friday",
+            "Period": 3,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Muhamed",
+            "TeacherId": 12,
+            "Day": "Friday",
+            "Period": 5,
+            "Subject": "Hifz",
+            "SubjectId": 12,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Monday",
+            "Period": 1,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Monday",
+            "Period": 3,
+            "Subject": "Odjeljenska zajednica",
+            "SubjectId": 20,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Monday",
+            "Period": 4,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Monday",
+            "Period": 5,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Monday",
+            "Period": 6,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Tuesday",
+            "Period": 1,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Tuesday",
+            "Period": 3,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Tuesday",
+            "Period": 4,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Tuesday",
+            "Period": 6,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Wednesday",
+            "Period": 1,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Wednesday",
+            "Period": 2,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Wednesday",
+            "Period": 4,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Wednesday",
+            "Period": 6,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Wednesday",
+            "Period": 7,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Thursday",
+            "Period": 4,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Thursday",
+            "Period": 5,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Thursday",
+            "Period": 6,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Thursday",
+            "Period": 7,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Friday",
+            "Period": 1,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Friday",
+            "Period": 2,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Nahla",
+            "TeacherId": 13,
+            "Day": "Friday",
+            "Period": 4,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Monday",
+            "Period": 1,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Monday",
+            "Period": 2,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Monday",
+            "Period": 5,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Monday",
+            "Period": 6,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Tuesday",
+            "Period": 3,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Tuesday",
+            "Period": 4,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Tuesday",
+            "Period": 5,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Tuesday",
+            "Period": 6,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Tuesday",
+            "Period": 7,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Wednesday",
+            "Period": 3,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Wednesday",
+            "Period": 4,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Wednesday",
+            "Period": 5,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Wednesday",
+            "Period": 7,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Thursday",
+            "Period": 1,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Thursday",
+            "Period": 2,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Thursday",
+            "Period": 4,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Thursday",
+            "Period": 5,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Friday",
+            "Period": 1,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Najda",
+            "TeacherId": 14,
+            "Day": "Friday",
+            "Period": 5,
+            "Subject": "Bosanski jezik",
+            "SubjectId": 3,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Monday",
+            "Period": 1,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Monday",
+            "Period": 2,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Monday",
+            "Period": 3,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Monday",
+            "Period": 5,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Tuesday",
+            "Period": 1,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Tuesday",
+            "Period": 2,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Tuesday",
+            "Period": 7,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Wednesday",
+            "Period": 2,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Wednesday",
+            "Period": 3,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Wednesday",
+            "Period": 5,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Wednesday",
+            "Period": 7,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Thursday",
+            "Period": 3,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Thursday",
+            "Period": 4,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Thursday",
+            "Period": 5,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Thursday",
+            "Period": 7,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Friday",
+            "Period": 2,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Friday",
+            "Period": 3,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Nermin",
+            "TeacherId": 15,
+            "Day": "Friday",
+            "Period": 5,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Monday",
+            "Period": 5,
+            "Subject": "Bosanska historija",
+            "SubjectId": 2,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Monday",
+            "Period": 6,
+            "Subject": "Odjeljenska zajednica",
+            "SubjectId": 20,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Monday",
+            "Period": 7,
+            "Subject": "Bosanska historija",
+            "SubjectId": 2,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Tuesday",
+            "Period": 2,
+            "Subject": "Jordanska historija",
+            "SubjectId": 15,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Tuesday",
+            "Period": 4,
+            "Subject": "Historija",
+            "SubjectId": 13,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Tuesday",
+            "Period": 6,
+            "Subject": "Jordanska historija",
+            "SubjectId": 15,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Tuesday",
+            "Period": 7,
+            "Subject": "Bosanska historija",
+            "SubjectId": 2,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Wednesday",
+            "Period": 1,
+            "Subject": "Ekonomija",
+            "SubjectId": 5,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Wednesday",
+            "Period": 2,
+            "Subject": "Ekonomija",
+            "SubjectId": 5,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Wednesday",
+            "Period": 4,
+            "Subject": "Historija",
+            "SubjectId": 13,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Wednesday",
+            "Period": 5,
+            "Subject": "Historija",
+            "SubjectId": 13,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Wednesday",
+            "Period": 6,
+            "Subject": "Ekonomija",
+            "SubjectId": 5,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Thursday",
+            "Period": 1,
+            "Subject": "Društvo",
+            "SubjectId": 4,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Thursday",
+            "Period": 3,
+            "Subject": "Jordanska historija",
+            "SubjectId": 15,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Thursday",
+            "Period": 4,
+            "Subject": "Jordanska historija",
+            "SubjectId": 15,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Thursday",
+            "Period": 6,
+            "Subject": "Ekonomija",
+            "SubjectId": 5,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Thursday",
+            "Period": 7,
+            "Subject": "Historija",
+            "SubjectId": 13,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Friday",
+            "Period": 1,
+            "Subject": "Historija",
+            "SubjectId": 13,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Sedin",
+            "TeacherId": 16,
+            "Day": "Friday",
+            "Period": 5,
+            "Subject": "Bosanska historija",
+            "SubjectId": 2,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Monday",
+            "Period": 2,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Monday",
+            "Period": 2,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Monday",
+            "Period": 3,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Monday",
+            "Period": 3,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Monday",
+            "Period": 4,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Monday",
+            "Period": 5,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Monday",
+            "Period": 6,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Monday",
+            "Period": 7,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Tuesday",
+            "Period": 3,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Tuesday",
+            "Period": 3,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Tuesday",
+            "Period": 3,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Tuesday",
+            "Period": 4,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Tuesday",
+            "Period": 4,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Tuesday",
+            "Period": 4,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Tuesday",
+            "Period": 5,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Tuesday",
+            "Period": 6,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Wednesday",
+            "Period": 4,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Wednesday",
+            "Period": 5,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Wednesday",
+            "Period": 6,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Wednesday",
+            "Period": 7,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Thursday",
+            "Period": 2,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Thursday",
+            "Period": 2,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Thursday",
+            "Period": 3,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Thursday",
+            "Period": 3,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Thursday",
+            "Period": 6,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Thursday",
+            "Period": 7,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Friday",
+            "Period": 2,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Friday",
+            "Period": 3,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Friday",
+            "Period": 4,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Sumeja",
+            "TeacherId": 17,
+            "Day": "Friday",
+            "Period": 5,
+            "Subject": "Sport",
+            "SubjectId": 23,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Monday",
+            "Period": 2,
+            "Subject": "Engleski Jezik",
+            "SubjectId": 6,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Monday",
+            "Period": 4,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Monday",
+            "Period": 6,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Monday",
+            "Period": 7,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Tuesday",
+            "Period": 1,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Tuesday",
+            "Period": 4,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Tuesday",
+            "Period": 5,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Tuesday",
+            "Period": 7,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Wednesday",
+            "Period": 1,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Wednesday",
+            "Period": 3,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Wednesday",
+            "Period": 5,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Wednesday",
+            "Period": 7,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Thursday",
+            "Period": 1,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Thursday",
+            "Period": 2,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Thursday",
+            "Period": 4,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Friday",
+            "Period": 3,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Friday",
+            "Period": 4,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Suraja",
+            "TeacherId": 18,
+            "Day": "Friday",
+            "Period": 5,
+            "Subject": "Engleski jezik",
+            "SubjectId": 7,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Monday",
+            "Period": 1,
+            "Subject": "Biologija",
+            "SubjectId": 1,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Monday",
+            "Period": 3,
+            "Subject": "Biologija",
+            "SubjectId": 1,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Monday",
+            "Period": 4,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Tuesday",
+            "Period": 1,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Tuesday",
+            "Period": 2,
+            "Subject": "Geografija",
+            "SubjectId": 9,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Tuesday",
+            "Period": 4,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Wednesday",
+            "Period": 1,
+            "Subject": "Odjeljenska zajednica",
+            "SubjectId": 20,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Wednesday",
+            "Period": 3,
+            "Subject": "Biologija",
+            "SubjectId": 1,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Wednesday",
+            "Period": 4,
+            "Subject": "Biologija",
+            "SubjectId": 1,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Wednesday",
+            "Period": 5,
+            "Subject": "Geografija",
+            "SubjectId": 9,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Wednesday",
+            "Period": 7,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Thursday",
+            "Period": 1,
+            "Subject": "Biologija",
+            "SubjectId": 1,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Thursday",
+            "Period": 4,
+            "Subject": "Geografija",
+            "SubjectId": 9,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Thursday",
+            "Period": 5,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Thursday",
+            "Period": 6,
+            "Subject": "Geografija",
+            "SubjectId": 9,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Friday",
+            "Period": 2,
+            "Subject": "Biologija",
+            "SubjectId": 1,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Friday",
+            "Period": 4,
+            "Subject": "Geografija",
+            "SubjectId": 9,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Suzana",
+            "TeacherId": 19,
+            "Day": "Friday",
+            "Period": 5,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Monday",
+            "Period": 3,
+            "Subject": "Odjeljenska zajednica",
+            "SubjectId": 20,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Monday",
+            "Period": 4,
+            "Subject": "Likovna kultura",
+            "SubjectId": 17,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Monday",
+            "Period": 5,
+            "Subject": "Tehnička kultura",
+            "SubjectId": 24,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Monday",
+            "Period": 6,
+            "Subject": "Likovna kultura",
+            "SubjectId": 17,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Monday",
+            "Period": 7,
+            "Subject": "Likovna kultura",
+            "SubjectId": 17,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Tuesday",
+            "Period": 2,
+            "Subject": "Tehnička kultura",
+            "SubjectId": 24,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Tuesday",
+            "Period": 7,
+            "Subject": "Tehnička kultura",
+            "SubjectId": 24,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Wednesday",
+            "Period": 4,
+            "Subject": "Likovna kultura",
+            "SubjectId": 17,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Wednesday",
+            "Period": 5,
+            "Subject": "Tehnička kultura",
+            "SubjectId": 24,
+            "Grade": "6th Grade",
+            "DepartmentId": 8
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Wednesday",
+            "Period": 6,
+            "Subject": "Likovna / tehnička kultura",
+            "SubjectId": 16,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Wednesday",
+            "Period": 7,
+            "Subject": "Likovna kultura",
+            "SubjectId": 17,
+            "Grade": "3rd Grade",
+            "DepartmentId": 5
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Thursday",
+            "Period": 2,
+            "Subject": "Likovna kultura",
+            "SubjectId": 17,
+            "Grade": "7th Grade",
+            "DepartmentId": 9
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Thursday",
+            "Period": 4,
+            "Subject": "Likovna kultura",
+            "SubjectId": 17,
+            "Grade": "4th Grade",
+            "DepartmentId": 6
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Thursday",
+            "Period": 5,
+            "Subject": "Likovna kultura",
+            "SubjectId": 17,
+            "Grade": "1st Grade",
+            "DepartmentId": 3
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Thursday",
+            "Period": 6,
+            "Subject": "Likovna kultura",
+            "SubjectId": 17,
+            "Grade": "2nd Grade",
+            "DepartmentId": 4
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Thursday",
+            "Period": 7,
+            "Subject": "Tehnička kultura",
+            "SubjectId": 24,
+            "Grade": "5th Grade",
+            "DepartmentId": 7
+        },
+        {
+            "Teacher": "Walaa",
+            "TeacherId": 20,
+            "Day": "Friday",
+            "Period": 4,
+            "Subject": "Tehnička kultura",
+            "SubjectId": 24,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Monday",
+            "Period": 2,
+            "Subject": "Hemija",
+            "SubjectId": 11,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Monday",
+            "Period": 5,
+            "Subject": "Hemija",
+            "SubjectId": 11,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Monday",
+            "Period": 7,
+            "Subject": "Hemija",
+            "SubjectId": 11,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Tuesday",
+            "Period": 1,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Tuesday",
+            "Period": 5,
+            "Subject": "Hemija",
+            "SubjectId": 11,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Tuesday",
+            "Period": 7,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Wednesday",
+            "Period": 1,
+            "Subject": "Hemija",
+            "SubjectId": 11,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Wednesday",
+            "Period": 2,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Wednesday",
+            "Period": 3,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Wednesday",
+            "Period": 6,
+            "Subject": "Hemija",
+            "SubjectId": 11,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Wednesday",
+            "Period": 7,
+            "Subject": "Hemija",
+            "SubjectId": 11,
+            "Grade": "9th Grade",
+            "DepartmentId": 11
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Thursday",
+            "Period": 1,
+            "Subject": "Hemija",
+            "SubjectId": 11,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Thursday",
+            "Period": 2,
+            "Subject": "Hemija",
+            "SubjectId": 11,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Thursday",
+            "Period": 5,
+            "Subject": "Priroda",
+            "SubjectId": 22,
+            "Grade": "8th Grade",
+            "DepartmentId": 10
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Thursday",
+            "Period": 7,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Friday",
+            "Period": 1,
+            "Subject": "Hemija",
+            "SubjectId": 11,
+            "Grade": "11th Grade",
+            "DepartmentId": 1
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Friday",
+            "Period": 2,
+            "Subject": "Hemija",
+            "SubjectId": 11,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Friday",
+            "Period": 3,
+            "Subject": "Hemija",
+            "SubjectId": 11,
+            "Grade": "12th Grade",
+            "DepartmentId": 2
+        },
+        {
+            "Teacher": "Zejneb",
+            "TeacherId": 21,
+            "Day": "Friday",
+            "Period": 5,
+            "Subject": "Matematika",
+            "SubjectId": 18,
+            "Grade": "10th Grade",
+            "DepartmentId": 0
+        }
+    ]
+}
