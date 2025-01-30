@@ -8,7 +8,7 @@ const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 const Timetable = () => {
 	const { timetable, updateTimetable } = useTimetable();
-	const [viewMode, setViewMode] = useState("Grouped");
+	const [viewMode, setViewMode] = useState("Combined");
 
 	// Get unique teachers for combined view
 	const teachers = Array.from(new Set(timetable.map((entry) => entry.Teacher)));
