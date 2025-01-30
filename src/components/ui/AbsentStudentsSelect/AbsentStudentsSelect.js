@@ -1,5 +1,5 @@
 import React from "react";
-import CreatableSelect from "react-select/creatable";
+import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import "./AbsentStudentsSelect.css";
@@ -46,12 +46,12 @@ const AbsentStudentsSelect = ({
 				<FontAwesomeIcon icon={faUserPlus} className="header-icon" />
 				<span>Absent Students</span>
 			</div>
-			<CreatableSelect
+			<Select
 				isClearable
-				isSearchable
+				isSearchable={false} // Disables typing in the select field
 				onChange={addAbsentStudent}
 				options={filteredOptions}
-				placeholder="Type to search students..."
+				placeholder="Select a student..."
 			/>
 			<div
 				className={`absent-students-list ${
