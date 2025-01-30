@@ -164,6 +164,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 					<DataTable
 						currentLogs={currentLogs}
 						handleDeleteLog={handleDeleteLog}
+						setClassLogs={setClassLogs}
 					/>
 
 					<Pagination

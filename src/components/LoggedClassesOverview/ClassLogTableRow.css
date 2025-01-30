@@ -14,6 +14,17 @@
 .delete-log-button:hover {
 	color: #a71d2a;
 }
+.edit-log-button {
+	background: transparent;
+	border: none;
+	color: #04abfd;
+	cursor: pointer;
+	font-size: 0.8rem;
+}
+
+.edit-log-button:hover {
+	color: #0598e2;
+}
 
 .attendance-info {
 	position: relative;

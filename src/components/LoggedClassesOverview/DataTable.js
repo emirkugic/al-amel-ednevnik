@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import ClassLogTableRow from "./ClassLogTableRow";
 import MobileLogDetailsModal from "./MobileLogDetailsModal";
+import EditLogModal from "./EditLogModal"; // Import the new EditLogModal component
 import "./DataTable.css";
 
-const DataTable = ({ currentLogs, handleDeleteLog }) => {
+const DataTable = ({ currentLogs, handleDeleteLog, setClassLogs }) => {
 	const [selectedLog, setSelectedLog] = useState(null);
+	const [editingLog, setEditingLog] = useState(null); // Track the log being edited
 
 	const columns = {
 		date: "Date",
@@ -29,6 +31,14 @@ const DataTable = ({ currentLogs, handleDeleteLog }) => {
 		closeLogDetails();
 	};
 
+	const handleEditLog = (log) => {
+		setEditingLog(log); // Open the edit modal with the selected log
+	};
+
+	const closeEditModal = () => {
+		setEditingLog(null); // Close the edit modal
+	};
+
 	return (
 		<div className="data-table-wrapper">
 			<div className="data-table-container">
@@ -50,6 +60,7 @@ const DataTable = ({ currentLogs, handleDeleteLog }) => {
 								key={log.classLogId}
 								log={log}
 								handleDeleteLog={handleDeleteLog}
+								handleEditLog={handleEditLog}
 								columns={columns}
 							/>
 						))}
@@ -57,39 +68,26 @@ const DataTable = ({ currentLogs, handleDeleteLog }) => {
 				</table>
 			</div>
 
-			<div className="log-list">
-				{currentLogs.map((log) => (
-					<div
-						key={log.classLogId}
-						className="log-list-item"
-						onClick={() => openLogDetails(log)}
-					>
-						<div className="log-item-row">
-							<span className="log-item-label">Date:</span>
-							<span>{new Date(log.classDate).toLocaleDateString()}</span>
-						</div>
-						<div className="log-item-row">
-							<span className="log-item-label">Period:</span>
-							<span>{log.period}</span>
-						</div>
-						<div className="log-item-row">
-							<span className="log-item-label">Title:</span>
-							<span>{log.lectureTitle}</span>
-						</div>
-						<div className="log-item-row">
-							<span className="log-item-label">Seq:</span>
-							<span>{log.sequence}</span>
-						</div>
-						<div className="log-item-more">Tap for more details</div>
-					</div>
-				))}
-			</div>
-
 			{selectedLog && (
 				<MobileLogDetailsModal
 					log={selectedLog}
 					onClose={closeLogDetails}
 					onDelete={handleDeleteAndClose}
+				/>
+			)}
+
+			{editingLog && (
+				<EditLogModal
+					log={editingLog}
+					onClose={closeEditModal}
+					handleUpdateLog={(updatedLog) => {
+						// Replace the log with the updated version
+						setClassLogs((prevLogs) =>
+							prevLogs.map((log) =>
+								log.classLogId === updatedLog.classLogId ? updatedLog : log
+							)
+						);
+					}}
 				/>
 			)}
 		</div>
