@@ -38,8 +38,8 @@ const classLogApi = {
 	},
 
 	// Update a class log
-	updateClassLog: async (id, classLogData, token) => {
-		const response = await apiClient.put(`/ClassLog/${id}`, classLogData, {
+	updateClassLog: async (id, updatedLogData, token) => {
+		const response = await apiClient.put(`/ClassLog/${id}`, updatedLogData, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		return response.data;
