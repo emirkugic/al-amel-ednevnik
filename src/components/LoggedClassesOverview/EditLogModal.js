@@ -4,63 +4,79 @@ import AbsentStudentsSelect from "../ui/AbsentStudentsSelect/AbsentStudentsSelec
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
 import studentApi from "../../api/studentApi";
+import classLogApi from "../../api/classLogApi"; // ✅ API import
 import useAuth from "../../hooks/useAuth";
 import "./EditLogModal.css";
 import { faChalkboardTeacher } from "@fortawesome/free-solid-svg-icons";
 
 const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 	const { user } = useAuth();
-	const [lectureTitle, setLectureTitle] = useState(log.lectureTitle);
-	const [absentStudents, setAbsentStudents] = useState(
-		log.absentStudents.map((s) => ({
-			value: s.id,
-			label: `${s.firstName} ${s.lastName}`,
-		}))
-	);
+	const [lectureTitle, setLectureTitle] = useState(log.lectureTitle || "");
+	const [absentStudents, setAbsentStudents] = useState([]);
 	const [studentOptions, setStudentOptions] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [notification, setNotification] = useState("");
 
+	// ✅ Fetch students when the modal opens
 	useEffect(() => {
+		if (!log.departmentId) return;
+
 		const fetchStudents = async () => {
 			try {
 				const students = await studentApi.getStudentsByDepartment(
 					log.departmentId,
 					user.token
 				);
-				setStudentOptions(
-					students.map((student) => ({
-						value: student.id,
-						label: `${student.firstName} ${student.lastName}`,
-					}))
-				);
+
+				const formattedStudents = students.map((student) => ({
+					value: student.id,
+					label: `${student.firstName} ${student.lastName}`,
+				}));
+
+				setStudentOptions(formattedStudents);
+
+				// ✅ Correct absent students format
+				const formattedAbsent = log.absentStudents
+					.map((s) => formattedStudents.find((stu) => stu.value === s.id))
+					.filter(Boolean);
+				setAbsentStudents(formattedAbsent);
 			} catch (error) {
+				console.error("Error fetching students:", error);
 				setNotification("Error fetching students. Please try again.");
 			}
 		};
 
 		fetchStudents();
-	}, [log.departmentId, user.token]);
+	}, [log.departmentId, user.token, log.absentStudents]);
 
+	// ✅ Submit the edited log
 	const handleSubmit = async () => {
-		if (!lectureTitle) {
+		if (!lectureTitle.trim()) {
 			setNotification("Please enter a lecture title.");
 			return;
 		}
 
+		// ✅ Prepare request data matching UpdateClassLogDto
 		const updatedLog = {
-			...log,
 			lectureTitle,
-			absentStudents: absentStudents.map((s) => ({
-				id: s.value,
-				firstName: s.label.split(" ")[0],
-				lastName: s.label.split(" ")[1],
-			})),
+			lectureType: log.lectureType || "Lecture", // Default value
+			classDate: log.classDate, // Keep existing date
+			period: log.period,
+			sequence: parseInt(log.sequence, 10) || 1, // Ensure it's a number
+			absentStudentIds: absentStudents.map((s) => s.value),
 		};
+
+		console.log("Request Body:", JSON.stringify(updatedLog, null, 2));
 
 		setIsLoading(true);
 		try {
-			await handleUpdateLog(updatedLog);
+			// ✅ Call API to update class log
+			await classLogApi.updateClassLog(log.classLogId, updatedLog, user.token);
+
+			// ✅ Update UI state after successful update
+			handleUpdateLog({ ...log, ...updatedLog });
+
+			// ✅ Close modal after success
 			onClose();
 		} catch (error) {
 			console.error("Error updating log:", error);

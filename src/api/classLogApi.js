@@ -37,8 +37,12 @@ const classLogApi = {
 		return response.data;
 	},
 
-	// Update a class log
+	// ✅ Update class log using new DTO format
 	updateClassLog: async (id, updatedLogData, token) => {
+		console.log(
+			"Sending request to update log:",
+			JSON.stringify(updatedLogData, null, 2)
+		);
 		const response = await apiClient.put(`/ClassLog/${id}`, updatedLogData, {
 			headers: { Authorization: `Bearer ${token}` },
 		});

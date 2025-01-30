@@ -3,10 +3,13 @@ import ClassLogTableRow from "./ClassLogTableRow";
 import MobileLogDetailsModal from "./MobileLogDetailsModal";
 import EditLogModal from "./EditLogModal"; // Import the new EditLogModal component
 import "./DataTable.css";
+import classLogApi from "../../api/classLogApi";
+import useAuth from "../../hooks/useAuth";
 
 const DataTable = ({ currentLogs, handleDeleteLog, setClassLogs }) => {
 	const [selectedLog, setSelectedLog] = useState(null);
 	const [editingLog, setEditingLog] = useState(null); // Track the log being edited
+	const { user } = useAuth();
 
 	const columns = {
 		date: "Date",
@@ -81,10 +84,12 @@ const DataTable = ({ currentLogs, handleDeleteLog, setClassLogs }) => {
 					log={editingLog}
 					onClose={closeEditModal}
 					handleUpdateLog={(updatedLog) => {
-						// Replace the log with the updated version
+						// ✅ Update state after API call
 						setClassLogs((prevLogs) =>
 							prevLogs.map((log) =>
-								log.classLogId === updatedLog.classLogId ? updatedLog : log
+								log.classLogId === updatedLog.classLogId
+									? { ...log, ...updatedLog }
+									: log
 							)
 						);
 					}}
