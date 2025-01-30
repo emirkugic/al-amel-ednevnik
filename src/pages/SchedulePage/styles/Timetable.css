@@ -35,7 +35,7 @@
 }
 
 .combined-table .empty {
-	background-color: #f8d7da;
+	background-color: #f8d7da65;
 	color: #adb5bd;
 }
 
@@ -50,4 +50,46 @@
 	padding: 8px;
 	border-radius: 5px;
 	border: 1px solid #ddd;
+}
+
+/* General styles remain unchanged */
+
+.cell {
+	position: relative;
+	min-height: 60px;
+	text-align: center;
+	vertical-align: middle;
+	transition: background-color 0.3s ease;
+}
+
+.cell.empty {
+	background-color: #f8d7da;
+	color: #adb5bd;
+}
+
+.cell.empty-hover {
+	background-color: #e2e6ea; /* Lighter hover effect */
+	color: #333;
+}
+
+.cell.filled {
+	background-color: #e9f7ef;
+	color: #333;
+}
+
+.draggable {
+	cursor: grab;
+	padding: 8px;
+	background-color: #d4edda; /* Green background for a natural look */
+	color: #155724;
+	border-radius: 4px;
+	font-weight: bold;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+	user-select: none; /* Disable text selection */
+}
+
+.draggable:active {
+	cursor: grabbing;
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
