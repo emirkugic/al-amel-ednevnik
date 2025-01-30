@@ -90,32 +90,31 @@ const DesktopSidebar = () => {
 	const menuItems = useMemo(() => {
 		const items = [
 			{ title: "Dashboard", icon: faHouse, route: "/" },
-			{ title: "Students", icon: faPeopleGroup, route: "/students" },
+			// { title: "Students", icon: faPeopleGroup, route: "/students" },
 			{
 				title: "Grades",
 				icon: faBook,
 				route: myCourses,
 			},
-			// { title: "Grades", icon: faChartLine, route: "/grades" },
 			{
 				title: "Lectures",
 				icon: faBookOpen,
 				route: myDepartments,
 			},
-			{
-				title: "My Department",
-				icon: faChalkboardTeacher,
-				route: "/department/testID",
-			},
-			{
-				title: "Schedule",
-				icon: faCalendarAlt,
-				route: "/schedule",
-			},
 		];
 
 		if (user?.role === "Admin") {
 			items.push(
+				{
+					title: "My Department",
+					icon: faChalkboardTeacher,
+					route: "/department/testID",
+				},
+				{
+					title: "Schedule",
+					icon: faCalendarAlt,
+					route: "/schedule",
+				},
 				{
 					title: "Teachers",
 					icon: faChalkboardTeacher,
