@@ -6,6 +6,7 @@ const classLogApi = {
 		const response = await apiClient.get("/ClassLog", {
 			headers: { Authorization: `Bearer ${token}` },
 		});
+		console.log("Fetched all class logs:", response.data);
 		return response.data;
 	},
 
