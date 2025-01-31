@@ -116,6 +116,11 @@ const DesktopSidebar = () => {
 					route: "/schedule",
 				},
 				{
+					title: "Weekly report",
+					icon: faChartLine,
+					route: "/logs",
+				},
+				{
 					title: "Teachers",
 					icon: faChalkboardTeacher,
 					route: "/teachers",

@@ -31,6 +31,7 @@ import {
 	AssessmentPage,
 	DepartmentPage,
 	SchedulePage,
+	LogsPage,
 } from "./pages/index.js";
 
 import "./App.css";
@@ -60,6 +61,7 @@ const AppContent = () => {
 						<Route path="/classes" element={<Classes />} />
 						<Route path="/parents" element={<Parents />} />
 						<Route path="/schedule" element={<SchedulePage />} />
+						<Route path="/logs" element={<LogsPage />} />
 
 						<Route path="/lectures/:departmentId" element={<LecturesPage />} />
 						<Route path="/courses/:subject" element={<AssessmentPage />} />
