@@ -60,7 +60,7 @@ const CreateStudentModal = ({ isOpen, onClose, token }) => {
 		try {
 			const response = await studentApi.createStudent(formattedFormData, token);
 			alert("Student created successfully!");
-			console.log("Created Student:", response);
+			// console.log("Created Student:", response);
 			setFormData({
 				firstName: "",
 				lastName: "",

@@ -66,7 +66,7 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 			absentStudentIds: absentStudents.map((s) => s.value),
 		};
 
-		console.log("Request Body:", JSON.stringify(updatedLog, null, 2));
+		// console.log("Request Body:", JSON.stringify(updatedLog, null, 2));
 
 		setIsLoading(true);
 		try {

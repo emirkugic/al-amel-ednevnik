@@ -84,14 +84,29 @@ const DataTable = ({ currentLogs, handleDeleteLog, setClassLogs }) => {
 					log={editingLog}
 					onClose={closeEditModal}
 					handleUpdateLog={(updatedLog) => {
-						// ✅ Update state after API call
-						setClassLogs((prevLogs) =>
-							prevLogs.map((log) =>
-								log.classLogId === updatedLog.classLogId
-									? { ...log, ...updatedLog }
-									: log
-							)
-						);
+						setClassLogs((prevLogs) => {
+							const newLogs = prevLogs.map((log) => {
+								if (log.departmentId !== updatedLog.departmentId) return log;
+
+								const updatedSubjects = log.subjects.map((subject) => {
+									if (subject.subjectId !== updatedLog.subjectId)
+										return subject;
+
+									const updatedClassLogs = subject.classLogs.map((classLog) =>
+										classLog.classLogId === updatedLog.classLogId
+											? { ...classLog, ...updatedLog }
+											: classLog
+									);
+
+									return { ...subject, classLogs: [...updatedClassLogs] };
+								});
+
+								return { ...log, subjects: [...updatedSubjects] };
+							});
+							window.location.reload();
+							// TODO: Remove the reload and update the state properly
+							return [...newLogs];
+						});
 					}}
 				/>
 			)}

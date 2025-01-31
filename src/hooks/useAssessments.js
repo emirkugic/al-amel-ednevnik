@@ -104,7 +104,7 @@ const useAssessments = (token) => {
 					assessmentId,
 					token
 				);
-			console.log("Students and grades fetched:", response);
+			// console.log("Students and grades fetched:", response);
 			return response; // Return the fetched data
 		} catch (err) {
 			console.error("Error fetching students and grades:", err);

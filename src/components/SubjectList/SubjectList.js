@@ -12,7 +12,7 @@ const SubjectList = () => {
 	];
 
 	const handlePillClick = (title) => {
-		console.log(`You clicked on: ${title}`);
+		// console.log(`You clicked on: ${title}`);
 	};
 
 	return (

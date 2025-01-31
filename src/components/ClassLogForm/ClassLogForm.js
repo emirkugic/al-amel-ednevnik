@@ -76,7 +76,7 @@ const ClassLogForm = () => {
 			absentStudents,
 			classSequence,
 		};
-		console.log("Submitting data:", data);
+		// console.log("Submitting data:", data);
 	};
 
 	return (
