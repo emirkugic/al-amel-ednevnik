@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import departmentApi from "./departmentApi";
+import departmentApi from "../api/departmentApi";
 
 const useDepartments = (token) => {
 	const [departments, setDepartments] = useState([]);

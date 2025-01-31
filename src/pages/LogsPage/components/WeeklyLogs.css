@@ -1,0 +1,99 @@
+/* Container styling */
+.weekly-logs {
+	padding: 20px;
+	font-family: Arial, sans-serif;
+}
+
+/* Controls at the top */
+.controls {
+	margin-bottom: 20px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.controls label {
+	font-weight: bold;
+}
+
+.week-label {
+	margin-left: auto;
+	font-style: italic;
+}
+
+/* Timetable container */
+.timetable {
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+}
+
+/* Each row in the timetable */
+.timetable-row {
+	display: flex;
+}
+
+/* Day label cell */
+.day-label {
+	background-color: #f0f0f0;
+	padding: 8px;
+	border: 1px solid #ccc;
+	width: 120px;
+	text-align: center;
+	font-weight: bold;
+}
+
+/* Individual period cell */
+.timetable-cell {
+	flex: 1;
+	background-color: #fff;
+	padding: 8px;
+	border: 1px solid #ccc;
+	min-height: 80px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	position: relative;
+}
+
+/* Label inside each cell */
+.timetable-cell .period-label {
+	font-weight: bold;
+	margin-bottom: 4px;
+}
+
+/* When no log exists for the period */
+.no-log {
+	color: red;
+	font-weight: bold;
+}
+
+/* Highlight cell in light red when missing a log */
+.missing {
+	background-color: #ffcccc;
+}
+
+/* Styling for log details */
+.logs {
+	font-size: 0.9em;
+}
+
+.log-entry {
+	margin-bottom: 4px;
+}
+
+/* Duplicate logs indicator */
+.duplicate-indicator {
+	color: #d00;
+	font-size: 0.8em;
+	font-weight: bold;
+	margin-top: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.day-label {
+		width: 100px;
+	}
+}
