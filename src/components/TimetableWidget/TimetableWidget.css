@@ -1,4 +1,4 @@
-.timetable-widget {
+.ttw-widget {
 	max-width: 300px;
 	background-color: #ffffff;
 	border-radius: 12px;
@@ -9,13 +9,13 @@
 	margin-top: 20px;
 }
 
-.timetable {
+.ttw-timetable {
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
 }
 
-.timetable-row {
+.ttw-row {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -27,17 +27,17 @@
 	color: #5a5a5a;
 }
 
-.timetable-row.current-period {
-	background-color: #cce4f6; /* New highlight color for the current period */
-	color: #007acc; /* New text color */
+.ttw-row.ttw-current {
+	background-color: #cce4f6;
+	color: #007acc;
 	font-weight: bold;
 }
 
-.timetable-time {
+.ttw-time {
 	font-weight: bold;
 	color: #007acc;
 }
 
-.timetable-label {
+.ttw-label {
 	color: #5a5a5a;
 }

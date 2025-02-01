@@ -6,21 +6,17 @@ const TimetableWidget = () => {
 	const isWinter = today.getMonth() >= 10 || today.getMonth() <= 3; // November - April is winter time
 	const isFriday = today.getDay() === 5;
 
-	// Automatically set mode based on date
 	const [mode] = useState(isWinter ? "Winter" : "Summer");
 	const [subMode] = useState(isFriday ? "Friday" : "Monday to Thursday");
 	const [currentTime, setCurrentTime] = useState(new Date());
 
-	// Update the current time every minute to refresh the highlight
 	useEffect(() => {
 		const timer = setInterval(() => {
 			setCurrentTime(new Date());
-		}, 60000); // Update every 60 seconds
-
-		return () => clearInterval(timer); // Cleanup timer on component unmount
+		}, 60000);
+		return () => clearInterval(timer);
 	}, []);
 
-	// Define the timetable data
 	const timetableData = {
 		Summer: {
 			"Monday to Thursday": [
@@ -68,9 +64,8 @@ const TimetableWidget = () => {
 
 	const currentTimetable = timetableData[mode][subMode];
 
-	// Function to check if the current time falls within the given start and end time
 	const isCurrentPeriod = (start, end) => {
-		const now = currentTime.getHours() * 60 + currentTime.getMinutes(); // current time in minutes
+		const now = currentTime.getHours() * 60 + currentTime.getMinutes();
 		const [startHours, startMinutes] = start.split(":").map(Number);
 		const [endHours, endMinutes] = end.split(":").map(Number);
 		const startTime = startHours * 60 + startMinutes;
@@ -80,19 +75,19 @@ const TimetableWidget = () => {
 	};
 
 	return (
-		<div className="timetable-widget">
-			<div className="timetable">
+		<div className="ttw-widget">
+			<div className="ttw-timetable">
 				{currentTimetable.map((item, index) => (
 					<div
 						key={index}
-						className={`timetable-row ${
-							isCurrentPeriod(item.start, item.end) ? "current-period" : ""
+						className={`ttw-row ${
+							isCurrentPeriod(item.start, item.end) ? "ttw-current" : ""
 						}`}
 					>
-						<div className="timetable-time">
+						<div className="ttw-time">
 							{item.start} - {item.end}
 						</div>
-						<div className="timetable-label">{item.label}</div>
+						<div className="ttw-label">{item.label}</div>
 					</div>
 				))}
 			</div>
