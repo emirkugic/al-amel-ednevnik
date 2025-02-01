@@ -72,6 +72,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 					...log,
 					subject: subject.subjectName,
 					sequence: log.sequence || 1,
+					departmentId: departmentLogs.departmentId,
 				}))
 			)
 			.filter((log) => {

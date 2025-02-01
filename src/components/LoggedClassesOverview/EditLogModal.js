@@ -4,7 +4,7 @@ import AbsentStudentsSelect from "../ui/AbsentStudentsSelect/AbsentStudentsSelec
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
 import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
 import studentApi from "../../api/studentApi";
-import classLogApi from "../../api/classLogApi"; // ✅ API import
+import classLogApi from "../../api/classLogApi";
 import useAuth from "../../hooks/useAuth";
 import "./EditLogModal.css";
 import { faChalkboardTeacher } from "@fortawesome/free-solid-svg-icons";
@@ -17,7 +17,6 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [notification, setNotification] = useState("");
 
-	// ✅ Fetch students when the modal opens
 	useEffect(() => {
 		if (!log.departmentId) return;
 
@@ -28,6 +27,7 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 					user.token
 				);
 
+				// Format students for the dropdown
 				const formattedStudents = students.map((student) => ({
 					value: student.id,
 					label: `${student.firstName} ${student.lastName}`,
@@ -35,10 +35,15 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 
 				setStudentOptions(formattedStudents);
 
-				// ✅ Correct absent students format
+				// Format absent students to match the dropdown options
 				const formattedAbsent = log.absentStudents
-					.map((s) => formattedStudents.find((stu) => stu.value === s.id))
-					.filter(Boolean);
+					.map((absent) =>
+						formattedStudents.find(
+							(student) => student.value === absent.studentId
+						)
+					)
+					.filter(Boolean); // Remove unmatched students
+
 				setAbsentStudents(formattedAbsent);
 			} catch (error) {
 				console.error("Error fetching students:", error);
@@ -49,34 +54,27 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 		fetchStudents();
 	}, [log.departmentId, user.token, log.absentStudents]);
 
-	// ✅ Submit the edited log
 	const handleSubmit = async () => {
 		if (!lectureTitle.trim()) {
 			setNotification("Please enter a lecture title.");
 			return;
 		}
 
-		// ✅ Prepare request data matching UpdateClassLogDto
 		const updatedLog = {
 			lectureTitle,
-			lectureType: log.lectureType || "Lecture", // Default value
-			classDate: log.classDate, // Keep existing date
+			lectureType: log.lectureType || "Lecture",
+			classDate: log.classDate,
 			period: log.period,
-			sequence: parseInt(log.sequence, 10) || 1, // Ensure it's a number
+			sequence: parseInt(log.sequence, 10) || 1,
 			absentStudentIds: absentStudents.map((s) => s.value),
 		};
 
-		// console.log("Request Body:", JSON.stringify(updatedLog, null, 2));
-
 		setIsLoading(true);
 		try {
-			// ✅ Call API to update class log
 			await classLogApi.updateClassLog(log.classLogId, updatedLog, user.token);
 
-			// ✅ Update UI state after successful update
 			handleUpdateLog({ ...log, ...updatedLog });
 
-			// ✅ Close modal after success
 			onClose();
 		} catch (error) {
 			console.error("Error updating log:", error);
