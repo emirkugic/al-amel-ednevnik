@@ -85,13 +85,16 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 			return;
 		}
 
+		const utcDate = new Date(selectedDay);
+		utcDate.setUTCHours(0, 0, 0, 0);
+
 		const classLogData = {
 			departmentId,
 			subjectId,
 			teacherId: user?.id,
 			lectureTitle,
 			lectureType: "Lecture",
-			classDate: selectedDay,
+			classDate: utcDate.toISOString(),
 			period: classHour,
 			absentStudentIds: absentStudents.map((s) => s.value),
 			...(classSequence && { sequence: parseInt(classSequence, 10) }),
