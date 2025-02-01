@@ -1,10 +1,9 @@
-/* Container styling */
-.weekly-logs {
+Container styling .weekly-logs {
 	padding: 20px;
 	font-family: Arial, sans-serif;
+	background-color: #f9f9f9;
 }
 
-/* Controls at the top */
 .controls {
 	margin-bottom: 20px;
 	display: flex;
@@ -19,81 +18,111 @@
 .week-label {
 	margin-left: auto;
 	font-style: italic;
+	color: #555;
 }
 
-/* Timetable container */
 .timetable {
 	display: flex;
 	flex-direction: column;
-	gap: 1px;
+	gap: 2px;
+	background-color: #e9ecef;
+	border-radius: 8px;
+	overflow: hidden;
 }
 
-/* Each row in the timetable */
 .timetable-row {
 	display: flex;
 }
 
-/* Day label cell */
 .day-label {
-	background-color: #f0f0f0;
-	padding: 8px;
-	border: 1px solid #ccc;
-	width: 120px;
+	background-color: #f0f8ff;
+	padding: 10px;
+	border-right: 2px solid #ddd;
 	text-align: center;
 	font-weight: bold;
+	font-size: 0.9em;
+	width: 140px;
+	min-width: 120px;
+	color: #333;
 }
 
-/* Individual period cell */
 .timetable-cell {
 	flex: 1;
 	background-color: #fff;
 	padding: 8px;
-	border: 1px solid #ccc;
-	min-height: 80px;
+	border: 1px solid #ddd;
+	min-height: 90px;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: flex-start;
 	position: relative;
+	border-radius: 4px;
+	transition: background-color 0.3s ease;
 }
 
-/* Label inside each cell */
+.timetable-cell:hover {
+	background-color: #f7f7f7;
+}
+
 .timetable-cell .period-label {
 	font-weight: bold;
+	color: #666;
 	margin-bottom: 4px;
 }
 
-/* When no log exists for the period */
 .no-log {
-	color: red;
+	color: #d9534f;
 	font-weight: bold;
 }
 
-/* Highlight cell in light red when missing a log */
 .missing {
-	background-color: #ffcccc;
+	background-color: #f8d7da;
+	color: #721c24;
 }
 
-/* Styling for log details */
 .logs {
 	font-size: 0.9em;
+	line-height: 1.4;
 }
 
 .log-entry {
 	margin-bottom: 4px;
+	color: #333;
 }
 
-/* Duplicate logs indicator */
-.duplicate-indicator {
-	color: #d00;
-	font-size: 0.8em;
+.log-entry .lecture-title {
 	font-weight: bold;
-	margin-top: 5px;
+	color: #495057;
 }
 
-/* Responsive adjustments */
+.log-details {
+	color: #555;
+	font-size: 0.85em;
+}
+
+.duplicate-indicator {
+	color: #e63946;
+	font-size: 0.75em;
+	font-weight: bold;
+	border: 1px solid #e63946;
+	padding: 2px 6px;
+	border-radius: 12px;
+	background: #f8d7da;
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+}
+
 @media (max-width: 768px) {
 	.day-label {
 		width: 100px;
+		font-size: 0.8em;
+		padding: 8px;
+	}
+
+	.timetable-cell {
+		min-height: 70px;
+		padding: 6px;
 	}
 }

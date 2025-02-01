@@ -154,9 +154,9 @@ const WeeklyLogs = () => {
 												</div>
 											))}
 											{logsForCell.length > 1 && (
-												<div className="duplicate-indicator">
-													Duplicate logs!
-												</div>
+												<span className="duplicate-indicator">
+													Duplicate logs
+												</span>
 											)}
 										</div>
 									)}
