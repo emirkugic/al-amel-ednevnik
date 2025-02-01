@@ -107,6 +107,7 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 				user.token
 			);
 
+			// Update state so the new log shows the absent students immediately.
 			setClassLogs((prevLogs) =>
 				prevLogs.map((log) =>
 					log.departmentId === departmentId
@@ -122,6 +123,10 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 														...newClassLog,
 														classLogId: newClassLog.id,
 														subjectName: subject.name,
+														absentStudents: absentStudents.map((s) => ({
+															studentId: s.value,
+															name: s.label,
+														})),
 													},
 												],
 										  }
@@ -198,7 +203,7 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 					studentOptions={studentOptions}
 					absentStudents={absentStudents}
 					setAbsentStudents={setAbsentStudents}
-					setNotification={setNotification} // Pass the notification setter
+					setNotification={setNotification}
 				/>
 
 				<div className="button-container">

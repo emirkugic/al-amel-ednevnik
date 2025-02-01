@@ -3,10 +3,13 @@ import ClassLogTableRow from "./ClassLogTableRow";
 import MobileLogDetailsModal from "./MobileLogDetailsModal";
 import EditLogModal from "./EditLogModal"; // Import the new EditLogModal component
 import "./DataTable.css";
+import classLogApi from "../../api/classLogApi";
+import useAuth from "../../hooks/useAuth";
 
 const DataTable = ({ currentLogs, handleDeleteLog, setClassLogs }) => {
 	const [selectedLog, setSelectedLog] = useState(null);
 	const [editingLog, setEditingLog] = useState(null); // Track the log being edited
+	const { user } = useAuth();
 
 	const columns = {
 		date: "Date",
@@ -82,27 +85,26 @@ const DataTable = ({ currentLogs, handleDeleteLog, setClassLogs }) => {
 					onClose={closeEditModal}
 					handleUpdateLog={(updatedLog) => {
 						setClassLogs((prevLogs) => {
-							const newLogs = prevLogs.map((log) => {
+							return prevLogs.map((log) => {
 								if (log.departmentId !== updatedLog.departmentId) return log;
 
-								const updatedSubjects = log.subjects.map((subject) => {
-									if (subject.subjectId !== updatedLog.subjectId)
-										return subject;
+								return {
+									...log,
+									subjects: log.subjects.map((subject) => {
+										if (subject.subjectId !== updatedLog.subjectId)
+											return subject;
 
-									const updatedClassLogs = subject.classLogs.map((classLog) =>
-										classLog.classLogId === updatedLog.classLogId
-											? { ...classLog, ...updatedLog }
-											: classLog
-									);
-
-									return { ...subject, classLogs: [...updatedClassLogs] };
-								});
-
-								return { ...log, subjects: [...updatedSubjects] };
+										return {
+											...subject,
+											classLogs: subject.classLogs.map((classLog) =>
+												classLog.classLogId === updatedLog.classLogId
+													? { ...classLog, ...updatedLog }
+													: classLog
+											),
+										};
+									}),
+								};
 							});
-							window.location.reload();
-							// TODO: Remove the reload and update the state properly
-							return [...newLogs];
 						});
 					}}
 				/>

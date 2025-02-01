@@ -60,6 +60,7 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 			return;
 		}
 
+		// Prepare the updated log data
 		const updatedLog = {
 			lectureTitle,
 			lectureType: log.lectureType || "Lecture",
@@ -73,8 +74,8 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 		try {
 			await classLogApi.updateClassLog(log.classLogId, updatedLog, user.token);
 
-			handleUpdateLog({ ...log, ...updatedLog });
-
+			// Pass along the updated absent students so that the DataTable reflects the change
+			handleUpdateLog({ ...log, ...updatedLog, absentStudents });
 			onClose();
 		} catch (error) {
 			console.error("Error updating log:", error);
