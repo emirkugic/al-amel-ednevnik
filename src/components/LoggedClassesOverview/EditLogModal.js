@@ -76,6 +76,8 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 
 			// Pass along the updated absent students so that the DataTable reflects the change
 			handleUpdateLog({ ...log, ...updatedLog, absentStudents });
+			// refresh page after submitting
+			window.location.reload();
 			onClose();
 		} catch (error) {
 			console.error("Error updating log:", error);
