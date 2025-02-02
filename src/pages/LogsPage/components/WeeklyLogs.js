@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useAllClassLogs from "../hooks/useAllClassLogs";
 import useDepartments from "../../../hooks/useDepartments";
 import useTeachers from "../../../hooks/useTeachers";
@@ -25,10 +25,17 @@ const WeeklyLogs = () => {
 		error: teachersError,
 	} = useTeachers(token);
 
-	const [selectedDepartment, setSelectedDepartment] = useState("all");
+	// Only allow individual departments.
+	const [selectedDepartment, setSelectedDepartment] = useState("");
 	const [weekOffset, setWeekOffset] = useState(0);
 
-	// Get the Monday for any given date.
+	useEffect(() => {
+		if (!selectedDepartment && departments && departments.length > 0) {
+			setSelectedDepartment(departments[0].id);
+		}
+	}, [departments, selectedDepartment]);
+
+	// Get Monday for any given date.
 	const getMonday = (d) => {
 		const date = new Date(d);
 		const day = date.getDay() || 7;
@@ -43,7 +50,7 @@ const WeeklyLogs = () => {
 	const mondayOffset = new Date(currentMonday);
 	mondayOffset.setDate(currentMonday.getDate() + weekOffset * 7);
 
-	// Build weekdays array (Mon-Fri) with abbreviated day name, ISO date, and period count.
+	// Build weekdays array (Mon–Fri) with abbreviated day name, ISO date, and period count.
 	const weekdays = [];
 	const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 	for (let i = 0; i < 5; i++) {
@@ -57,27 +64,29 @@ const WeeklyLogs = () => {
 		});
 	}
 
-	// Helper: Filter logs for a given ISO date and period.
+	// Helper: Filter logs for a given date and period.
 	const getLogsFor = (dateFormatted, period) => {
 		return classLogs.filter((log) => {
 			const logDate = new Date(log.classDate).toISOString().split("T")[0];
 			const matchesDate = logDate === dateFormatted;
 			const matchesPeriod = Number(log.period) === period;
-			const matchesDept =
-				selectedDepartment === "all" || log.departmentId === selectedDepartment;
+			const matchesDept = log.departmentId === selectedDepartment;
 			return matchesDate && matchesPeriod && matchesDept;
 		});
 	};
 
-	// Helper: Given a teacherId, return only the teacher’s first name.
+	// Helper: Return teacher's first name (first word only).
 	const getTeacherName = (teacherId) => {
 		const teacher = teachers.find((t) => t.id === teacherId);
-		return teacher ? teacher.firstName : teacherId;
+		return teacher ? teacher.firstName.split(" ")[0] : teacherId;
 	};
 
 	const handleDepartmentChange = (e) => setSelectedDepartment(e.target.value);
 	const handlePrevWeek = () => setWeekOffset((prev) => prev - 1);
 	const handleNextWeek = () => setWeekOffset((prev) => prev + 1);
+
+	// Disable the Next button if the user would move into a future week.
+	const disableNext = weekOffset >= 0;
 
 	if (logsLoading || depsLoading || teachersLoading)
 		return <div className="loading">Loading weekly logs...</div>;
@@ -94,30 +103,39 @@ const WeeklyLogs = () => {
 
 	return (
 		<div className="weekly-logs">
-			{/* Header and Controls */}
+			{/* Header */}
 			<div className="header">
-				<div className="controls">
-					<label>
-						Department:{" "}
-						<select
-							value={selectedDepartment}
-							onChange={handleDepartmentChange}
-						>
-							<option value="all">All Departments</option>
-							{departments.map((dept) => (
-								<option key={dept.id} value={dept.id}>
-									{dept.departmentName}
-								</option>
-							))}
-						</select>
+				<div className="header-left">
+					<label className="dept-label" htmlFor="deptSelect">
+						Select Department
 					</label>
-					<div className="week-navigation">
-						<button onClick={handlePrevWeek}>← Prev</button>
-						<span className="week-label">
-							Week of {mondayOffset.toLocaleDateString()}
-						</span>
-						<button onClick={handleNextWeek}>Next →</button>
-					</div>
+					<select
+						id="deptSelect"
+						className="dept-select"
+						value={selectedDepartment}
+						onChange={handleDepartmentChange}
+					>
+						{departments.map((dept) => (
+							<option key={dept.id} value={dept.id}>
+								{dept.departmentName}
+							</option>
+						))}
+					</select>
+				</div>
+				<div className="header-right">
+					<button className="week-btn" onClick={handlePrevWeek}>
+						&larr;
+					</button>
+					<span className="week-label">
+						Week of {mondayOffset.toLocaleDateString()}
+					</span>
+					<button
+						className="week-btn"
+						onClick={handleNextWeek}
+						disabled={disableNext}
+					>
+						&rarr;
+					</button>
 				</div>
 			</div>
 
@@ -142,6 +160,21 @@ const WeeklyLogs = () => {
 									>
 										<div className="cell-header">
 											<span className="period-number">P{period}</span>
+											{logsForCell.length > 1 && (
+												<span
+													className="duplicate-label"
+													title={logsForCell
+														.map(
+															(log) =>
+																`Title: ${log.lectureTitle}, Seq: ${
+																	log.sequence
+																}, Teacher: ${getTeacherName(log.teacherId)}`
+														)
+														.join("\n")}
+												>
+													{" - DUPLICATE"}
+												</span>
+											)}
 										</div>
 										{logsForCell.length === 0 ? (
 											<div className="cell-content no-log">Missing</div>
@@ -162,22 +195,19 @@ const WeeklyLogs = () => {
 											</div>
 										) : (
 											<div
-												className="cell-content log-collapsed"
+												className="cell-content log-duplicate"
 												title={logsForCell
 													.map(
 														(log) =>
 															`Title: ${log.lectureTitle}, Seq: ${
 																log.sequence
-															}, ${getTeacherName(log.teacherId)}`
+															}, Teacher: ${getTeacherName(log.teacherId)}`
 													)
 													.join("\n")}
 											>
+												{/* Optionally, you can display the first log's title as well */}
 												<div className="lecture-title">
 													{logsForCell[0].lectureTitle}
-													<span className="duplicate-count">
-														{" "}
-														+{logsForCell.length - 1}
-													</span>
 												</div>
 												<div className="log-details">
 													Seq: {logsForCell[0].sequence} |{" "}
@@ -197,4 +227,3 @@ const WeeklyLogs = () => {
 };
 
 export default WeeklyLogs;
-	

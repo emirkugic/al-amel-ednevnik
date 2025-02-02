@@ -9,8 +9,6 @@ import {
 	faPeopleGroup,
 	faBookOpen,
 	faCalendarAlt,
-	faCalendarCheck,
-	faTable,
 	faBook,
 	faChalkboardTeacher,
 } from "@fortawesome/free-solid-svg-icons";
@@ -30,13 +28,20 @@ const DesktopSidebar = () => {
 	const [myDepartments, setMyDepartments] = useState([]);
 	const [loadingCourses, setLoadingCourses] = useState(true);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+	const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+
+	useEffect(() => {
+		const handleResize = () => {
+			setIsDesktop(window.innerWidth > 768);
+		};
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
 
 	useEffect(() => {
 		const fetchMyCourses = async () => {
 			try {
-				if (!user?.id || !user?.token) {
-					return;
-				}
+				if (!user?.id || !user?.token) return;
 
 				setLoadingCourses(true);
 
@@ -90,7 +95,6 @@ const DesktopSidebar = () => {
 	const menuItems = useMemo(() => {
 		const items = [
 			{ title: "Dashboard", icon: faHouse, route: "/" },
-			// { title: "Students", icon: faPeopleGroup, route: "/students" },
 			{
 				title: "Grades",
 				icon: faBook,
@@ -116,7 +120,7 @@ const DesktopSidebar = () => {
 					route: "/schedule",
 				},
 				{
-					title: "Weekly report",
+					title: "Weekly Report",
 					icon: faChartLine,
 					route: "/logs",
 				},
@@ -141,10 +145,17 @@ const DesktopSidebar = () => {
 					route: "/parents",
 				}
 			);
+		} else if (isDesktop) {
+			// Non-admins see "/logs" ONLY in desktop view
+			items.push({
+				title: "Weekly Report",
+				icon: faChartLine,
+				route: "/logs",
+			});
 		}
 
 		return items;
-	}, [user, myCourses, myDepartments]);
+	}, [user, myCourses, myDepartments, isDesktop]);
 
 	useEffect(() => {
 		const activeMenuItem = menuItems.find((item) =>

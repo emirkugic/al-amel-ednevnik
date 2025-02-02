@@ -1,68 +1,57 @@
 /* Overall container styling */
 .weekly-logs {
-	padding: 12px;
-	max-width: 1000px;
+	padding: 10px;
+	max-width: 900px;
 	margin: 0 auto;
 	background: #f5f7fa;
-	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-/* Header and Controls */
+/* Header: Minimal, modern and split between left and right */
 .header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	background: #fff;
-	padding: 10px 12px;
-	border-radius: 6px;
+	border-bottom: 1px solid #e0e0e0;
+	padding: 10px 14px;
 	margin-bottom: 12px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+	border-radius: 4px;
 }
 
-.controls {
+.header-left {
+	flex: 1;
+	max-width: 150px;
+}
+
+.header-right {
 	display: flex;
-	flex-wrap: wrap;
 	align-items: center;
 	gap: 10px;
 }
 
-.controls label {
-	font-size: 0.9em;
-	font-weight: 600;
-}
-
-.controls select {
-	margin-left: 6px;
-	padding: 4px 6px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	font-size: 0.9em;
-}
-
-.week-navigation {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	margin-top: 6px;
-}
-
-.week-navigation button {
+.week-btn {
+	background: transparent;
+	border: 1px solid #1976d2;
+	color: #1976d2;
 	padding: 6px 10px;
-	border: none;
-	background: #1976d2;
-	color: #fff;
+	font-size: 1em;
 	border-radius: 4px;
 	cursor: pointer;
-	font-weight: 600;
-	font-size: 0.85em;
-	transition: background 0.3s ease;
+	transition: background 0.3s;
 }
 
-.week-navigation button:hover {
-	background: #1565c0;
+.week-btn:hover {
+	background: #e3f2fd;
 }
 
 .week-label {
-	font-size: 0.9em;
+	font-size: 1em;
 	font-weight: 600;
 }
+
+/* Using the DropdownSelect from our ui components
+   (assumes that DropdownSelect has its own styling, but you can add overrides here if needed) */
 
 /* Timetable Grid */
 .timetable {
@@ -80,10 +69,10 @@
 /* Day label column */
 .day-label {
 	background: #eceff1;
-	padding: 6px;
+	padding: 4px;
 	text-align: center;
-	border-radius: 6px;
-	min-width: 70px;
+	border-radius: 4px;
+	min-width: 60px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -104,21 +93,21 @@
 .periods {
 	flex: 1;
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
 	gap: 6px;
 }
 
 /* Period cell styling */
 .timetable-cell {
 	background: #fff;
-	padding: 6px;
-	border-radius: 6px;
+	padding: 4px;
+	border-radius: 4px;
 	border: 1px solid #ddd;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-	transition: background 0.3s ease, transform 0.2s ease;
+	transition: background 0.3s, transform 0.2s;
 	position: relative;
 }
 
@@ -128,7 +117,9 @@
 }
 
 .cell-header {
-	margin-bottom: 4px;
+	margin-bottom: 2px;
+	display: flex;
+	align-items: center;
 }
 
 .period-number {
@@ -137,13 +128,27 @@
 	font-size: 0.85em;
 }
 
+.duplicate-indicator {
+	margin-left: 4px;
+	font-size: 0.75em;
+	color: #e63946;
+	cursor: pointer;
+}
+
+.duplicate-label {
+	font-size: 0.75em;
+	color: #e63946;
+	margin-left: 4px;
+	cursor: pointer;
+}
+
 .cell-content {
 	font-size: 0.8em;
 	line-height: 1.2;
 	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
-/* Missing log indicator */
 .no-log {
 	color: #d32f2f;
 	font-weight: bold;
@@ -156,14 +161,7 @@
 	color: #c62828;
 }
 
-/* Log entry / collapsed styling */
-.log-entry,
-.log-collapsed {
-	cursor: default;
-}
-
-.log-entry .lecture-title,
-.log-collapsed .lecture-title {
+.log-entry .lecture-title {
 	font-weight: bold;
 	white-space: nowrap;
 	overflow: hidden;
@@ -176,32 +174,22 @@
 	margin-top: 2px;
 }
 
-.duplicate-count {
-	color: #e63946;
-	font-size: 0.75em;
-	margin-left: 3px;
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
 	.header {
-		padding: 8px;
-	}
-	.controls {
 		flex-direction: column;
 		align-items: flex-start;
 	}
+	.header-right {
+		margin-top: 8px;
+	}
 	.day-label {
-		min-width: 60px;
-		padding: 4px;
+		min-width: 50px;
+		padding: 3px;
 		font-size: 0.85em;
 	}
-	.week-navigation button {
-		padding: 4px 8px;
-		font-size: 0.8em;
-	}
 	.timetable-cell {
-		padding: 4px;
+		padding: 3px;
 		font-size: 0.75em;
 	}
 }
