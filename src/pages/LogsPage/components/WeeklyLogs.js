@@ -13,7 +13,6 @@ const WeeklyLogs = () => {
 		classLogs,
 		loading: logsLoading,
 		error: logsError,
-		refetch: refetchLogs,
 	} = useAllClassLogs(token);
 	const {
 		departments,
@@ -29,6 +28,7 @@ const WeeklyLogs = () => {
 	const [selectedDepartment, setSelectedDepartment] = useState("all");
 	const [weekOffset, setWeekOffset] = useState(0);
 
+	// Get the Monday for any given date.
 	const getMonday = (d) => {
 		const date = new Date(d);
 		const day = date.getDay() || 7;
@@ -43,8 +43,9 @@ const WeeklyLogs = () => {
 	const mondayOffset = new Date(currentMonday);
 	mondayOffset.setDate(currentMonday.getDate() + weekOffset * 7);
 
+	// Build weekdays array (Mon-Fri) with abbreviated day name, ISO date, and period count.
 	const weekdays = [];
-	const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+	const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 	for (let i = 0; i < 5; i++) {
 		const dayDate = new Date(mondayOffset);
 		dayDate.setDate(mondayOffset.getDate() + i);
@@ -52,16 +53,15 @@ const WeeklyLogs = () => {
 			name: dayNames[i],
 			date: dayDate,
 			dateFormatted: dayDate.toISOString().split("T")[0],
-			periodCount: dayNames[i] === "Friday" ? 5 : 7,
+			periodCount: i === 4 ? 5 : 7,
 		});
 	}
 
-	// Helper: Filter logs for a given date (YYYY-MM-DD) and period.
+	// Helper: Filter logs for a given ISO date and period.
 	const getLogsFor = (dateFormatted, period) => {
 		return classLogs.filter((log) => {
-			const logDate = new Date(log.classDate);
-			const logDateFormatted = logDate.toISOString().split("T")[0];
-			const matchesDate = logDateFormatted === dateFormatted;
+			const logDate = new Date(log.classDate).toISOString().split("T")[0];
+			const matchesDate = logDate === dateFormatted;
 			const matchesPeriod = Number(log.period) === period;
 			const matchesDept =
 				selectedDepartment === "all" || log.departmentId === selectedDepartment;
@@ -69,100 +69,126 @@ const WeeklyLogs = () => {
 		});
 	};
 
-	// Helper: Given a teacherId, find and return the teacher's full name.
+	// Helper: Given a teacherId, return only the teacher’s first name.
 	const getTeacherName = (teacherId) => {
 		const teacher = teachers.find((t) => t.id === teacherId);
-		return teacher ? `${teacher.firstName} ${teacher.lastName}` : teacherId;
+		return teacher ? teacher.firstName : teacherId;
 	};
 
-	const handleDepartmentChange = (e) => {
-		setSelectedDepartment(e.target.value);
-	};
-
-	const handlePrevWeek = () => {
-		setWeekOffset((prev) => prev - 1);
-	};
-
-	const handleNextWeek = () => {
-		setWeekOffset((prev) => prev + 1);
-	};
+	const handleDepartmentChange = (e) => setSelectedDepartment(e.target.value);
+	const handlePrevWeek = () => setWeekOffset((prev) => prev - 1);
+	const handleNextWeek = () => setWeekOffset((prev) => prev + 1);
 
 	if (logsLoading || depsLoading || teachersLoading)
-		return <div>Loading weekly logs...</div>;
-	if (logsError) return <div>Error (logs): {logsError.message}</div>;
-	if (depsError) return <div>Error (departments): {depsError.message}</div>;
+		return <div className="loading">Loading weekly logs...</div>;
+	if (logsError)
+		return <div className="error">Error (logs): {logsError.message}</div>;
+	if (depsError)
+		return (
+			<div className="error">Error (departments): {depsError.message}</div>
+		);
 	if (teachersError)
-		return <div>Error (teachers): {teachersError.message}</div>;
+		return (
+			<div className="error">Error (teachers): {teachersError.message}</div>
+		);
 
 	return (
 		<div className="weekly-logs">
-			{/* Controls for department selection and week navigation */}
-			<div className="controls">
-				<label>
-					Department:{" "}
-					<select value={selectedDepartment} onChange={handleDepartmentChange}>
-						<option value="all">All Departments</option>
-						{departments.map((dept) => (
-							<option key={dept.id} value={dept.id}>
-								{dept.departmentName}
-							</option>
-						))}
-					</select>
-				</label>
-				<button onClick={handlePrevWeek}>Previous Week</button>
-				<button onClick={handleNextWeek}>Next Week</button>
-				<span className="week-label">
-					Week of {mondayOffset.toLocaleDateString()}
-				</span>
+			{/* Header and Controls */}
+			<div className="header">
+				<div className="controls">
+					<label>
+						Department:{" "}
+						<select
+							value={selectedDepartment}
+							onChange={handleDepartmentChange}
+						>
+							<option value="all">All Departments</option>
+							{departments.map((dept) => (
+								<option key={dept.id} value={dept.id}>
+									{dept.departmentName}
+								</option>
+							))}
+						</select>
+					</label>
+					<div className="week-navigation">
+						<button onClick={handlePrevWeek}>← Prev</button>
+						<span className="week-label">
+							Week of {mondayOffset.toLocaleDateString()}
+						</span>
+						<button onClick={handleNextWeek}>Next →</button>
+					</div>
+				</div>
 			</div>
 
-			{/* Timetable grid */}
+			{/* Timetable Grid */}
 			<div className="timetable">
 				{weekdays.map((day) => (
 					<div className="timetable-row" key={day.dateFormatted}>
-						{/* Day label cell */}
 						<div className="day-label">
-							<strong>{day.name}</strong>
-							<br />
-							{day.dateFormatted}
+							<div className="day-name">{day.name}</div>
+							<div className="date">{day.dateFormatted}</div>
 						</div>
-						{/* Period cells for the day */}
-						{Array.from({ length: day.periodCount }, (_, index) => {
-							const period = index + 1;
-							const logsForCell = getLogsFor(day.dateFormatted, period);
-							return (
-								<div
-									key={period}
-									className={`timetable-cell ${
-										logsForCell.length === 0 ? "missing" : ""
-									}`}
-								>
-									<div className="period-label">Period {period}</div>
-									{logsForCell.length === 0 ? (
-										<div className="no-log">Missing</div>
-									) : (
-										<div className="logs">
-											{logsForCell.map((log, i) => (
-												<div key={i} className="log-entry">
-													<div className="lecture-title">
-														{log.lectureTitle}
-													</div>
-													<div className="log-details">
-														Seq: {log.sequence} | Teacher:{" "}
-														{getTeacherName(log.teacherId)}
-													</div>
-												</div>
-											))}
-											{logsForCell.length > 1 && (
-												<span className="duplicate-indicator">
-													Duplicate logs
-												</span>
-											)}
+						<div className="periods">
+							{Array.from({ length: day.periodCount }, (_, index) => {
+								const period = index + 1;
+								const logsForCell = getLogsFor(day.dateFormatted, period);
+								return (
+									<div
+										key={period}
+										className={`timetable-cell ${
+											logsForCell.length === 0 ? "missing" : ""
+										}`}
+									>
+										<div className="cell-header">
+											<span className="period-number">P{period}</span>
 										</div>
-									)}
-								</div>
-							);
-						})}
+										{logsForCell.length === 0 ? (
+											<div className="cell-content no-log">Missing</div>
+										) : logsForCell.length === 1 ? (
+											<div
+												className="cell-content log-entry"
+												title={`Seq: ${
+													logsForCell[0].sequence
+												} | ${getTeacherName(logsForCell[0].teacherId)}`}
+											>
+												<div className="lecture-title">
+													{logsForCell[0].lectureTitle}
+												</div>
+												<div className="log-details">
+													Seq: {logsForCell[0].sequence} |{" "}
+													{getTeacherName(logsForCell[0].teacherId)}
+												</div>
+											</div>
+										) : (
+											<div
+												className="cell-content log-collapsed"
+												title={logsForCell
+													.map(
+														(log) =>
+															`Title: ${log.lectureTitle}, Seq: ${
+																log.sequence
+															}, ${getTeacherName(log.teacherId)}`
+													)
+													.join("\n")}
+											>
+												<div className="lecture-title">
+													{logsForCell[0].lectureTitle}
+													<span className="duplicate-count">
+														{" "}
+														+{logsForCell.length - 1}
+													</span>
+												</div>
+												<div className="log-details">
+													Seq: {logsForCell[0].sequence} |{" "}
+													{getTeacherName(logsForCell[0].teacherId)}
+												</div>
+											</div>
+										)}
+									</div>
+								);
+							})}
+						</div>
 					</div>
 				))}
 			</div>
@@ -171,3 +197,4 @@ const WeeklyLogs = () => {
 };
 
 export default WeeklyLogs;
+	

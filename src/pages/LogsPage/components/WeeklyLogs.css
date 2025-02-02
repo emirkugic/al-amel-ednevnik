@@ -1,128 +1,207 @@
-Container styling .weekly-logs {
-	padding: 20px;
-	font-family: Arial, sans-serif;
-	background-color: #f9f9f9;
+/* Overall container styling */
+.weekly-logs {
+	padding: 12px;
+	max-width: 1000px;
+	margin: 0 auto;
+	background: #f5f7fa;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header and Controls */
+.header {
+	background: #fff;
+	padding: 10px 12px;
+	border-radius: 6px;
+	margin-bottom: 12px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .controls {
-	margin-bottom: 20px;
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	gap: 10px;
 }
 
 .controls label {
-	font-weight: bold;
+	font-size: 0.9em;
+	font-weight: 600;
+}
+
+.controls select {
+	margin-left: 6px;
+	padding: 4px 6px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 0.9em;
+}
+
+.week-navigation {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 6px;
+}
+
+.week-navigation button {
+	padding: 6px 10px;
+	border: none;
+	background: #1976d2;
+	color: #fff;
+	border-radius: 4px;
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 0.85em;
+	transition: background 0.3s ease;
+}
+
+.week-navigation button:hover {
+	background: #1565c0;
 }
 
 .week-label {
-	margin-left: auto;
-	font-style: italic;
-	color: #555;
+	font-size: 0.9em;
+	font-weight: 600;
 }
 
+/* Timetable Grid */
 .timetable {
 	display: flex;
 	flex-direction: column;
-	gap: 2px;
-	background-color: #e9ecef;
-	border-radius: 8px;
-	overflow: hidden;
+	gap: 6px;
 }
 
 .timetable-row {
 	display: flex;
+	gap: 6px;
+	align-items: stretch;
 }
 
+/* Day label column */
 .day-label {
-	background-color: #f0f8ff;
-	padding: 10px;
-	border-right: 2px solid #ddd;
+	background: #eceff1;
+	padding: 6px;
 	text-align: center;
-	font-weight: bold;
-	font-size: 0.9em;
-	width: 140px;
-	min-width: 120px;
-	color: #333;
-}
-
-.timetable-cell {
-	flex: 1;
-	background-color: #fff;
-	padding: 8px;
-	border: 1px solid #ddd;
-	min-height: 90px;
+	border-radius: 6px;
+	min-width: 70px;
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-start;
-	align-items: flex-start;
+	justify-content: center;
+	font-weight: 600;
+}
+
+.day-label .day-name {
+	font-size: 1em;
+	margin-bottom: 2px;
+}
+
+.day-label .date {
+	font-size: 0.75em;
+	color: #555;
+}
+
+/* Periods grid */
+.periods {
+	flex: 1;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+	gap: 6px;
+}
+
+/* Period cell styling */
+.timetable-cell {
+	background: #fff;
+	padding: 6px;
+	border-radius: 6px;
+	border: 1px solid #ddd;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	transition: background 0.3s ease, transform 0.2s ease;
 	position: relative;
-	border-radius: 4px;
-	transition: background-color 0.3s ease;
 }
 
 .timetable-cell:hover {
-	background-color: #f7f7f7;
+	transform: translateY(-1px);
+	background: #f9f9f9;
 }
 
-.timetable-cell .period-label {
-	font-weight: bold;
-	color: #666;
+.cell-header {
 	margin-bottom: 4px;
 }
 
-.no-log {
-	color: #d9534f;
+.period-number {
 	font-weight: bold;
-}
-
-.missing {
-	background-color: #f8d7da;
-	color: #721c24;
-}
-
-.logs {
-	font-size: 0.9em;
-	line-height: 1.4;
-}
-
-.log-entry {
-	margin-bottom: 4px;
-	color: #333;
-}
-
-.log-entry .lecture-title {
-	font-weight: bold;
-	color: #495057;
-}
-
-.log-details {
-	color: #555;
+	color: #1976d2;
 	font-size: 0.85em;
 }
 
-.duplicate-indicator {
-	color: #e63946;
-	font-size: 0.75em;
-	font-weight: bold;
-	border: 1px solid #e63946;
-	padding: 2px 6px;
-	border-radius: 12px;
-	background: #f8d7da;
-	position: absolute;
-	bottom: 5px;
-	right: 5px;
+.cell-content {
+	font-size: 0.8em;
+	line-height: 1.2;
+	overflow: hidden;
 }
 
+/* Missing log indicator */
+.no-log {
+	color: #d32f2f;
+	font-weight: bold;
+	text-align: center;
+	padding: 6px 0;
+}
+
+.missing {
+	background: #ffcdd2;
+	color: #c62828;
+}
+
+/* Log entry / collapsed styling */
+.log-entry,
+.log-collapsed {
+	cursor: default;
+}
+
+.log-entry .lecture-title,
+.log-collapsed .lecture-title {
+	font-weight: bold;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.log-details {
+	font-size: 0.75em;
+	color: #555;
+	margin-top: 2px;
+}
+
+.duplicate-count {
+	color: #e63946;
+	font-size: 0.75em;
+	margin-left: 3px;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-	.day-label {
-		width: 100px;
-		font-size: 0.8em;
+	.header {
 		padding: 8px;
 	}
-
+	.controls {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.day-label {
+		min-width: 60px;
+		padding: 4px;
+		font-size: 0.85em;
+	}
+	.week-navigation button {
+		padding: 4px 8px;
+		font-size: 0.8em;
+	}
 	.timetable-cell {
-		min-height: 70px;
-		padding: 6px;
+		padding: 4px;
+		font-size: 0.75em;
 	}
 }
