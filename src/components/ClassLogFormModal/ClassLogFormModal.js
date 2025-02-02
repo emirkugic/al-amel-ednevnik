@@ -107,7 +107,6 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 				user.token
 			);
 
-			// Update state so the new log shows the absent students immediately.
 			setClassLogs((prevLogs) =>
 				prevLogs.map((log) =>
 					log.departmentId === departmentId
@@ -141,7 +140,16 @@ const ClassLogFormModal = ({ onClose, departmentId, subjectId }) => {
 			onClose();
 		} catch (error) {
 			console.error("Error creating class log:", error);
-			setNotification("Error creating class log. Please try again.");
+			// Check if the error is a conflict (HTTP 409)
+			if (error.response && error.response.status === 409) {
+				setNotification(`English:
+								This day and period has already been logged. Cannot have duplicates.
+
+								Bosnian:
+								Ovaj dan i čas su već zabilježeni. Ne može biti duplikata.`);
+			} else {
+				setNotification(`Error creating class log. Please try again.`);
+			}
 		} finally {
 			setIsLoading(false);
 		}
