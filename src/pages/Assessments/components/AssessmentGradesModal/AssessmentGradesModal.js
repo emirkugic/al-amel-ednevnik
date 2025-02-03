@@ -25,12 +25,16 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 	}, [grades]);
 
 	const handleGradeChange = (studentId, grade) => {
+		// Convert input to string before saving
+		const gradeString = String(grade).trim();
+
 		// Ensure the grade does not exceed the maximum assessment points
 		if (Number(grade) > Number(assessment.points)) {
 			alert(`Grade cannot exceed the maximum points (${assessment.points})`);
 			return;
 		}
-		setLocalGrades({ ...localGrades, [studentId]: grade });
+
+		setLocalGrades({ ...localGrades, [studentId]: gradeString });
 		setEditing({ ...editing, [studentId]: true });
 	};
 
@@ -42,7 +46,7 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 			await createGrade({
 				studentId,
 				subjectAssessmentId: assessment.id,
-				grade: localGrades[studentId],
+				grade: String(localGrades[studentId]), // ✅ Ensure string conversion
 			});
 		} else if (gradeToUpdate.grade !== localGrades[studentId]) {
 			// Update the existing grade
@@ -50,11 +54,11 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 				id: gradeToUpdate.gradeId,
 				subjectAssessmentId: assessment.id,
 				studentId,
-				grade: localGrades[studentId],
+				grade: String(localGrades[studentId]), // ✅ Ensure string conversion
 			});
 		}
 
-		// Re-fetch all grades so new or updated items show correct data (esp. name)
+		// Re-fetch all grades so new or updated items show correct data
 		await fetchGrades(assessment.id);
 
 		// Turn off editing mode for this student
@@ -81,7 +85,8 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 									{editing[grade.studentId] ? (
 										<input
 											type="number"
-											min="1"
+											step="0.1" // ✅ Allows decimal grading (e.g., 0.5, 1.2)
+											min="0"
 											max={assessment.points}
 											value={localGrades[grade.studentId]}
 											onChange={(e) =>
