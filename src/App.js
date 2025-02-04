@@ -20,8 +20,6 @@ import Grades from "./components/pages/Grades";
 import Settings from "./components/pages/Settings";
 import Help from "./components/pages/Help";
 import Login from "./components/pages/Login";
-import Develop from "./components/pages/Develop";
-import Teachers from "./components/pages/Teachers";
 import Subjects from "./components/pages/Subjects";
 import Classes from "./components/pages/Classes";
 import Parents from "./components/pages/Parents";
@@ -32,7 +30,7 @@ import {
 	DepartmentPage,
 	SchedulePage,
 	LogsPage,
-	ManageTeachersPage,
+	TeachersPage,
 } from "./pages/index.js";
 
 import "./App.css";
@@ -56,14 +54,12 @@ const AppContent = () => {
 						<Route path="/grades" element={<Grades />} />
 						<Route path="/settings" element={<Settings />} />
 						<Route path="/help" element={<Help />} />
-						<Route path="/develop" element={<Develop />} />
-						<Route path="/teachers" element={<Teachers />} />
 						<Route path="/subjects" element={<Subjects />} />
 						<Route path="/classes" element={<Classes />} />
 						<Route path="/parents" element={<Parents />} />
 						<Route path="/schedule" element={<SchedulePage />} />
 						<Route path="/logs" element={<LogsPage />} />
-						<Route path="/manage-teachers" element={<ManageTeachersPage />} />
+						<Route path="/teachers" element={<TeachersPage />} />
 
 						<Route path="/lectures/:departmentId" element={<LecturesPage />} />
 						<Route path="/courses/:subject" element={<AssessmentPage />} />

@@ -2,8 +2,8 @@ import React from "react";
 
 import { TeacherManagement } from "./components/index";
 
-const ManageTeachersPage = () => {
+const TeachersPage = () => {
 	return <TeacherManagement />;
 };
 
-export default ManageTeachersPage;
+export default TeachersPage;

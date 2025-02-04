@@ -143,11 +143,6 @@ const DesktopSidebar = () => {
 					title: "Parents",
 					icon: faPeopleGroup,
 					route: "/parents",
-				},
-				{
-					title: "Manage Teachers",
-					icon: faChalkboardTeacher,
-					route: "/manage-teachers",
 				}
 			);
 		} else if (isDesktop) {
