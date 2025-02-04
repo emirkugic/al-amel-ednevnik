@@ -166,6 +166,20 @@ const TeacherManagement = () => {
 			alert("Please select a Subject and at least one Department.");
 			return;
 		}
+
+		// Ensure we are not adding a duplicate subject
+		const existingAssignment = subjectTeacher.assignedSubjects.find(
+			(as) =>
+				as.subjectId === subjectId &&
+				JSON.stringify(as.departmentId.sort()) ===
+					JSON.stringify(departmentSelection.sort())
+		);
+
+		if (existingAssignment) {
+			alert("This subject is already assigned to the selected departments.");
+			return;
+		}
+
 		try {
 			const assignedSubject = {
 				subjectId,
@@ -176,13 +190,11 @@ const TeacherManagement = () => {
 				assignedSubject,
 				token
 			);
-			// Update local state
+
 			setTeachers((prev) =>
 				prev.map((t) => (t.id === updatedTeacher.id ? updatedTeacher : t))
 			);
-			// Also update the local subjectTeacher so the UI matches
 			setSubjectTeacher(updatedTeacher);
-			// Reset
 			setSubjectId("");
 			setDepartmentSelection([]);
 		} catch (error) {
@@ -290,7 +302,9 @@ const TeacherManagement = () => {
 											const subjectName = getSubjectName(as.subjectId);
 											const deptNames = getDepartmentNames(as.departmentId);
 											return (
-												<li key={as.subjectId}>
+												<li
+													key={`${as.subjectId}-${as.departmentId.join("-")}`}
+												>
 													<FontAwesomeIcon
 														icon={faBook}
 														className="icon-small"
