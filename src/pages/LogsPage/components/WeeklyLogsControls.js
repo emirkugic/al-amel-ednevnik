@@ -58,7 +58,6 @@ const WeeklyLogsControls = ({
 				)}
 			</div>
 
-			{/* Week Navigation */}
 			<div className="controls-right">
 				<button className="week-btn" onClick={handlePrevWeek}>
 					&larr;
