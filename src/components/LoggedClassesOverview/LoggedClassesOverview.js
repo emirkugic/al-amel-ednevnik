@@ -84,11 +84,13 @@ const LoggedClassesOverview = ({ departmentId }) => {
 				return matchesSubject || matchesTitle || matchesStudent;
 			}) || [];
 
-	// Sort logs by date ascending or descending
+	// Sort logs by sequence ascending or descending
 	const sortedLogs = filteredLogs.sort((a, b) => {
-		const dateA = new Date(a.classDate);
-		const dateB = new Date(b.classDate);
-		return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+		if (sortOrder === "asc") {
+			return a.sequence - b.sequence;
+		} else {
+			return b.sequence - a.sequence;
+		}
 	});
 
 	// Pagination
