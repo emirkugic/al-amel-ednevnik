@@ -11,6 +11,13 @@
 	overflow-y: auto;
 }
 
+.desktop-view .log-table thead th {
+	position: sticky;
+	top: 0;
+	background-color: #fff;
+	z-index: 2;
+}
+
 .log-table {
 	width: 100%;
 	border-collapse: collapse;
