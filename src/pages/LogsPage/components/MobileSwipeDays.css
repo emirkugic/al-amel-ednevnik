@@ -1,0 +1,84 @@
+.mobile-swipe-days-container {
+	width: 100%;
+	overflow: hidden; /* Hide the overflow so we only see the center + partial next slides */
+	position: relative;
+}
+
+/* The track that holds all 5 slides side by side */
+.swipe-track {
+	display: flex;
+	align-items: flex-start; /* ensures slides start at the top if heights differ */
+	transition: transform 0.4s ease; /* smooth horizontal animation */
+}
+
+/* Each "slide" is a flex item with fixed width. 
+   80% + margin 5% => partial next slide is visible. */
+.swipe-slide {
+	flex: 0 0 80%;
+	margin: 0 5% 0 0; /* 5% right margin to see next slide's edge. 
+                      Adjust if you want edges on both sides: e.g. margin: 0 5%; */
+	box-sizing: border-box;
+}
+
+/* Remove right margin for the last slide (optional) */
+.swipe-slide:last-child {
+	margin-right: 0;
+}
+
+/* The 'mobile-day-card' can just fill the entire slide. 
+   We'll reuse your existing day label, periods, timetable styles, etc. 
+*/
+.mobile-day-card {
+	background: #fff;
+	border-radius: 6px;
+	border: 1px solid #ddd;
+	padding: 10px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	width: 100%; /* Fill the slide's width */
+}
+
+/* Reuse your existing .day-label, .periods, .timetable-cell, etc. 
+   Or copy them as needed if you want different styling for the carousel. */
+
+.day-label {
+	font-weight: 700;
+	margin-bottom: 8px;
+}
+
+.day-label .day-name {
+	font-size: 1.1rem;
+	margin-bottom: 2px;
+}
+.day-label .date {
+	font-size: 0.9rem;
+	color: #666;
+}
+
+/* Periods layout */
+.periods {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+/* Tweak for your timetable cells */
+.timetable-cell {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #ececec;
+	padding: 8px;
+	border-radius: 4px;
+	position: relative;
+	transition: background 0.3s, transform 0.2s;
+}
+
+.timetable-cell:hover {
+	background: #fafafa;
+	transform: translateY(-1px);
+}
+
+/* If you want to see a bit of the previous slide to the left as well,
+   you can do .swipe-slide { margin: 0 5% } so there's 5% margin on both sides.
+   That means each slide "width: 80%", plus 5% left + 5% right = 90%,
+   so 10% of the next slide peeks into view.
+   Adjust to your preference. */
