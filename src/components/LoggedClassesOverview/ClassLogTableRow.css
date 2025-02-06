@@ -3,6 +3,10 @@
 	padding: 10px;
 }
 
+.class-log-table-row td[data-label="Actions"] {
+	white-space: nowrap;
+}
+
 /* Delete button */
 .delete-log-button {
 	background: transparent;
