@@ -3,6 +3,7 @@ import useAllClassLogs from "../hooks/useAllClassLogs";
 import useDepartments from "../../../hooks/useDepartments";
 import useTeachers from "../../../hooks/useTeachers";
 import useAuth from "../../../hooks/useAuth";
+import WeeklyLogsControls from "./WeeklyLogsControls";
 import "./WeeklyLogs.css";
 
 const WeeklyLogs = () => {
@@ -14,28 +15,34 @@ const WeeklyLogs = () => {
 		loading: logsLoading,
 		error: logsError,
 	} = useAllClassLogs(token);
+
 	const {
 		departments,
 		loading: depsLoading,
 		error: depsError,
 	} = useDepartments(token);
+
 	const {
 		teachers,
 		loading: teachersLoading,
 		error: teachersError,
 	} = useTeachers(token);
 
-	// Only allow individual departments.
+	// ---------- STATE ----------
 	const [selectedDepartment, setSelectedDepartment] = useState("");
 	const [weekOffset, setWeekOffset] = useState(0);
 
+	// Track screen size for mobile
+	const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
 	useEffect(() => {
-		if (!selectedDepartment && departments && departments.length > 0) {
-			setSelectedDepartment(departments[0].id);
-		}
-	}, [departments, selectedDepartment]);
+		const handleResize = () => {
+			setIsMobile(window.innerWidth < 768);
+		};
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
 
-	// Get Monday for any given date.
+	// Build weekdays array
 	const getMonday = (d) => {
 		const date = new Date(d);
 		const day = date.getDay() || 7;
@@ -44,13 +51,11 @@ const WeeklyLogs = () => {
 		}
 		return date;
 	};
-
 	const today = new Date();
 	const currentMonday = getMonday(today);
 	const mondayOffset = new Date(currentMonday);
 	mondayOffset.setDate(currentMonday.getDate() + weekOffset * 7);
 
-	// Build weekdays array (Mon–Fri) with abbreviated day name, ISO date, and period count.
 	const weekdays = [];
 	const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 	for (let i = 0; i < 5; i++) {
@@ -64,7 +69,29 @@ const WeeklyLogs = () => {
 		});
 	}
 
-	// Helper: Filter logs for a given date and period.
+	// ----- Mobile: track which weekday index is selected -----
+	// For example, 0 => Monday, 1 => Tuesday, ...
+	const [selectedDayIndex, setSelectedDayIndex] = useState(0);
+
+	// On mount or when weekdays change, see if we can pick a better default
+	useEffect(() => {
+		const todayFormatted = today.toISOString().split("T")[0];
+		// If "today" is within this week's Mon-Fri, select that weekday's index
+		const foundIndex = weekdays.findIndex(
+			(wd) => wd.dateFormatted === todayFormatted
+		);
+		if (foundIndex !== -1) {
+			setSelectedDayIndex(foundIndex);
+		} else {
+			// If "today" not in these 5 days (e.g., weekend or different offset),
+			// just keep existing index. If it's out of range, reset to 0.
+			if (selectedDayIndex < 0 || selectedDayIndex > 4) {
+				setSelectedDayIndex(0);
+			}
+		}
+	}, [weekOffset, weekdays]);
+
+	// Filter logs for a given date & period
 	const getLogsFor = (dateFormatted, period) => {
 		return classLogs.filter((log) => {
 			const logDate = new Date(log.classDate).toISOString().split("T")[0];
@@ -75,18 +102,24 @@ const WeeklyLogs = () => {
 		});
 	};
 
-	// Helper: Return teacher's first name (first word only).
+	// Teacher name helper
 	const getTeacherName = (teacherId) => {
 		const teacher = teachers.find((t) => t.id === teacherId);
 		return teacher ? teacher.firstName.split(" ")[0] : teacherId;
 	};
 
-	const handleDepartmentChange = (e) => setSelectedDepartment(e.target.value);
+	// Department & Week controls
+	const onDepartmentChange = (deptId) => setSelectedDepartment(deptId);
 	const handlePrevWeek = () => setWeekOffset((prev) => prev - 1);
 	const handleNextWeek = () => setWeekOffset((prev) => prev + 1);
-
-	// Disable the Next button if the user would move into a future week.
 	const disableNext = weekOffset >= 0;
+
+	// Initialize department if needed
+	useEffect(() => {
+		if (!selectedDepartment && departments && departments.length > 0) {
+			setSelectedDepartment(departments[0].id);
+		}
+	}, [departments, selectedDepartment]);
 
 	if (logsLoading || depsLoading || teachersLoading)
 		return <div className="loading">Loading weekly logs...</div>;
@@ -101,56 +134,44 @@ const WeeklyLogs = () => {
 			<div className="error">Error (teachers): {teachersError.message}</div>
 		);
 
+	// Decide which days to render:
+	// - Desktop => all 5 days
+	// - Mobile => just the day at selectedDayIndex
+	const daysToRender = isMobile
+		? [weekdays[selectedDayIndex]] // single day
+		: weekdays; // all days
+
 	return (
 		<div className="weekly-logs">
-			{/* Header */}
-			<div className="header">
-				<div className="header-left">
-					<label className="dept-label" htmlFor="deptSelect">
-						Select Department
-					</label>
-					<select
-						id="deptSelect"
-						className="dept-select"
-						value={selectedDepartment}
-						onChange={handleDepartmentChange}
-					>
-						{departments.map((dept) => (
-							<option key={dept.id} value={dept.id}>
-								{dept.departmentName}
-							</option>
-						))}
-					</select>
-				</div>
-				<div className="header-right">
-					<button className="week-btn" onClick={handlePrevWeek}>
-						&larr;
-					</button>
-					<span className="week-label">
-						Week of {mondayOffset.toLocaleDateString()}
-					</span>
-					<button
-						className="week-btn"
-						onClick={handleNextWeek}
-						disabled={disableNext}
-					>
-						&rarr;
-					</button>
-				</div>
-			</div>
+			{/* 1) Our new controls component */}
+			<WeeklyLogsControls
+				departments={departments}
+				selectedDepartment={selectedDepartment}
+				onDepartmentChange={onDepartmentChange}
+				isMobile={isMobile}
+				weekdays={weekdays}
+				selectedDayIndex={selectedDayIndex}
+				setSelectedDayIndex={setSelectedDayIndex}
+				handlePrevWeek={handlePrevWeek}
+				handleNextWeek={handleNextWeek}
+				disableNext={disableNext}
+				mondayOffset={mondayOffset}
+				weekOffset={weekOffset}
+			/>
 
-			{/* Timetable Grid */}
+			{/* 2) The timetable */}
 			<div className="timetable">
-				{weekdays.map((day) => (
-					<div className="timetable-row" key={day.dateFormatted}>
+				{daysToRender.map((day, idx) => (
+					<div className="timetable-row" key={day.dateFormatted || idx}>
 						<div className="day-label">
 							<div className="day-name">{day.name}</div>
 							<div className="date">{day.dateFormatted}</div>
 						</div>
 						<div className="periods">
-							{Array.from({ length: day.periodCount }, (_, index) => {
-								const period = index + 1;
+							{Array.from({ length: day.periodCount }, (_, periodIndex) => {
+								const period = periodIndex + 1;
 								const logsForCell = getLogsFor(day.dateFormatted, period);
+
 								return (
 									<div
 										key={period}
@@ -205,7 +226,6 @@ const WeeklyLogs = () => {
 													)
 													.join("\n")}
 											>
-												{/* Optionally, you can display the first log's title as well */}
 												<div className="lecture-title">
 													{logsForCell[0].lectureTitle}
 												</div>
