@@ -1,60 +1,78 @@
 import React, { useState } from "react";
 import ClassLogTableRow from "./ClassLogTableRow";
-import MobileLogDetailsModal from "./MobileLogDetailsModal";
-import EditLogModal from "./EditLogModal"; // Import the new EditLogModal component
 import "./DataTable.css";
-import classLogApi from "../../api/classLogApi";
 import useAuth from "../../hooks/useAuth";
+import EditLogModal from "./EditLogModal";
 
 const DataTable = ({ currentLogs, handleDeleteLog, setClassLogs }) => {
-	const [selectedLog, setSelectedLog] = useState(null);
-	const [editingLog, setEditingLog] = useState(null); // Track the log being edited
 	const { user } = useAuth();
 
-	const columns = {
-		date: "Date",
-		subject: "Subject",
-		period: "Period",
-		lectureTitle: "Lecture Title",
-		sequence: "Sequence",
-		absentStudents: "Absent Students",
-		actions: "Actions",
+	// Keep track of which log is being edited (null if none)
+	const [editingLog, setEditingLog] = useState(null);
+
+	// Decide whether a log is editable based on the date
+	const isEditable = (log) => {
+		const today = new Date();
+		const logDate = new Date(log.classDate);
+		const diffTime = Math.abs(today - logDate);
+		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+		return diffDays <= 50; // or your desired cutoff
 	};
 
-	const openLogDetails = (log) => {
-		setSelectedLog(log);
-	};
-
-	const closeLogDetails = () => {
-		setSelectedLog(null);
-	};
-
-	const handleDeleteAndClose = (logId) => {
-		handleDeleteLog(logId);
-		closeLogDetails();
-	};
-
+	// When user clicks "Edit"
 	const handleEditLog = (log) => {
-		setEditingLog(log); // Open the edit modal with the selected log
+		setEditingLog(log);
 	};
 
+	// Closes the edit modal
 	const closeEditModal = () => {
-		setEditingLog(null); // Close the edit modal
+		setEditingLog(null);
+	};
+
+	// Called by EditLogModal after a successful update
+	const handleUpdateLog = (updatedLog) => {
+		// If you prefer to do a full page reload, you can skip this.
+		// Otherwise, update the local state so the table re-renders:
+		setClassLogs((prevLogs) =>
+			prevLogs.map((dept) => {
+				// Each item is { departmentId, subjects: [...] }
+				if (dept.departmentId !== updatedLog.departmentId) return dept;
+
+				return {
+					...dept,
+					subjects: dept.subjects.map((subj) => {
+						if (subj.subjectId !== updatedLog.subjectId) return subj;
+
+						return {
+							...subj,
+							classLogs: subj.classLogs.map((log) => {
+								if (log.classLogId !== updatedLog.classLogId) {
+									return log;
+								}
+								// Merge the updated fields
+								return { ...log, ...updatedLog };
+							}),
+						};
+					}),
+				};
+			})
+		);
 	};
 
 	return (
 		<div className="data-table-wrapper">
-			<div className="data-table-container">
+			{/* Desktop Table View */}
+			<div className="data-table-container desktop-view">
 				<table className="log-table">
 					<thead>
 						<tr>
-							<th>{columns.date}</th>
-							<th>{columns.subject}</th>
-							<th>{columns.period}</th>
-							<th>{columns.lectureTitle}</th>
-							<th>{columns.sequence}</th>
-							<th>{columns.absentStudents}</th>
-							<th>{columns.actions}</th>
+							<th>Date</th>
+							<th>Subject</th>
+							<th>Period</th>
+							<th>Lecture Title</th>
+							<th>Sequence</th>
+							<th>Absent Students</th>
+							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -64,49 +82,58 @@ const DataTable = ({ currentLogs, handleDeleteLog, setClassLogs }) => {
 								log={log}
 								handleDeleteLog={handleDeleteLog}
 								handleEditLog={handleEditLog}
-								columns={columns}
 							/>
 						))}
 					</tbody>
 				</table>
 			</div>
 
-			{selectedLog && (
-				<MobileLogDetailsModal
-					log={selectedLog}
-					onClose={closeLogDetails}
-					onDelete={handleDeleteAndClose}
-				/>
-			)}
+			{/* Mobile List View */}
+			<div className="mobile-log-list">
+				{currentLogs.map((log) => (
+					<div className="mobile-log-card" key={log.classLogId}>
+						<div className="log-header">
+							<strong>{log.subject}</strong>
+							<span>{new Date(log.classDate).toLocaleDateString()}</span>
+						</div>
+						<div className="log-body">
+							<p>
+								<strong>Lecture:</strong> {log.lectureTitle}
+							</p>
+							<p>
+								<strong>Period:</strong> {log.period} |{" "}
+								<strong>Sequence:</strong> {log.sequence}
+							</p>
+							<p>
+								<strong>Absent:</strong>{" "}
+								{log.absentStudents?.length
+									? log.absentStudents.length
+									: "None"}
+							</p>
+						</div>
+						<div className="log-actions">
+							{/* Only show Edit if still editable */}
+							{isEditable(log) && (
+								<button className="edit-btn" onClick={() => handleEditLog(log)}>
+									Edit
+								</button>
+							)}
+							<button
+								className="delete-btn"
+								onClick={() => handleDeleteLog(log.classLogId)}
+							>
+								Delete
+							</button>
+						</div>
+					</div>
+				))}
+			</div>
 
 			{editingLog && (
 				<EditLogModal
 					log={editingLog}
 					onClose={closeEditModal}
-					handleUpdateLog={(updatedLog) => {
-						setClassLogs((prevLogs) => {
-							return prevLogs.map((log) => {
-								if (log.departmentId !== updatedLog.departmentId) return log;
-
-								return {
-									...log,
-									subjects: log.subjects.map((subject) => {
-										if (subject.subjectId !== updatedLog.subjectId)
-											return subject;
-
-										return {
-											...subject,
-											classLogs: subject.classLogs.map((classLog) =>
-												classLog.classLogId === updatedLog.classLogId
-													? { ...classLog, ...updatedLog }
-													: classLog
-											),
-										};
-									}),
-								};
-							});
-						});
-					}}
+					handleUpdateLog={handleUpdateLog}
 				/>
 			)}
 		</div>

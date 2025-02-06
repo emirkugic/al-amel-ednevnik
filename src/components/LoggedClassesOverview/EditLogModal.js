@@ -75,9 +75,19 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 			await classLogApi.updateClassLog(log.classLogId, updatedLog, user.token);
 
 			// Pass along the updated absent students so that the DataTable reflects the change
-			handleUpdateLog({ ...log, ...updatedLog, absentStudents });
+			// EditLogModal.jsx
+			handleUpdateLog({
+				...log,
+				...updatedLog,
+				// Convert each dropdown item { value, label } to { studentId, name }
+				absentStudents: absentStudents.map((item) => ({
+					studentId: item.value,
+					name: item.label,
+				})),
+			});
+
 			// refresh page after submitting
-			window.location.reload();
+			// window.location.reload();
 			onClose();
 		} catch (error) {
 			console.error("Error updating log:", error);

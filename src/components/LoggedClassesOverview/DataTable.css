@@ -1,14 +1,12 @@
 .data-table-wrapper {
 	position: relative;
+	width: 100%;
+	margin-top: 10px;
 }
 
-/* Desktop (default) */
-.data-table-container {
-	flex-grow: 1;
-	border-top: 1px solid #eee;
-	border-bottom: 1px solid #eee;
-	margin-top: 10px;
-	overflow: hidden;
+/* ====== DESKTOP VIEW ====== */
+.desktop-view {
+	display: block;
 }
 
 .log-table {
@@ -30,54 +28,79 @@
 	color: #666;
 }
 
-/* The mobile log list is hidden by default on large screens */
-.log-list {
+/* ====== MOBILE VIEW (STACKED LIST) ====== */
+.mobile-log-list {
 	display: none;
 }
 
-/* Mobile view (max-width: 600px): Hide the table, show the list */
+/* Mobile View - Show List, Hide Table */
 @media (max-width: 600px) {
-	.data-table-container {
-		display: none; /* Hide table on mobile */
+	.desktop-view {
+		display: none;
 	}
 
-	.log-list {
-		display: block;
+	.mobile-log-list {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
 		margin-top: 10px;
 	}
 
-	.log-list-item {
+	.mobile-log-card {
 		background: #fff;
-		border: 1px solid #eee;
+		padding: 12px;
 		border-radius: 8px;
-		padding: 15px;
-		margin-bottom: 15px;
-		cursor: pointer;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	}
 
-	.log-item-row {
+	.log-header {
 		display: flex;
 		justify-content: space-between;
-		margin-bottom: 5px;
-	}
-
-	.log-item-label {
+		align-items: center;
+		font-size: 0.9rem;
 		font-weight: bold;
-		margin-right: 10px;
-		color: #333;
-		font-size: 0.9em;
+		color: #007bff;
 	}
 
-	.log-item-row span:last-child {
-		color: #444;
-		font-size: 0.9em;
+	.log-body {
+		margin-top: 6px;
+		font-size: 0.85rem;
 	}
 
-	.log-item-more {
-		text-align: right;
-		color: #04abfd;
-		font-size: 0.85em;
-		margin-top: 5px;
-		font-style: italic;
+	.log-body p {
+		margin: 4px 0;
+	}
+
+	.log-actions {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 8px;
+	}
+
+	.log-actions button {
+		border: none;
+		padding: 6px 10px;
+		font-size: 0.8rem;
+		cursor: pointer;
+		border-radius: 4px;
+		margin-left: 6px;
+	}
+
+	.edit-btn {
+		background: #04abfd;
+		color: white;
+	}
+
+	.delete-btn {
+		background: #dc3545;
+		color: white;
+	}
+
+	.edit-btn:hover {
+		background: #0280c7;
+	}
+
+	.delete-btn:hover {
+		background: #a71d2a;
 	}
 }

@@ -31,7 +31,6 @@ const LoggedClassesOverview = ({ departmentId }) => {
 					user.id,
 					user.token
 				);
-
 				const filteredSubjects = teacherData.assignedSubjects
 					.filter((subject) => subject.departmentId.includes(departmentId))
 					.map((subject) => subject.subjectId);
@@ -41,14 +40,12 @@ const LoggedClassesOverview = ({ departmentId }) => {
 				);
 
 				const resolvedSubjects = await Promise.all(subjectPromises);
-
 				const subjectsList = resolvedSubjects.map((subject) => ({
 					id: subject.id,
 					name: subject.name,
 				}));
 
 				setSubjects(subjectsList);
-
 				if (subjectsList.length > 0) {
 					setSelectedSubject(subjectsList[0].id);
 				}
@@ -64,6 +61,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 		(log) => log.departmentId === departmentId
 	);
 
+	// Filter logs for the chosen subject + search text
 	const filteredLogs =
 		departmentLogs?.subjects
 			.filter((subject) => subject.subjectId === selectedSubject)
@@ -72,25 +70,28 @@ const LoggedClassesOverview = ({ departmentId }) => {
 					...log,
 					subject: subject.subjectName,
 					sequence: log.sequence || 1,
-					departmentId: departmentLogs.departmentId,
+					departmentId: departmentLogs.departmentId, // preserve departmentId
+					subjectId: subject.subjectId, // so we know which subject it belongs to
 				}))
 			)
 			.filter((log) => {
-				const matchesSearch =
-					log.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-					log.lectureTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-					log.absentStudents.some((student) =>
-						student.name.toLowerCase().includes(searchQuery.toLowerCase())
-					);
-				return matchesSearch;
+				const query = searchQuery.toLowerCase();
+				const matchesSubject = log.subject?.toLowerCase().includes(query);
+				const matchesTitle = log.lectureTitle.toLowerCase().includes(query);
+				const matchesStudent = log.absentStudents.some((student) =>
+					student.name.toLowerCase().includes(query)
+				);
+				return matchesSubject || matchesTitle || matchesStudent;
 			}) || [];
 
+	// Sort logs by date ascending or descending
 	const sortedLogs = filteredLogs.sort((a, b) => {
 		const dateA = new Date(a.classDate);
 		const dateB = new Date(b.classDate);
 		return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
 	});
 
+	// Pagination
 	const indexOfLastLog = currentPage * logsPerPage;
 	const indexOfFirstLog = indexOfLastLog - logsPerPage;
 	const currentLogs = sortedLogs.slice(indexOfFirstLog, indexOfLastLog);
