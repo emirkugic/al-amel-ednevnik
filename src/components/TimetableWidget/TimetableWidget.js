@@ -27,7 +27,7 @@ const TimetableWidget = () => {
 				{ start: "11:05", end: "11:45", label: "4th Period" },
 				{ start: "11:50", end: "12:30", label: "5th Period" },
 				{ start: "12:35", end: "13:15", label: "6th Period" },
-				{ start: "13:20", end: "13:35", label: "Prayer" },
+				{ start: "13:20", end: "13:35", label: "Break 2" },
 				{ start: "13:40", end: "14:20", label: "7th Period" },
 			],
 			Friday: [
@@ -47,7 +47,7 @@ const TimetableWidget = () => {
 				{ start: "10:40", end: "11:00", label: "Break" },
 				{ start: "11:05", end: "11:45", label: "4th Period" },
 				{ start: "11:50", end: "12:30", label: "5th Period" },
-				{ start: "12:35", end: "12:50", label: "Prayer" },
+				{ start: "12:35", end: "12:50", label: "Break 2" },
 				{ start: "12:55", end: "13:35", label: "6th Period" },
 				{ start: "13:40", end: "14:20", label: "7th Period" },
 			],
