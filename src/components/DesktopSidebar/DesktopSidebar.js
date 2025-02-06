@@ -28,15 +28,6 @@ const DesktopSidebar = () => {
 	const [myDepartments, setMyDepartments] = useState([]);
 	const [loadingCourses, setLoadingCourses] = useState(true);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-	const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
-
-	useEffect(() => {
-		const handleResize = () => {
-			setIsDesktop(window.innerWidth > 768);
-		};
-		window.addEventListener("resize", handleResize);
-		return () => window.removeEventListener("resize", handleResize);
-	}, []);
 
 	useEffect(() => {
 		const fetchMyCourses = async () => {
@@ -105,6 +96,11 @@ const DesktopSidebar = () => {
 				icon: faBookOpen,
 				route: myDepartments,
 			},
+			{
+				title: "Weekly Report",
+				icon: faChartLine,
+				route: "/logs",
+			},
 		];
 
 		if (user?.role === "Admin") {
@@ -118,11 +114,6 @@ const DesktopSidebar = () => {
 					title: "Schedule",
 					icon: faCalendarAlt,
 					route: "/schedule",
-				},
-				{
-					title: "Weekly Report",
-					icon: faChartLine,
-					route: "/logs",
 				},
 				{
 					title: "Teachers",
@@ -145,17 +136,10 @@ const DesktopSidebar = () => {
 					route: "/parents",
 				}
 			);
-		} else if (isDesktop) {
-			// Non-admins see "/logs" ONLY in desktop view
-			items.push({
-				title: "Weekly Report",
-				icon: faChartLine,
-				route: "/logs",
-			});
 		}
 
 		return items;
-	}, [user, myCourses, myDepartments, isDesktop]);
+	}, [user, myCourses, myDepartments]);
 
 	useEffect(() => {
 		const activeMenuItem = menuItems.find((item) =>

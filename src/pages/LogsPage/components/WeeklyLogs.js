@@ -32,7 +32,7 @@ const WeeklyLogs = () => {
 	const [selectedDepartment, setSelectedDepartment] = useState("");
 	const [weekOffset, setWeekOffset] = useState(0);
 
-	// Track screen size for mobile
+	// Detect mobile
 	const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
 	useEffect(() => {
 		const handleResize = () => {
@@ -42,7 +42,7 @@ const WeeklyLogs = () => {
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
-	// Build weekdays array
+	// ----- Build the Monday-based week -----
 	const getMonday = (d) => {
 		const date = new Date(d);
 		const day = date.getDay() || 7;
@@ -51,11 +51,13 @@ const WeeklyLogs = () => {
 		}
 		return date;
 	};
+
 	const today = new Date();
 	const currentMonday = getMonday(today);
 	const mondayOffset = new Date(currentMonday);
 	mondayOffset.setDate(currentMonday.getDate() + weekOffset * 7);
 
+	// Create an array for Mon–Fri
 	const weekdays = [];
 	const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 	for (let i = 0; i < 5; i++) {
@@ -65,40 +67,47 @@ const WeeklyLogs = () => {
 			name: dayNames[i],
 			date: dayDate,
 			dateFormatted: dayDate.toISOString().split("T")[0],
-			periodCount: i === 4 ? 5 : 7,
+			periodCount: i === 4 ? 5 : 7, // e.g. Friday might have 5 periods
 		});
 	}
 
-	// ----- Mobile: track which weekday index is selected -----
-	// For example, 0 => Monday, 1 => Tuesday, ...
+	// ----- Mobile: track selectedDayIndex (0..4) -----
+	// We'll set the default day only once, on the very first load (if "today" is in range).
 	const [selectedDayIndex, setSelectedDayIndex] = useState(0);
+	const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-	// On mount or when weekdays change, see if we can pick a better default
 	useEffect(() => {
-		const todayFormatted = today.toISOString().split("T")[0];
-		// If "today" is within this week's Mon-Fri, select that weekday's index
-		const foundIndex = weekdays.findIndex(
-			(wd) => wd.dateFormatted === todayFormatted
-		);
-		if (foundIndex !== -1) {
-			setSelectedDayIndex(foundIndex);
-		} else {
-			// If "today" not in these 5 days (e.g., weekend or different offset),
-			// just keep existing index. If it's out of range, reset to 0.
-			if (selectedDayIndex < 0 || selectedDayIndex > 4) {
-				setSelectedDayIndex(0);
+		if (isFirstLoad && weekdays.length > 0) {
+			const todayStr = today.toISOString().split("T")[0];
+			const foundIndex = weekdays.findIndex(
+				(wd) => wd.dateFormatted === todayStr
+			);
+			if (foundIndex !== -1) {
+				setSelectedDayIndex(foundIndex); // set “today” as default if in range
+			} else {
+				setSelectedDayIndex(0); // otherwise Monday
 			}
+			setIsFirstLoad(false);
 		}
-	}, [weekOffset, weekdays]);
+		// If user manually selects a day, we won't overwrite it again
+	}, [weekdays, isFirstLoad, today]);
+
+	// If user picks a day out of bounds, reset to 0
+	useEffect(() => {
+		if (selectedDayIndex < 0 || selectedDayIndex > 4) {
+			setSelectedDayIndex(0);
+		}
+	}, [selectedDayIndex]);
 
 	// Filter logs for a given date & period
 	const getLogsFor = (dateFormatted, period) => {
 		return classLogs.filter((log) => {
 			const logDate = new Date(log.classDate).toISOString().split("T")[0];
-			const matchesDate = logDate === dateFormatted;
-			const matchesPeriod = Number(log.period) === period;
-			const matchesDept = log.departmentId === selectedDepartment;
-			return matchesDate && matchesPeriod && matchesDept;
+			return (
+				logDate === dateFormatted &&
+				Number(log.period) === period &&
+				log.departmentId === selectedDepartment
+			);
 		});
 	};
 
@@ -109,7 +118,7 @@ const WeeklyLogs = () => {
 	};
 
 	// Department & Week controls
-	const onDepartmentChange = (deptId) => setSelectedDepartment(deptId);
+	const handleDepartmentChange = (deptId) => setSelectedDepartment(deptId);
 	const handlePrevWeek = () => setWeekOffset((prev) => prev - 1);
 	const handleNextWeek = () => setWeekOffset((prev) => prev + 1);
 	const disableNext = weekOffset >= 0;
@@ -121,25 +130,26 @@ const WeeklyLogs = () => {
 		}
 	}, [departments, selectedDepartment]);
 
-	if (logsLoading || depsLoading || teachersLoading)
+	// Loading & error states
+	if (logsLoading || depsLoading || teachersLoading) {
 		return <div className="loading">Loading weekly logs...</div>;
-	if (logsError)
+	}
+	if (logsError) {
 		return <div className="error">Error (logs): {logsError.message}</div>;
-	if (depsError)
+	}
+	if (depsError) {
 		return (
 			<div className="error">Error (departments): {depsError.message}</div>
 		);
-	if (teachersError)
+	}
+	if (teachersError) {
 		return (
 			<div className="error">Error (teachers): {teachersError.message}</div>
 		);
+	}
 
-	// Decide which days to render:
-	// - Desktop => all 5 days
-	// - Mobile => just the day at selectedDayIndex
-	const daysToRender = isMobile
-		? [weekdays[selectedDayIndex]] // single day
-		: weekdays; // all days
+	// Decide which days to render (mobile => single day, desktop => all)
+	const daysToRender = isMobile ? [weekdays[selectedDayIndex]] : weekdays;
 
 	return (
 		<div className="weekly-logs">
@@ -147,7 +157,7 @@ const WeeklyLogs = () => {
 			<WeeklyLogsControls
 				departments={departments}
 				selectedDepartment={selectedDepartment}
-				onDepartmentChange={onDepartmentChange}
+				onDepartmentChange={handleDepartmentChange}
 				isMobile={isMobile}
 				weekdays={weekdays}
 				selectedDayIndex={selectedDayIndex}
@@ -156,10 +166,9 @@ const WeeklyLogs = () => {
 				handleNextWeek={handleNextWeek}
 				disableNext={disableNext}
 				mondayOffset={mondayOffset}
-				weekOffset={weekOffset}
 			/>
 
-			{/* 2) The timetable */}
+			{/* 2) Timetable */}
 			<div className="timetable">
 				{daysToRender.map((day, idx) => (
 					<div className="timetable-row" key={day.dateFormatted || idx}>

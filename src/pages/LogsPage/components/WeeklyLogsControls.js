@@ -13,7 +13,6 @@ const WeeklyLogsControls = ({
 	handleNextWeek,
 	disableNext,
 	mondayOffset,
-	weekOffset,
 }) => {
 	return (
 		<div className="weekly-logs-controls">
@@ -37,7 +36,7 @@ const WeeklyLogsControls = ({
 					</select>
 				</div>
 
-				{/* Mobile only: Day selection */}
+				{/* Day selection (mobile only) */}
 				{isMobile && (
 					<div className="control-group">
 						<label className="control-label" htmlFor="mobileDaySelect">

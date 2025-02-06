@@ -19,7 +19,7 @@
 .timetable {
 	display: flex;
 	flex-direction: column;
-	gap: 6px;
+	gap: 8px;
 }
 
 .timetable-row {
@@ -30,10 +30,10 @@
 
 .day-label {
 	background: #eceff1;
-	padding: 4px;
+	padding: 6px;
 	text-align: center;
 	border-radius: 4px;
-	min-width: 60px;
+	min-width: 70px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -41,12 +41,12 @@
 }
 
 .day-label .day-name {
-	font-size: 1em;
+	font-size: 1rem;
 	margin-bottom: 2px;
 }
 
 .day-label .date {
-	font-size: 0.75em;
+	font-size: 0.75rem;
 	color: #555;
 }
 
@@ -87,18 +87,18 @@
 .period-number {
 	font-weight: bold;
 	color: #1976d2;
-	font-size: 0.85em;
+	font-size: 0.85rem;
 }
 
 .duplicate-label {
-	font-size: 0.75em;
+	font-size: 0.75rem;
 	color: #e63946;
 	margin-left: 4px;
 	cursor: pointer;
 }
 
 .cell-content {
-	font-size: 0.85em;
+	font-size: 0.85rem;
 	line-height: 1.25;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -124,7 +124,7 @@
 }
 
 .log-details {
-	font-size: 0.75em;
+	font-size: 0.75rem;
 	color: #555;
 	margin-top: 2px;
 }
@@ -138,11 +138,11 @@
 
 	.timetable-row {
 		display: block;
-		margin-bottom: 16px; /* add more space between day cards */
+		margin-bottom: 16px;
 		background: #fff;
 		border-radius: 6px;
 		border: 1px solid #ddd;
-		padding: 8px;
+		padding: 10px;
 	}
 
 	.day-label {
@@ -156,7 +156,7 @@
 	}
 
 	.day-label .day-name {
-		font-size: 1.1rem; /* bigger for mobile readability */
+		font-size: 1.1rem;
 		margin-bottom: 0;
 	}
 	.day-label .date {
@@ -180,7 +180,7 @@
 
 	.cell-header {
 		margin-bottom: 4px;
-		font-size: 1rem; /* bigger text */
+		font-size: 1rem;
 	}
 
 	.period-number {
@@ -189,7 +189,7 @@
 	}
 
 	.cell-content {
-		font-size: 0.95rem; /* bigger text for details */
+		font-size: 0.95rem;
 		line-height: 1.3;
 	}
 
