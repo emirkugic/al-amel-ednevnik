@@ -16,10 +16,9 @@
 
 @media (max-width: 600px) {
 	.logged-classes-overview {
-		/* No fixed height on mobile. Let content expand. */
-		min-height: auto;
-		padding: 16px;
 		height: auto;
+		padding: 16px;
+		margin-top: 15px;
 	}
 }
 
