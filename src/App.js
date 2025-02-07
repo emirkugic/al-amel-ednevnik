@@ -10,19 +10,15 @@ import { ClassLogsProvider } from "./contexts/ClassLogsContext";
 
 import PrivateRoute from "./components/PrivateRoute";
 
-import DesktopSidebar from "./components/DesktopSidebar/DesktopSidebar";
-import RightSidebarDesktop from "./components/RightSidebarDesktop/RightSidebarDesktop";
+import Sidebar from "./components/Sidebar/Sidebar";
+import RightSidebar from "./components/RightSidebar/RightSidebar";
+
 import Dashboard from "./components/pages/Dashboard";
 import Students from "./components/pages/Students";
-import Courses from "./components/pages/Courses";
-import Attendance from "./components/pages/Attendance";
 import Grades from "./components/pages/Grades";
 import Settings from "./components/pages/Settings";
 import Help from "./components/pages/Help";
-import Login from "./components/pages/Login";
-import Subjects from "./components/pages/Subjects";
 import Classes from "./components/pages/Classes";
-import Parents from "./components/pages/Parents";
 
 import {
 	LecturesPage,
@@ -31,6 +27,9 @@ import {
 	SchedulePage,
 	LogsPage,
 	TeachersPage,
+	LoginPage,
+	SubjectsPage,
+	ParentsPage,
 } from "./pages/index.js";
 
 import "./App.css";
@@ -41,22 +40,20 @@ const AppContent = () => {
 
 	return (
 		<div className="App">
-			{!isLoginPage && <DesktopSidebar />}
+			{!isLoginPage && <Sidebar />}
 			<div className={`main-content ${isLoginPage ? "no-margins" : ""}`}>
 				<Routes>
-					<Route path="/login" element={<Login />} />
+					<Route path="/login" element={<LoginPage />} />
 
 					<Route element={<PrivateRoute />}>
 						<Route path="/" element={<Dashboard />} />
 						<Route path="/students" element={<Students />} />
-						<Route path="/courses" element={<Courses />} />
-						<Route path="/attendance" element={<Attendance />} />
 						<Route path="/grades" element={<Grades />} />
 						<Route path="/settings" element={<Settings />} />
 						<Route path="/help" element={<Help />} />
-						<Route path="/subjects" element={<Subjects />} />
+						<Route path="/subjects" element={<SubjectsPage />} />
 						<Route path="/classes" element={<Classes />} />
-						<Route path="/parents" element={<Parents />} />
+						<Route path="/parents" element={<ParentsPage />} />
 						<Route path="/schedule" element={<SchedulePage />} />
 						<Route path="/logs" element={<LogsPage />} />
 						<Route path="/teachers" element={<TeachersPage />} />
@@ -70,7 +67,7 @@ const AppContent = () => {
 					</Route>
 				</Routes>
 			</div>
-			{!isLoginPage && <RightSidebarDesktop />}
+			{!isLoginPage && <RightSidebar />}
 		</div>
 	);
 };

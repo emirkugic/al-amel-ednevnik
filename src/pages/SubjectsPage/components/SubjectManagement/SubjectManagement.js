@@ -8,8 +8,8 @@ import {
 	faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import AddEditSubjectModal from "../AddEditSubjectModal/AddEditSubjectModal";
-import subjectApi from "../../api/subjectApi";
-import useAuth from "../../hooks/useAuth";
+import subjectApi from "../../../../api/subjectApi";
+import useAuth from "../../../../hooks/useAuth";
 
 const SubjectManagement = () => {
 	const { user } = useAuth(); // Access token from context

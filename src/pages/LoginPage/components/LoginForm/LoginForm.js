@@ -1,13 +1,13 @@
 import React, { useState, useContext } from "react";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
-import TextInput from "../ui/TextInput/TextInput";
-import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
-import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
-import useAuth from "../../hooks/useAuth";
-import { ClassLogsContext } from "../../contexts/ClassLogsContext";
+import TextInput from "../../../../components/ui/TextInput/TextInput";
+import PrimaryButton from "../../../../components/ui/PrimaryButton/PrimaryButton";
+import SecondaryButton from "../../../../components/ui/SecondaryButton/SecondaryButton";
+import useAuth from "../../../../hooks/useAuth";
+import { ClassLogsContext } from "../../../../contexts/ClassLogsContext";
 import "./LoginForm.css";
 
-import { logo } from "../../assets/";
+import { logo } from "../../../../assets/";
 
 const LoginForm = () => {
 	const { login } = useAuth();

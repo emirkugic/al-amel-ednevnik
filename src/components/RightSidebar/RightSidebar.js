@@ -1,15 +1,15 @@
 import React from "react";
-import "./RightSidebarDesktop.css";
+import "./RightSidebar.css";
 import CalendarWidget from "../CalendarWidget/CalendarWidget";
 import TimetableWidget from "../TimetableWidget/TimetableWidget";
 
-const RightSidebarDesktop = () => {
+const RightSidebar = () => {
 	return (
-		<div className="right-sidebar-desktop">
+		<div className="right-sidebar">
 			<CalendarWidget />
 			<TimetableWidget />
 		</div>
 	);
 };
 
-export default RightSidebarDesktop;
+export default RightSidebar;

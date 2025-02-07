@@ -9,12 +9,12 @@ import {
 	faKey,
 	faPhone,
 } from "@fortawesome/free-solid-svg-icons";
-import TextInput from "../ui/TextInput/TextInput"; // Assuming this is your custom input component
-import PrimaryButton from "../ui/PrimaryButton/PrimaryButton"; // Assuming this is your custom button component
-import SecondaryButton from "../ui/SecondaryButton/SecondaryButton"; // Assuming this is your custom button component
-import useAuth from "../../hooks/useAuth";
-import useParents from "../../hooks/useParents";
-import parentApi from "../../api/parentApi";
+import TextInput from "../../../../components/ui/TextInput/TextInput";
+import PrimaryButton from "../../../../components/ui/PrimaryButton/PrimaryButton";
+import SecondaryButton from "../../../../components/ui/SecondaryButton/SecondaryButton";
+import useAuth from "../../../../hooks/useAuth";
+import useParents from "../../../../hooks/useParents";
+import parentApi from "../../../../api/parentApi";
 
 const ParentManagement = () => {
 	const { user } = useAuth();

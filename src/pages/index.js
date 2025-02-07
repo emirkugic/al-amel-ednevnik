@@ -4,3 +4,6 @@ export { default as "DepartmentPage" } from "./DepartmentPage/DepartmentPage.js"
 export { default as "SchedulePage" } from "./SchedulePage/SchedulePage.js";
 export { default as "LogsPage" } from "./LogsPage/LogsPage.js";
 export { default as "TeachersPage" } from "./TeachersPage/TeachersPage.js";
+export { default as "LoginPage" } from "./LoginPage/LoginPage.js";
+export { default as "SubjectsPage" } from "./SubjectsPage/SubjectsPage.js";
+export { default as "ParentsPage" } from "./ParentsPage/ParentsPage.js";

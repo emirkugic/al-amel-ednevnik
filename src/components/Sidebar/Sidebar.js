@@ -1,80 +1,211 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import the hook for navigation
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState, useEffect, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import {
-	faCalendarAlt,
+	faBars,
+	faTimes,
 	faChartLine,
-	faCog,
-	faQuestionCircle,
 	faSignOutAlt,
 	faHouse,
 	faPeopleGroup,
-	faClock,
 	faBookOpen,
-	faBars,
+	faCalendarAlt,
+	faBook,
+	faChalkboardTeacher,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import DesktopSidebarButton from "../ui/DesktopSidebarButton/DesktopSidebarButton";
+import useAuth from "../../hooks/useAuth";
+import teacherApi from "../../api/teacherApi";
+import subjectApi from "../../api/subjectApi";
+import departmentApi from "../../api/departmentApi";
 import "./Sidebar.css";
-import { faAnchorLock } from "@fortawesome/free-solid-svg-icons/faAnchorLock";
 
-const Sidebar = () => {
-	const [activeItem, setActiveItem] = useState("Dashboard"); // Default active item
-	const [isMenuOpen, setIsMenuOpen] = useState(false); // To toggle mobile menu
-	const navigate = useNavigate(); // Use React Router's navigation hook
+const DesktopSidebar = () => {
+	const location = useLocation();
+	const { user, logout } = useAuth();
+	const [activeItem, setActiveItem] = useState("");
+	const [myCourses, setMyCourses] = useState([]);
+	const [myDepartments, setMyDepartments] = useState([]);
+	const [loadingCourses, setLoadingCourses] = useState(true);
+	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-	const menuItems = [
-		{ name: "Dashboard", icon: faHouse, path: "/" },
-		{ name: "Students", icon: faPeopleGroup, path: "/students" },
-		{ name: "Courses", icon: faBookOpen, path: "/courses" },
-		{ name: "Schedule", icon: faCalendarAlt, path: "/schedule" },
-		{ name: "Attendance", icon: faClock, path: "/attendance" },
-		{ name: "Grades", icon: faChartLine, path: "/grades" },
-		{ name: "Settings", icon: faCog, path: "/settings" },
-		{ name: "Help", icon: faQuestionCircle, path: "/help" },
-		{ name: "Login", icon: faAnchorLock, path: "/login" },
-	];
+	useEffect(() => {
+		const fetchMyCourses = async () => {
+			try {
+				if (!user?.id || !user?.token) return;
 
-	const handleItemClick = (item) => {
-		setActiveItem(item.name); // Set the clicked item as active
-		navigate(item.path); // Navigate to the corresponding path
-		if (window.innerWidth <= 768) setIsMenuOpen(false); // Close menu on mobile
+				setLoadingCourses(true);
+
+				const teacherData = await teacherApi.getTeacherById(
+					user.id,
+					user.token
+				);
+
+				const subjectPromises = teacherData.assignedSubjects.map((subject) =>
+					subjectApi.getSubjectById(subject.subjectId, user.token)
+				);
+
+				const resolvedSubjects = await Promise.all(subjectPromises);
+
+				const courseList = resolvedSubjects.map((subject) => ({
+					title: subject.name,
+					path: `/courses/${subject.id}`,
+				}));
+				setMyCourses(courseList);
+
+				const uniqueDepartmentIds = [
+					...new Set(
+						teacherData.assignedSubjects.flatMap(
+							(subject) => subject.departmentId
+						)
+					),
+				];
+
+				const departmentPromises = uniqueDepartmentIds.map((id) =>
+					departmentApi.getDepartmentById(id, user.token)
+				);
+
+				const resolvedDepartments = await Promise.all(departmentPromises);
+
+				const departmentList = resolvedDepartments.map((dept) => ({
+					title: dept.departmentName + " razred",
+					path: `/lectures/${dept.id}`,
+				}));
+
+				setMyDepartments(departmentList);
+			} catch (error) {
+				console.error("Error fetching teacher's data:", error);
+			} finally {
+				setLoadingCourses(false);
+			}
+		};
+
+		fetchMyCourses();
+	}, [user]);
+
+	const menuItems = useMemo(() => {
+		const items = [
+			{ title: "Dashboard", icon: faHouse, route: "/" },
+			{
+				title: "Grades",
+				icon: faBook,
+				route: myCourses,
+			},
+			{
+				title: "Lectures",
+				icon: faBookOpen,
+				route: myDepartments,
+			},
+			{
+				title: "Weekly Report",
+				icon: faChartLine,
+				route: "/logs",
+			},
+		];
+
+		if (user?.role === "Admin") {
+			items.push(
+				{
+					title: "My Department",
+					icon: faChalkboardTeacher,
+					route: "/department/testID",
+				},
+				{
+					title: "Schedule",
+					icon: faCalendarAlt,
+					route: "/schedule",
+				},
+				{
+					title: "Teachers",
+					icon: faChalkboardTeacher,
+					route: "/teachers",
+				},
+				{
+					title: "Subjects",
+					icon: faBook,
+					route: "/subjects",
+				},
+				{
+					title: "Classes",
+					icon: faPeopleGroup,
+					route: "/classes",
+				},
+				{
+					title: "Parents",
+					icon: faPeopleGroup,
+					route: "/parents",
+				}
+			);
+		}
+
+		return items;
+	}, [user, myCourses, myDepartments]);
+
+	useEffect(() => {
+		const activeMenuItem = menuItems.find((item) =>
+			Array.isArray(item.route)
+				? item.route.some((sub) => sub.path === location.pathname)
+				: item.route === location.pathname
+		);
+
+		if (activeMenuItem) {
+			setActiveItem(activeMenuItem.title);
+		}
+	}, [location.pathname, menuItems]);
+
+	const handleButtonClick = (title, route) => {
+		setActiveItem(title);
+		if (window.innerWidth <= 768) {
+			setIsSidebarOpen(false);
+		}
+	};
+
+	const handleLogout = () => {
+		logout();
+		if (window.innerWidth <= 768) {
+			setIsSidebarOpen(false);
+		}
+	};
+
+	const toggleSidebar = () => {
+		setIsSidebarOpen((prev) => !prev);
 	};
 
 	return (
-		<div>
-			{/* Top bar for mobile view */}
-			<div className="top-bar">
+		<>
+			<div className="topbar">
 				<FontAwesomeIcon
-					icon={faBars}
-					className="burger-menu"
-					onClick={() => setIsMenuOpen(!isMenuOpen)}
+					icon={isSidebarOpen ? faTimes : faBars}
+					className="hamburger-icon"
+					onClick={toggleSidebar}
 				/>
-				<div className="brand-title">Al Amel</div>
+				<span className="topbar-title">Dashboard</span>
 			</div>
-
-			{/* Sidebar for desktop and mobile */}
-			<div className={`sidebar ${isMenuOpen ? "open" : ""}`}>
-				{menuItems.map((item) => (
-					<div
-						key={item.name}
-						className={`menu-item ${activeItem === item.name ? "active" : ""}`}
-						onClick={() => handleItemClick(item)}
-					>
-						<FontAwesomeIcon
+			<div className={`desktop-sidebar ${isSidebarOpen ? "open" : ""}`}>
+				<div className="sidebar-menu">
+					{menuItems.map((item) => (
+						<DesktopSidebarButton
+							key={item.title}
+							title={item.title}
 							icon={item.icon}
-							className={activeItem === item.name ? "active-icon" : ""}
+							route={item.route}
+							isActive={activeItem === item.title}
+							onClick={() => handleButtonClick(item.title, item.route)}
 						/>
-						{item.name}
-					</div>
-				))}
-				<div
-					className="menu-item logout"
-					onClick={() => handleItemClick({ path: "/" })}
-				>
-					<FontAwesomeIcon icon={faSignOutAlt} /> Logout
+					))}
+				</div>
+				<div className="logout-container">
+					<DesktopSidebarButton
+						title="Logout"
+						icon={faSignOutAlt}
+						route="/login"
+						isActive={false}
+						onClick={handleLogout}
+					/>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 
-export default Sidebar;
+export default DesktopSidebar;

@@ -1,4 +1,4 @@
-.right-sidebar-desktop {
+.right-sidebar {
 	width: 350px;
 	height: 100vh;
 	background-color: #ffffff;
@@ -13,13 +13,13 @@
 	box-sizing: border-box;
 }
 
-.right-sidebar-desktop .timetable-widget {
+.right-sidebar .timetable-widget {
 	margin-top: 10px;
 }
 
 /* Hide the sidebar on mobile view (screen width less than 768px) */
 @media (max-width: 768px) {
-	.right-sidebar-desktop {
+	.right-sidebar {
 		display: none;
 	}
 }
