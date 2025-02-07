@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import useAllClassLogs from "../hooks/useAllClassLogs";
 import useDepartments from "../../../hooks/useDepartments";
 import useTeachers from "../../../hooks/useTeachers";
-import useSubjects from "../../../hooks/useSubjects"; // <-- NEW import
+import useSubjects from "../../../hooks/useSubjects"; // NEW import for subjects
 import useAuth from "../../../hooks/useAuth";
 import WeeklyLogsControls from "./WeeklyLogsControls";
+import ClassLogFormModal from "../../../components/ClassLogFormModal/ClassLogFormModal"; // Import your modal
 import "./WeeklyLogs.css";
 
 const WeeklyLogs = () => {
@@ -29,7 +30,7 @@ const WeeklyLogs = () => {
 		error: teachersError,
 	} = useTeachers(token);
 
-	// NEW: Fetch subjects
+	// NEW: fetch subjects to get at least one subjectId
 	const {
 		subjects,
 		loading: subjectsLoading,
@@ -39,6 +40,9 @@ const WeeklyLogs = () => {
 	// ---------- STATE ----------
 	const [selectedDepartment, setSelectedDepartment] = useState("");
 	const [weekOffset, setWeekOffset] = useState(0);
+
+	// For opening/closing the modal when user clicks "Missing"
+	const [showModal, setShowModal] = useState(false);
 
 	// Detect mobile
 	const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
@@ -80,7 +84,6 @@ const WeeklyLogs = () => {
 	}
 
 	// ----- Mobile: track selectedDayIndex (0..4) -----
-	// We'll set the default day only once, on the very first load (if "today" is in range).
 	const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 	const [isFirstLoad, setIsFirstLoad] = useState(true);
 
@@ -97,10 +100,8 @@ const WeeklyLogs = () => {
 			}
 			setIsFirstLoad(false);
 		}
-		// If user manually selects a day, we won't overwrite it again
 	}, [weekdays, isFirstLoad, today]);
 
-	// If user picks a day out of bounds, reset to 0
 	useEffect(() => {
 		if (selectedDayIndex < 0 || selectedDayIndex > 4) {
 			setSelectedDayIndex(0);
@@ -123,27 +124,6 @@ const WeeklyLogs = () => {
 	const getTeacherName = (teacherId) => {
 		const teacher = teachers.find((t) => t.id === teacherId);
 		return teacher ? teacher.firstName.split(" ")[0] : teacherId;
-	};
-
-	// Subject name helper
-	const getSubjectName = (subjectId) => {
-		const subject = subjects.find((s) => s.id === subjectId);
-		return subject ? subject.name : subjectId;
-	};
-
-	// -------- Console Log on Click --------
-	const handleLogClick = (log) => {
-		console.log({
-			classLogId: log.id, // "Use classLogId: log.id"
-			teacherId: log.teacherId,
-			teacherName: getTeacherName(log.teacherId),
-			subjectId: log.subjectId,
-			subjectName: getSubjectName(log.subjectId),
-			lectureTitle: log.lectureTitle,
-			sequence: log.sequence,
-			period: log.period,
-			classDate: log.classDate,
-		});
 	};
 
 	// Department & Week controls
@@ -182,13 +162,14 @@ const WeeklyLogs = () => {
 		);
 	}
 
+	const defaultSubjectId = subjects.length > 0 ? subjects[0].id : "";
+
 	// Decide which days to render (mobile => single day, desktop => all)
 	const daysToRender = isMobile ? [weekdays[selectedDayIndex]] : weekdays;
 
-	// ----- RETURN: Full UI -----
 	return (
 		<div className="weekly-logs">
-			{/* Top Controls */}
+			{/* 1) Our controls */}
 			<WeeklyLogsControls
 				departments={departments}
 				selectedDepartment={selectedDepartment}
@@ -203,7 +184,7 @@ const WeeklyLogs = () => {
 				mondayOffset={mondayOffset}
 			/>
 
-			{/* Timetable */}
+			{/* 2) Timetable */}
 			<div className="timetable">
 				{daysToRender.map((day, idx) => (
 					<div className="timetable-row" key={day.dateFormatted || idx}>
@@ -242,18 +223,22 @@ const WeeklyLogs = () => {
 											)}
 										</div>
 
-										{/* 0 logs => Missing */}
+										{/* If no logs => open modal on click */}
 										{logsForCell.length === 0 ? (
-											<div className="cell-content no-log">Missing</div>
+											<div
+												className="cell-content no-log"
+												style={{ cursor: "pointer" }}
+												onClick={() => setShowModal(true)}
+											>
+												Missing
+											</div>
 										) : logsForCell.length === 1 ? (
-											/* 1 log => clickable log-entry */
+											/* Single log => same as before */
 											<div
 												className="cell-content log-entry"
 												title={`Seq: ${
 													logsForCell[0].sequence
 												} | ${getTeacherName(logsForCell[0].teacherId)}`}
-												onClick={() => handleLogClick(logsForCell[0])}
-												style={{ cursor: "pointer" }}
 											>
 												<div className="lecture-title">
 													{logsForCell[0].lectureTitle}
@@ -264,7 +249,7 @@ const WeeklyLogs = () => {
 												</div>
 											</div>
 										) : (
-											/* 2+ logs => "log-duplicate" (just show first log visually, but clickable) */
+											/* 2+ logs => "log-duplicate" */
 											<div
 												className="cell-content log-duplicate"
 												title={logsForCell
@@ -275,8 +260,6 @@ const WeeklyLogs = () => {
 															}, Teacher: ${getTeacherName(log.teacherId)}`
 													)
 													.join("\n")}
-												onClick={() => handleLogClick(logsForCell[0])}
-												style={{ cursor: "pointer" }}
 											>
 												<div className="lecture-title">
 													{logsForCell[0].lectureTitle}
@@ -294,6 +277,15 @@ const WeeklyLogs = () => {
 					</div>
 				))}
 			</div>
+
+			{/* 3) The "Missing" modal (ClassLogFormModal) */}
+			{showModal && (
+				<ClassLogFormModal
+					onClose={() => setShowModal(false)}
+					departmentId={selectedDepartment}
+					subjectId={defaultSubjectId}
+				/>
+			)}
 		</div>
 	);
 };

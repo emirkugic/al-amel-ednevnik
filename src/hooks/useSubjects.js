@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import subjectApi from "../api/subjectApi"; // Ensure this points to your subject API file
+import subjectApi from "../api/subjectApi";
 
 const useSubjects = (token) => {
 	const [subjects, setSubjects] = useState([]);
