@@ -1,5 +1,6 @@
 import React from "react";
 import "./WeeklyLogsControls.css";
+import useAuth from "../../../hooks/useAuth"; // so we can read user.role & assignedSubjects
 
 const WeeklyLogsControls = ({
 	departments,
@@ -14,6 +15,23 @@ const WeeklyLogsControls = ({
 	disableNext,
 	mondayOffset,
 }) => {
+	const { user, assignedSubjects } = useAuth();
+	const isAdmin = user?.role === "Admin";
+
+	// If admin, show ALL departments; if teacher, filter them
+	let teacherDepartments = departments;
+	if (!isAdmin) {
+		const teacherDeptIds = new Set();
+		if (assignedSubjects && assignedSubjects.length > 0) {
+			assignedSubjects.forEach((as) => {
+				as.departmentId.forEach((depId) => teacherDeptIds.add(depId));
+			});
+		}
+		teacherDepartments = departments.filter((dept) =>
+			teacherDeptIds.has(dept.id)
+		);
+	}
+
 	return (
 		<div className="weekly-logs-controls">
 			<div className="controls-left">
@@ -28,7 +46,7 @@ const WeeklyLogsControls = ({
 						value={selectedDepartment}
 						onChange={(e) => onDepartmentChange(e.target.value)}
 					>
-						{departments.map((dept) => (
+						{teacherDepartments.map((dept) => (
 							<option key={dept.id} value={dept.id}>
 								{dept.departmentName}
 							</option>
