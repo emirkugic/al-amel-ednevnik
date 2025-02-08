@@ -13,7 +13,7 @@ import {
 	faChalkboardTeacher,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import DesktopSidebarButton from "../ui/DesktopSidebarButton/DesktopSidebarButton";
+import SidebarButton from "../ui/SidebarButton/SidebarButton";
 import useAuth from "../../hooks/useAuth";
 import teacherApi from "../../api/teacherApi";
 import subjectApi from "../../api/subjectApi";
@@ -184,7 +184,7 @@ const DesktopSidebar = () => {
 			<div className={`desktop-sidebar ${isSidebarOpen ? "open" : ""}`}>
 				<div className="sidebar-menu">
 					{menuItems.map((item) => (
-						<DesktopSidebarButton
+						<SidebarButton
 							key={item.title}
 							title={item.title}
 							icon={item.icon}
@@ -195,7 +195,7 @@ const DesktopSidebar = () => {
 					))}
 				</div>
 				<div className="logout-container">
-					<DesktopSidebarButton
+					<SidebarButton
 						title="Logout"
 						icon={faSignOutAlt}
 						route="/login"

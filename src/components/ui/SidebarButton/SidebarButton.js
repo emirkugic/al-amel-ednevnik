@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import "./DesktopSidebarButton.css";
+import "./SidebarButton.css";
 
 const DesktopSidebarButton = ({ title, icon, route, isActive, onClick }) => {
 	const navigate = useNavigate();
