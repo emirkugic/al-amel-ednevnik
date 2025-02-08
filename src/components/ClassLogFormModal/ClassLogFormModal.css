@@ -115,3 +115,9 @@
 		margin-right: 15px;
 	}
 }
+
+/* Weekly logs Mode */
+.class-log-form-modal.new-ui-mode .modal-content {
+	max-height: 400px;
+	overflow-y: auto;
+}

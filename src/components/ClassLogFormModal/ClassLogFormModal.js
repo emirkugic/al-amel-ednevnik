@@ -3,6 +3,7 @@ import {
 	faClock,
 	faChalkboardTeacher,
 	faListNumeric,
+	faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
 
 import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
@@ -52,12 +53,14 @@ const ClassLogFormModal = ({
 }) => {
 	const weekDays = getWorkWeekDates();
 
+	// Old UI states
 	const [selectedDay, setSelectedDay] = useState(
 		weekDays.find((day) => day.value === new Date().toISOString().split("T")[0])
 			?.value || null
 	);
 	const [classHour, setClassHour] = useState("");
 
+	// Shared
 	const [lectureTitle, setLectureTitle] = useState("");
 	const [classSequence, setClassSequence] = useState("");
 	const [notification, setNotification] = useState("");
@@ -65,9 +68,11 @@ const ClassLogFormModal = ({
 	const [studentOptions, setStudentOptions] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 
+	// Auth + context
 	const { user, assignedSubjects } = useAuth();
 	const { setClassLogs } = useContext(ClassLogsContext);
 
+	// New UI states
 	const [teacherSubjects, setTeacherSubjects] = useState([]);
 	const [selectedSubject, setSelectedSubject] = useState(subjectId || "");
 
@@ -101,10 +106,12 @@ const ClassLogFormModal = ({
 		if (!isNewUiMode) return;
 		if (!assignedSubjects || assignedSubjects.length === 0) return;
 
+		// Filter assigned subjects for the selected department
 		const subsInDept = assignedSubjects.filter((as) =>
 			as.departmentId.includes(departmentId)
 		);
 
+		// Convert to { value, label } using subject names
 		const teacherSubs = subsInDept.map((as) => {
 			const foundSub = subjects.find((s) => s.id === as.subjectId);
 			return {
@@ -112,9 +119,9 @@ const ClassLogFormModal = ({
 				label: foundSub ? foundSub.name : as.subjectId,
 			};
 		});
-
 		setTeacherSubjects(teacherSubs);
 
+		// Default to first subject if none selected
 		if (!selectedSubject && teacherSubs.length > 0) {
 			setSelectedSubject(teacherSubs[0].value);
 		}
@@ -187,7 +194,7 @@ const ClassLogFormModal = ({
 													{
 														...newClassLog,
 														classLogId: newClassLog.id,
-														subjectName: subj.name, // or foundSub.name
+														subjectName: subj.name,
 														absentStudents: absentStudents.map((s) => ({
 															studentId: s.value,
 															name: s.label,
@@ -202,6 +209,7 @@ const ClassLogFormModal = ({
 				)
 			);
 
+			// Inform parent for immediate UI update
 			if (onSuccess) {
 				onSuccess({
 					id: newClassLog.id,
@@ -234,7 +242,7 @@ const ClassLogFormModal = ({
 	};
 
 	return (
-		<div className="class-log-form-modal">
+		<div className={`class-log-form-modal ${isNewUiMode ? "new-ui-mode" : ""}`}>
 			<div className="modal-content">
 				{isLoading && <div className="loading-bar"></div>}
 
@@ -245,6 +253,7 @@ const ClassLogFormModal = ({
 							className="dropdown-select"
 							label="Day of the Week"
 							placeholder="Select a day"
+							icon={faCalendar}
 							value={selectedDay}
 							onChange={(value) => setSelectedDay(value)}
 							options={weekDays}
@@ -280,17 +289,16 @@ const ClassLogFormModal = ({
 					</>
 				)}
 
+				{/* --- NEW UI => Subject pick only, day/period locked externally --- */}
 				{isNewUiMode && (
-					<>
-						<DropdownSelect
-							className="dropdown-select"
-							label="Subject"
-							placeholder="Select a subject"
-							value={selectedSubject}
-							onChange={(val) => setSelectedSubject(val)}
-							options={teacherSubjects}
-						/>
-					</>
+					<DropdownSelect
+						className="dropdown-select"
+						label="Subject"
+						placeholder="Select a subject"
+						value={selectedSubject}
+						onChange={(val) => setSelectedSubject(val)}
+						options={teacherSubjects}
+					/>
 				)}
 
 				{/* COMMON FIELDS => Title, Absent, Buttons */}
