@@ -2,54 +2,63 @@ import React, { useState, useEffect } from "react";
 import useAllClassLogs from "../hooks/useAllClassLogs";
 import useDepartments from "../../../hooks/useDepartments";
 import useTeachers from "../../../hooks/useTeachers";
-import useSubjects from "../../../hooks/useSubjects"; // NEW import for subjects
+import useSubjects from "../../../hooks/useSubjects";
 import useAuth from "../../../hooks/useAuth";
 import WeeklyLogsControls from "./WeeklyLogsControls";
-import ClassLogFormModal from "../../../components/ClassLogFormModal/ClassLogFormModal"; // Import your modal
+import ClassLogFormModal from "../../../components/ClassLogFormModal/ClassLogFormModal";
 import "./WeeklyLogs.css";
 
 const WeeklyLogs = () => {
 	const { user } = useAuth();
 	const token = user?.token;
 
+	// 1) Fetch from your hooks
 	const {
 		classLogs,
 		loading: logsLoading,
 		error: logsError,
 	} = useAllClassLogs(token);
-
 	const {
 		departments,
 		loading: depsLoading,
 		error: depsError,
 	} = useDepartments(token);
-
 	const {
 		teachers,
 		loading: teachersLoading,
 		error: teachersError,
 	} = useTeachers(token);
-
-	// NEW: fetch subjects to get at least one subjectId
 	const {
 		subjects,
 		loading: subjectsLoading,
 		error: subjectsError,
 	} = useSubjects(token);
 
-	// ---------- STATE ----------
+	// 2) Local state to store logs we actually display
+	const [allLogs, setAllLogs] = useState([]);
+
+	// 3) Fill local logs once they’re loaded
+	useEffect(() => {
+		if (!logsLoading && classLogs) {
+			setAllLogs(classLogs);
+		}
+	}, [classLogs, logsLoading]);
+
+	// Department & week states
 	const [selectedDepartment, setSelectedDepartment] = useState("");
 	const [weekOffset, setWeekOffset] = useState(0);
 
 	// For opening/closing the modal when user clicks "Missing"
 	const [showModal, setShowModal] = useState(false);
 
+	// Store which date/period was clicked
+	const [missingDate, setMissingDate] = useState("");
+	const [missingPeriod, setMissingPeriod] = useState("");
+
 	// Detect mobile
 	const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
 	useEffect(() => {
-		const handleResize = () => {
-			setIsMobile(window.innerWidth < 768);
-		};
+		const handleResize = () => setIsMobile(window.innerWidth < 768);
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
@@ -79,14 +88,15 @@ const WeeklyLogs = () => {
 			name: dayNames[i],
 			date: dayDate,
 			dateFormatted: dayDate.toISOString().split("T")[0],
-			periodCount: i === 4 ? 5 : 7, // e.g. Friday might have 5 periods
+			periodCount: i === 4 ? 5 : 7,
 		});
 	}
 
-	// ----- Mobile: track selectedDayIndex (0..4) -----
+	// Mobile: track selectedDayIndex (0..4)
 	const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 	const [isFirstLoad, setIsFirstLoad] = useState(true);
 
+	// Default day = "today" if in range
 	useEffect(() => {
 		if (isFirstLoad && weekdays.length > 0) {
 			const todayStr = today.toISOString().split("T")[0];
@@ -94,9 +104,9 @@ const WeeklyLogs = () => {
 				(wd) => wd.dateFormatted === todayStr
 			);
 			if (foundIndex !== -1) {
-				setSelectedDayIndex(foundIndex); // set “today” as default if in range
+				setSelectedDayIndex(foundIndex);
 			} else {
-				setSelectedDayIndex(0); // otherwise Monday
+				setSelectedDayIndex(0);
 			}
 			setIsFirstLoad(false);
 		}
@@ -108,9 +118,9 @@ const WeeklyLogs = () => {
 		}
 	}, [selectedDayIndex]);
 
-	// Filter logs for a given date & period
+	// Filter logs from local state (allLogs) for a given date & period
 	const getLogsFor = (dateFormatted, period) => {
-		return classLogs.filter((log) => {
+		return allLogs.filter((log) => {
 			const logDate = new Date(log.classDate).toISOString().split("T")[0];
 			return (
 				logDate === dateFormatted &&
@@ -126,7 +136,7 @@ const WeeklyLogs = () => {
 		return teacher ? teacher.firstName.split(" ")[0] : teacherId;
 	};
 
-	// Department & Week controls
+	// Controls
 	const handleDepartmentChange = (deptId) => setSelectedDepartment(deptId);
 	const handlePrevWeek = () => setWeekOffset((prev) => prev - 1);
 	const handleNextWeek = () => setWeekOffset((prev) => prev + 1);
@@ -162,14 +172,17 @@ const WeeklyLogs = () => {
 		);
 	}
 
-	const defaultSubjectId = subjects.length > 0 ? subjects[0].id : "";
-
 	// Decide which days to render (mobile => single day, desktop => all)
 	const daysToRender = isMobile ? [weekdays[selectedDayIndex]] : weekdays;
 
+	// Callback for when the new log is successfully created
+	const handleNewLogCreated = (newLog) => {
+		// Insert the newly created log into local 'allLogs' state
+		setAllLogs((prev) => [...prev, newLog]);
+	};
+
 	return (
 		<div className="weekly-logs">
-			{/* 1) Our controls */}
 			<WeeklyLogsControls
 				departments={departments}
 				selectedDepartment={selectedDepartment}
@@ -184,7 +197,6 @@ const WeeklyLogs = () => {
 				mondayOffset={mondayOffset}
 			/>
 
-			{/* 2) Timetable */}
 			<div className="timetable">
 				{daysToRender.map((day, idx) => (
 					<div className="timetable-row" key={day.dateFormatted || idx}>
@@ -223,17 +235,21 @@ const WeeklyLogs = () => {
 											)}
 										</div>
 
-										{/* If no logs => open modal on click */}
 										{logsForCell.length === 0 ? (
 											<div
 												className="cell-content no-log"
 												style={{ cursor: "pointer" }}
-												onClick={() => setShowModal(true)}
+												onClick={() => {
+													// 1) Store day/period for new UI
+													setMissingDate(day.dateFormatted);
+													setMissingPeriod(period.toString());
+													// 2) Show modal
+													setShowModal(true);
+												}}
 											>
 												Missing
 											</div>
 										) : logsForCell.length === 1 ? (
-											/* Single log => same as before */
 											<div
 												className="cell-content log-entry"
 												title={`Seq: ${
@@ -249,7 +265,6 @@ const WeeklyLogs = () => {
 												</div>
 											</div>
 										) : (
-											/* 2+ logs => "log-duplicate" */
 											<div
 												className="cell-content log-duplicate"
 												title={logsForCell
@@ -278,12 +293,14 @@ const WeeklyLogs = () => {
 				))}
 			</div>
 
-			{/* 3) The "Missing" modal (ClassLogFormModal) */}
 			{showModal && (
 				<ClassLogFormModal
 					onClose={() => setShowModal(false)}
 					departmentId={selectedDepartment}
-					subjectId={defaultSubjectId}
+					disableDayAndPeriodSelection={true}
+					externalDate={missingDate}
+					externalPeriod={missingPeriod}
+					onSuccess={(newlyCreatedLog) => handleNewLogCreated(newlyCreatedLog)}
 				/>
 			)}
 		</div>
