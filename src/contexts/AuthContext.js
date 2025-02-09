@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
 		if (storedUser && storedUser.token) {
 			const decodedToken = jwtDecode(storedUser.token);
 
-			// Check if the token is expired
 			if (decodedToken.exp * 1000 < Date.now()) {
 				logout();
 			} else {
@@ -29,7 +28,6 @@ export const AuthProvider = ({ children }) => {
 				setAssignedSubjects(storedUser.assignedSubjects || []);
 				setTimetable(storedUser.timetable || []);
 
-				// Set a timeout to automatically log out the user when the token expires
 				const timeout = decodedToken.exp * 1000 - Date.now();
 				setTimeout(logout, timeout);
 			}

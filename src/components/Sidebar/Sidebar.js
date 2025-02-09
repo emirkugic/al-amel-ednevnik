@@ -31,11 +31,10 @@ const DesktopSidebar = () => {
 
 	useEffect(() => {
 		const fetchMyCourses = async () => {
+			if (!user?.id || !user?.token) return;
+
 			try {
-				if (!user?.id || !user?.token) return;
-
 				setLoadingCourses(true);
-
 				const teacherData = await teacherApi.getTeacherById(
 					user.id,
 					user.token
@@ -46,7 +45,6 @@ const DesktopSidebar = () => {
 				);
 
 				const resolvedSubjects = await Promise.all(subjectPromises);
-
 				const courseList = resolvedSubjects.map((subject) => ({
 					title: subject.name,
 					path: `/courses/${subject.id}`,
@@ -66,9 +64,8 @@ const DesktopSidebar = () => {
 				);
 
 				const resolvedDepartments = await Promise.all(departmentPromises);
-
 				const departmentList = resolvedDepartments.map((dept) => ({
-					title: dept.departmentName + " razred",
+					title: dept.departmentName + ". razred",
 					path: `/lectures/${dept.id}`,
 				}));
 
@@ -79,8 +76,9 @@ const DesktopSidebar = () => {
 				setLoadingCourses(false);
 			}
 		};
-
-		fetchMyCourses();
+		if (user) {
+			fetchMyCourses();
+		}
 	}, [user]);
 
 	const menuItems = useMemo(() => {

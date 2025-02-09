@@ -15,9 +15,9 @@ import RightSidebar from "./components/RightSidebar/RightSidebar";
 
 import Dashboard from "./components/pages/Dashboard";
 import Students from "./components/pages/Students";
-import Grades from "./components/pages/Grades";
-import Settings from "./components/pages/Settings";
 import Help from "./components/pages/Help";
+
+// needs a lot of import updates to move to /src/pages
 import Classes from "./components/pages/Classes";
 
 import {
@@ -30,7 +30,7 @@ import {
 	LoginPage,
 	SubjectsPage,
 	ParentsPage,
-} from "./pages/index.js";
+} from "./pages";
 
 import "./App.css";
 
@@ -48,8 +48,6 @@ const AppContent = () => {
 					<Route element={<PrivateRoute />}>
 						<Route path="/" element={<Dashboard />} />
 						<Route path="/students" element={<Students />} />
-						<Route path="/grades" element={<Grades />} />
-						<Route path="/settings" element={<Settings />} />
 						<Route path="/help" element={<Help />} />
 						<Route path="/subjects" element={<SubjectsPage />} />
 						<Route path="/classes" element={<Classes />} />

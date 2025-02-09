@@ -1,5 +1,5 @@
 import React from "react";
-import { ParentManagement } from "./components/index.js";
+import { ParentManagement } from "./components/";
 
 const ParentsPage = () => {
 	return (
