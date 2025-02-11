@@ -34,7 +34,7 @@ const AssessmentManagement = () => {
 	} = useAssessments(user?.token);
 
 	const [selectedDepartment, setSelectedDepartment] = useState("");
-	const [selectedSemester, setSelectedSemester] = useState("First Semester");
+	const [selectedSemester, setSelectedSemester] = useState("Second Semester");
 	const [title, setTitle] = useState("");
 	const [type, setType] = useState("Exam");
 	const [points, setPoints] = useState("");
@@ -110,7 +110,14 @@ const AssessmentManagement = () => {
 					<Controls
 						course_id={subject}
 						grades={[]}
-						assessmentTypes={["Exam", "Quiz", "Project", "Homework"]}
+						assessmentTypes={[
+							"Exam",
+							"Quiz",
+							"Project",
+							"Homework",
+							"Activity",
+							"Other",
+						]}
 						title={title}
 						setTitle={setTitle}
 						type={type}

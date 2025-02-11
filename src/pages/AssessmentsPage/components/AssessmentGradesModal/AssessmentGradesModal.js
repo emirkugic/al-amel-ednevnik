@@ -25,10 +25,8 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 	}, [grades]);
 
 	const handleGradeChange = (studentId, grade) => {
-		// Convert input to string before saving
 		const gradeString = String(grade).trim();
 
-		// Ensure the grade does not exceed the maximum assessment points
 		if (Number(grade) > Number(assessment.points)) {
 			alert(`Grade cannot exceed the maximum points (${assessment.points})`);
 			return;
@@ -42,34 +40,34 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 		const gradeToUpdate = grades.find((g) => g.studentId === studentId);
 
 		if (!gradeToUpdate || !gradeToUpdate.gradeId) {
-			// If no grade exists, create a new one
 			await createGrade({
 				studentId,
 				subjectAssessmentId: assessment.id,
-				grade: String(localGrades[studentId]), // ✅ Ensure string conversion
+				grade: String(localGrades[studentId]),
 			});
 		} else if (gradeToUpdate.grade !== localGrades[studentId]) {
-			// Update the existing grade
 			await updateGrade(gradeToUpdate.gradeId, {
 				id: gradeToUpdate.gradeId,
 				subjectAssessmentId: assessment.id,
 				studentId,
-				grade: String(localGrades[studentId]), // ✅ Ensure string conversion
+				grade: String(localGrades[studentId]),
 			});
 		}
 
-		// Re-fetch all grades so new or updated items show correct data
 		await fetchGrades(assessment.id);
-
-		// Turn off editing mode for this student
 		setEditing({ ...editing, [studentId]: false });
 	};
 
 	return (
-		<div className="modal-overlay" onClick={onClose}>
-			<div className="modal-content" onClick={(e) => e.stopPropagation()}>
-				<h2>Grades for {assessment.title}</h2>
-				<table className="student-table">
+		<div className="assessment-modal-overlay" onClick={onClose}>
+			<div
+				className="assessment-modal-content"
+				onClick={(e) => e.stopPropagation()}
+			>
+				<h2 className="assessment-modal-header">
+					Grades for {assessment.title}
+				</h2>
+				<table className="assessment-modal-table">
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -85,7 +83,7 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 									{editing[grade.studentId] ? (
 										<input
 											type="number"
-											step="0.1" // ✅ Allows decimal grading (e.g., 0.5, 1.2)
+											step="0.1"
 											min="0"
 											max={assessment.points}
 											value={localGrades[grade.studentId]}
@@ -101,7 +99,7 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 									{editing[grade.studentId] ? (
 										<button
 											onClick={() => saveGrade(grade.studentId)}
-											className="action-button save"
+											className="assessment-modal-button save"
 										>
 											<FontAwesomeIcon icon={faSave} />
 										</button>
@@ -110,7 +108,7 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 											onClick={() =>
 												setEditing({ ...editing, [grade.studentId]: true })
 											}
-											className="action-button edit"
+											className="assessment-modal-button edit"
 										>
 											<FontAwesomeIcon icon={faPen} />
 										</button>
