@@ -52,11 +52,11 @@ export const AuthProvider = ({ children }) => {
 			JSON.stringify({ ...userWithRoleAndId, ...data })
 		);
 
-		//automatically log out the user when the token expires
 		const timeout = decodedToken.exp * 1000 - Date.now();
 		setTimeout(logout, timeout);
 
-		navigate("/");
+		// navigate("/");
+		return userWithRoleAndId;
 	};
 
 	const logout = () => {
