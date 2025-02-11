@@ -1,0 +1,246 @@
+/* Container styling */
+.absences-container {
+	background: #fdfdfd;
+	padding: 20px;
+	border-radius: 8px;
+	margin: 0 auto;
+	max-width: 1000px;
+	font-family: Arial, sans-serif;
+}
+
+/* Title */
+.absences-container h2 {
+	color: #333;
+	font-size: 1.8rem;
+	margin-bottom: 15px;
+	text-align: center;
+}
+
+/* Filters Section */
+.absences-filters {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: #ffffff;
+	padding: 12px;
+	border-radius: 8px;
+	margin-bottom: 20px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	gap: 10px;
+}
+
+.search-box {
+	display: flex;
+	align-items: center;
+	position: relative;
+	flex-grow: 1;
+}
+
+.search-box input {
+	width: 100%;
+	padding: 10px 35px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	font-size: 1rem;
+}
+
+.search-icon {
+	position: absolute;
+	left: 10px;
+	color: #888;
+	font-size: 1rem;
+	pointer-events: none;
+}
+
+.filters {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.filters input {
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	font-size: 1rem;
+}
+
+/* Weeks and Days */
+.week-group {
+	background: #fff;
+	padding: 15px;
+	border-radius: 8px;
+	margin-bottom: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.week-group h3 {
+	color: #007bff;
+	font-size: 1.5rem;
+	margin-bottom: 10px;
+	border-bottom: 2px solid #007bff;
+	padding-bottom: 5px;
+}
+
+.day-group {
+	background: #f8f8f8;
+	padding: 12px;
+	border-radius: 6px;
+	margin-bottom: 15px;
+}
+
+.day-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.day-header h4 {
+	font-size: 1.3rem;
+	color: #444;
+	margin: 0;
+}
+
+.toggle-day-btn {
+	background: #28a745;
+	color: white;
+	border: none;
+	padding: 8px 14px;
+	font-size: 0.9rem;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background 0.2s, transform 0.1s;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.toggle-day-btn:hover {
+	background: #218838;
+	transform: scale(1.03);
+}
+
+/* Table Styling */
+.absences-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 10px;
+	overflow-x: auto;
+}
+
+.absences-table th,
+.absences-table td {
+	padding: 12px;
+	text-align: center;
+	font-size: 1rem;
+	border-bottom: 1px solid #ddd;
+	white-space: nowrap;
+}
+
+.absences-table th {
+	background: #007bff;
+	color: white;
+	font-weight: bold;
+}
+
+.absences-table tr:nth-child(even) {
+	background: #f5f5f5;
+}
+
+/* Student Column */
+.student-col {
+	text-align: left;
+	font-weight: 600;
+	width: 150px;
+}
+
+/* Actions Column */
+.actions-col {
+	width: 120px;
+}
+
+.toggle-student-day-btn {
+	background: #ff9800;
+	color: white;
+	border: none;
+	padding: 6px 10px;
+	font-size: 0.85rem;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background 0.2s, transform 0.1s;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.toggle-student-day-btn:hover {
+	background: #e58c00;
+	transform: scale(1.03);
+}
+
+/* Cell States */
+.present {
+	background: #e7f8ee; /* Soft green background for present (no absence) */
+	color: #1f7a37;
+	font-weight: 600;
+	cursor: default;
+}
+
+.unresolved {
+	background: #f8d7da; /* light red background for unresolved */
+	color: #721c24;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.unresolved:hover {
+	background: #f1bfc3;
+}
+
+.resolved {
+	background: #cde9ff; /* light blue background for resolved */
+	color: #044c7a;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.resolved:hover {
+	background: #b0dcff;
+}
+
+/* No Data Message */
+.no-data {
+	text-align: center;
+	font-size: 1.1rem;
+	color: #666;
+	margin: 20px 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.absences-filters {
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.filters input {
+		width: 100%;
+	}
+
+	.absences-table th,
+	.absences-table td {
+		font-size: 0.85rem;
+		padding: 8px;
+	}
+
+	.student-col {
+		width: auto;
+	}
+
+	.actions-col {
+		width: auto;
+	}
+}
