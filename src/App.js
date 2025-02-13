@@ -5,11 +5,8 @@ import {
 	Route,
 	useLocation,
 } from "react-router-dom";
-import { AuthProvider } from "./contexts/AuthContext";
-import { ClassLogsProvider } from "./contexts/ClassLogsContext";
-
+import { AuthProvider, ClassLogsProvider } from "./contexts";
 import PrivateRoute from "./components/PrivateRoute";
-
 import Sidebar from "./components/Sidebar/Sidebar";
 import RightSidebar from "./components/RightSidebar/RightSidebar";
 
@@ -17,7 +14,6 @@ import Dashboard from "./components/pages/Dashboard";
 import Students from "./components/pages/Students";
 import Help from "./components/pages/Help";
 
-// needs a lot of import updates to move to /src/pages
 import Classes from "./components/pages/Classes";
 
 import {
