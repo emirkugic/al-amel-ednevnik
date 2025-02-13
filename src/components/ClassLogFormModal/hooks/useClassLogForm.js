@@ -194,6 +194,7 @@ export function useClassLogForm({
 		} catch (err) {
 			console.error("Error creating class log:", err);
 			if (err.response && err.response.status === 409) {
+				// TODO: Translate
 				addNotification(
 					"error",
 					`
