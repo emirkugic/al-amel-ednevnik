@@ -2,44 +2,31 @@ import React, { useState, useEffect, useContext } from "react";
 import {
 	faClock,
 	faChalkboardTeacher,
-	faListNumeric,
 	faCalendar,
+	faBook,
 } from "@fortawesome/free-solid-svg-icons";
 
-import PrimaryButton from "../ui/PrimaryButton/PrimaryButton";
-import TextInput from "../ui/TextInput/TextInput";
-import DropdownSelect from "../ui/DropdownSelect/DropdownSelect";
-import AbsentStudentsSelect from "../ui/AbsentStudentsSelect/AbsentStudentsSelect";
-import SecondaryButton from "../ui/SecondaryButton/SecondaryButton";
+import {
+	PrimaryButton,
+	SecondaryButton,
+	TextInput,
+	DropdownSelect,
+	AbsentStudentsSelect,
+} from "../ui";
 
-import classLogApi from "../../api/classLogApi";
-import studentApi from "../../api/studentApi";
+import { studentApi } from "../../api/";
+
+import {
+	getWorkWeekDates,
+	toMidnightUTC,
+	validateClassLog,
+	createNewClassLog,
+} from "../../utils";
+
 import useAuth from "../../hooks/useAuth";
 import { ClassLogsContext } from "../../contexts/ClassLogsContext";
 
 import "./ClassLogFormModal.css";
-
-const getWorkWeekDates = () => {
-	const today = new Date();
-	const currentDay = today.getDay(); // 0=Sun,1=Mon,...,6=Sat
-	const monday = new Date(today);
-	monday.setDate(today.getDate() - (currentDay === 0 ? 6 : currentDay - 1));
-	const dates = [];
-
-	for (let i = 0; i < 5; i++) {
-		const date = new Date(monday);
-		date.setDate(monday.getDate() + i);
-
-		// Only add days up to "today"
-		if (date <= today) {
-			dates.push({
-				value: date.toISOString().split("T")[0], // e.g. "2023-09-14"
-				label: date.toLocaleDateString("en-US", { weekday: "long" }),
-			});
-		}
-	}
-	return dates;
-};
 
 const ClassLogFormModal = ({
 	onClose,
@@ -56,7 +43,7 @@ const ClassLogFormModal = ({
 	// Old UI states
 	const [selectedDay, setSelectedDay] = useState(
 		weekDays.find((day) => day.value === new Date().toISOString().split("T")[0])
-			?.value || null
+			?.value || ""
 	);
 	const [classHour, setClassHour] = useState("");
 
@@ -72,17 +59,19 @@ const ClassLogFormModal = ({
 	const { user, assignedSubjects } = useAuth();
 	const { setClassLogs } = useContext(ClassLogsContext);
 
-	// New UI states
+	// New UI states (for the scenario where day/period come from outside)
 	const [teacherSubjects, setTeacherSubjects] = useState([]);
 	const [selectedSubject, setSelectedSubject] = useState(subjectId || "");
 
 	const isNewUiMode = disableDayAndPeriodSelection;
 
 	useEffect(() => {
+		// Early exit if we lack required info
 		if (!departmentId || !user?.token) {
 			setNotification("Error: Missing department ID or user token.");
 			return;
 		}
+
 		const fetchStudents = async () => {
 			try {
 				const students = await studentApi.getStudentsByDepartment(
@@ -103,15 +92,17 @@ const ClassLogFormModal = ({
 	}, [departmentId, user]);
 
 	useEffect(() => {
-		if (!isNewUiMode) return;
-		if (!assignedSubjects || assignedSubjects.length === 0) return;
+		// If using new UI, gather teacher's assigned subjects for the selected department
+		if (!isNewUiMode || !assignedSubjects || assignedSubjects.length === 0) {
+			return;
+		}
 
-		// Filter assigned subjects for the selected department
+		// Filter assigned subjects by department
 		const subsInDept = assignedSubjects.filter((as) =>
 			as.departmentId.includes(departmentId)
 		);
 
-		// Convert to { value, label } using subject names
+		// Convert to { value, label }
 		const teacherSubs = subsInDept.map((as) => {
 			const foundSub = subjects.find((s) => s.id === as.subjectId);
 			return {
@@ -121,18 +112,12 @@ const ClassLogFormModal = ({
 		});
 		setTeacherSubjects(teacherSubs);
 
-		// Default to first subject if none selected
 		if (!selectedSubject && teacherSubs.length > 0) {
 			setSelectedSubject(teacherSubs[0].value);
 		}
 	}, [isNewUiMode, assignedSubjects, departmentId, subjects, selectedSubject]);
 
 	const handleSubmit = async () => {
-		if (!lectureTitle) {
-			setNotification("Please fill in all required fields (lecture title).");
-			return;
-		}
-
 		let finalDate = selectedDay;
 		let finalPeriod = classHour;
 		let finalSubjectId = subjectId;
@@ -152,21 +137,28 @@ const ClassLogFormModal = ({
 			}
 		}
 
-		if (!finalDate || !finalPeriod || !finalSubjectId) {
-			setNotification("Please fill in date, period, and subject.");
+		// Validate inputs
+		const error = validateClassLog({
+			lectureTitle,
+			date: finalDate,
+			period: finalPeriod,
+			subjectId: finalSubjectId,
+			absentStudents,
+		});
+		if (error) {
+			setNotification(error);
 			return;
 		}
 
-		const utcDate = new Date(finalDate);
-		utcDate.setUTCHours(0, 0, 0, 0);
-
+		// Prepare final payload
+		const utcDate = toMidnightUTC(finalDate);
 		const classLogData = {
 			departmentId,
 			subjectId: finalSubjectId,
 			teacherId: user?.id,
 			lectureTitle,
 			lectureType: "Lecture",
-			classDate: utcDate.toISOString(),
+			classDate: utcDate,
 			period: finalPeriod,
 			absentStudentIds: absentStudents.map((s) => s.value),
 			...(classSequence && { sequence: parseInt(classSequence, 10) }),
@@ -174,42 +166,16 @@ const ClassLogFormModal = ({
 
 		setIsLoading(true);
 		try {
-			const newClassLog = await classLogApi.createClassLogWithAbsences(
+			const newClassLog = await createNewClassLog({
 				classLogData,
-				user.token
-			);
+				userToken: user.token,
+				setClassLogs,
+				departmentId,
+				subjectId: finalSubjectId,
+				absentStudents,
+			});
 
-			// Update global context
-			setClassLogs((prevLogs) =>
-				prevLogs.map((log) =>
-					log.departmentId === departmentId
-						? {
-								...log,
-								subjects: log.subjects.map((subj) =>
-									subj.subjectId === finalSubjectId
-										? {
-												...subj,
-												classLogs: [
-													...subj.classLogs,
-													{
-														...newClassLog,
-														classLogId: newClassLog.id,
-														subjectName: subj.name,
-														absentStudents: absentStudents.map((s) => ({
-															studentId: s.value,
-															name: s.label,
-														})),
-													},
-												],
-										  }
-										: subj
-								),
-						  }
-						: log
-				)
-			);
-
-			// Inform parent for immediate UI update
+			// Trigger parent callback
 			if (onSuccess) {
 				onSuccess({
 					id: newClassLog.id,
@@ -229,10 +195,10 @@ const ClassLogFormModal = ({
 			console.error("Error creating class log:", error);
 			if (error.response && error.response.status === 409) {
 				setNotification(`English:
-          This day and period has already been logged. Cannot have duplicates.
+  This day and period have already been logged. Cannot have duplicates.
 
-          Bosnian:
-          Ovaj dan i čas su već zabilježeni. Ne može biti duplikata.`);
+Bosnian:
+  Ovaj dan i čas su već zabilježeni. Ne može biti duplikata.`);
 			} else {
 				setNotification("Error creating class log. Please try again.");
 			}
@@ -243,10 +209,12 @@ const ClassLogFormModal = ({
 
 	return (
 		<div className={`class-log-form-modal ${isNewUiMode ? "new-ui-mode" : ""}`}>
+			<div className="modal-background" onClick={onClose}></div>
 			<div className="modal-content">
 				{isLoading && <div className="loading-bar"></div>}
 
-				{/* --- OLD UI => Day & Period --- */}
+				<h2 className="modal-title">Log a Class</h2>
+
 				{!isNewUiMode && (
 					<>
 						<DropdownSelect
@@ -277,23 +245,15 @@ const ClassLogFormModal = ({
 									{ value: "7", label: "7th Period" },
 								]}
 							/>
-							<TextInput
-								className="text-input"
-								label="Ordinal number"
-								icon={faListNumeric}
-								placeholder="Optional"
-								value={classSequence}
-								onChange={(e) => setClassSequence(e.target.value)}
-							/>
 						</div>
 					</>
 				)}
 
-				{/* --- NEW UI => Subject pick only, day/period locked externally --- */}
 				{isNewUiMode && (
 					<DropdownSelect
 						className="dropdown-select"
 						label="Subject"
+						icon={faBook}
 						placeholder="Select a subject"
 						value={selectedSubject}
 						onChange={(val) => setSelectedSubject(val)}
@@ -301,7 +261,6 @@ const ClassLogFormModal = ({
 					/>
 				)}
 
-				{/* COMMON FIELDS => Title, Absent, Buttons */}
 				<TextInput
 					label="Lecture Title"
 					icon={faChalkboardTeacher}

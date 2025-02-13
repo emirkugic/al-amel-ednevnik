@@ -1,0 +1,10 @@
+export { default as authApi } from "./authApi";
+export { default as classApi } from "./classApi";
+export { default as classLogApi } from "./classLogApi";
+export { default as departmentApi } from "./departmentApi";
+export { default as gradeApi } from "./gradeApi";
+export { default as parentApi } from "./parentApi";
+export { default as studentApi } from "./studentApi";
+export { default as subjectApi } from "./subjectApi";
+export { default as subjectAssessmentApi } from "./subjectAssessmentApi";
+export { default as teacherApi } from "./teacherApi";
