@@ -1,29 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { Notification } from "../../../components/ui";
 import "./AbsentStudentsSelect.css";
 
 const AbsentStudentsSelect = ({
 	studentOptions,
 	absentStudents,
 	setAbsentStudents,
-	setNotification,
 }) => {
+	const [notifications, setNotifications] = useState([]);
+
+	const addNotification = (message, type = "error") => {
+		const id = Date.now();
+		setNotifications((prev) => [...prev, { id, description: message, type }]);
+
+		setTimeout(() => {
+			removeNotification(id);
+		}, 3000);
+	};
+
+	const removeNotification = (id) => {
+		setNotifications((prev) =>
+			prev.filter((notification) => notification.id !== id)
+		);
+	};
+
 	const addAbsentStudent = (option) => {
 		if (
 			option &&
 			!absentStudents.some((student) => student.value === option.value)
 		) {
 			setAbsentStudents((prev) => [...prev, option]);
-			setNotification("");
 		} else {
-			setNotification(
+			addNotification(
 				"Duplicate entry: You cannot report the same student absent multiple times for the same period."
 			);
-			setTimeout(() => {
-				setNotification("");
-			}, 3000);
 		}
 	};
 
@@ -42,13 +55,17 @@ const AbsentStudentsSelect = ({
 
 	return (
 		<div className="form-group">
+			<Notification
+				notifications={notifications}
+				removeNotification={removeNotification}
+			/>
 			<div className="absent-students-header">
 				<FontAwesomeIcon icon={faUserPlus} className="header-icon" />
 				<span>Absent Students</span>
 			</div>
 			<Select
 				isClearable
-				isSearchable={false} // Disables typing in the select field
+				isSearchable={false}
 				onChange={addAbsentStudent}
 				options={filteredOptions}
 				placeholder="Select a student..."
