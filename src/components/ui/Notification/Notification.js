@@ -7,9 +7,12 @@ import {
 	faCheckCircle,
 	faTimes,
 } from "@fortawesome/free-solid-svg-icons";
+import { useNotification } from "../../../contexts";
 import "./Notification.css";
 
-const Notification = ({ notifications, removeNotification }) => {
+const Notification = () => {
+	const { notifications, removeNotification } = useNotification();
+
 	const iconMap = {
 		error: (
 			<FontAwesomeIcon icon={faExclamationCircle} className="icon error-icon" />

@@ -5,7 +5,11 @@ import {
 	Route,
 	useLocation,
 } from "react-router-dom";
-import { AuthProvider, ClassLogsProvider } from "./contexts";
+import {
+	AuthProvider,
+	ClassLogsProvider,
+	NotificationProvider,
+} from "./contexts";
 import PrivateRoute from "./components/PrivateRoute";
 import Sidebar from "./components/Sidebar/Sidebar";
 import RightSidebar from "./components/RightSidebar/RightSidebar";
@@ -68,11 +72,13 @@ const AppContent = () => {
 
 const App = () => (
 	<Router>
-		<AuthProvider>
-			<ClassLogsProvider>
-				<AppContent />
-			</ClassLogsProvider>
-		</AuthProvider>
+		<NotificationProvider>
+			<AuthProvider>
+				<ClassLogsProvider>
+					<AppContent />
+				</ClassLogsProvider>
+			</AuthProvider>
+		</NotificationProvider>
 	</Router>
 );
 
