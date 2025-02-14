@@ -31,7 +31,6 @@ const ClassLogFormModal = ({
 	subjects = [],
 	onSuccess,
 }) => {
-	// Use the custom hook for all logic/state
 	const {
 		isNewUiMode,
 		weekDays,
