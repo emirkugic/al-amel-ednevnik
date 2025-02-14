@@ -1,19 +1,16 @@
-// hooks/useClassLogForm.js
 import { useState, useEffect, useContext } from "react";
 import { ClassLogsContext } from "../../../contexts";
 import { useAuth } from "../../../hooks";
 import { studentApi } from "../../../api";
+import { useNotification } from "../../../contexts/";
 
 import {
 	getWorkWeekDates,
 	toMidnightUTC,
 	validateClassLog,
 	createNewClassLog,
-} from "../../../utils"; // or wherever your utils live
+} from "../../../utils";
 
-/**
- * Encapsulates the core logic for ClassLogFormModal.
- */
 export function useClassLogForm({
 	departmentId,
 	subjectId,
@@ -27,7 +24,8 @@ export function useClassLogForm({
 	const { user, assignedSubjects } = useAuth();
 	const { setClassLogs } = useContext(ClassLogsContext);
 
-	// Old UI states
+	const { showNotification } = useNotification();
+
 	const weekDays = getWorkWeekDates();
 	const [selectedDay, setSelectedDay] = useState(
 		weekDays.find((day) => day.value === new Date().toISOString().split("T")[0])
@@ -35,34 +33,43 @@ export function useClassLogForm({
 	);
 	const [classHour, setClassHour] = useState("");
 
-	// Shared states
 	const [lectureTitle, setLectureTitle] = useState("");
 	const [classSequence, setClassSequence] = useState("");
 	const [absentStudents, setAbsentStudents] = useState([]);
 	const [studentOptions, setStudentOptions] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 
-	// For “new UI mode”
 	const [teacherSubjects, setTeacherSubjects] = useState([]);
 	const [selectedSubject, setSelectedSubject] = useState(subjectId || "");
 	const isNewUiMode = disableDayAndPeriodSelection;
 
-	// Notifications will be managed by the parent component if needed
 	const [notifications, setNotifications] = useState([]);
 
 	const addNotification = (type, description) => {
-		const id = Date.now();
-		setNotifications((prev) => [...prev, { id, type, description }]);
+		const existingNotification = notifications.find(
+			(n) => n.type === type && n.description === description
+		);
+
+		if (existingNotification) {
+			setNotifications((prev) =>
+				prev.filter((n) => n.id !== existingNotification.id)
+			);
+
+			setTimeout(() => {
+				const id = Date.now();
+				setNotifications((prev) => [...prev, { id, type, description }]);
+				showNotification(description, type);
+			}, 100);
+		} else {
+			const id = Date.now();
+			setNotifications((prev) => [...prev, { id, type, description }]);
+			showNotification(description, type);
+		}
 	};
 
-	const removeNotification = (id) => {
-		setNotifications((prev) => prev.filter((n) => n.id !== id));
-	};
-
-	// 1) Fetch Student Options
 	useEffect(() => {
 		if (!departmentId || !user?.token) {
-			addNotification("error", "Error: Missing department ID or user token.");
+			// addNotification("error", "Error: Missing department ID or user token.");
 			return;
 		}
 
@@ -79,25 +86,22 @@ export function useClassLogForm({
 					}))
 				);
 			} catch (error) {
-				addNotification("error", "Error fetching students. Please try again.");
+				// addNotification("error", "Error fetching students. Please try again.");
 			}
 		};
 
 		fetchStudents();
 	}, [departmentId, user]);
 
-	// 2) Build Teacher Subjects if “new UI mode”
 	useEffect(() => {
 		if (!isNewUiMode || !assignedSubjects || assignedSubjects.length === 0) {
 			return;
 		}
 
-		// Filter assigned subjects by department
 		const subsInDept = assignedSubjects.filter((as) =>
 			as.departmentId.includes(departmentId)
 		);
 
-		// Convert to { value, label }
 		const teacherSubs = subsInDept.map((as) => {
 			const foundSub = subjects.find((s) => s.id === as.subjectId);
 			return {
@@ -107,36 +111,31 @@ export function useClassLogForm({
 		});
 		setTeacherSubjects(teacherSubs);
 
-		// Default to first subject if not provided
 		if (!selectedSubject && teacherSubs.length > 0) {
 			setSelectedSubject(teacherSubs[0].value);
 		}
 	}, [isNewUiMode, assignedSubjects, departmentId, subjects, selectedSubject]);
 
-	// 3) Handle Submit
 	const handleSubmit = async () => {
-		// Step A) Decide date, period, subject
 		let finalDate = selectedDay;
 		let finalPeriod = classHour;
 		let finalSubjectId = subjectId;
 
 		if (isNewUiMode) {
 			if (!externalDate || !externalPeriod) {
-				addNotification(
-					"error",
-					"Error: 'disableDayAndPeriodSelection' is active, but external date/period not provided."
-				);
+				// addNotification(
+				// 	"error",
+				// 	"Error: 'disableDayAndPeriodSelection' is active, but external date/period not provided."
+				// );
 				return;
 			}
 			finalDate = externalDate;
 			finalPeriod = externalPeriod;
-
 			if (teacherSubjects.length > 0) {
 				finalSubjectId = selectedSubject;
 			}
 		}
 
-		// Step B) Validate inputs
 		const error = validateClassLog({
 			lectureTitle,
 			date: finalDate,
@@ -149,7 +148,6 @@ export function useClassLogForm({
 			return;
 		}
 
-		// Step C) Create final payload
 		const utcDate = toMidnightUTC(finalDate);
 		const classLogData = {
 			departmentId,
@@ -163,7 +161,6 @@ export function useClassLogForm({
 			...(classSequence && { sequence: parseInt(classSequence, 10) }),
 		};
 
-		// Step D) Attempt to create new Class Log
 		setIsLoading(true);
 		try {
 			const newClassLog = await createNewClassLog({
@@ -175,7 +172,6 @@ export function useClassLogForm({
 				absentStudents,
 			});
 
-			// Callback
 			if (onSuccess) {
 				onSuccess({
 					id: newClassLog.id,
@@ -189,17 +185,14 @@ export function useClassLogForm({
 				});
 			}
 			addNotification("success", "Class log created successfully!");
-
 			onClose();
 		} catch (err) {
 			console.error("Error creating class log:", err);
 			if (err.response && err.response.status === 409) {
-				// TODO: Translate
 				addNotification(
 					"error",
 					`
   لقد تم تسجيل هذا اليوم وهذه الساعة. لا يمكن أن يكون هناك تكرار.
-
   Ovaj dan i čas su već zabilježeni. Ne može biti duplikata.`
 				);
 			} else {
@@ -229,8 +222,6 @@ export function useClassLogForm({
 		selectedSubject,
 		setSelectedSubject,
 		notifications,
-		removeNotification,
-
 		handleSubmit,
 	};
 }
