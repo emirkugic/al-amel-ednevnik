@@ -47,12 +47,12 @@ const Notification = () => {
 					<div className="notification-content">
 						<p>{notification.description}</p>
 					</div>
-					<button
+					{/* <button
 						className="close-btn"
 						onClick={() => removeNotification(notification.id)}
 					>
 						<FontAwesomeIcon icon={faTimes} />
-					</button>
+					</button> */}
 				</div>
 			))}
 		</div>

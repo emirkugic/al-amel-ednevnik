@@ -2,7 +2,7 @@
 	position: fixed;
 	top: 20px;
 	right: 20px;
-	z-index: 9999; /* Higher z-index to ensure it appears above all other elements */
+	z-index: 9999;
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
@@ -28,7 +28,7 @@
 
 .notification-content {
 	flex-grow: 1;
-	padding-right: 30px; /* Add padding to create space between text and close button */
+	padding-right: 30px;
 }
 
 .notification-content p {
@@ -38,7 +38,7 @@
 }
 
 .close-btn {
-	background: none; /* No background for the close button */
+	background: none;
 	border: none;
 	color: #888;
 	font-size: 16px;
@@ -46,12 +46,12 @@
 	position: absolute;
 	right: 10px;
 	top: 50%;
-	transform: translateY(-50%); /* Center the button vertically */
+	transform: translateY(-50%);
 }
 
 .close-btn:hover {
 	color: #555;
-	background: none; /* Ensure no background on hover */
+	background: none;
 }
 
 .notification.error {
@@ -59,9 +59,17 @@
 	border-left: 5px solid #ff4d4f;
 }
 
+.error-icon {
+	color: #ff4d4f;
+}
+
 .notification.warning {
 	background-color: #fffbe6;
 	border-left: 5px solid #faad14;
+}
+
+.warning-icon {
+	color: #faad14;
 }
 
 .notification.info {
@@ -69,9 +77,17 @@
 	border-left: 5px solid #1890ff;
 }
 
+.info-icon {
+	color: #1890ff;
+}
+
 .notification.success {
-	background-color: #f6ffed;
-	border-left: 5px solid #52c41a;
+	background-color: #d4edda;
+	border-left: 5px solid #28a745;
+}
+
+.success-icon {
+	color: #28a745;
 }
 
 @keyframes fadeIn {
