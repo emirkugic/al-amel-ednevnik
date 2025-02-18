@@ -1,3 +1,4 @@
+export { default as absenceApi } from "./absenceApi";
 export { default as authApi } from "./authApi";
 export { default as classApi } from "./classApi";
 export { default as classLogApi } from "./classLogApi";

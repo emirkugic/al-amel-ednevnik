@@ -1,3 +1,4 @@
+export { default as useAbsences } from "./useAbsences";
 export { default as useAssessments } from "./useAssessments";
 export { default as useAuth } from "./useAuth";
 export { default as useClassLogs } from "./useClassLogs";
