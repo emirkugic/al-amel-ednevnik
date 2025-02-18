@@ -1,246 +1,324 @@
-/* Container styling */
-.absences-container {
-	background: #fdfdfd;
-	padding: 20px;
-	border-radius: 8px;
+/* ===============================
+   Color & Font Variables
+=============================== */
+:root {
+	--primary-color: #04abfd;
+	--primary-hover: #0392dd;
+	--text-color: #1f2937;
+	--text-muted: #6b7280;
+	--bg-color: #f9fafb;
+	--card-bg: #ffffff;
+	--border-color: #e5e7eb;
+	--resolved-bg: #ecfdf5; /* Light green BG */
+	--resolved-fg: #10b981; /* Green text */
+	--unresolved-bg: #fef2f2; /* Light red BG */
+	--unresolved-fg: #ef4444; /* Red text */
+	--radius: 8px;
+	--transition-speed: 0.2s;
+	--font-family: "Inter", sans-serif;
+}
+
+/* ===============================
+   Container & Heading
+=============================== */
+.absences-refined__container {
+	max-width: 1200px;
 	margin: 0 auto;
-	max-width: 1000px;
-	font-family: Arial, sans-serif;
+	padding: 1.5rem;
+	font-family: var(--font-family);
+	background-color: var(--bg-color);
+	color: var(--text-color);
 }
 
-/* Title */
-.absences-container h2 {
-	color: #333;
-	font-size: 1.8rem;
-	margin-bottom: 15px;
+.absences-refined__title {
 	text-align: center;
+	font-size: 1.75rem;
+	font-weight: 600;
+	margin-bottom: 2rem;
 }
 
-/* Filters Section */
-.absences-filters {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	background: #ffffff;
-	padding: 12px;
-	border-radius: 8px;
-	margin-bottom: 20px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	gap: 10px;
+.absences-refined__no-data {
+	text-align: center;
+	margin-top: 2rem;
+	font-size: 1.1rem;
+	color: var(--text-muted);
 }
 
-.search-box {
-	display: flex;
-	align-items: center;
-	position: relative;
-	flex-grow: 1;
+/* ===============================
+   Week / Day Layout
+=============================== */
+.absences-refined__week-block {
+	margin-bottom: 2rem;
 }
 
-.search-box input {
-	width: 100%;
-	padding: 10px 35px;
-	border: 1px solid #ddd;
-	border-radius: 6px;
-	font-size: 1rem;
-}
-
-.search-icon {
-	position: absolute;
-	left: 10px;
-	color: #888;
-	font-size: 1rem;
-	pointer-events: none;
-}
-
-.filters {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-}
-
-.filters input {
-	padding: 10px;
-	border: 1px solid #ddd;
-	border-radius: 6px;
-	font-size: 1rem;
-}
-
-/* Weeks and Days */
-.week-group {
-	background: #fff;
-	padding: 15px;
-	border-radius: 8px;
-	margin-bottom: 20px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.week-group h3 {
-	color: #007bff;
-	font-size: 1.5rem;
-	margin-bottom: 10px;
-	border-bottom: 2px solid #007bff;
-	padding-bottom: 5px;
-}
-
-.day-group {
-	background: #f8f8f8;
-	padding: 12px;
-	border-radius: 6px;
-	margin-bottom: 15px;
-}
-
-.day-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 10px;
-}
-
-.day-header h4 {
+.absences-refined__week-title {
 	font-size: 1.3rem;
-	color: #444;
-	margin: 0;
+	color: var(--primary-color);
+	font-weight: 600;
+	margin-bottom: 1rem;
+	border-left: 4px solid var(--primary-color);
+	padding-left: 0.5rem;
 }
 
-.toggle-day-btn {
-	background: #28a745;
-	color: white;
-	border: none;
-	padding: 8px 14px;
-	font-size: 0.9rem;
-	border-radius: 6px;
-	cursor: pointer;
-	transition: background 0.2s, transform 0.1s;
+.absences-refined__day-card {
+	background-color: var(--card-bg);
+	border-radius: var(--radius);
+	padding: 1rem;
+	margin-bottom: 1.5rem;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.absences-refined__day-card-header {
 	display: flex;
+	justify-content: space-between;
 	align-items: center;
-	gap: 6px;
+	margin-bottom: 1rem;
 }
 
-.toggle-day-btn:hover {
-	background: #218838;
-	transform: scale(1.03);
+.absences-refined__day-card-header h4 {
+	margin: 0;
+	font-size: 1.1rem;
+	font-weight: 500;
 }
 
-/* Table Styling */
-.absences-table {
+.absences-refined__day-buttons button {
+	margin-left: 0.5rem;
+}
+
+/* ===============================
+   Table
+=============================== */
+.absences-refined__table {
 	width: 100%;
 	border-collapse: collapse;
-	margin-top: 10px;
-	overflow-x: auto;
 }
 
-.absences-table th,
-.absences-table td {
-	padding: 12px;
+.absences-refined__table th,
+.absences-refined__table td {
 	text-align: center;
-	font-size: 1rem;
-	border-bottom: 1px solid #ddd;
+	padding: 0.75rem;
+	border-bottom: 1px solid var(--border-color);
+	font-size: 0.9rem;
+}
+
+.absences-refined__table thead {
+	background-color: var(--primary-color);
+	color: #ffffff;
+}
+
+.absences-refined__table tr:nth-child(even) td {
+	background-color: #f3f4f6;
+}
+
+.absences-refined__student-name {
+	text-align: left;
+	font-weight: 500;
+}
+
+/* ===============================
+   Cell States
+=============================== */
+.absences-refined__cell-present {
+	color: var(--resolved-fg);
+	font-weight: 600;
+}
+
+.absences-refined__cell-resolved {
+	background-color: var(--resolved-bg);
+	color: var(--resolved-fg);
+	font-weight: 600;
+	position: relative;
+}
+
+.absences-refined__cell-unresolved {
+	background-color: var(--unresolved-bg);
+	color: var(--unresolved-fg);
+	font-weight: 600;
+	position: relative;
+}
+
+/* Icon inside each cell (clickable) */
+.absences-refined__cell-icon {
+	cursor: pointer;
+	display: inline-block;
+	margin-right: 0.5rem;
+	transition: opacity var(--transition-speed);
+}
+
+.absences-refined__cell-icon:hover {
+	opacity: 0.8;
+}
+
+/* Excuse (Edit) button inside cell */
+.absences-refined__excuse-btn {
+	background-color: #ffffff;
+	color: var(--text-color);
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius);
+	padding: 0.3rem 0.5rem;
+	font-size: 0.75rem;
+	cursor: pointer;
+	transition: background-color var(--transition-speed), transform 0.1s;
+}
+
+.absences-refined__excuse-btn:hover {
+	background-color: #f3f4f6;
+	transform: translateY(-1px);
+}
+
+/* ===============================
+   Actions Column
+=============================== */
+.absences-refined__actions-col {
 	white-space: nowrap;
 }
 
-.absences-table th {
-	background: #007bff;
-	color: white;
-	font-weight: bold;
-}
-
-.absences-table tr:nth-child(even) {
-	background: #f5f5f5;
-}
-
-/* Student Column */
-.student-col {
-	text-align: left;
-	font-weight: 600;
-	width: 150px;
-}
-
-/* Actions Column */
-.actions-col {
-	width: 120px;
-}
-
-.toggle-student-day-btn {
-	background: #ff9800;
-	color: white;
-	border: none;
-	padding: 6px 10px;
-	font-size: 0.85rem;
-	border-radius: 6px;
-	cursor: pointer;
-	transition: background 0.2s, transform 0.1s;
-	display: flex;
+.absences-refined__toggle-student-day-btn {
+	display: inline-flex;
 	align-items: center;
-	gap: 6px;
-}
-
-.toggle-student-day-btn:hover {
-	background: #e58c00;
-	transform: scale(1.03);
-}
-
-/* Cell States */
-.present {
-	background: #e7f8ee; /* Soft green background for present (no absence) */
-	color: #1f7a37;
-	font-weight: 600;
-	cursor: default;
-}
-
-.unresolved {
-	background: #f8d7da; /* light red background for unresolved */
-	color: #721c24;
-	font-weight: 600;
+	gap: 0.3rem;
+	background-color: var(--primary-color);
+	color: #ffffff;
+	border: none;
+	border-radius: var(--radius);
+	padding: 0.4rem 0.6rem;
+	font-size: 0.75rem;
 	cursor: pointer;
-	transition: background 0.2s;
+	transition: background-color var(--transition-speed), transform 0.1s;
 }
 
-.unresolved:hover {
-	background: #f1bfc3;
+.absences-refined__toggle-student-day-btn:hover {
+	background-color: var(--primary-hover);
+	transform: translateY(-1px);
 }
 
-.resolved {
-	background: #cde9ff; /* light blue background for resolved */
-	color: #044c7a;
-	font-weight: 600;
+/* ===============================
+   Day Header Buttons
+=============================== */
+.absences-refined__day-toggle-btn,
+.absences-refined__day-excuse-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	background-color: var(--primary-color);
+	color: #ffffff;
+	border: none;
+	border-radius: var(--radius);
+	padding: 0.4rem 0.6rem;
+	font-size: 0.85rem;
 	cursor: pointer;
-	transition: background 0.2s;
+	transition: background-color var(--transition-speed), transform 0.1s;
 }
 
-.resolved:hover {
-	background: #b0dcff;
+.absences-refined__day-toggle-btn:hover,
+.absences-refined__day-excuse-btn:hover {
+	background-color: var(--primary-hover);
+	transform: translateY(-1px);
 }
 
-/* No Data Message */
-.no-data {
-	text-align: center;
-	font-size: 1.1rem;
-	color: #666;
-	margin: 20px 0;
+/* ===============================
+   Modals
+=============================== */
+.absences-refined__modal-backdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.45);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 999;
 }
 
-/* Responsive */
+.absences-refined__modal {
+	background-color: #ffffff;
+	padding: 1.5rem;
+	border-radius: var(--radius);
+	max-width: 500px;
+	width: 90%;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.absences-refined__modal h3 {
+	margin-top: 0;
+	font-size: 1.2rem;
+	margin-bottom: 1rem;
+}
+
+.absences-refined__modal label {
+	display: block;
+	font-weight: 500;
+	margin-bottom: 0.3rem;
+}
+
+.absences-refined__modal textarea {
+	width: 100%;
+	min-height: 80px;
+	padding: 0.5rem;
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius);
+	font-size: 0.9rem;
+	resize: vertical;
+	outline: none;
+	margin-bottom: 1rem;
+}
+
+.absences-refined__modal textarea:focus {
+	border-color: var(--primary-color);
+}
+
+.absences-refined__modal-buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+}
+
+.absences-refined__btn-cancel {
+	background-color: #ffffff;
+	border: 1px solid var(--border-color);
+	color: var(--text-color);
+	border-radius: var(--radius);
+	padding: 0.4rem 0.9rem;
+	cursor: pointer;
+	font-size: 0.85rem;
+	transition: background-color var(--transition-speed), transform 0.1s;
+}
+
+.absences-refined__btn-cancel:hover {
+	background-color: #f3f4f6;
+	transform: translateY(-1px);
+}
+
+.absences-refined__btn-primary {
+	background-color: var(--primary-color);
+	color: #ffffff;
+	border: none;
+	border-radius: var(--radius);
+	padding: 0.4rem 0.9rem;
+	cursor: pointer;
+	font-size: 0.85rem;
+	transition: background-color var(--transition-speed), transform 0.1s;
+}
+
+.absences-refined__btn-primary:hover {
+	background-color: var(--primary-hover);
+	transform: translateY(-1px);
+}
+
+/* ===============================
+   Responsive
+=============================== */
 @media (max-width: 768px) {
-	.absences-filters {
-		flex-direction: column;
-		gap: 10px;
+	.absences-refined__table th,
+	.absences-refined__table td {
+		font-size: 0.8rem;
+		padding: 0.5rem;
 	}
 
-	.filters input {
-		width: 100%;
-	}
-
-	.absences-table th,
-	.absences-table td {
-		font-size: 0.85rem;
-		padding: 8px;
-	}
-
-	.student-col {
-		width: auto;
-	}
-
-	.actions-col {
-		width: auto;
+	.absences-refined__toggle-student-day-btn {
+		font-size: 0.7rem;
+		padding: 0.3rem 0.5rem;
 	}
 }
