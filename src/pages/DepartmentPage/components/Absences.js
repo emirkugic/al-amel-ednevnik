@@ -1,14 +1,9 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-	faCheck,
-	faTimes,
-	faCalendarCheck,
-	faCalendarMinus,
-	faEdit,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 import "./Absences.css";
+import ExcuseModal from "./Absences/ExcuseModal";
 import { useAbsences, useAuth } from "../../../hooks";
 
 const tempDepartmentId = "673b94896d216a12b56d0c17";
@@ -20,7 +15,7 @@ const getWeekNumber = (dateString) => {
 	return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
 };
 
-const AbsencesRefined = () => {
+const Absences = () => {
 	const { user } = useAuth();
 	const token = user?.token;
 	const { absences, loading, error } = useAbsences(tempDepartmentId, token);
@@ -32,8 +27,6 @@ const AbsencesRefined = () => {
 		}
 	}, [absences, loading]);
 
-	// Group raw absence records into:
-	// week -> date -> student -> { studentName, periods[] }
 	const absencesByWeek = useMemo(() => {
 		const grouped = {};
 		for (const record of localAbsences) {
@@ -60,8 +53,8 @@ const AbsencesRefined = () => {
 		return grouped;
 	}, [localAbsences]);
 
-	// Modal state for either individual period excuse or for excusing an entire student's day.
-	// If periodNumber is null, it indicates a bulk update for that student for that day.
+	// Modal state for both individual period excuse and for excusing an entire student's day.
+	// When periodNumber is null, it indicates a bulk update (excusing the entire day for that student).
 	const [periodModal, setPeriodModal] = useState({
 		open: false,
 		absenceId: null,
@@ -71,7 +64,7 @@ const AbsencesRefined = () => {
 		currentReason: "",
 	});
 
-	// Opens modal for an individual period.
+	// Open modal for an individual period
 	const openPeriodExcuseModal = (
 		absenceId,
 		date,
@@ -89,11 +82,11 @@ const AbsencesRefined = () => {
 		});
 	};
 
-	// Opens modal for excusing an entire day for a student.
+	// Open modal for excusing the entire day for one student
 	const openStudentDayExcuseModal = (studentId, date) => {
 		setPeriodModal({
 			open: true,
-			absenceId: null, // not used for bulk updates
+			absenceId: null,
 			date,
 			studentId,
 			periodNumber: null, // indicates bulk update
@@ -101,7 +94,7 @@ const AbsencesRefined = () => {
 		});
 	};
 
-	// Save the excuse. If periodNumber is null, update all absences for that student on that day.
+	// Save the excuse. If periodNumber is null, update every absence for that student on that date.
 	const savePeriodExcuse = () => {
 		const { absenceId, currentReason, studentId, date, periodNumber } =
 			periodModal;
@@ -162,7 +155,6 @@ const AbsencesRefined = () => {
 							<div key={dateStr} className="day-card">
 								<div className="day-card-header">
 									<h4>{dateStr}</h4>
-									{/* Top-level buttons removed */}
 								</div>
 								<table className="absences-table">
 									<thead>
@@ -247,47 +239,23 @@ const AbsencesRefined = () => {
 					</div>
 				))
 			)}
-
-			{/* Single modal reused for both individual and entire-day excuses */}
-			{periodModal.open && (
-				<div className="modal-backdrop">
-					<div className="modal">
-						<h3>
-							{periodModal.periodNumber !== null
-								? "Excuse This Absence"
-								: `Excuse All Absences for ${periodModal.date}`}
-						</h3>
-						<label>Reason</label>
-						<textarea
-							value={periodModal.currentReason}
-							onChange={(e) =>
-								setPeriodModal({
-									...periodModal,
-									currentReason: e.target.value,
-								})
-							}
-							placeholder="Enter a reason (required)"
-						/>
-						<div className="modal-buttons">
-							<button
-								className="btn-cancel"
-								onClick={() => setPeriodModal({ ...periodModal, open: false })}
-							>
-								Cancel
-							</button>
-							<button
-								className="btn-primary"
-								onClick={savePeriodExcuse}
-								disabled={!periodModal.currentReason.trim()}
-							>
-								Save
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
+			<ExcuseModal
+				open={periodModal.open}
+				title={
+					periodModal.periodNumber !== null
+						? "Excuse This Absence"
+						: `Excuse All Absences for ${periodModal.date}`
+				}
+				reason={periodModal.currentReason}
+				onChange={(e) =>
+					setPeriodModal({ ...periodModal, currentReason: e.target.value })
+				}
+				onCancel={() => setPeriodModal({ ...periodModal, open: false })}
+				onSave={savePeriodExcuse}
+				disabled={!periodModal.currentReason.trim()}
+			/>
 		</div>
 	);
 };
 
-export default AbsencesRefined;
+export default Absences;

@@ -1,6 +1,3 @@
-/* ===============================
-   Color & Font Variables
-=============================== */
 :root {
 	--primary-color: #04abfd;
 	--primary-hover: #0392dd;
@@ -9,18 +6,15 @@
 	--bg-color: #f9fafb;
 	--card-bg: #ffffff;
 	--border-color: #e5e7eb;
-	--resolved-bg: #ecfdf5; /* Light green BG */
-	--resolved-fg: #10b981; /* Green text */
-	--unresolved-bg: #fef2f2; /* Light red BG */
-	--unresolved-fg: #ef4444; /* Red text */
+	--resolved-bg: #ecfdf5;
+	--resolved-fg: #10b981;
+	--unresolved-bg: #fef2f2;
+	--unresolved-fg: #ef4444;
 	--radius: 8px;
 	--transition-speed: 0.2s;
 	--font-family: "Inter", sans-serif;
 }
 
-/* ===============================
-   Container & Title
-=============================== */
 .absences-container {
 	max-width: 1200px;
 	margin: 0 auto;
@@ -44,9 +38,6 @@
 	color: var(--text-muted);
 }
 
-/* ===============================
-   Week & Day Grouping
-=============================== */
 .week-group {
 	margin-bottom: 2rem;
 }
@@ -85,13 +76,10 @@
 	margin-left: 0.5rem;
 }
 
-/* ===============================
-   Table Styling
-=============================== */
 .absences-table {
 	width: 100%;
 	border-collapse: collapse;
-	table-layout: fixed; /* Ensures fixed column widths */
+	table-layout: fixed;
 }
 
 .absences-table th,
@@ -103,23 +91,17 @@
 	white-space: nowrap;
 }
 
-/* ===============================
-   Student Name Cell (with ellipsis)
-=============================== */
 .student-name-cell {
 	text-align: left;
 	font-weight: 500;
-	width: 150px; /* Fixed width to prevent overflow */
+	width: 150px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-/* ===============================
-   Cell States (Present/Absent)
-=============================== */
 .present-cell {
-	color: var(--resolved-fg); /* Green check mark */
+	color: var(--resolved-fg);
 	font-weight: 600;
 }
 
@@ -137,7 +119,6 @@
 	position: relative;
 }
 
-/* Icon inside each cell (clickable) */
 .cell-icon {
 	cursor: pointer;
 	display: inline-block;
@@ -149,7 +130,6 @@
 	opacity: 0.8;
 }
 
-/* Button to Excuse a single period */
 .excuse-btn {
 	background-color: #ffffff;
 	color: var(--text-color);
@@ -166,9 +146,6 @@
 	transform: translateY(-1px);
 }
 
-/* ===============================
-   Day Actions (Toggle, Excuse)
-=============================== */
 .day-toggle-btn,
 .day-excuse-btn {
 	display: inline-flex;
@@ -190,9 +167,6 @@
 	transform: translateY(-1px);
 }
 
-/* ===============================
-   Toggle Day for a Single Student
-=============================== */
 .toggle-student-day-btn {
 	display: inline-flex;
 	align-items: center;
@@ -212,108 +186,12 @@
 	transform: translateY(-1px);
 }
 
-/* ===============================
-   Modals (Backdrop, Dialog)
-=============================== */
-.modal-backdrop {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.45);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	z-index: 9999;
-}
-
-.modal {
-	background-color: #ffffff;
-	padding: 1.5rem;
-	border-radius: var(--radius);
-	max-width: 500px;
-	max-height: 200px;
-	width: 90%;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.modal h3 {
-	margin-top: 0;
-	font-size: 1.2rem;
-	margin-bottom: 1rem;
-}
-
-.modal label {
-	display: block;
-	font-weight: 500;
-	margin-bottom: 0.3rem;
-}
-
-.modal textarea {
-	width: 100%;
-	min-height: 80px;
-	padding: 0.5rem;
-	border: 1px solid var(--border-color);
-	border-radius: var(--radius);
-	font-size: 0.9rem;
-	resize: vertical;
-	outline: none;
-	margin-bottom: 1rem;
-}
-
-.modal textarea:focus {
-	border-color: var(--primary-color);
-}
-
-.modal-buttons {
-	display: flex;
-	justify-content: flex-end;
-	gap: 0.75rem;
-}
-
-.btn-cancel {
-	background-color: #ffffff;
-	border: 1px solid var(--border-color);
-	color: var(--text-color);
-	border-radius: var(--radius);
-	padding: 0.4rem 0.9rem;
-	cursor: pointer;
-	font-size: 0.85rem;
-	transition: background-color var(--transition-speed), transform 0.1s;
-}
-
-.btn-cancel:hover {
-	background-color: #f3f4f6;
-	transform: translateY(-1px);
-}
-
-.btn-primary {
-	background-color: var(--primary-color);
-	color: #ffffff;
-	border: none;
-	border-radius: var(--radius);
-	padding: 0.4rem 0.9rem;
-	cursor: pointer;
-	font-size: 0.85rem;
-	transition: background-color var(--transition-speed), transform 0.1s;
-}
-
-.btn-primary:hover {
-	background-color: var(--primary-hover);
-	transform: translateY(-1px);
-}
-
-/* ===============================
-   Responsive Adjustments
-=============================== */
 @media (max-width: 768px) {
 	.absences-table th,
 	.absences-table td {
 		font-size: 0.8rem;
 		padding: 0.5rem;
 	}
-
 	.toggle-student-day-btn {
 		font-size: 0.7rem;
 		padding: 0.3rem 0.5rem;
