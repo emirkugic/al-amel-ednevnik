@@ -91,6 +91,7 @@
 .absences-table {
 	width: 100%;
 	border-collapse: collapse;
+	table-layout: fixed; /* Ensures fixed column widths */
 }
 
 .absences-table th,
@@ -102,19 +103,16 @@
 	white-space: nowrap;
 }
 
-.absences-table thead {
-	background-color: var(--primary-color);
-	color: #ffffff;
-}
-
-.absences-table tr:nth-child(even) td {
-	background-color: #f3f4f6;
-}
-
+/* ===============================
+   Student Name Cell (with ellipsis)
+=============================== */
 .student-name-cell {
 	text-align: left;
 	font-weight: 500;
-	width: 150px;
+	width: 150px; /* Fixed width to prevent overflow */
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 /* ===============================
@@ -193,7 +191,7 @@
 }
 
 /* ===============================
-   Toggle Day for a single student
+   Toggle Day for a Single Student
 =============================== */
 .toggle-student-day-btn {
 	display: inline-flex;
