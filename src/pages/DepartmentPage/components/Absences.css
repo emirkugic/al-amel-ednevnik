@@ -18,7 +18,6 @@
 .absences-container {
 	max-width: 1200px;
 	margin: 0 auto;
-	padding: 1.5rem;
 	font-family: var(--font-family);
 	background-color: var(--bg-color);
 	color: var(--text-color);
@@ -89,6 +88,11 @@
 	border-bottom: 1px solid var(--border-color);
 	font-size: 0.9rem;
 	white-space: nowrap;
+}
+
+.absences-table th:not(:first-child):not(:last-child),
+.absences-table td:not(:first-child):not(:last-child) {
+	width: 40px;
 }
 
 .student-name-cell {
