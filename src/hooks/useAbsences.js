@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { absenceApi } from "../api";
+import absenceApi from "../api/absenceApi";
 
 const useAbsences = (departmentId, token) => {
 	const [absences, setAbsences] = useState([]);
@@ -26,7 +26,31 @@ const useAbsences = (departmentId, token) => {
 		fetchAbsences();
 	}, [departmentId, token]);
 
-	return { absences, loading, error };
+	const updateAbsence = async (absenceId, isExcused, reason) => {
+		const previousAbsences = [...absences];
+		const updated = absences.map((rec) =>
+			rec.absence.id === absenceId
+				? {
+						...rec,
+						absence: {
+							...rec.absence,
+							isExcused,
+							reason,
+						},
+				  }
+				: rec
+		);
+		setAbsences(updated);
+
+		try {
+			await absenceApi.updateAbsence(absenceId, isExcused, reason, token);
+		} catch (err) {
+			setAbsences(previousAbsences);
+			throw err;
+		}
+	};
+
+	return { absences, loading, error, updateAbsence, setAbsences };
 };
 
 export default useAbsences;
