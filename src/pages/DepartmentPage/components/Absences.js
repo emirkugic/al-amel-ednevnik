@@ -20,13 +20,16 @@ const getWeekNumber = (dateString) => {
 	const winterStart = new Date(schoolYear + 1, 0, 1);
 	const winterEnd = new Date(schoolYear + 1, 0, 28);
 	const daysBetween = (d1, d2) => Math.floor((d2 - d1) / 86400000);
+
 	let dateDays = daysBetween(schoolStart, date);
 	let breakDays = 0;
+
 	if (date >= winterEnd) {
 		breakDays = daysBetween(winterStart, winterEnd) + 1;
 	} else if (date >= winterStart && date <= winterEnd) {
 		dateDays = daysBetween(schoolStart, winterStart);
 	}
+
 	const effectiveDays = dateDays - breakDays;
 	if (effectiveDays < 0) return 0;
 	return Math.floor(effectiveDays / 7) + 1;
@@ -35,11 +38,20 @@ const getWeekNumber = (dateString) => {
 const Absences = () => {
 	const { user } = useAuth();
 	const token = user?.token;
-	const { absences, loading, error } = useAbsences(tempDepartmentId, token);
+
+	// Pull in the absences and the update method from the hook:
+	const { absences, loading, error, updateAbsence } = useAbsences(
+		tempDepartmentId,
+		token
+	);
+
+	// Local copy to manage immediate UI changes (grouping, etc.):
 	const [localAbsences, setLocalAbsences] = useState([]);
 
 	useEffect(() => {
-		if (!loading && absences) setLocalAbsences(absences);
+		if (!loading && absences) {
+			setLocalAbsences(absences);
+		}
 	}, [absences, loading]);
 
 	const absencesByWeek = useMemo(() => {
@@ -49,15 +61,18 @@ const Absences = () => {
 			const rawDate = classLog.classDate;
 			const dateObj = new Date(rawDate);
 			const dateStr = dateObj.toISOString().split("T")[0];
+
 			const weekLabel = `Week ${getWeekNumber(dateStr)}`;
 			const studentId = student.id;
 			const studentName = `${student.firstName} ${student.lastName}`.trim();
 			const periodNumber = parseInt(classLog.period, 10) || 1;
+
 			if (!grouped[weekLabel]) grouped[weekLabel] = {};
 			if (!grouped[weekLabel][dateStr]) grouped[weekLabel][dateStr] = {};
 			if (!grouped[weekLabel][dateStr][studentId]) {
 				grouped[weekLabel][dateStr][studentId] = { studentName, periods: [] };
 			}
+
 			grouped[weekLabel][dateStr][studentId].periods.push({
 				absenceId: absence.id,
 				number: periodNumber,
@@ -105,13 +120,16 @@ const Absences = () => {
 		});
 	};
 
-	const savePeriodExcuse = () => {
+	const savePeriodExcuse = async () => {
 		const { absenceId, currentReason, studentId, date, periodNumber } =
 			periodModal;
 		if (!currentReason.trim()) return;
-		let updated;
+
+		// Optimistically update the UI first
+		let updatedAbsences;
 		if (periodNumber !== null) {
-			updated = localAbsences.map((rec) => {
+			// Single period
+			updatedAbsences = localAbsences.map((rec) => {
 				if (rec.absence.id === absenceId) {
 					return {
 						...rec,
@@ -124,8 +142,28 @@ const Absences = () => {
 				}
 				return rec;
 			});
+			setLocalAbsences(updatedAbsences);
+
+			// Persist to backend
+			try {
+				await updateAbsence(absenceId, true, currentReason);
+			} catch (err) {
+				// If the API call fails, revert local changes
+				console.error("Failed to update single absence:", err);
+				setLocalAbsences((prev) => [...absences]); // Re-sync with hook's state
+			}
 		} else {
-			updated = localAbsences.map((rec) => {
+			// Excuse all periods for the day
+			// Gather all relevant absences for that day/student
+			const toUpdate = localAbsences.filter((rec) => {
+				const recDate = new Date(rec.classLog.classDate)
+					.toISOString()
+					.split("T")[0];
+				return rec.student.id === studentId && recDate === date;
+			});
+
+			// Optimistically mark them all excused in local state
+			updatedAbsences = localAbsences.map((rec) => {
 				const recDate = new Date(rec.classLog.classDate)
 					.toISOString()
 					.split("T")[0];
@@ -141,8 +179,22 @@ const Absences = () => {
 				}
 				return rec;
 			});
+			setLocalAbsences(updatedAbsences);
+
+			// Persist each to backend
+			for (const rec of toUpdate) {
+				try {
+					await updateAbsence(rec.absence.id, true, currentReason);
+				} catch (err) {
+					console.error("Failed to update daily absence:", err);
+					// If any fail, revert the local array for safety:
+					setLocalAbsences((prev) => [...absences]);
+					break;
+				}
+			}
 		}
-		setLocalAbsences(updated);
+
+		// Close the modal
 		setPeriodModal({ ...periodModal, open: false });
 	};
 
@@ -151,7 +203,6 @@ const Absences = () => {
 
 	return (
 		<div className="absences-container">
-			{/* <h2 className="absences-title">Class Absences Overview</h2> */}
 			{Object.keys(absencesByWeek).length === 0 ? (
 				<p className="no-data">No absences to display.</p>
 			) : (
@@ -162,6 +213,7 @@ const Absences = () => {
 							const dateObj = new Date(dateStr);
 							const isFriday = dateObj.getDay() === 5;
 							const totalPeriods = isFriday ? 5 : 7;
+
 							return (
 								<div key={dateStr} className="day-card">
 									<div className="day-card-header">
