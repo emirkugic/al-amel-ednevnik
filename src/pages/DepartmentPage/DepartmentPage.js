@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import data from "./data/data.json";
 import "./DepartmentPage.css";
 import Absences from "./components/Absences";
+import Grades from "./Grades/Grades";
 
 const DepartmentPage = () => {
 	const [tab, setTab] = useState("overview");
@@ -10,10 +10,6 @@ const DepartmentPage = () => {
 		totalStudents: 0,
 		students: [],
 	});
-
-	useEffect(() => {
-		setDepartmentData(data);
-	}, []);
 
 	const { students } = departmentData;
 
@@ -26,30 +22,7 @@ const DepartmentPage = () => {
 		/>
 	);
 
-	const renderGradesTab = () => (
-		<div className="dp-grades-tab">
-			<h2>Grades Overview</h2>
-			<p>Quick snapshot of each student's average grade.</p>
-			<table className="dp-table">
-				<thead>
-					<tr>
-						<th>Student</th>
-						<th>Average Grade</th>
-						<th>Grade Count</th>
-					</tr>
-				</thead>
-				<tbody>
-					{students.map((s) => (
-						<tr key={s.id}>
-							<td>{s.name}</td>
-							<td>{s.avgGrade || 0}</td>
-							<td>{s.grades ? s.grades.length : 0}</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</div>
-	);
+	const renderGradesTab = () => <Grades />;
 
 	return (
 		<div className="dp-container">
