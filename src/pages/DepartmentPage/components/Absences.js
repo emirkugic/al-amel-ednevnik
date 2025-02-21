@@ -8,11 +8,30 @@ import { useAbsences, useAuth } from "../../../hooks";
 
 const tempDepartmentId = "673b94896d216a12b56d0c17";
 
+// TODO: Make the admin enter the school year start date and the winter break start and end dates.
 const getWeekNumber = (dateString) => {
 	const date = new Date(dateString);
-	const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-	const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
-	return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+	let schoolYear = date.getFullYear();
+	if (date.getMonth() < 8) {
+		schoolYear -= 1;
+	}
+	const sept1 = new Date(schoolYear, 8, 1);
+	const offset = (1 - sept1.getDay() + 7) % 7;
+	const schoolStart = new Date(sept1);
+	schoolStart.setDate(sept1.getDate() + offset);
+	const winterStart = new Date(schoolYear + 1, 0, 1);
+	const winterEnd = new Date(schoolYear + 1, 0, 28);
+	const daysBetween = (d1, d2) => Math.floor((d2 - d1) / 86400000);
+	let dateDays = daysBetween(schoolStart, date);
+	let breakDays = 0;
+	if (date >= winterEnd) {
+		breakDays = daysBetween(winterStart, winterEnd) + 1;
+	} else if (date >= winterStart && date <= winterEnd) {
+		dateDays = daysBetween(schoolStart, winterStart);
+	}
+	const effectiveDays = dateDays - breakDays;
+	if (effectiveDays < 0) return 0;
+	return Math.floor(effectiveDays / 7) + 1;
 };
 
 const Absences = () => {
