@@ -92,7 +92,7 @@
 
 .absences-table th:not(:first-child):not(:last-child),
 .absences-table td:not(:first-child):not(:last-child) {
-	width: 40px;
+	width: 35px;
 }
 
 .student-name-cell {
