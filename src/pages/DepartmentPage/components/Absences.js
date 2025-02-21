@@ -1,14 +1,12 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faEdit } from "@fortawesome/free-solid-svg-icons";
-
 import "./Absences.css";
 import ExcuseModal from "./Absences/ExcuseModal";
 import { useAbsences, useAuth } from "../../../hooks";
 
 const tempDepartmentId = "673b94896d216a12b56d0c17";
 
-// TODO: Make the admin enter the school year start date and the winter break start and end dates.
 const getWeekNumber = (dateString) => {
 	const date = new Date(dateString);
 	let schoolYear = date.getFullYear();
@@ -41,9 +39,7 @@ const Absences = () => {
 	const [localAbsences, setLocalAbsences] = useState([]);
 
 	useEffect(() => {
-		if (!loading && absences) {
-			setLocalAbsences(absences);
-		}
+		if (!loading && absences) setLocalAbsences(absences);
 	}, [absences, loading]);
 
 	const absencesByWeek = useMemo(() => {
@@ -72,8 +68,6 @@ const Absences = () => {
 		return grouped;
 	}, [localAbsences]);
 
-	// Modal state for both individual period excuse and for excusing an entire student's day.
-	// When periodNumber is null, it indicates a bulk update (excusing the entire day for that student).
 	const [periodModal, setPeriodModal] = useState({
 		open: false,
 		absenceId: null,
@@ -83,7 +77,6 @@ const Absences = () => {
 		currentReason: "",
 	});
 
-	// Open modal for an individual period
 	const openPeriodExcuseModal = (
 		absenceId,
 		date,
@@ -101,26 +94,23 @@ const Absences = () => {
 		});
 	};
 
-	// Open modal for excusing the entire day for one student
 	const openStudentDayExcuseModal = (studentId, date) => {
 		setPeriodModal({
 			open: true,
 			absenceId: null,
 			date,
 			studentId,
-			periodNumber: null, // indicates bulk update
+			periodNumber: null,
 			currentReason: "",
 		});
 	};
 
-	// Save the excuse. If periodNumber is null, update every absence for that student on that date.
 	const savePeriodExcuse = () => {
 		const { absenceId, currentReason, studentId, date, periodNumber } =
 			periodModal;
-		if (!currentReason.trim()) return; // Must have a reason
+		if (!currentReason.trim()) return;
 		let updated;
 		if (periodNumber !== null) {
-			// Individual period update.
 			updated = localAbsences.map((rec) => {
 				if (rec.absence.id === absenceId) {
 					return {
@@ -135,7 +125,6 @@ const Absences = () => {
 				return rec;
 			});
 		} else {
-			// Bulk update: Update every absence for this student on this date.
 			updated = localAbsences.map((rec) => {
 				const recDate = new Date(rec.classLog.classDate)
 					.toISOString()
@@ -155,7 +144,6 @@ const Absences = () => {
 		}
 		setLocalAbsences(updated);
 		setPeriodModal({ ...periodModal, open: false });
-		// Optionally add API update logic here.
 	};
 
 	if (loading) return <div className="loading">Loading absences...</div>;
@@ -163,98 +151,106 @@ const Absences = () => {
 
 	return (
 		<div className="absences-container">
-			<h2 className="absences-title">Class Absences Overview</h2>
+			{/* <h2 className="absences-title">Class Absences Overview</h2> */}
 			{Object.keys(absencesByWeek).length === 0 ? (
 				<p className="no-data">No absences to display.</p>
 			) : (
 				Object.entries(absencesByWeek).map(([week, days]) => (
 					<div key={week} className="week-group">
 						<h3 className="week-title">{week}</h3>
-						{Object.entries(days).map(([dateStr, studentsObj]) => (
-							<div key={dateStr} className="day-card">
-								<div className="day-card-header">
-									<h4>{dateStr}</h4>
-								</div>
-								<table className="absences-table">
-									<thead>
-										<tr>
-											<th>Student</th>
-											{[...Array(7)].map((_, i) => (
-												<th key={i}>P{i + 1}</th>
-											))}
-											<th>Actions</th>
-										</tr>
-									</thead>
-									<tbody>
-										{Object.entries(studentsObj).map(([stId, stData]) => {
-											const { studentName, periods } = stData;
-											return (
-												<tr key={stId}>
-													<td className="student-name-cell" title={studentName}>
-														{studentName}
-													</td>
-													{Array.from({ length: 7 }, (_, idx) => {
-														const periodRecord = periods.find(
-															(p) => p.number === idx + 1
-														);
-														if (!periodRecord) {
+						{Object.entries(days).map(([dateStr, studentsObj]) => {
+							const dateObj = new Date(dateStr);
+							const isFriday = dateObj.getDay() === 5;
+							const totalPeriods = isFriday ? 5 : 7;
+							return (
+								<div key={dateStr} className="day-card">
+									<div className="day-card-header">
+										<h4>{dateStr}</h4>
+									</div>
+									<table className="absences-table">
+										<thead>
+											<tr>
+												<th>Student</th>
+												{Array.from({ length: totalPeriods }, (_, i) => (
+													<th key={i}>P{i + 1}</th>
+												))}
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tbody>
+											{Object.entries(studentsObj).map(([stId, stData]) => {
+												const { studentName, periods } = stData;
+												return (
+													<tr key={stId}>
+														<td
+															className="student-name-cell"
+															title={studentName}
+														>
+															{studentName}
+														</td>
+														{Array.from({ length: totalPeriods }, (_, idx) => {
+															const periodRecord = periods.find(
+																(p) => p.number === idx + 1
+															);
+															if (!periodRecord) {
+																return (
+																	<td key={idx} className="present-cell">
+																		✓
+																	</td>
+																);
+															}
+															const { absenceId, resolved, reason } =
+																periodRecord;
+															const cellClass = resolved
+																? "cell-resolved"
+																: "cell-unresolved";
 															return (
-																<td key={idx} className="present-cell">
-																	✓
+																<td key={idx} className={cellClass}>
+																	<div
+																		className="cell-icon"
+																		onClick={() =>
+																			openPeriodExcuseModal(
+																				absenceId,
+																				dateStr,
+																				stId,
+																				idx + 1,
+																				reason
+																			)
+																		}
+																		title={
+																			reason
+																				? `Reason: ${reason}`
+																				: "Click to excuse (provide a reason)"
+																		}
+																	>
+																		{resolved ? (
+																			<FontAwesomeIcon icon={faCheck} />
+																		) : (
+																			<FontAwesomeIcon icon={faTimes} />
+																		)}
+																	</div>
 																</td>
 															);
-														}
-														const { absenceId, resolved, reason } =
-															periodRecord;
-														const cellClass = resolved
-															? "cell-resolved"
-															: "cell-unresolved";
-														return (
-															<td key={idx} className={cellClass}>
-																<div
-																	className="cell-icon"
-																	onClick={() =>
-																		openPeriodExcuseModal(
-																			absenceId,
-																			dateStr,
-																			stId,
-																			idx + 1,
-																			reason
-																		)
-																	}
-																	title={
-																		reason
-																			? `Reason: ${reason}`
-																			: "Click to excuse (provide a reason)"
-																	}
-																>
-																	{resolved ? (
-																		<FontAwesomeIcon icon={faCheck} />
-																	) : (
-																		<FontAwesomeIcon icon={faTimes} />
-																	)}
-																</div>
-															</td>
-														);
-													})}
-													<td>
-														<button
-															className="toggle-student-day-btn"
-															onClick={() =>
-																openStudentDayExcuseModal(stId, dateStr)
-															}
-														>
-															<FontAwesomeIcon icon={faEdit} />
-															<span>Excuse Day</span>
-														</button>
-													</td>
-												</tr>
-											);
-										})}
-									</tbody>
-								</table>
-							</div>
-						))}
+														})}
+														<td>
+															<button
+																className="toggle-student-day-btn"
+																onClick={() =>
+																	openStudentDayExcuseModal(stId, dateStr)
+																}
+															>
+																<FontAwesomeIcon icon={faEdit} />
+																<span>Excuse Day</span>
+															</button>
+														</td>
+													</tr>
+												);
+											})}
+										</tbody>
+									</table>
+								</div>
+							);
+						})}
 					</div>
 				))
 			)}
