@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import useAllClassLogs from "../hooks/useAllClassLogs";
 import useDepartments from "../../../hooks/useDepartments";
 import useTeachers from "../../../hooks/useTeachers";
@@ -11,7 +11,7 @@ import ClassLogFormModal from "../../../components/ClassLogFormModal/ClassLogFor
 import "./WeeklyLogs.css";
 
 const WeeklyLogs = () => {
-	const { user } = useAuth();
+	const { user, assignedSubjects } = useAuth();
 	const token = user?.token;
 
 	const {
@@ -43,11 +43,22 @@ const WeeklyLogs = () => {
 		}
 	}, [classLogs, logsLoading]);
 
+	const filteredDepartments = useMemo(() => {
+		if (!departments) return [];
+		if (user?.role === "Admin") return departments;
+		const teacherDeptIds = new Set();
+		if (assignedSubjects && assignedSubjects.length > 0) {
+			assignedSubjects.forEach((as) => {
+				as.departmentId.forEach((depId) => teacherDeptIds.add(depId));
+			});
+		}
+		return departments.filter((dept) => teacherDeptIds.has(dept.id));
+	}, [departments, assignedSubjects, user]);
+
 	const [selectedDepartment, setSelectedDepartment] = useState("");
 	const [weekOffset, setWeekOffset] = useState(0);
 
 	const [showModal, setShowModal] = useState(false);
-
 	const [missingDate, setMissingDate] = useState("");
 	const [missingPeriod, setMissingPeriod] = useState("");
 
@@ -71,7 +82,6 @@ const WeeklyLogs = () => {
 	const mondayOffset = new Date(currentMonday);
 	mondayOffset.setDate(currentMonday.getDate() + weekOffset * 7);
 
-	// Create Mon-Fri array
 	const weekdays = [];
 	const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 	for (let i = 0; i < 5; i++) {
@@ -85,11 +95,9 @@ const WeeklyLogs = () => {
 		});
 	}
 
-	// Mobile day index
 	const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 	const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-	// Default day = "today" if in range
 	useEffect(() => {
 		if (isFirstLoad && weekdays.length > 0) {
 			const todayStr = today.toISOString().split("T")[0];
@@ -105,7 +113,16 @@ const WeeklyLogs = () => {
 		if (selectedDayIndex < 0 || selectedDayIndex > 4) setSelectedDayIndex(0);
 	}, [selectedDayIndex]);
 
-	// Filter local logs for date/period
+	useEffect(() => {
+		if (
+			!selectedDepartment &&
+			filteredDepartments &&
+			filteredDepartments.length > 0
+		) {
+			setSelectedDepartment(filteredDepartments[0].id);
+		}
+	}, [filteredDepartments, selectedDepartment]);
+
 	const getLogsFor = (dateFormatted, period) => {
 		return allLogs.filter((log) => {
 			const logDate = new Date(log.classDate).toISOString().split("T")[0];
@@ -129,11 +146,11 @@ const WeeklyLogs = () => {
 	const handleNextWeek = () => setWeekOffset((prev) => prev + 1);
 	const disableNext = weekOffset >= 0;
 
-	useEffect(() => {
-		if (!selectedDepartment && departments && departments.length > 0) {
-			setSelectedDepartment(departments[0].id);
-		}
-	}, [departments, selectedDepartment]);
+	const handleNewLogCreated = (newLog) => {
+		setAllLogs((prev) => [...prev, newLog]);
+	};
+
+	const daysToRender = isMobile ? [weekdays[selectedDayIndex]] : weekdays;
 
 	// Loading & error states
 	if (logsLoading || depsLoading || teachersLoading || subjectsLoading) {
@@ -158,16 +175,10 @@ const WeeklyLogs = () => {
 		);
 	}
 
-	const daysToRender = isMobile ? [weekdays[selectedDayIndex]] : weekdays;
-
-	const handleNewLogCreated = (newLog) => {
-		setAllLogs((prev) => [...prev, newLog]);
-	};
-
 	return (
 		<div className="weekly-logs">
 			<WeeklyLogsControls
-				departments={departments}
+				departments={filteredDepartments}
 				selectedDepartment={selectedDepartment}
 				onDepartmentChange={handleDepartmentChange}
 				isMobile={isMobile}
