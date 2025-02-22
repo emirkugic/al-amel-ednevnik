@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faEdit } from "@fortawesome/free-solid-svg-icons";
 import "./Absences.css";
 import ExcuseModal from "./Absences/ExcuseModal";
-import { useAbsences, useAuth } from "../../../hooks";
+import { useAbsences, useAuth, useClassTeacher } from "../../../hooks";
 
 const tempDepartmentId = "673b94896d216a12b56d0c17";
 
@@ -38,14 +38,17 @@ const getWeekNumber = (dateString) => {
 const Absences = () => {
 	const { user } = useAuth();
 	const token = user?.token;
+	// Get the department id for class teachers using our custom hook.
+	const classTeacherDeptId = useClassTeacher();
+	const departmentId = classTeacherDeptId || tempDepartmentId;
 
-	// Pull in the absences and the update method from the hook:
+	// Use the departmentId in our absences hook.
 	const { absences, loading, error, updateAbsence } = useAbsences(
-		tempDepartmentId,
+		departmentId,
 		token
 	);
 
-	// Local copy to manage immediate UI changes (grouping, etc.):
+	// Local state for UI updates.
 	const [localAbsences, setLocalAbsences] = useState([]);
 
 	useEffect(() => {
@@ -125,10 +128,9 @@ const Absences = () => {
 			periodModal;
 		if (!currentReason.trim()) return;
 
-		// Optimistically update the UI first
 		let updatedAbsences;
 		if (periodNumber !== null) {
-			// Single period
+			// Single period update
 			updatedAbsences = localAbsences.map((rec) => {
 				if (rec.absence.id === absenceId) {
 					return {
@@ -144,17 +146,14 @@ const Absences = () => {
 			});
 			setLocalAbsences(updatedAbsences);
 
-			// Persist to backend
 			try {
 				await updateAbsence(absenceId, true, currentReason);
 			} catch (err) {
-				// If the API call fails, revert local changes
 				console.error("Failed to update single absence:", err);
-				setLocalAbsences((prev) => [...absences]); // Re-sync with hook's state
+				setLocalAbsences((prev) => [...absences]); // revert
 			}
 		} else {
 			// Excuse all periods for the day
-			// Gather all relevant absences for that day/student
 			const toUpdate = localAbsences.filter((rec) => {
 				const recDate = new Date(rec.classLog.classDate)
 					.toISOString()
@@ -162,7 +161,6 @@ const Absences = () => {
 				return rec.student.id === studentId && recDate === date;
 			});
 
-			// Optimistically mark them all excused in local state
 			updatedAbsences = localAbsences.map((rec) => {
 				const recDate = new Date(rec.classLog.classDate)
 					.toISOString()
@@ -181,20 +179,17 @@ const Absences = () => {
 			});
 			setLocalAbsences(updatedAbsences);
 
-			// Persist each to backend
 			for (const rec of toUpdate) {
 				try {
 					await updateAbsence(rec.absence.id, true, currentReason);
 				} catch (err) {
 					console.error("Failed to update daily absence:", err);
-					// If any fail, revert the local array for safety:
-					setLocalAbsences((prev) => [...absences]);
+					setLocalAbsences((prev) => [...absences]); // revert
 					break;
 				}
 			}
 		}
 
-		// Close the modal
 		setPeriodModal({ ...periodModal, open: false });
 	};
 
