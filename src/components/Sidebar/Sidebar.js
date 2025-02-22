@@ -30,6 +30,13 @@ const DesktopSidebar = () => {
 	const [loadingCourses, setLoadingCourses] = useState(true);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+	const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+	useEffect(() => {
+		const handleResize = () => setIsMobile(window.innerWidth <= 768);
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
+
 	// Get the class teacher department id (if applicable)
 	const classTeacherDeptId = useClassTeacher();
 
@@ -85,9 +92,19 @@ const DesktopSidebar = () => {
 		}
 	}, [user]);
 
+	// Build menu items conditionally
 	const menuItems = useMemo(() => {
-		const items = [
-			{ title: "Dashboard", icon: faHouse, route: "/" },
+		const items = [];
+		// Only include the Dashboard button if we're in mobile view.
+		if (isMobile) {
+			items.push({
+				title: "Dashboard",
+				icon: faHouse,
+				route: "/",
+			});
+		}
+		// Common items
+		items.push(
 			{
 				title: "Grades",
 				icon: faBook,
@@ -102,8 +119,8 @@ const DesktopSidebar = () => {
 				title: "Weekly Report",
 				icon: faChartLine,
 				route: "/logs",
-			},
-		];
+			}
+		);
 
 		if (user?.role === "Admin" || classTeacherDeptId) {
 			items.push({
@@ -145,7 +162,7 @@ const DesktopSidebar = () => {
 		}
 
 		return items;
-	}, [user, myCourses, myDepartments, classTeacherDeptId]);
+	}, [user, myCourses, myDepartments, classTeacherDeptId, isMobile]);
 
 	useEffect(() => {
 		const activeMenuItem = menuItems.find((item) =>

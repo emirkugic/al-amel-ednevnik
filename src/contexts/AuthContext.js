@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
 		const timeout = decodedToken.exp * 1000 - Date.now();
 		setTimeout(logout, timeout);
 
-		navigate("/");
+		navigate("/logs");
 	};
 
 	const logout = () => {
