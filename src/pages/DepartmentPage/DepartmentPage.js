@@ -4,7 +4,7 @@ import Absences from "./components/Absences";
 import Grades from "./Grades/Grades";
 
 const DepartmentPage = () => {
-	const [tab, setTab] = useState("overview");
+	const [tab, setTab] = useState("grades");
 	const [departmentData, setDepartmentData] = useState({
 		totalClassesHeld: 0,
 		totalStudents: 0,
@@ -30,16 +30,16 @@ const DepartmentPage = () => {
 
 			<div className="dp-tabs-row">
 				<button
-					className={`dp-tab-btn ${tab === "absences" ? "active" : ""}`}
-					onClick={() => setTab("absences")}
-				>
-					Absences
-				</button>
-				<button
 					className={`dp-tab-btn ${tab === "grades" ? "active" : ""}`}
 					onClick={() => setTab("grades")}
 				>
 					Grades
+				</button>
+				<button
+					className={`dp-tab-btn ${tab === "absences" ? "active" : ""}`}
+					onClick={() => setTab("absences")}
+				>
+					Absences
 				</button>
 			</div>
 

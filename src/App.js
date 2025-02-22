@@ -58,10 +58,7 @@ const AppContent = () => {
 
 						<Route path="/lectures/:departmentId" element={<LecturesPage />} />
 						<Route path="/courses/:subject" element={<AssessmentPage />} />
-						<Route
-							path="/department/:departmentId"
-							element={<DepartmentPage />}
-						/>
+						<Route path="/department" element={<DepartmentPage />} />
 					</Route>
 				</Routes>
 			</div>

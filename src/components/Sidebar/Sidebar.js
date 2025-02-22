@@ -19,6 +19,7 @@ import teacherApi from "../../api/teacherApi";
 import subjectApi from "../../api/subjectApi";
 import departmentApi from "../../api/departmentApi";
 import "./Sidebar.css";
+import { useClassTeacher } from "../../hooks";
 
 const DesktopSidebar = () => {
 	const location = useLocation();
@@ -28,6 +29,9 @@ const DesktopSidebar = () => {
 	const [myDepartments, setMyDepartments] = useState([]);
 	const [loadingCourses, setLoadingCourses] = useState(true);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+	// Get the class teacher department id (if applicable)
+	const classTeacherDeptId = useClassTeacher();
 
 	useEffect(() => {
 		const fetchMyCourses = async () => {
@@ -101,13 +105,17 @@ const DesktopSidebar = () => {
 			},
 		];
 
+		if (user?.role === "Admin" || classTeacherDeptId) {
+			items.push({
+				title: "My Department",
+				icon: faChalkboardTeacher,
+				route: "/department",
+			});
+		}
+
+		// Additional admin-only items
 		if (user?.role === "Admin") {
 			items.push(
-				{
-					title: "My Department",
-					icon: faChalkboardTeacher,
-					route: "/department/testID",
-				},
 				{
 					title: "Schedule",
 					icon: faCalendarAlt,
@@ -137,7 +145,7 @@ const DesktopSidebar = () => {
 		}
 
 		return items;
-	}, [user, myCourses, myDepartments]);
+	}, [user, myCourses, myDepartments, classTeacherDeptId]);
 
 	useEffect(() => {
 		const activeMenuItem = menuItems.find((item) =>
