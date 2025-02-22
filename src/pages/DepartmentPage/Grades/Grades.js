@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from "react";
 import "./Grades.css";
-import { useAuth, useGrades } from "../../../hooks";
+import { useAuth, useGrades, useClassTeacher } from "../../../hooks";
 
 const tempDepartmentId = "673b94896d216a12b56d0c17";
 
@@ -19,13 +19,17 @@ const calculateTotal = (studentGrades, assessments) => {
 const Grades = () => {
 	const { user } = useAuth();
 	const token = user?.token;
+
+	const classTeacherDeptId = useClassTeacher();
+	const departmentId = classTeacherDeptId || tempDepartmentId;
+
 	const { grades, loading, error, fetchGradesByDepartment } = useGrades(token);
 
 	useEffect(() => {
 		if (token) {
-			fetchGradesByDepartment(tempDepartmentId);
+			fetchGradesByDepartment(departmentId);
 		}
-	}, [token]);
+	}, [token, departmentId]);
 
 	const subjects = useMemo(() => {
 		if (!grades || !grades.length) return [];
