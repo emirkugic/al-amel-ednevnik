@@ -1,146 +1,17 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import "./Grades.css";
+import { useAuth, useGrades } from "../../../hooks";
 
-// Mocked data to simulate fetching from a backend
-const mockData = {
-	departmentName: "Academic Department",
-	subjects: [
-		{
-			subjectName: "Mathematics",
-			subjectCode: "MATH101",
-			assessments: [
-				{
-					name: "Exam 1",
-					weight: "30%",
-					date: "2025-01-15",
-					pointsPossible: 30,
-				},
-				{
-					name: "Homework",
-					weight: "20%",
-					date: "2025-02-03",
-					pointsPossible: 20,
-				},
-				{
-					name: "Final",
-					weight: "50%",
-					date: "2025-03-10",
-					pointsPossible: 50,
-				},
-			],
-			students: [
-				{
-					studentId: "123",
-					firstName: "Alice",
-					lastName: "Doe",
-					grades: {
-						"Exam 1": 28,
-						Homework: 20,
-						// Final not graded yet
-					},
-				},
-				{
-					studentId: "456",
-					firstName: "Bob",
-					lastName: "Smith",
-					grades: {
-						"Exam 1": 25,
-						Homework: 18,
-						Final: 40,
-					},
-				},
-			],
-		},
-		{
-			subjectName: "Computer Programming",
-			subjectCode: "CSE103",
-			assessments: [
-				{
-					name: "Midterm",
-					weight: "40%",
-					date: "2025-01-20",
-					pointsPossible: 35,
-				},
-				{
-					name: "Project",
-					weight: "30%",
-					date: "2025-02-15",
-					pointsPossible: 20,
-				},
-				{
-					name: "Final",
-					weight: "30%",
-					date: "2025-03-25",
-					pointsPossible: 45,
-				},
-			],
-			students: [
-				{
-					studentId: "789",
-					firstName: "Charlie",
-					lastName: "Brown",
-					grades: {
-						Midterm: 30,
-						Project: 18,
-						// Final not graded yet
-					},
-				},
-				{
-					studentId: "101",
-					firstName: "Diana",
-					lastName: "Prince",
-					grades: {
-						Midterm: 32,
-						Project: 16,
-						Final: 40,
-					},
-				},
-			],
-		},
-		{
-			subjectName: "History",
-			subjectCode: "HIST105",
-			assessments: [
-				{
-					name: "Essay",
-					weight: "50%",
-					date: "2025-01-25",
-					pointsPossible: 30,
-				},
-				{ name: "Exam", weight: "50%", date: "2025-02-20", pointsPossible: 40 },
-			],
-			students: [
-				{
-					studentId: "555",
-					firstName: "Eva",
-					lastName: "Green",
-					grades: {
-						Essay: 25,
-						Exam: 30,
-					},
-				},
-				{
-					studentId: "666",
-					firstName: "Frank",
-					lastName: "Miller",
-					grades: {
-						Essay: 27,
-						// Exam not graded yet
-					},
-				},
-			],
-		},
-	],
-};
+const tempDepartmentId = "673b94896d216a12b56d0c17";
 
-// Helper function to calculate total points earned and total possible points
-// Only assessments with a grade are summed.
+// Calculates total earned points and total possible points only for assessments with a grade.
 const calculateTotal = (studentGrades, assessments) => {
 	let earned = 0;
 	let possible = 0;
 	assessments.forEach((assessment) => {
-		if (studentGrades[assessment.name] !== undefined) {
-			earned += studentGrades[assessment.name];
+		// Use the assessment's title as the key (for aggregated ones, title is the type)
+		if (studentGrades[assessment.title] !== undefined) {
+			earned += studentGrades[assessment.title];
 			possible += assessment.pointsPossible;
 		}
 	});
@@ -148,23 +19,116 @@ const calculateTotal = (studentGrades, assessments) => {
 };
 
 const Grades = () => {
-	const { departmentName, subjects } = mockData;
+	const { user } = useAuth();
+	const token = user?.token;
+	const { grades, loading, error, fetchGradesByDepartment } = useGrades(token);
 
-	// Precompute total points for each student per subject.
-	const subjectsWithTotals = useMemo(() => {
-		return subjects.map((subject) => {
-			const newStudents = subject.students.map((student) => {
-				const total = calculateTotal(student.grades, subject.assessments);
-				return { ...student, total };
+	// Fetch grades by department when token is available.
+	useEffect(() => {
+		if (token) {
+			fetchGradesByDepartment(tempDepartmentId);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [token]);
+
+	// Transform the fetched backend data into the structure we need.
+	// For assessments with points < 5, we aggregate them by their type.
+	const subjects = useMemo(() => {
+		if (!grades || !grades.length) return [];
+		return grades.map((item) => {
+			// Build two sets of display columns:
+			// 1. Aggregated columns for assessments under 5 points (grouped by their type).
+			// 2. Individual assessments (points >= 5).
+			const aggregatedColumns = {}; // key: assessment.type
+			const individualAssessments = [];
+
+			// Process each assessment from the backend.
+			item.assessments.forEach((assessment) => {
+				const points = parseFloat(assessment.points);
+				if (points < 5) {
+					// Group by type (e.g., "Homework", "Quiz", etc.)
+					const type = assessment.type;
+					if (!aggregatedColumns[type]) {
+						aggregatedColumns[type] = {
+							// Use the type as the title for the aggregated column.
+							title: type,
+							pointsPossible: 0,
+						};
+					}
+					aggregatedColumns[type].pointsPossible += points;
+				} else {
+					individualAssessments.push({
+						title: assessment.title,
+						pointsPossible: points,
+						assessmentId: assessment.assessmentId,
+					});
+				}
 			});
-			return { ...subject, students: newStudents };
+			// Merge the aggregated and individual assessments.
+			const mappedAssessments = [
+				...Object.values(aggregatedColumns),
+				...individualAssessments,
+			];
+
+			// Build student grades.
+			// For aggregated assessments, sum the grades per student by type.
+			// For individual assessments, record the grade as-is.
+			const studentsMap = {};
+			item.assessments.forEach((assessment) => {
+				const points = parseFloat(assessment.points);
+				if (assessment.grades && assessment.grades.length) {
+					assessment.grades.forEach((gradeObj) => {
+						const student = gradeObj.student;
+						const sId = student.id;
+						if (!studentsMap[sId]) {
+							studentsMap[sId] = {
+								studentId: sId,
+								firstName: student.firstName,
+								lastName: student.lastName,
+								grades: {},
+							};
+						}
+						if (points < 5) {
+							// Aggregate using the assessment type as key.
+							const key = assessment.type;
+							if (!studentsMap[sId].grades[key]) {
+								studentsMap[sId].grades[key] = 0;
+							}
+							studentsMap[sId].grades[key] += parseFloat(gradeObj.grade);
+						} else {
+							// Use the individual assessment title as key.
+							const key = assessment.title;
+							studentsMap[sId].grades[key] = parseFloat(gradeObj.grade);
+						}
+					});
+				}
+			});
+			const students = Object.values(studentsMap);
+			return {
+				subjectName: item.subject.name,
+				subjectCode: item.subject.id,
+				assessments: mappedAssessments,
+				students,
+			};
 		});
-	}, [subjects]);
+	}, [grades]);
+
+	const departmentName = "Department Grades";
+
+	if (loading) return <div className="grades-container">Loading grades...</div>;
+	if (error)
+		return (
+			<div className="grades-container">
+				Error: {error.message || error.toString()}
+			</div>
+		);
+	if (!subjects.length)
+		return <div className="grades-container">No grades to display.</div>;
 
 	return (
 		<div className="grades-container">
 			<h1 className="grades-title">Grades for {departmentName}</h1>
-			{subjectsWithTotals.map((subject) => (
+			{subjects.map((subject) => (
 				<div key={subject.subjectCode} className="grades-subject-block">
 					<h2 className="subject-name">
 						{subject.subjectName} ({subject.subjectCode})
@@ -174,8 +138,8 @@ const Grades = () => {
 							<tr>
 								<th>Student</th>
 								{subject.assessments.map((assessment) => (
-									<th key={assessment.name}>
-										{assessment.name} <br />
+									<th key={assessment.assessmentId || assessment.title}>
+										{assessment.title} <br />
 										<span className="assessment-weight">
 											({assessment.pointsPossible} pts)
 										</span>
@@ -186,17 +150,28 @@ const Grades = () => {
 						</thead>
 						<tbody>
 							{subject.students.map((student) => {
-								const { studentId, firstName, lastName, grades, total } =
-									student;
+								const {
+									studentId,
+									firstName,
+									lastName,
+									grades: studentGrades,
+								} = student;
+								const total = calculateTotal(
+									studentGrades,
+									subject.assessments
+								);
 								return (
 									<tr key={studentId}>
 										<td>
 											{firstName} {lastName}
 										</td>
 										{subject.assessments.map((assessment) => {
-											const gradeValue = grades[assessment.name];
+											// For aggregated columns, the key is the type;
+											// for individual assessments, the key is the title.
+											const key = assessment.title;
+											const gradeValue = studentGrades[key];
 											return (
-												<td key={assessment.name}>
+												<td key={assessment.assessmentId || assessment.title}>
 													{gradeValue !== undefined ? gradeValue : "/"}
 												</td>
 											);
