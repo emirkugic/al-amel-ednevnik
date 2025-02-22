@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import "./LoggedClassesOverview.css";
 import ClassLogFormModal from "../ClassLogFormModal/ClassLogFormModal";
 import teacherApi from "../../api/teacherApi";
 import subjectApi from "../../api/subjectApi";
+import departmentApi from "../../api/departmentApi";
 import useAuth from "../../hooks/useAuth";
 import { ClassLogsContext } from "../../contexts/ClassLogsContext";
 import classLogApi from "../../api/classLogApi";
@@ -21,6 +22,23 @@ const LoggedClassesOverview = ({ departmentId }) => {
 	const [selectedSubject, setSelectedSubject] = useState("");
 	const [subjects, setSubjects] = useState([]);
 	const logsPerPage = 10;
+
+	// New state for department name.
+	const [departmentName, setDepartmentName] = useState("");
+
+	// Fetch department name using the departmentId.
+	useEffect(() => {
+		if (departmentId && user?.token) {
+			departmentApi
+				.getDepartmentById(departmentId, user.token)
+				.then((dept) => {
+					setDepartmentName(dept.departmentName);
+				})
+				.catch((err) => {
+					console.error("Error fetching department info:", err);
+				});
+		}
+	}, [departmentId, user]);
 
 	useEffect(() => {
 		const fetchSubjects = async () => {
@@ -148,7 +166,10 @@ const LoggedClassesOverview = ({ departmentId }) => {
 
 	return (
 		<div className="logged-classes-overview">
-			<h2>Class Logs for {selectedSubjectName || "Loading..."}</h2>
+			<h2>
+				Class Logs for {selectedSubjectName || "Loading..."} -{" "}
+				{departmentName || "Loading..."}. razred
+			</h2>
 			<p>Track and manage your class sessions</p>
 			{loading && <p>Loading class logs...</p>}
 			{error && <p>Error: {error}</p>}

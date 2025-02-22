@@ -12,6 +12,10 @@ import { faChalkboardTeacher } from "@fortawesome/free-solid-svg-icons";
 const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 	const { user } = useAuth();
 	const [lectureTitle, setLectureTitle] = useState(log.lectureTitle || "");
+	// New state for sequence number; store as string for editing.
+	const [sequence, setSequence] = useState(
+		log.sequence ? log.sequence.toString() : "1"
+	);
 	const [absentStudents, setAbsentStudents] = useState([]);
 	const [studentOptions, setStudentOptions] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
@@ -60,13 +64,13 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 			return;
 		}
 
-		// Prepare the updated log data
+		// Prepare the updated log data; parse the sequence from state.
 		const updatedLog = {
 			lectureTitle,
 			lectureType: log.lectureType || "Lecture",
 			classDate: log.classDate,
 			period: log.period,
-			sequence: parseInt(log.sequence, 10) || 1,
+			sequence: parseInt(sequence, 10) || 1,
 			absentStudentIds: absentStudents.map((s) => s.value),
 		};
 
@@ -75,19 +79,15 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 			await classLogApi.updateClassLog(log.classLogId, updatedLog, user.token);
 
 			// Pass along the updated absent students so that the DataTable reflects the change
-			// EditLogModal.jsx
 			handleUpdateLog({
 				...log,
 				...updatedLog,
-				// Convert each dropdown item { value, label } to { studentId, name }
 				absentStudents: absentStudents.map((item) => ({
 					studentId: item.value,
 					name: item.label,
 				})),
 			});
 
-			// refresh page after submitting
-			// window.location.reload();
 			onClose();
 		} catch (error) {
 			console.error("Error updating log:", error);
@@ -110,6 +110,13 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 					placeholder="Enter lecture title"
 					value={lectureTitle}
 					onChange={(e) => setLectureTitle(e.target.value)}
+				/>
+
+				<TextInput
+					label="Sequence Number"
+					placeholder="Enter sequence number"
+					value={sequence}
+					onChange={(e) => setSequence(e.target.value)}
 				/>
 
 				<AbsentStudentsSelect
