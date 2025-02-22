@@ -116,6 +116,7 @@ const AssessmentManagement = () => {
 							"Project",
 							"Homework",
 							"Activity",
+							"Book report",
 							"Other",
 						]}
 						title={title}
