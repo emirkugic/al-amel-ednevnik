@@ -30,6 +30,16 @@ const gradeApi = {
 		});
 		return response.data;
 	},
+
+	getGradesByDepartment: async (departmentId, token) => {
+		const response = await apiClient.get(
+			`/AssessmentGrade/grades-by-department-id/${departmentId}`,
+			{
+				headers: { Authorization: `Bearer ${token}` },
+			}
+		);
+		return response.data;
+	},
 };
 
 export default gradeApi;

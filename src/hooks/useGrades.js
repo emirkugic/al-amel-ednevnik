@@ -23,14 +23,29 @@ const useGrades = (token) => {
 		}
 	};
 
+	const fetchGradesByDepartment = async (departmentId) => {
+		try {
+			setLoading(true);
+			const response = await gradeApi.getGradesByDepartment(
+				departmentId,
+				token
+			);
+			setGrades(response);
+		} catch (err) {
+			console.error("Error fetching grades by department:", err);
+			setError(err);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	// Update a specific grade
 	const updateGrade = async (gradeId, updatedData) => {
 		try {
 			if (!gradeId) {
-				console.error("Grade ID is required for update."); // Debugging log
+				console.error("Grade ID is required for update.");
 				throw new Error("Grade ID is missing or invalid.");
 			}
-
 			setLoading(true);
 			await gradeApi.updateGrade(gradeId, updatedData, token);
 			setGrades((prevGrades) =>
@@ -51,7 +66,6 @@ const useGrades = (token) => {
 		try {
 			setLoading(true);
 			const response = await gradeApi.createGrade(newGradeData, token);
-
 			// Replace the placeholder entry or add the new grade
 			setGrades((prevGrades) => {
 				// Remove any existing placeholder for the student
@@ -74,6 +88,7 @@ const useGrades = (token) => {
 		loading,
 		error,
 		fetchGrades,
+		fetchGradesByDepartment,
 		updateGrade,
 		createGrade,
 	};
