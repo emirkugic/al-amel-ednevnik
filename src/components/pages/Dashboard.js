@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-	return <h1>Coming soon</h1>;
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		navigate("/logs", { replace: true });
+	}, [navigate]);
+
+	return null;
 };
 
 export default Dashboard;
