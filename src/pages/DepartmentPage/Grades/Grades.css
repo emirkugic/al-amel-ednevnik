@@ -1,48 +1,120 @@
-.grades-container {
-	max-width: 900px;
-	margin: 0 auto;
+/* Page container */
+.grades-page {
+	max-width: 1200px;
+	margin: 2rem auto;
 	padding: 1rem;
-	font-family: Arial, sans-serif;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Main title */
 .grades-title {
-	margin-bottom: 1.5rem;
 	text-align: center;
+	font-size: 1.8rem;
+	margin-bottom: 2rem;
 	color: #333;
 }
 
-.grades-subject-block {
-	margin-bottom: 2rem;
-	border: 1px solid #ccc;
-	padding: 1rem;
+/* Tab bar container */
+.subject-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+	justify-content: center;
+}
+
+.subject-tab {
+	border: none;
+	background-color: #f2f2f2;
+	color: #333;
+	padding: 0.5rem 1rem;
+	font-size: 0.95rem;
 	border-radius: 6px;
-	background: #fff;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+.subject-tab:hover {
+	background-color: #e3e3e3;
+}
+.subject-tab.active {
+	background-color: #0077cc;
+	color: #fff;
+	font-weight: 600;
 }
 
-.subject-name {
-	margin: 0 0 1rem;
-	color: #2c3e50;
+/* Panel for the active subject info + table */
+.subject-panel {
+	background-color: #fff;
+	border-radius: 8px;
+	padding: 1.5rem;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Subject info row */
+.subject-info {
+	margin-bottom: 1.5rem;
+	font-size: 0.95rem;
+	color: #444;
+}
+.subject-info h2 {
+	margin-bottom: 0.5rem;
+	font-size: 1.4rem;
+	color: #0077cc;
+}
+
+/* Table container */
+.grades-table-container {
+	overflow-x: auto;
+}
+
+/* Grades table */
 .grades-table {
 	width: 100%;
 	border-collapse: collapse;
-	margin-bottom: 1rem;
-}
-
-.grades-table th,
-.grades-table td {
-	border: 1px solid #ccc;
-	padding: 0.75rem;
-	text-align: center;
+	font-size: 0.9rem;
 }
 
 .grades-table th {
-	background-color: #eee;
+	background-color: #f2f2f2;
+	text-align: center;
+	padding: 0.75rem;
+	border-bottom: 2px solid #ddd;
 }
 
-.assessment-weight {
-	font-weight: normal;
-	font-size: 0.85rem;
-	color: #666;
+.grades-table td {
+	padding: 0.75rem;
+	text-align: center;
+	border-bottom: 1px solid #eee;
+}
+
+/* Table head details */
+.table-head-title {
+	font-weight: 600;
+	margin-bottom: 3px;
+}
+.table-head-points {
+	font-size: 0.8rem;
+	color: #777;
+}
+
+/* Student name cell */
+.student-cell {
+	text-align: left;
+	font-weight: 500;
+}
+
+/* Alternating rows */
+.grades-table tbody tr:nth-child(even) {
+	background-color: #fafafa;
+}
+
+/* Hover effect */
+.grades-table tbody tr:hover {
+	background-color: #f5faff;
+}
+
+/* The total column */
+.total-col {
+	font-weight: 600;
+	background-color: #f9fcff;
 }
