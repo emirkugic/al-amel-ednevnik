@@ -38,6 +38,14 @@
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
 		Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 	color: var(--gray-800);
+	box-sizing: border-box;
+	background-color: white;
+	border-radius: var(--border-radius-lg);
+}
+
+/* Apply border-box to all elements */
+.assessments-dashboard * {
+	box-sizing: border-box;
 }
 
 /* Header */
@@ -50,6 +58,8 @@
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 20px;
+	flex-wrap: wrap;
+	gap: 16px;
 }
 
 .title-section h1 {
@@ -64,6 +74,7 @@
 	display: flex;
 	align-items: center;
 	gap: 16px;
+	flex-wrap: wrap;
 }
 
 .meter-tooltip-container {
@@ -72,6 +83,7 @@
 
 .points-info {
 	position: relative;
+	margin-bottom: 8px;
 }
 
 .meter-label {
@@ -124,6 +136,7 @@
 
 .meter-container {
 	min-width: 240px;
+	width: 100%;
 }
 
 .progress-bar-container {
@@ -178,6 +191,7 @@
 	align-items: center;
 	gap: 8px;
 	height: 40px;
+	white-space: nowrap;
 }
 
 .btn-add:hover:not(:disabled) {
@@ -254,6 +268,7 @@
 .filters {
 	display: flex;
 	gap: 12px;
+	flex-wrap: wrap;
 }
 
 .filter-dropdown,
@@ -270,6 +285,7 @@
 	transform: translateY(-50%);
 	color: var(--gray-500);
 	pointer-events: none;
+	z-index: 1;
 }
 
 .filter-dropdown select,
@@ -288,6 +304,7 @@
 	background-repeat: no-repeat;
 	background-position: right 10px center;
 	background-size: 16px;
+	position: relative;
 }
 
 .filter-dropdown select:focus,
@@ -364,6 +381,7 @@
 
 .form-group {
 	margin-bottom: 20px;
+	position: relative;
 }
 
 .form-group:last-child {
@@ -373,10 +391,12 @@
 .form-row {
 	display: flex;
 	gap: 20px;
+	flex-wrap: wrap;
 }
 
 .form-row .form-group {
 	flex: 1;
+	min-width: 120px;
 }
 
 .form-group label {
@@ -421,6 +441,7 @@
 	gap: 12px;
 	background-color: var(--gray-50);
 	border-top: 1px solid var(--gray-200);
+	flex-wrap: wrap;
 }
 
 .btn-save,
@@ -558,6 +579,8 @@
 	margin-bottom: 16px;
 	padding-bottom: 8px;
 	border-bottom: 1px solid var(--gray-200);
+	flex-wrap: wrap;
+	gap: 8px;
 }
 
 .month-icon {
@@ -687,6 +710,7 @@
 	gap: 6px;
 	color: var(--gray-500);
 	font-size: 13px;
+	margin: 0;
 }
 
 .card-actions {
@@ -697,6 +721,7 @@
 	right: 12px;
 	opacity: 0;
 	transition: var(--transition-fast);
+	z-index: 10;
 }
 
 .assessment-card:hover .card-actions {
@@ -715,6 +740,7 @@
 	cursor: pointer;
 	transition: var(--transition-fast);
 	color: white;
+	padding: 0;
 }
 
 .btn-edit {
@@ -740,6 +766,10 @@
 	.form-row {
 		flex-direction: column;
 		gap: 16px;
+	}
+
+	.form-row .form-group {
+		width: 100%;
 	}
 
 	.month-assessments {
@@ -796,6 +826,20 @@
 	}
 
 	.btn-add {
+		width: 100%;
+		justify-content: center;
+	}
+
+	.filters {
+		flex-direction: column;
+	}
+
+	.form-actions {
+		flex-direction: column;
+	}
+
+	.btn-save,
+	.btn-cancel {
 		width: 100%;
 		justify-content: center;
 	}

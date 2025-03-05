@@ -325,7 +325,6 @@ const Assessments = () => {
 
 				<div className="filter-section">
 					<div className="search-bar">
-						<FontAwesomeIcon icon={faSearch} className="search-icon" />
 						<input
 							type="text"
 							placeholder="Search assessments..."
