@@ -343,7 +343,6 @@ const Assessments = () => {
 
 					<div className="filters">
 						<div className="filter-dropdown">
-							<FontAwesomeIcon icon={faFilter} className="filter-icon" />
 							<select
 								value={filterType}
 								onChange={(e) => setFilterType(e.target.value)}
@@ -358,7 +357,6 @@ const Assessments = () => {
 						</div>
 
 						<div className="sort-dropdown">
-							<FontAwesomeIcon icon={faSort} className="sort-icon" />
 							<select
 								value={sortOrder}
 								onChange={(e) => setSortOrder(e.target.value)}
