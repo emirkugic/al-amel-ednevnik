@@ -20,6 +20,9 @@ import Help from "./components/pages/Help";
 
 import Classes from "./components/pages/Classes";
 
+// temp
+import TeacherManagement from "./pages/TeachersPage/components/TeacherManagement2";
+
 import {
 	LecturesPage,
 	AssessmentPage,
@@ -56,11 +59,12 @@ const AppContent = () => {
 						<Route path="/schedule" element={<SchedulePage />} />
 						<Route path="/logs" element={<LogsPage />} />
 						<Route path="/teachers" element={<TeachersPage />} />
-
 						<Route path="/lectures/:departmentId" element={<LecturesPage />} />
 						<Route path="/courses/:subject" element={<AssessmentPage />} />
 						<Route path="/department" element={<DepartmentPage />} />
-
+						{/* temp */}
+						{/* temp */}
+						<Route path="/teachers2" element={<TeacherManagement />} />{" "}
 						<Route path="/assessments" element={<Assessments />} />
 					</Route>
 				</Routes>
