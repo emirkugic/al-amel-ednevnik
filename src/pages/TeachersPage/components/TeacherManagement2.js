@@ -2,17 +2,9 @@ import React, { useState, useEffect } from "react";
 import "./TeacherManagement2.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-	faSearch,
 	faUserPlus,
 	faEdit,
-	faChevronDown,
-	faChevronUp,
 	faBook,
-	faChalkboardTeacher,
-	faEnvelope,
-	faPhone,
-	faFilter,
-	faSort,
 	faTimes,
 	faShieldAlt,
 	faUser,
@@ -20,7 +12,6 @@ import {
 	faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
 
-// Mock data - replace with API calls in production
 const MOCK_TEACHERS = [
 	{
 		id: 1,
@@ -237,39 +228,6 @@ const TeacherManagement = () => {
 				</button>
 			</div>
 
-			{/* temporary disabled, don't delete  */}
-			{/* <div className="search-filter-container">
-				<div className="search-bar">
-					<FontAwesomeIcon icon={faSearch} className="search-icon" />
-					<input
-						type="text"
-						placeholder="Search by name, subject, or class..."
-						value={searchTerm}
-						onChange={(e) => setSearchTerm(e.target.value)}
-					/>
-					{searchTerm && (
-						<button className="clear-search" onClick={() => setSearchTerm("")}>
-							<FontAwesomeIcon icon={faTimes} />
-						</button>
-					)}
-				</div>
-
-				<div className="filter-actions">
-					<button
-						className={`filter-toggle ${showFilters ? "active" : ""}`}
-						onClick={() => setShowFilters(!showFilters)}
-					>
-						<FontAwesomeIcon icon={faFilter} /> Filters
-					</button>
-
-					{(searchTerm || filterDepartment || filterAdmin !== "all") && (
-						<button className="clear-filters" onClick={clearFilters}>
-							<FontAwesomeIcon icon={faTimes} /> Clear
-						</button>
-					)}
-				</div>
-			</div> */}
-
 			{showFilters && (
 				<div className="advanced-filters">
 					<div className="filter-group">
@@ -350,11 +308,11 @@ const TeacherManagement = () => {
 						<thead>
 							<tr>
 								<th>Teacher</th>
-								<th>Contact Information</th>
-								<th>Subjects</th>
-								<th>Classes</th>
+								<th className="hide-on-mobile">Contact Information</th>
+								<th className="hide-on-mobile compact-column">Subjects</th>
+								<th className="hide-on-mobile compact-column">Classes</th>
 								<th>Role</th>
-								<th>Actions</th>
+								<th className="actions-column">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -367,13 +325,17 @@ const TeacherManagement = () => {
 										<td className="teacher-name-cell">
 											<div className="teacher-name">{teacher.name}</div>
 										</td>
-										<td>
+										<td className="hide-on-mobile">
 											<div className="contact-info">
 												<div>{teacher.email}</div>
 											</div>
 										</td>
-										<td className="count-cell">{teacher.subjects.length}</td>
-										<td className="count-cell">{countTotalClasses(teacher)}</td>
+										<td className="count-cell hide-on-mobile compact-column">
+											{teacher.subjects.length}
+										</td>
+										<td className="count-cell hide-on-mobile compact-column">
+											{countTotalClasses(teacher)}
+										</td>
 										<td>
 											{teacher.isAdmin ? (
 												<span className="admin-badge">
@@ -385,16 +347,8 @@ const TeacherManagement = () => {
 												</span>
 											)}
 										</td>
-										<td>
+										<td className="actions-column">
 											<div className="action-buttons">
-												<FontAwesomeIcon
-													className="expand-icon"
-													icon={
-														expandedTeacher === teacher.id
-															? faChevronUp
-															: faChevronDown
-													}
-												/>
 												<button
 													className="edit-btn"
 													aria-label="Edit Teacher"
@@ -410,8 +364,16 @@ const TeacherManagement = () => {
 									</tr>
 									{expandedTeacher === teacher.id && (
 										<tr className="details-row">
-											<td colSpan="6">
+											<td colSpan="6" className="expanded-cell">
 												<div className="teacher-details">
+													<div className="mobile-only-info">
+														<div className="mobile-info-row">
+															<strong>Email:</strong> {teacher.email}
+														</div>
+														<div className="mobile-info-row">
+															<strong>Department:</strong> {teacher.department}
+														</div>
+													</div>
 													<table className="subjects-table">
 														<thead>
 															<tr>
