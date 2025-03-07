@@ -305,6 +305,7 @@ body {
 	box-shadow: var(--shadow-md);
 	border: 1px solid var(--border-color);
 	overflow: hidden;
+	max-height: 95vh;
 }
 
 /* Grades Panel */
@@ -362,7 +363,7 @@ body {
 /* Fix table container to prevent horizontal scrolling */
 .table-container {
 	flex: 1;
-	overflow: hidden; /* Change from overflow-x: auto to overflow: hidden */
+	overflow: hidden;
 	margin-left: -24px;
 	margin-right: -24px;
 }
@@ -420,6 +421,13 @@ body {
 	vertical-align: middle;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	background-color: transparent;
+	box-shadow: none;
+}
+
+.grades-table td:first-child {
+	background-color: transparent;
+	box-shadow: none;
 }
 
 .grades-table tr:last-child td {
@@ -435,8 +443,8 @@ body {
 	font-weight: 600;
 	font-size: small;
 	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+	background-color: transparent;
+	box-shadow: none;
 }
 
 .assessment-cell {
@@ -475,6 +483,8 @@ body {
 	padding: 12px 20px;
 	border-top: 1px solid var(--border-color);
 	background-color: var(--background-light);
+	margin-left: -24px;
+	margin-right: -24px;
 }
 
 .grade-legend {
