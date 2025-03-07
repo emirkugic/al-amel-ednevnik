@@ -2,22 +2,24 @@ import React, { useState, useEffect } from "react";
 import "./TeacherManagement2.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+	faSearch,
 	faUserPlus,
 	faEdit,
-	faBook,
+	faFilter,
 	faTimes,
 	faShieldAlt,
 	faUser,
 	faArrowDown,
 	faArrowUp,
+	faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
 
+// Mock data - replace with API calls in production
 const MOCK_TEACHERS = [
 	{
 		id: 1,
 		name: "Dr. Sarah Johnson",
 		email: "sarah.johnson@school.edu",
-		phone: "(555) 123-4567",
 		isAdmin: true,
 		department: "Science",
 		subjects: [
@@ -27,9 +29,8 @@ const MOCK_TEACHERS = [
 	},
 	{
 		id: 2,
-		name: "Hossameldin Ibrahim Sayed Yassin Sayed Ahmed",
+		name: "Prof. Michael Chen",
 		email: "michael.chen@school.edu",
-		phone: "(555) 234-5678",
 		isAdmin: false,
 		department: "Mathematics",
 		subjects: [
@@ -41,7 +42,6 @@ const MOCK_TEACHERS = [
 		id: 3,
 		name: "Dr. Emily Rodriguez",
 		email: "emily.rodriguez@school.edu",
-		phone: "(555) 345-6789",
 		isAdmin: true,
 		department: "Languages",
 		subjects: [
@@ -54,7 +54,6 @@ const MOCK_TEACHERS = [
 		id: 4,
 		name: "Mr. David Wilson",
 		email: "david.wilson@school.edu",
-		phone: "(555) 456-7890",
 		isAdmin: false,
 		department: "Social Sciences",
 		subjects: [
@@ -66,7 +65,6 @@ const MOCK_TEACHERS = [
 		id: 5,
 		name: "Ms. Jessica Park",
 		email: "jessica.park@school.edu",
-		phone: "(555) 567-8901",
 		isAdmin: false,
 		department: "Science",
 		subjects: [
@@ -201,7 +199,7 @@ const TeacherManagement = () => {
 
 	if (loading) {
 		return (
-			<div className="teacher-loading">
+			<div className="dashboard-card loading-card">
 				<div className="loading-spinner"></div>
 				<p>Loading teacher data...</p>
 			</div>
@@ -226,6 +224,38 @@ const TeacherManagement = () => {
 				<button className="add-teacher-btn">
 					<FontAwesomeIcon icon={faUserPlus} /> Add New Teacher
 				</button>
+			</div>
+
+			<div className="search-filter-container">
+				<div className="search-bar">
+					<FontAwesomeIcon icon={faSearch} className="search-icon" />
+					<input
+						type="text"
+						placeholder="Search by name, subject, or class..."
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+					/>
+					{searchTerm && (
+						<button className="clear-search" onClick={() => setSearchTerm("")}>
+							<FontAwesomeIcon icon={faTimes} />
+						</button>
+					)}
+				</div>
+
+				<div className="filter-actions">
+					<button
+						className={`filter-toggle ${showFilters ? "active" : ""}`}
+						onClick={() => setShowFilters(!showFilters)}
+					>
+						<FontAwesomeIcon icon={faFilter} /> Filters
+					</button>
+
+					{(searchTerm || filterDepartment || filterAdmin !== "all") && (
+						<button className="clear-filters" onClick={clearFilters}>
+							<FontAwesomeIcon icon={faTimes} /> Clear
+						</button>
+					)}
+				</div>
 			</div>
 
 			{showFilters && (
@@ -308,15 +338,15 @@ const TeacherManagement = () => {
 						<thead>
 							<tr>
 								<th>Teacher</th>
-								<th className="hide-on-mobile">Contact Information</th>
-								<th className="hide-on-mobile compact-column">Subjects</th>
-								<th className="hide-on-mobile compact-column">Classes</th>
+								<th>Email</th>
+								<th>Subjects</th>
+								<th>Classes</th>
 								<th>Role</th>
-								<th className="actions-column">Actions</th>
+								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
-							{filteredTeachers.map((teacher) => (
+							{filteredTeachers.map((teacher, index) => (
 								<React.Fragment key={teacher.id}>
 									<tr
 										className={expandedTeacher === teacher.id ? "expanded" : ""}
@@ -325,17 +355,19 @@ const TeacherManagement = () => {
 										<td className="teacher-name-cell">
 											<div className="teacher-name">{teacher.name}</div>
 										</td>
-										<td className="hide-on-mobile">
+										<td>
 											<div className="contact-info">
-												<div>{teacher.email}</div>
+												<div className="email-display">
+													<FontAwesomeIcon
+														icon={faEnvelope}
+														className="contact-icon"
+													/>
+													{teacher.email}
+												</div>
 											</div>
 										</td>
-										<td className="count-cell hide-on-mobile compact-column">
-											{teacher.subjects.length}
-										</td>
-										<td className="count-cell hide-on-mobile compact-column">
-											{countTotalClasses(teacher)}
-										</td>
+										<td className="count-cell">{teacher.subjects.length}</td>
+										<td className="count-cell">{countTotalClasses(teacher)}</td>
 										<td>
 											{teacher.isAdmin ? (
 												<span className="admin-badge">
@@ -347,7 +379,7 @@ const TeacherManagement = () => {
 												</span>
 											)}
 										</td>
-										<td className="actions-column">
+										<td>
 											<div className="action-buttons">
 												<button
 													className="edit-btn"
@@ -364,16 +396,8 @@ const TeacherManagement = () => {
 									</tr>
 									{expandedTeacher === teacher.id && (
 										<tr className="details-row">
-											<td colSpan="6" className="expanded-cell">
+											<td colSpan="6">
 												<div className="teacher-details">
-													<div className="mobile-only-info">
-														<div className="mobile-info-row">
-															<strong>Email:</strong> {teacher.email}
-														</div>
-														<div className="mobile-info-row">
-															<strong>Department:</strong> {teacher.department}
-														</div>
-													</div>
 													<table className="subjects-table">
 														<thead>
 															<tr>
@@ -384,13 +408,7 @@ const TeacherManagement = () => {
 														<tbody>
 															{teacher.subjects.map((subject) => (
 																<tr key={subject.id}>
-																	<td>
-																		<FontAwesomeIcon
-																			icon={faBook}
-																			className="subject-icon"
-																		/>
-																		{subject.name}
-																	</td>
+																	<td>{subject.name}</td>
 																	<td>
 																		<div className="class-chips">
 																			{subject.classes.map((cls) => (
