@@ -175,7 +175,9 @@
 .content-area {
 	flex: 1;
 	overflow-y: auto;
-	padding: 24px;
+	/* padding: 24px; */
+	padding-left: 24px;
+	padding-right: 24px;
 }
 
 /* Form styling */
@@ -189,7 +191,8 @@
 
 .form-section h3 {
 	margin: 0;
-	padding: 16px 20px;
+	/* padding: 16px 20px; */
+	padding: 10px;
 	font-size: 16px;
 	font-weight: 600;
 	color: var(--text-color);
@@ -219,7 +222,7 @@
 .form-field input[type="text"],
 .form-field input[type="email"],
 .form-field input[type="password"] {
-	padding: 10px 14px;
+	/* padding: 10px 14px; */
 	border: 1px solid var(--border-color);
 	border-radius: var(--radius-sm);
 	font-size: 15px;
@@ -307,7 +310,7 @@
 	position: absolute;
 	right: 12px;
 	top: 50%;
-	transform: translateY(-50%);
+	transform: translateY(-55%);
 	background: none;
 	border: none;
 	color: var(--light-text);
