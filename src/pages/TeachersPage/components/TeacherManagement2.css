@@ -35,12 +35,20 @@ html {
 
 .dashboard-card {
 	background-color: var(--background-white);
-	border-radius: 8px;
+	border-radius: 12px;
 	box-shadow: var(--shadow-md);
 	overflow: hidden;
-	height: 100vh;
+	height: 94vh;
 	display: flex;
 	flex-direction: column;
+	margin-left: 13px;
+}
+
+@media screen and (max-width: 600px) {
+	.dashboard-card {
+		max-height: 89vh;
+		margin-left: -2px;
+	}
 }
 
 .loading-card {
