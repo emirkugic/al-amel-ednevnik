@@ -21,7 +21,8 @@ import Help from "./components/pages/Help";
 import Classes from "./components/pages/Classes";
 
 // temp
-import TeacherManagement from "./pages/TeachersPage/components/v2/TeacherManagement2";
+import TeacherManagement from "./pages/TeachersPage/components/v2/TeacherManagement2"; // /teachers2
+import ClassGradesPage from "./pages/DepartmentPage/ClassGradesPage/ClassGradesPage"; // /grades
 
 import {
 	LecturesPage,
@@ -33,7 +34,7 @@ import {
 	LoginPage,
 	SubjectsPage,
 	ParentsPage,
-	Assessments,
+	Assessments, // temp
 } from "./pages";
 
 import "./App.css";
@@ -63,9 +64,9 @@ const AppContent = () => {
 						<Route path="/courses/:subject" element={<AssessmentPage />} />
 						<Route path="/department" element={<DepartmentPage />} />
 						{/* temp */}
-						{/* temp */}
 						<Route path="/teachers2" element={<TeacherManagement />} />{" "}
 						<Route path="/assessments" element={<Assessments />} />
+						<Route path="/grades" element={<ClassGradesPage />} />
 					</Route>
 				</Routes>
 			</div>
