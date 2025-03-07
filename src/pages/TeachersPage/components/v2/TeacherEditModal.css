@@ -127,7 +127,7 @@
 }
 
 .tab-navigation {
-	padding: 16px 0;
+	/* No padding */
 }
 
 .nav-item {
@@ -180,7 +180,7 @@
 
 /* Form styling */
 .form-section {
-	margin-bottom: 28px;
+	margin-bottom: 10px;
 	background-color: var(--white);
 	border-radius: var(--radius-md);
 	border: 1px solid var(--border-color);
@@ -238,31 +238,65 @@
 	flex-direction: column;
 }
 
-.admin-toggle-button {
+.toggle-switch-container {
 	display: flex;
 	align-items: center;
-	gap: 10px;
-	background: none;
-	border: 1px solid var(--border-color);
-	border-radius: var(--radius-sm);
-	padding: 10px 14px;
+	gap: 12px;
+	margin-top: 5px;
+}
+
+.toggle-switch {
+	position: relative;
+	display: inline-block;
+	width: 52px;
+	height: 26px;
+}
+
+.toggle-switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.toggle-slider {
+	position: absolute;
 	cursor: pointer;
-	font-size: 15px;
-	transition: var(--transition);
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	border-radius: 34px;
+	transition: 0.3s;
 }
 
-.admin-toggle-button:hover {
-	background-color: var(--background-light);
+.toggle-slider:before {
+	position: absolute;
+	content: "";
+	height: 18px;
+	width: 18px;
+	left: 4px;
+	bottom: 4px;
+	background-color: white;
+	border-radius: 50%;
+	transition: 0.3s;
 }
 
-.admin-toggle-button .toggle-on {
-	font-size: 22px;
-	color: var(--primary-color);
+.toggle-switch input:checked + .toggle-slider {
+	background-color: var(--primary-color);
 }
 
-.admin-toggle-button .toggle-off {
-	font-size: 22px;
-	color: var(--light-text);
+.toggle-switch input:focus + .toggle-slider {
+	box-shadow: 0 0 1px var(--primary-color);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+	transform: translateX(26px);
+}
+
+.toggle-label {
+	font-size: 14px;
+	font-weight: 500;
 }
 
 .password-input {

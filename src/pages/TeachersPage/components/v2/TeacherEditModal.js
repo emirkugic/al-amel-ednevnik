@@ -92,7 +92,8 @@ const TeacherEditModal = ({ isOpen, teacher, onClose, onSave }) => {
 
 	// Handle adding a new subject
 	const handleAddSubject = (subjectId) => {
-		const subject = AVAILABLE_SUBJECTS.find((s) => s.id === subjectId);
+		const subjectId_num = parseInt(subjectId, 10);
+		const subject = AVAILABLE_SUBJECTS.find((s) => s.id === subjectId_num);
 		if (!subject) return;
 
 		setTeacherData((prev) => ({
@@ -257,34 +258,24 @@ const TeacherEditModal = ({ isOpen, teacher, onClose, onSave }) => {
 
 										<div className="form-field admin-toggle-container">
 											<label>Administrator Access</label>
-											<button
-												type="button"
-												className="admin-toggle-button"
-												onClick={() =>
-													setTeacherData((prev) => ({
-														...prev,
-														isAdmin: !prev.isAdmin,
-													}))
-												}
-											>
-												<FontAwesomeIcon
-													icon={teacherData.isAdmin ? faToggleOn : faToggleOff}
-													className={
-														teacherData.isAdmin ? "toggle-on" : "toggle-off"
-													}
-												/>
-												<span>
-													{teacherData.isAdmin ? (
-														<>
-															<FontAwesomeIcon icon={faUserShield} /> Admin
-														</>
-													) : (
-														<>
-															<FontAwesomeIcon icon={faUser} /> Teacher
-														</>
-													)}
+											<div className="toggle-switch-container">
+												<label className="toggle-switch">
+													<input
+														type="checkbox"
+														checked={teacherData.isAdmin}
+														onChange={() =>
+															setTeacherData((prev) => ({
+																...prev,
+																isAdmin: !prev.isAdmin,
+															}))
+														}
+													/>
+													<span className="toggle-slider"></span>
+												</label>
+												<span className="toggle-label">
+													{teacherData.isAdmin ? "Admin" : "Teacher"}
 												</span>
-											</button>
+											</div>
 										</div>
 									</div>
 								</div>
