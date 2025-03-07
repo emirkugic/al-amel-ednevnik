@@ -164,9 +164,7 @@ const TeacherEditModal = ({ isOpen, teacher, onClose, onSave }) => {
 		<div className="modal-backdrop">
 			<div className="modal-container">
 				<header className="modal-header">
-					<h2>
-						{teacher ? `Edit Teacher: ${teacher.name}` : "Add New Teacher"}
-					</h2>
+					<h2>{teacher ? `${teacher.name}` : "Add New Teacher"}</h2>
 					<button className="close-button" onClick={onClose}>
 						<FontAwesomeIcon icon={faTimes} />
 					</button>
