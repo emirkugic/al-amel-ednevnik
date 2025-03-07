@@ -226,7 +226,7 @@ const TeacherManagement = () => {
 				</button>
 			</div>
 
-			<div className="search-filter-container">
+			{/* <div className="search-filter-container">
 				<div className="search-bar">
 					<FontAwesomeIcon icon={faSearch} className="search-icon" />
 					<input
@@ -256,7 +256,7 @@ const TeacherManagement = () => {
 						</button>
 					)}
 				</div>
-			</div>
+			</div> */}
 
 			{showFilters && (
 				<div className="advanced-filters">

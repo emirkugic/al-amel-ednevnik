@@ -286,6 +286,62 @@ html {
 	vertical-align: middle;
 }
 
+/* Only apply overflow for desktop view (non-mobile) */
+@media (min-width: 769px) {
+	.teacher-table td {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	/* Define specific column widths for desktop */
+	.teacher-table th:nth-child(1),
+	.teacher-table td:nth-child(1) {
+		width: 20%;
+	}
+
+	.teacher-table th:nth-child(2),
+	.teacher-table td:nth-child(2) {
+		width: 25%;
+	}
+
+	.teacher-table th:nth-child(3),
+	.teacher-table td:nth-child(3) {
+		width: 10%;
+		text-align: center;
+	}
+
+	.teacher-table th:nth-child(4),
+	.teacher-table td:nth-child(4) {
+		width: 10%;
+		text-align: center;
+	}
+
+	.teacher-table th:nth-child(5),
+	.teacher-table td:nth-child(5) {
+		width: 15%;
+		text-align: center;
+	}
+
+	.teacher-table th:nth-child(6),
+	.teacher-table td:nth-child(6) {
+		width: 10%;
+		text-align: center;
+	}
+
+	/* Email display for desktop */
+	.email-display {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 100%;
+	}
+
+	.contact-icon {
+		flex-shrink: 0;
+	}
+}
+
 .teacher-table tbody tr {
 	cursor: pointer;
 }
@@ -397,6 +453,9 @@ html {
 .teacher-details {
 	padding: 0;
 	background-color: var(--expanded-row);
+	margin: 0;
+	width: 100%;
+	display: block;
 }
 
 .details-row + tr {
@@ -408,6 +467,7 @@ html {
 	border-collapse: collapse;
 	font-size: 14px;
 	background-color: white;
+	margin: 0;
 }
 
 .subjects-table th {
@@ -427,6 +487,23 @@ html {
 
 .subjects-table tr:last-child td {
 	border-bottom: none;
+}
+
+/* Force no margin or padding on expanded details table */
+.details-row table {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	border-spacing: 0;
+}
+
+.details-row table * {
+	margin: 0;
+	border-spacing: 0;
+}
+
+.details-row td[colspan="6"] {
+	padding: 0;
 }
 
 .class-chips {
