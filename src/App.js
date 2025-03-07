@@ -21,7 +21,7 @@ import Help from "./components/pages/Help";
 import Classes from "./components/pages/Classes";
 
 // temp
-import TeacherManagement from "./pages/TeachersPage/components/TeacherManagement2";
+import TeacherManagement from "./pages/TeachersPage/components/v2/TeacherManagement2";
 
 import {
 	LecturesPage,

@@ -13,6 +13,7 @@ import {
 	faArrowUp,
 	faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
+import TeacherEditModal from "./TeacherEditModal"; // Import the modal component
 
 // Mock data - replace with API calls in production
 const MOCK_TEACHERS = [
@@ -85,6 +86,10 @@ const TeacherManagement = () => {
 	const [expandedTeacher, setExpandedTeacher] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [showFilters, setShowFilters] = useState(false);
+
+	// Modal state
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [selectedTeacher, setSelectedTeacher] = useState(null);
 
 	// Departments extracted from teacher data
 	const departments = [
@@ -197,6 +202,41 @@ const TeacherManagement = () => {
 		setFilterAdmin("all");
 	};
 
+	// Open the edit modal for a teacher
+	const openEditModal = (teacher, e) => {
+		e.stopPropagation(); // Prevent row click from toggling expand
+		setSelectedTeacher(teacher);
+		setIsModalOpen(true);
+	};
+
+	// Handle adding a new teacher
+	const handleAddTeacher = () => {
+		setSelectedTeacher(null); // No pre-selected teacher for "add new"
+		setIsModalOpen(true);
+	};
+
+	// Handle saving teacher data
+	const handleSaveTeacher = (teacherData) => {
+		// For existing teachers
+		if (teacherData.id) {
+			setTeachers((prev) =>
+				prev.map((teacher) =>
+					teacher.id === teacherData.id ? { ...teacherData } : teacher
+				)
+			);
+		}
+		// For new teachers
+		else {
+			const newTeacher = {
+				...teacherData,
+				id: Math.max(...teachers.map((t) => t.id)) + 1, // Generate new ID
+			};
+			setTeachers((prev) => [...prev, newTeacher]);
+		}
+
+		setIsModalOpen(false);
+	};
+
 	if (loading) {
 		return (
 			<div className="dashboard-card loading-card">
@@ -221,42 +261,10 @@ const TeacherManagement = () => {
 						</span>
 					</p>
 				</div>
-				<button className="add-teacher-btn">
+				<button className="add-teacher-btn" onClick={handleAddTeacher}>
 					<FontAwesomeIcon icon={faUserPlus} /> Add New Teacher
 				</button>
 			</div>
-
-			{/* <div className="search-filter-container">
-				<div className="search-bar">
-					<FontAwesomeIcon icon={faSearch} className="search-icon" />
-					<input
-						type="text"
-						placeholder="Search by name, subject, or class..."
-						value={searchTerm}
-						onChange={(e) => setSearchTerm(e.target.value)}
-					/>
-					{searchTerm && (
-						<button className="clear-search" onClick={() => setSearchTerm("")}>
-							<FontAwesomeIcon icon={faTimes} />
-						</button>
-					)}
-				</div>
-
-				<div className="filter-actions">
-					<button
-						className={`filter-toggle ${showFilters ? "active" : ""}`}
-						onClick={() => setShowFilters(!showFilters)}
-					>
-						<FontAwesomeIcon icon={faFilter} /> Filters
-					</button>
-
-					{(searchTerm || filterDepartment || filterAdmin !== "all") && (
-						<button className="clear-filters" onClick={clearFilters}>
-							<FontAwesomeIcon icon={faTimes} /> Clear
-						</button>
-					)}
-				</div>
-			</div> */}
 
 			{showFilters && (
 				<div className="advanced-filters">
@@ -385,9 +393,7 @@ const TeacherManagement = () => {
 													className="edit-btn"
 													aria-label="Edit Teacher"
 													title="Edit Teacher"
-													onClick={(e) => {
-														e.stopPropagation(); // Prevent row click from triggering
-													}}
+													onClick={(e) => openEditModal(teacher, e)}
 												>
 													<FontAwesomeIcon icon={faEdit} />
 												</button>
@@ -439,6 +445,14 @@ const TeacherManagement = () => {
 					</button>
 				</div>
 			)}
+
+			{/* Teacher Edit Modal */}
+			<TeacherEditModal
+				isOpen={isModalOpen}
+				teacher={selectedTeacher}
+				onClose={() => setIsModalOpen(false)}
+				onSave={handleSaveTeacher}
+			/>
 		</div>
 	);
 };
