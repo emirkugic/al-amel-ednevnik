@@ -152,17 +152,17 @@ const ClassGradesPage = () => {
 					<table className="grades-table">
 						<thead>
 							<tr>
-								<th>Student</th>
+								<th className="student-col">Student</th>
 								{subjectAssessments.map((assessment) => (
-									<th key={assessment.id}>
+									<th key={assessment.id} className="assessment-col">
 										{assessment.name}
 										<span className="max-points">
 											Max: {assessment.maxPoints} pts
 										</span>
 									</th>
 								))}
-								<th>Total</th>
-								<th>Grade</th>
+								<th className="total-col">Total</th>
+								<th className="grade-col">Grade</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -410,6 +410,7 @@ const ClassGradesPage = () => {
 			.slice(0, 3);
 
 		return (
+			// summary page
 			<div className="summary-view">
 				<div className="summary-section">
 					<h3>Subject Performance</h3>
@@ -516,14 +517,8 @@ const ClassGradesPage = () => {
 	};
 
 	return (
+		// left sidebar
 		<div className="class-grades-page">
-			<header className="page-header">
-				<div className="header-content">
-					<h1>Class Grades Management</h1>
-					<p>Class: 10-B | Academic Year: 2023-2024 | Term: Fall</p>
-				</div>
-			</header>
-
 			<div className="main-container">
 				<div className="sidebar">
 					<div className="class-info">
