@@ -15,7 +15,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import TeacherEditModal from "./TeacherEditModal";
 
-// Import the hooks and API services (just like the original implementation)
 import useAuth from "../../../../hooks/useAuth";
 import teacherApi from "../../../../api/teacherApi";
 import subjectApi from "../../../../api/subjectApi";
@@ -74,9 +73,7 @@ const TeacherManagement = () => {
 		fetchData();
 	}, [token]);
 
-	// Extract unique departments from teachers for filtering
 	const uniqueDepartments = () => {
-		// Create a set of unique department IDs from assigned subjects
 		const departmentIds = new Set();
 
 		teachers.forEach((teacher) => {
@@ -95,9 +92,7 @@ const TeacherManagement = () => {
 			.filter(Boolean);
 	};
 
-	// Transform teacher data for the UI
 	const transformTeacherData = (teacher) => {
-		// Create a structure similar to what the v2 UI expects
 		const transformedSubjects = [];
 
 		if (teacher.assignedSubjects) {
@@ -105,8 +100,6 @@ const TeacherManagement = () => {
 				const subject = subjects.find((s) => s.id === assignment.subjectId);
 
 				if (subject) {
-					// Convert department IDs to class codes (in this example)
-					// We're using department IDs as a proxy for classes
 					const classes = assignment.departmentId.map((depId) => {
 						const department = departments.find((d) => d.id === depId);
 						return department ? department.departmentName : depId;
@@ -134,13 +127,11 @@ const TeacherManagement = () => {
 		};
 	};
 
-	// Filter and sort teachers
 	useEffect(() => {
 		if (teachers.length === 0) return;
 
 		let result = [...teachers].map(transformTeacherData);
 
-		// Apply search filter
 		if (searchTerm) {
 			result = result.filter((teacher) => {
 				const fullName = `${teacher.name}`.toLowerCase();
@@ -209,6 +200,7 @@ const TeacherManagement = () => {
 		filterAdmin,
 		sortBy,
 		sortDirection,
+		transformTeacherData,
 	]);
 
 	// Count total classes for a teacher
@@ -392,37 +384,6 @@ const TeacherManagement = () => {
 				<button className="add-teacher-btn" onClick={handleAddTeacher}>
 					<FontAwesomeIcon icon={faUserPlus} /> Add New Teacher
 				</button>
-			</div>
-
-			<div className="search-filter-container">
-				<div className="search-bar">
-					<FontAwesomeIcon icon={faSearch} className="search-icon" />
-					<input
-						type="text"
-						placeholder="Search teachers, subjects, or classes..."
-						value={searchTerm}
-						onChange={(e) => setSearchTerm(e.target.value)}
-					/>
-					{searchTerm && (
-						<button className="clear-search" onClick={() => setSearchTerm("")}>
-							<FontAwesomeIcon icon={faTimes} />
-						</button>
-					)}
-				</div>
-				<div className="filter-actions">
-					<button
-						className={`filter-toggle ${showFilters ? "active" : ""}`}
-						onClick={() => setShowFilters(!showFilters)}
-					>
-						<FontAwesomeIcon icon={faFilter} />
-						{showFilters ? "Hide Filters" : "Show Filters"}
-					</button>
-					{(searchTerm || filterDepartment || filterAdmin !== "all") && (
-						<button className="clear-filters" onClick={clearFilters}>
-							<FontAwesomeIcon icon={faTimes} /> Clear
-						</button>
-					)}
-				</div>
 			</div>
 
 			{showFilters && (

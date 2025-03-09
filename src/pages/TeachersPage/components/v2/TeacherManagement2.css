@@ -119,16 +119,6 @@ html {
 	box-shadow: var(--shadow-md);
 }
 
-/* Search and Filter Area */
-.search-filter-container {
-	padding: 20px 30px;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 16px;
-	border-bottom: 1px solid var(--border-color);
-	align-items: center;
-}
-
 .search-bar {
 	position: relative;
 	flex-grow: 1;
@@ -582,11 +572,6 @@ html {
 		gap: 16px;
 	}
 
-	.search-filter-container {
-		flex-direction: column;
-		align-items: stretch;
-	}
-
 	.advanced-filters {
 		flex-direction: column;
 	}
@@ -612,7 +597,6 @@ html {
 	}
 
 	.teacher-header,
-	.search-filter-container,
 	.advanced-filters {
 		padding: 16px 12px;
 	}
