@@ -34,6 +34,13 @@ const parentApi = {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 	},
+
+	getChildrenByParentId: async (parentId, token) => {
+		const response = await apiClient.get(`/Parent/${parentId}/children`, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		return response.data;
+	},
 };
 
 export default parentApi;
