@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, {
+	useEffect,
+	useMemo,
+	useState,
+	useCallback,
+	useRef,
+} from "react";
 import "./Grades.css";
 import { useAuth, useGrades, useClassTeacher } from "../../../hooks";
 
@@ -9,7 +15,7 @@ const Grades = () => {
 	// Use class teacher department ID
 	const departmentId = useClassTeacher();
 
-	// Hook to fetch grades - IMPORTANT: Keep this outside of any effects
+	// Hook to fetch grades
 	const { grades, loading, error, fetchGradesByDepartment } = useGrades(token);
 
 	// Selected subject
@@ -20,6 +26,13 @@ const Grades = () => {
 
 	// Flag to track if data was loaded at least once
 	const [initialLoadDone, setInitialLoadDone] = useState(false);
+
+	// Print mode state
+	const [printMode, setPrintMode] = useState(false);
+	const [studentToPrint, setStudentToPrint] = useState(null);
+
+	// Ref for print container
+	const printContainerRef = useRef(null);
 
 	// Fetch grades only once when the component mounts and tokens/department are available
 	useEffect(() => {
@@ -215,6 +228,78 @@ const Grades = () => {
 		setSelectedSubjectIndex(Number(e.target.value));
 	}, []);
 
+	// Print or export student grades
+	const printStudentGrades = useCallback(
+		(student) => {
+			if (!processedData.length || selectedSubjectIndex >= processedData.length)
+				return;
+
+			// Set print mode and student to print
+			setStudentToPrint(student);
+			setPrintMode(true);
+
+			// Use setTimeout to ensure the print view is rendered before printing
+			setTimeout(() => {
+				window.print();
+
+				// Exit print mode after printing
+				setTimeout(() => {
+					setPrintMode(false);
+					setStudentToPrint(null);
+				}, 500);
+			}, 300);
+		},
+		[processedData, selectedSubjectIndex]
+	);
+
+	// Calculate student's overall performance
+	const calculateStudentOverall = useCallback((student, subject) => {
+		let totalEarned = 0;
+		let totalPossible = 0;
+
+		// Calculate for each month
+		subject.monthlyData.forEach((monthData) => {
+			const monthKey = `${monthData.year}-${monthData.month}`;
+			const studentMonthGrades = student.monthlyGrades[monthKey] || {
+				smallTypes: {},
+				largeAssessments: {},
+			};
+
+			let monthEarned = 0;
+			let monthPossible = 0;
+
+			// Add small assessments
+			Object.entries(monthData.smallAssessmentsByType).forEach(
+				([type, typeGroup]) => {
+					const studentTypeGrade = studentMonthGrades.smallTypes[type] || 0;
+					monthEarned += studentTypeGrade;
+					monthPossible += typeGroup.pointsPossible;
+				}
+			);
+
+			// Add large assessments
+			monthData.largeAssessments.forEach((assess) => {
+				const studentAssessGrade =
+					studentMonthGrades.largeAssessments[assess.title];
+				if (studentAssessGrade !== undefined) {
+					monthEarned += studentAssessGrade;
+					monthPossible += assess.pointsPossible;
+				}
+			});
+
+			// Add to total
+			totalEarned += monthEarned;
+			totalPossible += monthPossible;
+		});
+
+		return {
+			earned: totalEarned,
+			possible: totalPossible,
+			percentage:
+				totalPossible > 0 ? (totalEarned / totalPossible) * 100 : null,
+		};
+	}, []);
+
 	// Determine if we should show loading state
 	const showLoading = loading && !grades.length;
 
@@ -246,6 +331,183 @@ const Grades = () => {
 	// Current subject
 	const currentSubject = processedData[selectedSubjectIndex];
 
+	// Print view for student grades
+	if (printMode && studentToPrint) {
+		const studentOverall = calculateStudentOverall(
+			studentToPrint,
+			currentSubject
+		);
+
+		return (
+			<div className="grade-sys-print-container" ref={printContainerRef}>
+				<div className="grade-sys-print-header">
+					<h1>Student Grade Report</h1>
+					<h2>
+						{studentToPrint.firstName} {studentToPrint.lastName}
+					</h2>
+					<div className="grade-sys-print-meta">
+						<p>
+							<strong>Subject:</strong> {currentSubject.subjectName}
+						</p>
+						<p>
+							<strong>Date:</strong> {new Date().toLocaleDateString()}
+						</p>
+					</div>
+				</div>
+
+				{/* Only show months with grades */}
+				{currentSubject.monthlyData
+					.filter((monthData) => {
+						const monthKey = `${monthData.year}-${monthData.month}`;
+						const studentMonthGrades = studentToPrint.monthlyGrades[
+							monthKey
+						] || { smallTypes: {}, largeAssessments: {} };
+						return (
+							Object.keys(studentMonthGrades.smallTypes).length > 0 ||
+							Object.keys(studentMonthGrades.largeAssessments).length > 0
+						);
+					})
+					.map((monthData) => {
+						const monthKey = `${monthData.year}-${monthData.month}`;
+						const studentMonthGrades = studentToPrint.monthlyGrades[
+							monthKey
+						] || { smallTypes: {}, largeAssessments: {} };
+
+						// Calculate month total
+						let monthEarned = 0;
+						let monthPossible = 0;
+
+						return (
+							<div className="grade-sys-print-month" key={monthKey}>
+								<h3>{monthData.displayName}</h3>
+								<table className="grade-sys-print-table">
+									<thead>
+										<tr>
+											<th>Assessment</th>
+											<th>Score</th>
+											<th>Possible</th>
+											<th>Percentage</th>
+										</tr>
+									</thead>
+									<tbody>
+										{/* Small assessments grouped by type */}
+										{Object.entries(monthData.smallAssessmentsByType).map(
+											([type, typeGroup]) => {
+												const typeGrade =
+													studentMonthGrades.smallTypes[type] || 0;
+												monthEarned += typeGrade;
+												monthPossible += typeGroup.pointsPossible;
+
+												const typePercentage =
+													typeGroup.pointsPossible > 0
+														? (typeGrade / typeGroup.pointsPossible) * 100
+														: null;
+
+												return (
+													<tr key={type}>
+														<td>{type}</td>
+														<td>{typeGrade.toFixed(1)}</td>
+														<td>{typeGroup.pointsPossible.toFixed(1)}</td>
+														<td>
+															{typePercentage !== null
+																? `${typePercentage.toFixed(1)}%`
+																: "-"}
+														</td>
+													</tr>
+												);
+											}
+										)}
+
+										{/* Large assessments individually */}
+										{monthData.largeAssessments.map((assess) => {
+											const grade =
+												studentMonthGrades.largeAssessments[assess.title];
+											const hasGrade = grade !== undefined;
+
+											if (hasGrade) {
+												monthEarned += grade;
+												monthPossible += assess.pointsPossible;
+
+												const assessPercentage =
+													(grade / assess.pointsPossible) * 100;
+
+												return (
+													<tr key={assess.assessmentId}>
+														<td>
+															{assess.title} ({assess.type})
+														</td>
+														<td>{grade.toFixed(1)}</td>
+														<td>{assess.pointsPossible.toFixed(1)}</td>
+														<td>{assessPercentage.toFixed(1)}%</td>
+													</tr>
+												);
+											}
+
+											return null;
+										})}
+
+										{/* Month total */}
+										{monthPossible > 0 && (
+											<tr className="grade-sys-print-total">
+												<td>
+													<strong>Month Total</strong>
+												</td>
+												<td>
+													<strong>{monthEarned.toFixed(1)}</strong>
+												</td>
+												<td>
+													<strong>{monthPossible.toFixed(1)}</strong>
+												</td>
+												<td>
+													<strong>
+														{((monthEarned / monthPossible) * 100).toFixed(1)}%
+													</strong>
+												</td>
+											</tr>
+										)}
+									</tbody>
+								</table>
+							</div>
+						);
+					})}
+
+				{/* Final summary */}
+				{studentOverall.possible > 0 && (
+					<div className="grade-sys-print-summary">
+						<h3>Overall Performance</h3>
+						<table className="grade-sys-print-table">
+							<thead>
+								<tr>
+									<th>Total Earned</th>
+									<th>Total Possible</th>
+									<th>Final Percentage</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr className="grade-sys-print-final">
+									<td>
+										<strong>{studentOverall.earned.toFixed(1)}</strong>
+									</td>
+									<td>
+										<strong>{studentOverall.possible.toFixed(1)}</strong>
+									</td>
+									<td>
+										<strong>
+											{studentOverall.percentage !== null
+												? `${studentOverall.percentage.toFixed(1)}%`
+												: "-"}
+										</strong>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				)}
+			</div>
+		);
+	}
+
+	// Normal view
 	return (
 		<div className="grade-sys-wrapper">
 			<div className="grade-sys-header">
@@ -442,7 +704,7 @@ const Grades = () => {
 				</div>
 			))}
 
-			{/* Overall summary section */}
+			{/* Overall summary section with print option */}
 			<div className="grade-sys-summary-card">
 				<div className="grade-sys-summary-header">
 					<h3>Overall Performance</h3>
@@ -464,15 +726,17 @@ const Grades = () => {
 									</th>
 								))}
 								<th className="grade-sys-final-col">Final</th>
+								<th className="grade-sys-export-col">Export</th>
 							</tr>
 						</thead>
 						<tbody>
 							{filteredStudents.map((student) => {
-								// Calculate overall score
-								let totalEarned = 0;
-								let totalPossible = 0;
+								const studentOverall = calculateStudentOverall(
+									student,
+									currentSubject
+								);
 
-								// Calculate for each month
+								// Calculate for each month for the visualization
 								const monthlyScores = currentSubject.monthlyData.map(
 									(monthData) => {
 										const monthKey = `${monthData.year}-${monthData.month}`;
@@ -503,10 +767,6 @@ const Grades = () => {
 											}
 										});
 
-										// Add to total
-										totalEarned += monthEarned;
-										totalPossible += monthPossible;
-
 										return {
 											earned: monthEarned,
 											possible: monthPossible,
@@ -517,11 +777,6 @@ const Grades = () => {
 										};
 									}
 								);
-
-								const finalPercentage =
-									totalPossible > 0
-										? (totalEarned / totalPossible) * 100
-										: null;
 
 								return (
 									<tr key={student.studentId}>
@@ -557,18 +812,31 @@ const Grades = () => {
 										})}
 
 										<td className="grade-sys-final-grade">
-											{finalPercentage !== null ? (
+											{studentOverall.percentage !== null ? (
 												<div className="grade-sys-final-score">
 													<div className="grade-sys-final-percent">
-														{finalPercentage.toFixed(1)}%
+														{studentOverall.percentage.toFixed(1)}%
 													</div>
 													<div className="grade-sys-final-raw">
-														{totalEarned.toFixed(1)}/{totalPossible.toFixed(1)}
+														{studentOverall.earned.toFixed(1)}/
+														{studentOverall.possible.toFixed(1)}
 													</div>
 												</div>
 											) : (
 												<span className="grade-sys-no-data">No Data</span>
 											)}
+										</td>
+
+										{/* Print button */}
+										<td className="grade-sys-export-cell">
+											<button
+												className="grade-sys-export-btn"
+												onClick={() => printStudentGrades(student)}
+												title="Print Report"
+											>
+												<span className="grade-sys-export-icon">🖨️</span>
+												Print
+											</button>
 										</td>
 									</tr>
 								);
