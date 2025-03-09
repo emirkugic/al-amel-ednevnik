@@ -262,6 +262,21 @@ const TeacherManagement = () => {
 	// Handle saving teacher data
 	const handleSaveTeacher = async (teacherData) => {
 		try {
+			// Handle delete case (when _delete flag is set)
+			if (teacherData._delete && teacherData.id) {
+				// Delete the teacher
+				await teacherApi.deleteTeacher(teacherData.id, token);
+
+				// Update the state by removing the deleted teacher
+				setTeachers((prevTeachers) =>
+					prevTeachers.filter((t) => t.id !== teacherData.id)
+				);
+
+				// Close the modal
+				setIsModalOpen(false);
+				return;
+			}
+
 			// Format teacher data for the API - only include provided data
 			const apiTeacherData = {
 				firstName: teacherData.firstName,

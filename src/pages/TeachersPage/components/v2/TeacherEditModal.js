@@ -13,6 +13,7 @@ import {
 	faChevronRight,
 	faToggleOn,
 	faToggleOff,
+	faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
 const TeacherEditModal = ({
@@ -395,23 +396,44 @@ const TeacherEditModal = ({
 
 										<div className="form-field admin-toggle-container">
 											<label>Administrator Access</label>
-											<div className="toggle-switch-container">
-												<label className="toggle-switch">
-													<input
-														type="checkbox"
-														checked={teacherData.isAdmin}
-														onChange={() =>
-															setTeacherData((prev) => ({
-																...prev,
-																isAdmin: !prev.isAdmin,
-															}))
-														}
-													/>
-													<span className="toggle-slider"></span>
-												</label>
-												<span className="toggle-label">
-													{teacherData.isAdmin ? "Admin" : "Teacher"}
-												</span>
+											<div className="admin-actions-row">
+												<div className="toggle-switch-container">
+													<label className="toggle-switch">
+														<input
+															type="checkbox"
+															checked={teacherData.isAdmin}
+															onChange={() =>
+																setTeacherData((prev) => ({
+																	...prev,
+																	isAdmin: !prev.isAdmin,
+																}))
+															}
+														/>
+														<span className="toggle-slider"></span>
+													</label>
+													<span className="toggle-label">
+														{teacherData.isAdmin ? "Admin" : "Teacher"}
+													</span>
+												</div>
+
+												{teacher && (
+													<button
+														type="button"
+														className="delete-teacher-btn"
+														onClick={() => {
+															if (
+																window.confirm(
+																	`Are you sure you want to delete ${teacher.firstName} ${teacher.lastName}? This action cannot be undone.`
+																)
+															) {
+																onClose();
+																onSave({ id: teacher.id, _delete: true });
+															}
+														}}
+													>
+														<FontAwesomeIcon icon={faTrash} /> Delete
+													</button>
+												)}
 											</div>
 										</div>
 									</div>

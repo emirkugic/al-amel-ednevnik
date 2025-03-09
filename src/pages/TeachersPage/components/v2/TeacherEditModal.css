@@ -13,9 +13,6 @@
 	--danger-color: #f44336;
 	--warning-color: #ff9800;
 	--admin-color: #9c27b0;
-	--sidebar-width: 240px;
-	--header-height: 64px;
-	--footer-height: 72px;
 	--shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
 	--shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
 	--shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
@@ -23,6 +20,9 @@
 	--radius-md: 8px;
 	--radius-lg: 12px;
 	--transition: all 0.2s ease-in-out;
+	--sidebar-width: 240px;
+	--header-height: 64px;
+	--footer-height: 72px;
 }
 
 /* Modal backdrop */
@@ -84,6 +84,7 @@
 	padding: 0 24px;
 	height: var(--header-height);
 	border-bottom: 1px solid var(--border-color);
+	background-color: var(--white);
 }
 
 .modal-header h2 {
@@ -150,6 +151,7 @@
 	background-color: var(--white);
 	color: var(--primary-color);
 	font-weight: 500;
+	box-shadow: inset 3px 0 0 var(--primary-color);
 }
 
 .nav-icon {
@@ -176,6 +178,7 @@
 	padding-right: 24px;
 	display: flex;
 	flex-direction: column;
+	background-color: var(--white);
 }
 
 /* Form styling */
@@ -239,11 +242,20 @@
 	flex-direction: column;
 }
 
+.admin-actions-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 5px;
+	transform: translateY(-20%);
+}
+
 .toggle-switch-container {
 	display: flex;
 	align-items: center;
 	gap: 12px;
 	margin-top: 5px;
+	/* transform: translateY(-20%); */
 }
 
 .toggle-switch {
@@ -300,6 +312,28 @@
 	font-weight: 500;
 }
 
+/* Delete teacher button */
+.delete-teacher-btn {
+	background-color: var(--danger-color);
+	color: white;
+	border: none;
+	border-radius: var(--radius-sm);
+	padding: 8px 16px;
+	font-size: 13px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	transition: var(--transition);
+	box-shadow: var(--shadow-sm);
+}
+
+.delete-teacher-btn:hover {
+	background-color: #d32f2f;
+	box-shadow: 0 2px 8px rgba(244, 67, 54, 0.4);
+}
+
+/* Password input */
 .password-input {
 	position: relative;
 }
@@ -308,7 +342,7 @@
 	position: absolute;
 	right: 12px;
 	top: 50%;
-	transform: translateY(-55%);
+	transform: translateY(-60%);
 	background: none;
 	border: none;
 	color: var(--light-text);
@@ -319,6 +353,10 @@
 	justify-content: center;
 	width: 36px;
 	height: 36px;
+}
+
+.toggle-password:hover {
+	color: var(--primary-color);
 }
 
 /* Subject tab styling */
