@@ -118,11 +118,11 @@ const ClassGradesPage = () => {
 
 	// Get color based on percentage for visual feedback
 	const getGradeColor = (percentage) => {
-		if (percentage >= 90) return "var(--grade-a)";
-		if (percentage >= 80) return "var(--grade-b)";
-		if (percentage >= 70) return "var(--grade-c)";
-		if (percentage >= 60) return "var(--grade-d)";
-		return "var(--grade-f)";
+		if (percentage >= 90) return "var(--cgp-grade-a)";
+		if (percentage >= 80) return "var(--cgp-grade-b)";
+		if (percentage >= 70) return "var(--cgp-grade-c)";
+		if (percentage >= 60) return "var(--cgp-grade-d)";
+		return "var(--cgp-grade-f)";
 	};
 
 	// Render content by subject
@@ -133,36 +133,36 @@ const ClassGradesPage = () => {
 		);
 
 		return (
-			<div className="grades-panel">
-				<div className="panel-header">
+			<div className="cgp-grades-panel">
+				<div className="cgp-panel-header">
 					<h3>{subject.name} Grades</h3>
-					<div className="panel-actions">
-						<button className="action-button">
+					<div className="cgp-panel-actions">
+						<button className="cgp-action-button">
 							<FontAwesomeIcon icon={faFileExport} />
 							<span>Export</span>
 						</button>
-						<button className="action-button">
+						<button className="cgp-action-button">
 							<FontAwesomeIcon icon={faChartBar} />
 							<span>Analytics</span>
 						</button>
 					</div>
 				</div>
 
-				<div className="table-container">
-					<table className="grades-table">
+				<div className="cgp-table-container">
+					<table className="cgp-grades-table">
 						<thead>
 							<tr>
-								<th className="student-col">Student</th>
+								<th className="cgp-student-col">Student</th>
 								{subjectAssessments.map((assessment) => (
-									<th key={assessment.id} className="assessment-col">
+									<th key={assessment.id} className="cgp-assessment-col">
 										{assessment.name}
-										<span className="max-points">
+										<span className="cgp-max-points">
 											Max: {assessment.maxPoints} pts
 										</span>
 									</th>
 								))}
-								<th className="total-col">Total</th>
-								<th className="grade-col">Grade</th>
+								<th className="cgp-total-col">Total</th>
+								<th className="cgp-grade-col">Grade</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -173,7 +173,7 @@ const ClassGradesPage = () => {
 								);
 								return (
 									<tr key={student.id}>
-										<td className="student-name">{student.name}</td>
+										<td className="cgp-student-name">{student.name}</td>
 										{subjectAssessments.map((assessment) => {
 											const grade = grades.find(
 												(g) =>
@@ -186,12 +186,12 @@ const ClassGradesPage = () => {
 											);
 
 											return (
-												<td key={assessment.id} className="assessment-cell">
-													<div className="points">
+												<td key={assessment.id} className="cgp-assessment-cell">
+													<div className="cgp-points">
 														{points}/{assessment.maxPoints}
 													</div>
 													<div
-														className="progress-bar"
+														className="cgp-progress-bar"
 														style={{
 															width: `${percentage}%`,
 															backgroundColor: getGradeColor(percentage),
@@ -200,7 +200,7 @@ const ClassGradesPage = () => {
 												</td>
 											);
 										})}
-										<td className="total-cell">
+										<td className="cgp-total-cell">
 											<strong>
 												{calculateTotalPoints(student.id, selectedSubject)}/
 												{calculateMaxPoints(selectedSubject)}
@@ -208,7 +208,7 @@ const ClassGradesPage = () => {
 										</td>
 										<td>
 											<span
-												className="grade-pill"
+												className="cgp-grade-pill"
 												style={{ backgroundColor: getGradeColor(percentage) }}
 											>
 												{getGradeLetter(percentage)} ({percentage}%)
@@ -221,40 +221,40 @@ const ClassGradesPage = () => {
 					</table>
 				</div>
 
-				<div className="panel-footer">
-					<div className="grade-legend">
-						<div className="legend-item">
+				<div className="cgp-panel-footer">
+					<div className="cgp-grade-legend">
+						<div className="cgp-legend-item">
 							<span
-								className="legend-color"
-								style={{ backgroundColor: "var(--grade-a)" }}
+								className="cgp-legend-color"
+								style={{ backgroundColor: "var(--cgp-grade-a)" }}
 							></span>
 							<span>A (90-100%)</span>
 						</div>
-						<div className="legend-item">
+						<div className="cgp-legend-item">
 							<span
-								className="legend-color"
-								style={{ backgroundColor: "var(--grade-b)" }}
+								className="cgp-legend-color"
+								style={{ backgroundColor: "var(--cgp-grade-b)" }}
 							></span>
 							<span>B (80-89%)</span>
 						</div>
-						<div className="legend-item">
+						<div className="cgp-legend-item">
 							<span
-								className="legend-color"
-								style={{ backgroundColor: "var(--grade-c)" }}
+								className="cgp-legend-color"
+								style={{ backgroundColor: "var(--cgp-grade-c)" }}
 							></span>
 							<span>C (70-79%)</span>
 						</div>
-						<div className="legend-item">
+						<div className="cgp-legend-item">
 							<span
-								className="legend-color"
-								style={{ backgroundColor: "var(--grade-d)" }}
+								className="cgp-legend-color"
+								style={{ backgroundColor: "var(--cgp-grade-d)" }}
 							></span>
 							<span>D (60-69%)</span>
 						</div>
-						<div className="legend-item">
+						<div className="cgp-legend-item">
 							<span
-								className="legend-color"
-								style={{ backgroundColor: "var(--grade-f)" }}
+								className="cgp-legend-color"
+								style={{ backgroundColor: "var(--cgp-grade-f)" }}
 							></span>
 							<span>F (0-59%)</span>
 						</div>
@@ -269,23 +269,23 @@ const ClassGradesPage = () => {
 		const student = students.find((s) => s.id === selectedStudent);
 
 		return (
-			<div className="grades-panel">
-				<div className="panel-header">
+			<div className="cgp-grades-panel">
+				<div className="cgp-panel-header">
 					<h3>{student.name}'s Grades</h3>
-					<div className="panel-actions">
-						<button className="action-button">
+					<div className="cgp-panel-actions">
+						<button className="cgp-action-button">
 							<FontAwesomeIcon icon={faFileExport} />
 							<span>Export</span>
 						</button>
-						<button className="action-button">
+						<button className="cgp-action-button">
 							<FontAwesomeIcon icon={faEye} />
 							<span>Student View</span>
 						</button>
 					</div>
 				</div>
 
-				<div className="table-container">
-					<table className="grades-table student-grades-table">
+				<div className="cgp-table-container">
+					<table className="cgp-grades-table cgp-student-grades-table">
 						<thead>
 							<tr>
 								<th>Subject</th>
@@ -306,9 +306,9 @@ const ClassGradesPage = () => {
 
 								return (
 									<tr key={subject.id}>
-										<td className="subject-name">{subject.name}</td>
+										<td className="cgp-subject-name">{subject.name}</td>
 										<td>
-											<div className="assessment-list">
+											<div className="cgp-assessment-list">
 												{subjectAssessments.map((assessment) => {
 													const grade = grades.find(
 														(g) =>
@@ -323,19 +323,19 @@ const ClassGradesPage = () => {
 													return (
 														<div
 															key={assessment.id}
-															className="assessment-item"
+															className="cgp-assessment-item"
 														>
-															<div className="assessment-details">
-																<span className="assessment-name">
+															<div className="cgp-assessment-details">
+																<span className="cgp-assessment-name">
 																	{assessment.name}
 																</span>
-																<span className="assessment-grade">
+																<span className="cgp-assessment-grade">
 																	{points}/{assessment.maxPoints}
 																</span>
 															</div>
-															<div className="assessment-progress-container">
+															<div className="cgp-assessment-progress-container">
 																<div
-																	className="assessment-progress"
+																	className="cgp-assessment-progress"
 																	style={{
 																		width: `${assessmentPercentage}%`,
 																		backgroundColor:
@@ -348,7 +348,7 @@ const ClassGradesPage = () => {
 												})}
 											</div>
 										</td>
-										<td className="total-cell">
+										<td className="cgp-total-cell">
 											<strong>
 												{calculateTotalPoints(selectedStudent, subject.id)}/
 												{calculateMaxPoints(subject.id)}
@@ -356,7 +356,7 @@ const ClassGradesPage = () => {
 										</td>
 										<td>
 											<span
-												className="grade-pill"
+												className="cgp-grade-pill"
 												style={{ backgroundColor: getGradeColor(percentage) }}
 											>
 												{getGradeLetter(percentage)} ({percentage}%)
@@ -411,35 +411,41 @@ const ClassGradesPage = () => {
 
 		return (
 			// summary page
-			<div className="summary-view">
-				<div className="summary-section">
+			<div className="cgp-summary-view">
+				<div className="cgp-summary-section">
 					<h3>Subject Performance</h3>
-					<div className="subject-performance">
+					<div className="cgp-subject-performance">
 						{subjectAverages.map((subject) => (
-							<div key={subject.id} className="performance-card">
-								<div className="card-header">
+							<div key={subject.id} className="cgp-performance-card">
+								<div className="cgp-card-header">
 									<h4>{subject.name}</h4>
 								</div>
-								<div className="card-content">
+								<div className="cgp-card-content">
 									<div
-										className="grade-circle"
+										className="cgp-grade-circle"
 										style={{
 											background: `conic-gradient(${getGradeColor(
 												subject.average
 											)} ${subject.average}%, #e0e0e0 0)`,
 										}}
 									>
-										<span className="grade-text">{subject.letterGrade}</span>
-										<span className="grade-percentage">{subject.average}%</span>
+										<span className="cgp-grade-text">
+											{subject.letterGrade}
+										</span>
+										<span className="cgp-grade-percentage">
+											{subject.average}%
+										</span>
 									</div>
-									<div className="performance-details">
-										<div className="detail-item">
-											<span className="detail-label">Class Average</span>
-											<span className="detail-value">{subject.average}%</span>
+									<div className="cgp-performance-details">
+										<div className="cgp-detail-item">
+											<span className="cgp-detail-label">Class Average</span>
+											<span className="cgp-detail-value">
+												{subject.average}%
+											</span>
 										</div>
-										<div className="detail-item">
-											<span className="detail-label">Highest Score</span>
-											<span className="detail-value">
+										<div className="cgp-detail-item">
+											<span className="cgp-detail-label">Highest Score</span>
+											<span className="cgp-detail-value">
 												{Math.max(
 													...students.map((s) =>
 														calculatePercentage(s.id, subject.id)
@@ -448,9 +454,9 @@ const ClassGradesPage = () => {
 												%
 											</span>
 										</div>
-										<div className="detail-item">
-											<span className="detail-label">Lowest Score</span>
-											<span className="detail-value">
+										<div className="cgp-detail-item">
+											<span className="cgp-detail-label">Lowest Score</span>
+											<span className="cgp-detail-value">
 												{Math.min(
 													...students.map((s) =>
 														calculatePercentage(s.id, subject.id)
@@ -466,21 +472,21 @@ const ClassGradesPage = () => {
 					</div>
 				</div>
 
-				<div className="summary-columns">
-					<div className="summary-column">
+				<div className="cgp-summary-columns">
+					<div className="cgp-summary-column">
 						<h3>Top Performers</h3>
-						<div className="performers-list">
+						<div className="cgp-performers-list">
 							{topPerformers.map((student, index) => (
-								<div key={student.id} className="performer-card">
-									<div className="performer-rank">{index + 1}</div>
-									<div className="performer-info">
-										<div className="performer-name">{student.name}</div>
-										<div className="performer-grade">
+								<div key={student.id} className="cgp-performer-card">
+									<div className="cgp-performer-rank">{index + 1}</div>
+									<div className="cgp-performer-info">
+										<div className="cgp-performer-name">{student.name}</div>
+										<div className="cgp-performer-grade">
 											{student.average}% Average
 										</div>
 									</div>
 									<div
-										className="performer-grade-pill"
+										className="cgp-performer-grade-pill"
 										style={{ backgroundColor: getGradeColor(student.average) }}
 									>
 										{getGradeLetter(student.average)}
@@ -490,19 +496,19 @@ const ClassGradesPage = () => {
 						</div>
 					</div>
 
-					<div className="summary-column">
+					<div className="cgp-summary-column">
 						<h3>Needs Improvement</h3>
-						<div className="performers-list">
+						<div className="cgp-performers-list">
 							{lowPerformers.map((student, index) => (
-								<div key={student.id} className="performer-card">
-									<div className="performer-info">
-										<div className="performer-name">{student.name}</div>
-										<div className="performer-grade">
+								<div key={student.id} className="cgp-performer-card">
+									<div className="cgp-performer-info">
+										<div className="cgp-performer-name">{student.name}</div>
+										<div className="cgp-performer-grade">
 											{student.average}% Average
 										</div>
 									</div>
 									<div
-										className="performer-grade-pill"
+										className="cgp-performer-grade-pill"
 										style={{ backgroundColor: getGradeColor(student.average) }}
 									>
 										{getGradeLetter(student.average)}
@@ -518,77 +524,88 @@ const ClassGradesPage = () => {
 
 	return (
 		// left sidebar
-		<div className="class-grades-page">
-			<div className="main-container">
-				<div className="sidebar">
-					<div className="class-info">
+		<div className="cgp-class-grades-page">
+			<div className="cgp-main-container">
+				<div className="cgp-sidebar">
+					<div className="cgp-class-info">
 						<h2>Class 10-B</h2>
-						<div className="class-meta">
-							<div className="meta-item">
-								<span className="meta-label">Students</span>
-								<span className="meta-value">{students.length}</span>
+						<div className="cgp-class-meta">
+							<div className="cgp-meta-item">
+								<span className="cgp-meta-label">Students</span>
+								<span className="cgp-meta-value">{students.length}</span>
 							</div>
-							<div className="meta-item">
-								<span className="meta-label">Subjects</span>
-								<span className="meta-value">{subjects.length}</span>
+							<div className="cgp-meta-item">
+								<span className="cgp-meta-label">Subjects</span>
+								<span className="cgp-meta-value">{subjects.length}</span>
 							</div>
 						</div>
 					</div>
 
-					<nav className="tab-navigation">
+					<nav className="cgp-tab-navigation">
 						<button
-							className={`nav-item ${
+							className={`cgp-nav-item ${
 								activeTab === "bySubject" ? "active" : ""
 							}`}
 							onClick={() => setActiveTab("bySubject")}
 						>
-							<span className="nav-icon">
+							<span className="cgp-nav-icon">
 								<FontAwesomeIcon icon={faGraduationCap} />
 							</span>
-							<span className="nav-text">View by Subject</span>
+							<span className="cgp-nav-text">View by Subject</span>
 							{activeTab === "bySubject" && (
-								<FontAwesomeIcon icon={faChevronRight} className="indicator" />
+								<FontAwesomeIcon
+									icon={faChevronRight}
+									className="cgp-indicator"
+								/>
 							)}
 						</button>
 
 						<button
-							className={`nav-item ${
+							className={`cgp-nav-item ${
 								activeTab === "byStudent" ? "active" : ""
 							}`}
 							onClick={() => setActiveTab("byStudent")}
 						>
-							<span className="nav-icon">
+							<span className="cgp-nav-icon">
 								<FontAwesomeIcon icon={faUser} />
 							</span>
-							<span className="nav-text">View by Student</span>
+							<span className="cgp-nav-text">View by Student</span>
 							{activeTab === "byStudent" && (
-								<FontAwesomeIcon icon={faChevronRight} className="indicator" />
+								<FontAwesomeIcon
+									icon={faChevronRight}
+									className="cgp-indicator"
+								/>
 							)}
 						</button>
 
 						<button
-							className={`nav-item ${activeTab === "summary" ? "active" : ""}`}
+							className={`cgp-nav-item ${
+								activeTab === "summary" ? "active" : ""
+							}`}
 							onClick={() => setActiveTab("summary")}
 						>
-							<span className="nav-icon">
+							<span className="cgp-nav-icon">
 								<FontAwesomeIcon icon={faChartBar} />
 							</span>
-							<span className="nav-text">Class Summary</span>
+							<span className="cgp-nav-text">Class Summary</span>
 							{activeTab === "summary" && (
-								<FontAwesomeIcon icon={faChevronRight} className="indicator" />
+								<FontAwesomeIcon
+									icon={faChevronRight}
+									className="cgp-indicator"
+								/>
 							)}
 						</button>
 					</nav>
 
-					<div className="filter-section">
+					<div className="cgp-filter-section">
 						<h3>
-							<FontAwesomeIcon icon={faFilter} className="filter-icon" />
+							<FontAwesomeIcon icon={faFilter} className="cgp-filter-icon" />
 							Filters
 						</h3>
 
 						{activeTab === "bySubject" && (
-							<div className="filter-content">
-								<div className="filter-group">
+							<div className="cgp-filter-content">
+								<div className="cgp-filter-group">
 									<label htmlFor="subject-select">Subject</label>
 									<select
 										id="subject-select"
@@ -603,9 +620,9 @@ const ClassGradesPage = () => {
 									</select>
 								</div>
 
-								<div className="filter-group">
+								<div className="cgp-filter-group">
 									<label htmlFor="student-search">Search Student</label>
-									<div className="search-input">
+									<div className="cgp-search-input">
 										<input
 											type="text"
 											id="student-search"
@@ -613,15 +630,18 @@ const ClassGradesPage = () => {
 											value={searchQuery}
 											onChange={(e) => setSearchQuery(e.target.value)}
 										/>
-										<FontAwesomeIcon icon={faSearch} className="search-icon" />
+										<FontAwesomeIcon
+											icon={faSearch}
+											className="cgp-search-icon"
+										/>
 									</div>
 								</div>
 							</div>
 						)}
 
 						{activeTab === "byStudent" && (
-							<div className="filter-content">
-								<div className="filter-group">
+							<div className="cgp-filter-content">
+								<div className="cgp-filter-group">
 									<label htmlFor="student-select">Student</label>
 									<select
 										id="student-select"
@@ -639,20 +659,20 @@ const ClassGradesPage = () => {
 						)}
 					</div>
 
-					<div className="info-card">
-						<div className="info-card-header">
-							<FontAwesomeIcon icon={faInfoCircle} className="info-icon" />
+					<div className="cgp-info-card">
+						<div className="cgp-info-card-header">
+							<FontAwesomeIcon icon={faInfoCircle} className="cgp-info-icon" />
 							<h3>Need Help?</h3>
 						</div>
 						<p>
 							Use the class grade management system to view, analyze, and export
 							student performance data.
 						</p>
-						<button className="help-button">View Tutorial</button>
+						<button className="cgp-help-button">View Tutorial</button>
 					</div>
 				</div>
 
-				<div className="content-area">
+				<div className="cgp-content-area">
 					{activeTab === "bySubject" && renderSubjectView()}
 					{activeTab === "byStudent" && renderStudentView()}
 					{activeTab === "summary" && renderSummaryView()}
