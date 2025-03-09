@@ -25,25 +25,27 @@ const DepartmentPage = () => {
 	const renderGradesTab = () => <Grades />;
 
 	return (
-		<div className="dp-container">
-			<h1 className="dp-header">Department Management</h1>
-
-			<div className="dp-tabs-row">
+		<div className="grade-sys-container">
+			<div className="grade-sys-tabs">
 				<button
-					className={`dp-tab-btn ${tab === "grades" ? "active" : ""}`}
+					className={`grade-sys-tab ${
+						tab === "grades" ? "grade-sys-active" : ""
+					}`}
 					onClick={() => setTab("grades")}
 				>
 					Grades
 				</button>
 				<button
-					className={`dp-tab-btn ${tab === "absences" ? "active" : ""}`}
+					className={`grade-sys-tab ${
+						tab === "absences" ? "grade-sys-active" : ""
+					}`}
 					onClick={() => setTab("absences")}
 				>
 					Absences
 				</button>
 			</div>
 
-			<div className="dp-tab-content">
+			<div className="grade-sys-content">
 				{tab === "absences" && renderAbsencesTab()}
 				{tab === "grades" && renderGradesTab()}
 			</div>
