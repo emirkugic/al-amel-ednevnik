@@ -405,9 +405,24 @@
 
 .grade-sys-print-meta {
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	font-size: 14px;
 	color: #64748b;
+}
+
+.grade-sys-print-subject {
+	margin-bottom: 30px;
+	page-break-inside: avoid;
+}
+
+.grade-sys-print-subject-title {
+	font-size: 18px;
+	margin: 0 0 15px 0;
+	color: #1e293b;
+	background-color: #f8fafc;
+	padding: 8px 12px;
+	border-radius: 4px;
+	border-left: 4px solid #3b82f6;
 }
 
 .grade-sys-print-month {
@@ -415,7 +430,7 @@
 }
 
 .grade-sys-print-month h3 {
-	font-size: 18px;
+	font-size: 16px;
 	margin: 0 0 10px 0;
 	color: #1e293b;
 	padding-bottom: 5px;
@@ -426,7 +441,7 @@
 	width: 100%;
 	border-collapse: collapse;
 	margin-bottom: 20px;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 .grade-sys-print-table th {
@@ -449,24 +464,39 @@
 
 .grade-sys-print-total td {
 	background-color: #f1f5f9;
+	font-weight: 500;
+}
+
+.grade-sys-print-subject-summary {
+	margin: 15px 0 25px 0;
+	border-top: 1px dashed #e2e8f0;
+	padding-top: 15px;
+}
+
+.grade-sys-print-subject-final td {
+	font-weight: 600;
+	background-color: #eff6ff;
 }
 
 .grade-sys-print-summary {
-	margin-top: 30px;
+	margin-top: 40px;
 	margin-bottom: 20px;
+	page-break-inside: avoid;
+	border-top: 2px solid #e2e8f0;
+	padding-top: 20px;
 }
 
-.grade-sys-print-summary h3 {
+.grade-sys-print-summary h2 {
 	font-size: 18px;
-	margin: 0 0 10px 0;
+	margin: 0 0 15px 0;
 	color: #1e293b;
-	padding-bottom: 5px;
-	border-bottom: 1px solid #e2e8f0;
+	text-align: center;
 }
 
 .grade-sys-print-final td {
 	background-color: #eff6ff;
-	font-size: 16px;
+	font-size: 14px;
+	text-align: center;
 }
 
 .grade-sys-print-footer {
@@ -494,11 +524,16 @@
 		left: 0;
 		top: 0;
 		width: 100%;
-		padding: 0;
+		padding: 15px;
 	}
 
-	.grade-sys-print-table {
-		page-break-inside: avoid;
+	/* Ensure proper page breaks */
+	.grade-sys-print-subject {
+		page-break-after: auto;
+	}
+
+	.grade-sys-print-subject-title {
+		page-break-after: avoid;
 	}
 
 	.grade-sys-print-month {
