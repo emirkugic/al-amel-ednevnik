@@ -35,6 +35,7 @@ import {
 	SubjectsPage,
 	ParentsPage,
 	Assessments, // temp
+	ClassManagement, //WIP
 } from "./pages";
 
 import "./App.css";
@@ -67,6 +68,8 @@ const AppContent = () => {
 						<Route path="/teachers2" element={<TeacherManagement />} />{" "}
 						<Route path="/assessments" element={<Assessments />} />
 						<Route path="/grades" element={<ClassGradesPage />} />
+						{/* WIP */}
+						<Route path="/classes2" element={<ClassManagement />} />
 					</Route>
 				</Routes>
 			</div>

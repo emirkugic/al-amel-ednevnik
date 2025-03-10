@@ -8,3 +8,4 @@ export { default as "LoginPage" } from "./LoginPage/LoginPage.js";
 export { default as "SubjectsPage" } from "./SubjectsPage/SubjectsPage.js";
 export { default as "ParentsPage" } from "./ParentsPage/ParentsPage.js";
 export { default as "Assessments" } from "./Assessments/Assessments.js";
+export { default as "ClassManagement" } from "./ClassManagementPage/ClassManagement.js";
