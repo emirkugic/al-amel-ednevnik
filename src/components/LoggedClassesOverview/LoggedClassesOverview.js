@@ -167,8 +167,8 @@ const LoggedClassesOverview = ({ departmentId }) => {
 	return (
 		<div className="logged-classes-overview">
 			<h2>
-				Class Logs for {selectedSubjectName || "Loading..."} -{" "}
-				{departmentName || "Loading..."}. razred
+				{selectedSubjectName || "Loading..."} - {departmentName || "Loading..."}
+				. razred
 			</h2>
 			<p>Track and manage your class sessions</p>
 			{loading && <p>Loading class logs...</p>}
