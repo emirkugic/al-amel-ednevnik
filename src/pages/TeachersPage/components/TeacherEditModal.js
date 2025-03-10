@@ -297,68 +297,68 @@ const TeacherEditModal = ({
 	if (!isOpen) return null;
 
 	return (
-		<div className="modal-backdrop">
-			<div className="modal-container">
-				<header className="modal-header">
+		<div className="tem-modal-backdrop">
+			<div className="tem-modal-container">
+				<header className="tem-modal-header">
 					<h2>
 						{teacher
 							? `${teacher.firstName} ${teacher.lastName}`
 							: "Add New Teacher"}
 					</h2>
-					<button className="close-button" onClick={onClose}>
+					<button className="tem-close-button" onClick={onClose}>
 						<FontAwesomeIcon icon={faTimes} />
 					</button>
 				</header>
 
-				<div className="modal-body">
-					<div className="sidebar">
-						<nav className="tab-navigation">
+				<div className="tem-modal-body">
+					<div className="tem-sidebar">
+						<nav className="tem-tab-navigation">
 							<button
-								className={`nav-item ${
-									activeTab === "profile" ? "active" : ""
+								className={`tem-nav-item ${
+									activeTab === "profile" ? "tem-active" : ""
 								}`}
 								onClick={() => setActiveTab("profile")}
 							>
-								<span className="nav-icon">
+								<span className="tem-nav-icon">
 									<FontAwesomeIcon icon={faUser} />
 								</span>
-								<span className="nav-text">Profile</span>
+								<span className="tem-nav-text">Profile</span>
 								{activeTab === "profile" && (
 									<FontAwesomeIcon
 										icon={faChevronRight}
-										className="indicator"
+										className="tem-indicator"
 									/>
 								)}
 							</button>
 
 							<button
-								className={`nav-item ${
-									activeTab === "subjects" ? "active" : ""
+								className={`tem-nav-item ${
+									activeTab === "subjects" ? "tem-active" : ""
 								}`}
 								onClick={() => setActiveTab("subjects")}
 							>
-								<span className="nav-icon">
+								<span className="tem-nav-icon">
 									<FontAwesomeIcon icon={faUserShield} />
 								</span>
-								<span className="nav-text">Subject & Classes</span>
+								<span className="tem-nav-text">Subject & Classes</span>
 								{activeTab === "subjects" && (
 									<FontAwesomeIcon
 										icon={faChevronRight}
-										className="indicator"
+										className="tem-indicator"
 									/>
 								)}
 							</button>
 						</nav>
 					</div>
 
-					<div className="content-area">
+					<div className="tem-content-area">
 						{activeTab === "profile" && (
-							<div className="profile-tab">
-								<div className="form-section">
+							<div className="tem-profile-tab">
+								<div className="tem-form-section">
 									<h3>Personal Information</h3>
 
-									<div className="form-grid">
-										<div className="form-field">
+									<div className="tem-form-grid">
+										<div className="tem-form-field">
 											<label htmlFor="firstName">First Name</label>
 											<input
 												type="text"
@@ -370,7 +370,7 @@ const TeacherEditModal = ({
 											/>
 										</div>
 
-										<div className="form-field">
+										<div className="tem-form-field">
 											<label htmlFor="lastName">Last Name</label>
 											<input
 												type="text"
@@ -382,7 +382,7 @@ const TeacherEditModal = ({
 											/>
 										</div>
 
-										<div className="form-field">
+										<div className="tem-form-field">
 											<label htmlFor="email">Email Address</label>
 											<input
 												type="email"
@@ -394,11 +394,11 @@ const TeacherEditModal = ({
 											/>
 										</div>
 
-										<div className="form-field admin-toggle-container">
+										<div className="tem-form-field tem-admin-toggle-container">
 											<label>Administrator Access</label>
-											<div className="admin-actions-row">
-												<div className="toggle-switch-container">
-													<label className="toggle-switch">
+											<div className="tem-admin-actions-row">
+												<div className="tem-toggle-switch-container">
+													<label className="tem-toggle-switch">
 														<input
 															type="checkbox"
 															checked={teacherData.isAdmin}
@@ -409,9 +409,9 @@ const TeacherEditModal = ({
 																}))
 															}
 														/>
-														<span className="toggle-slider"></span>
+														<span className="tem-toggle-slider"></span>
 													</label>
-													<span className="toggle-label">
+													<span className="tem-toggle-label">
 														{teacherData.isAdmin ? "Admin" : "Teacher"}
 													</span>
 												</div>
@@ -419,7 +419,7 @@ const TeacherEditModal = ({
 												{teacher && (
 													<button
 														type="button"
-														className="delete-teacher-btn"
+														className="tem-delete-teacher-btn"
 														onClick={() => {
 															if (
 																window.confirm(
@@ -439,13 +439,13 @@ const TeacherEditModal = ({
 									</div>
 								</div>
 
-								<div className="form-section">
+								<div className="tem-form-section">
 									<h3>Security</h3>
 
-									<div className="form-grid">
-										<div className="form-field">
+									<div className="tem-form-grid">
+										<div className="tem-form-field">
 											<label htmlFor="loginPassword">Login Password</label>
-											<div className="password-input">
+											<div className="tem-password-input">
 												<input
 													type={showLoginPassword ? "text" : "password"}
 													id="loginPassword"
@@ -460,7 +460,7 @@ const TeacherEditModal = ({
 												/>
 												<button
 													type="button"
-													className="toggle-password"
+													className="tem-toggle-password"
 													onClick={() =>
 														setShowLoginPassword(!showLoginPassword)
 													}
@@ -477,11 +477,11 @@ const TeacherEditModal = ({
 											</div>
 										</div>
 
-										<div className="form-field">
+										<div className="tem-form-field">
 											<label htmlFor="gradePassword">
 												Grade Access Password
 											</label>
-											<div className="password-input">
+											<div className="tem-password-input">
 												<input
 													type={showGradePassword ? "text" : "password"}
 													id="gradePassword"
@@ -496,7 +496,7 @@ const TeacherEditModal = ({
 												/>
 												<button
 													type="button"
-													className="toggle-password"
+													className="tem-toggle-password"
 													onClick={() =>
 														setShowGradePassword(!showGradePassword)
 													}
@@ -518,12 +518,12 @@ const TeacherEditModal = ({
 						)}
 
 						{activeTab === "subjects" && (
-							<div className="subjects-tab">
-								<div className="subject-columns">
-									<div className="subject-list">
+							<div className="tem-subjects-tab">
+								<div className="tem-subject-columns">
+									<div className="tem-subject-list">
 										<h3>Assigned Subjects</h3>
 
-										<div className="subject-search">
+										<div className="tem-subject-search">
 											<select
 												value={subjectToAdd}
 												onChange={(e) => handleAddSubject(e.target.value)}
@@ -539,36 +539,36 @@ const TeacherEditModal = ({
 											</select>
 										</div>
 
-										<div className="assigned-subjects">
+										<div className="tem-assigned-subjects">
 											{teacherData.subjects.length === 0 ? (
-												<div className="no-subjects">
+												<div className="tem-no-subjects">
 													<p>No subjects assigned yet</p>
 												</div>
 											) : (
-												<ul className="subject-items">
+												<ul className="tem-subject-items">
 													{teacherData.subjects.map((subject) => (
 														<li
 															key={subject.id}
-															className={`subject-item ${
+															className={`tem-subject-item ${
 																selectedSubjectForEdit === subject.id
-																	? "selected"
+																	? "tem-selected"
 																	: ""
 															}`}
 															onClick={() =>
 																setSelectedSubjectForEdit(subject.id)
 															}
 														>
-															<div className="subject-info">
-																<span className="subject-name">
+															<div className="tem-subject-info">
+																<span className="tem-subject-name">
 																	{subject.name}
 																</span>
-																<span className="class-count">
+																<span className="tem-class-count">
 																	{subject.classes.length} classes
 																</span>
 															</div>
-															<div className="subject-actions">
+															<div className="tem-subject-actions">
 																<button
-																	className="remove-subject"
+																	className="tem-remove-subject"
 																	onClick={(e) => {
 																		e.stopPropagation();
 																		handleRemoveSubject(subject.id);
@@ -584,12 +584,12 @@ const TeacherEditModal = ({
 										</div>
 									</div>
 
-									<div className="class-selection">
+									<div className="tem-class-selection">
 										<h3>Assign Classes</h3>
 
 										{selectedSubjectForEdit ? (
 											<>
-												<div className="selected-subject-header">
+												<div className="tem-selected-subject-header">
 													<h4>
 														{
 															teacherData.subjects.find(
@@ -599,7 +599,7 @@ const TeacherEditModal = ({
 													</h4>
 												</div>
 
-												<div className="class-grid">
+												<div className="tem-class-grid">
 													{departments.map((department) => {
 														const className = department.departmentName;
 														const isSelected = teacherData.subjects
@@ -609,8 +609,8 @@ const TeacherEditModal = ({
 														return (
 															<div
 																key={department.id}
-																className={`class-item ${
-																	isSelected ? "selected" : ""
+																className={`tem-class-item ${
+																	isSelected ? "tem-selected" : ""
 																}`}
 																onClick={() =>
 																	handleToggleClass(
@@ -619,11 +619,13 @@ const TeacherEditModal = ({
 																	)
 																}
 															>
-																<span className="class-name">{className}</span>
+																<span className="tem-class-name">
+																	{className}
+																</span>
 																{isSelected && (
 																	<FontAwesomeIcon
 																		icon={faCheck}
-																		className="class-check"
+																		className="tem-class-check"
 																	/>
 																)}
 															</div>
@@ -632,7 +634,7 @@ const TeacherEditModal = ({
 												</div>
 											</>
 										) : (
-											<div className="no-subject-selected">
+											<div className="tem-no-subject-selected">
 												<p>Select a subject to assign classes</p>
 											</div>
 										)}
@@ -643,11 +645,11 @@ const TeacherEditModal = ({
 					</div>
 				</div>
 
-				<footer className="modal-footer">
-					<button className="cancel-button" onClick={onClose}>
+				<footer className="tem-modal-footer">
+					<button className="tem-cancel-button" onClick={onClose}>
 						Cancel
 					</button>
-					<button className="save-button" onClick={handleSubmit}>
+					<button className="tem-save-button" onClick={handleSubmit}>
 						Save Changes
 					</button>
 				</footer>
