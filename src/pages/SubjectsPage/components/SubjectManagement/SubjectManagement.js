@@ -3,40 +3,94 @@ import "./SubjectManagement.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faBook,
-	faPen,
-	faTrash,
 	faPlus,
+	faEdit,
+	faTrash,
+	faSearch,
+	faGraduationCap,
+	faFilter,
+	faSort,
+	faTimes,
+	faArrowDown,
+	faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
 import AddEditSubjectModal from "../AddEditSubjectModal/AddEditSubjectModal";
 import subjectApi from "../../../../api/subjectApi";
 import useAuth from "../../../../hooks/useAuth";
 
 const SubjectManagement = () => {
-	const { user } = useAuth(); // Access token from context
+	const { user } = useAuth();
 	const [subjects, setSubjects] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalData, setModalData] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
+	const [searchTerm, setSearchTerm] = useState("");
+	const [gradeFilter, setGradeFilter] = useState("");
+	const [sortBy, setSortBy] = useState("name");
+	const [sortDirection, setSortDirection] = useState("asc");
+	const [showFilters, setShowFilters] = useState(false);
 
 	useEffect(() => {
-		if (!user || !user.token) return;
+		if (!user?.token) return;
 
 		const fetchSubjects = async () => {
+			setIsLoading(true);
 			try {
 				const data = await subjectApi.getAllSubjects(user.token);
 				setSubjects(data);
 			} catch (error) {
 				console.error("Error fetching subjects:", error);
+			} finally {
+				setIsLoading(false);
 			}
 		};
 		fetchSubjects();
 	}, [user]);
+
+	// Get all unique grade levels
+	const allGrades = [
+		...new Set(subjects.flatMap((subject) => subject.gradeLevels)),
+	].sort((a, b) => a - b);
+
+	// Filter and sort subjects
+	const filteredSubjects = subjects
+		.filter((subject) => {
+			// Apply search filter
+			const matchesSearch = subject.name
+				.toLowerCase()
+				.includes(searchTerm.toLowerCase());
+
+			// Apply grade filter
+			const matchesGrade =
+				!gradeFilter || subject.gradeLevels.includes(gradeFilter);
+
+			return matchesSearch && matchesGrade;
+		})
+		.sort((a, b) => {
+			// Apply sorting
+			let compareValue = 0;
+
+			switch (sortBy) {
+				case "name":
+					compareValue = a.name.localeCompare(b.name);
+					break;
+				case "gradeCount":
+					compareValue = a.gradeLevels.length - b.gradeLevels.length;
+					break;
+				default:
+					compareValue = 0;
+			}
+
+			return sortDirection === "asc" ? compareValue : -compareValue;
+		});
 
 	const openAddModal = () => {
 		setModalData(null);
 		setIsModalOpen(true);
 	};
 
-	const openEditModal = (subject) => {
+	const openEditModal = (subject, e) => {
+		e.stopPropagation();
 		setModalData(subject);
 		setIsModalOpen(true);
 	};
@@ -71,55 +125,146 @@ const SubjectManagement = () => {
 		}
 	};
 
-	const handleDelete = async (id) => {
-		try {
-			await subjectApi.deleteSubject(id, user.token);
-			setSubjects((prev) => prev.filter((subject) => subject.id !== id));
-		} catch (error) {
-			console.error("Error deleting subject:", error);
+	const handleDelete = async (id, e) => {
+		e.stopPropagation();
+		if (window.confirm("Are you sure you want to delete this subject?")) {
+			try {
+				await subjectApi.deleteSubject(id, user.token);
+				setSubjects((prev) => prev.filter((subject) => subject.id !== id));
+			} catch (error) {
+				console.error("Error deleting subject:", error);
+			}
 		}
 	};
 
-	if (!user || !user.token) {
-		return <div>Loading...</div>; // Show a loading state while waiting for the user
+	// Toggle sort direction
+	const handleSort = (column) => {
+		if (sortBy === column) {
+			setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+		} else {
+			setSortBy(column);
+			setSortDirection("asc");
+		}
+	};
+
+	// Clear all filters
+	const clearFilters = () => {
+		setSearchTerm("");
+		setGradeFilter("");
+	};
+
+	if (!user?.token) {
+		return (
+			<div className="subject-dashboard-card subject-loading-card">
+				<div className="subject-loading-spinner"></div>
+				<p>Loading...</p>
+			</div>
+		);
 	}
 
 	return (
-		<div className="subject-management">
-			<div className="header">
-				<h2>Subject Management</h2>
-				<p>
-					Manage your school's academic subjects and their grade assignments
-				</p>
-				<button className="add-subject" onClick={openAddModal}>
-					<FontAwesomeIcon icon={faPlus} /> Add Subject
+		<div className="subject-dashboard-card">
+			{/* Header */}
+			<div className="subject-header">
+				<div className="subject-title">
+					<h1>
+						<FontAwesomeIcon icon={faBook} className="subject-title-icon" />
+						Subject Management
+					</h1>
+					<p>
+						<span className="subject-stat-pill">
+							<FontAwesomeIcon icon={faBook} /> {subjects.length} subjects
+						</span>
+					</p>
+				</div>
+				<button className="subject-add-btn" onClick={openAddModal}>
+					<FontAwesomeIcon icon={faPlus} /> Add New Subject
 				</button>
 			</div>
-			<div className="subject-list">
-				{subjects.map((subject) => (
-					<div key={subject.id} className="subject-card">
-						<div className="subject-header">
-							<FontAwesomeIcon icon={faBook} className="subject-icon" />
-							<h3>{subject.name}</h3>
-						</div>
-						<p className="description">{subject.description}</p>
-						<p className="grades">
-							<FontAwesomeIcon icon={faBook} /> {subject.gradeLevels.join(", ")}
-						</p>
-						<div className="actions">
-							<button className="edit" onClick={() => openEditModal(subject)}>
-								<FontAwesomeIcon icon={faPen} />
-							</button>
-							<button
-								className="delete"
-								onClick={() => handleDelete(subject.id)}
-							>
-								<FontAwesomeIcon icon={faTrash} />
-							</button>
-						</div>
-					</div>
-				))}
-			</div>
+
+			{/* Table View */}
+			{isLoading ? (
+				<div className="subject-loading-container">
+					<div className="subject-loading-spinner"></div>
+					<p>Loading subjects...</p>
+				</div>
+			) : filteredSubjects.length > 0 ? (
+				<div className="subject-table-container">
+					<table className="subject-table">
+						<thead>
+							<tr>
+								<th>Subject</th>
+								<th>Grade Levels</th>
+								<th className="subject-count-col">Grade Count</th>
+								<th className="subject-actions-col">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{filteredSubjects.map((subject) => (
+								<tr key={subject.id} className="subject-row">
+									<td className="subject-name-cell">
+										<div className="subject-cell-content">
+											<FontAwesomeIcon
+												icon={faBook}
+												className="subject-row-icon"
+											/>
+											<span className="subject-row-name">{subject.name}</span>
+										</div>
+									</td>
+									<td>
+										<div className="subject-grade-chips">
+											{subject.gradeLevels.length > 0 ? (
+												subject.gradeLevels.map((grade) => (
+													<span key={grade} className="subject-grade-chip">
+														{grade}
+													</span>
+												))
+											) : (
+												<span className="subject-no-grades-text">
+													No grades assigned
+												</span>
+											)}
+										</div>
+									</td>
+									<td className="subject-count-col">
+										<span className="subject-count-badge">
+											{subject.gradeLevels.length}
+										</span>
+									</td>
+									<td className="subject-actions-col">
+										<div className="subject-action-buttons">
+											<button
+												className="subject-edit-btn"
+												onClick={(e) => openEditModal(subject, e)}
+												aria-label="Edit subject"
+											>
+												<FontAwesomeIcon icon={faEdit} />
+											</button>
+											<button
+												className="subject-delete-btn"
+												onClick={(e) => handleDelete(subject.id, e)}
+												aria-label="Delete subject"
+											>
+												<FontAwesomeIcon icon={faTrash} />
+											</button>
+										</div>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			) : (
+				<div className="subject-no-results">
+					<FontAwesomeIcon icon={faBook} className="subject-no-results-icon" />
+					<p>No subjects found matching your criteria.</p>
+					<button onClick={clearFilters}>
+						<FontAwesomeIcon icon={faTimes} /> Clear Filters
+					</button>
+				</div>
+			)}
+
+			{/* Modal */}
 			{isModalOpen && (
 				<AddEditSubjectModal
 					isOpen={isModalOpen}
