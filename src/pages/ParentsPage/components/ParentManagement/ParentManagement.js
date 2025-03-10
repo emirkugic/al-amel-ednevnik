@@ -5,22 +5,15 @@ import {
 	faTrashAlt,
 	faPlus,
 	faEdit,
-	faUser,
-	faKey,
 	faPhone,
 	faSearch,
-	faFilter,
-	faTimes,
 	faUserFriends,
 	faEnvelope,
-	faShieldAlt,
-	faArrowDown,
-	faArrowUp,
 	faChild,
 	faChevronDown,
 	faChevronUp,
+	faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-import TextInput from "../../../../components/ui/TextInput/TextInput";
 import useAuth from "../../../../hooks/useAuth";
 import useParents from "../../../../hooks/useParents";
 import parentApi from "../../../../api/parentApi";

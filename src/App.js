@@ -14,15 +14,8 @@ import PrivateRoute from "./components/PrivateRoute";
 import Sidebar from "./components/Sidebar/Sidebar";
 import RightSidebar from "./components/RightSidebar/RightSidebar";
 
-import Dashboard from "./components/pages/Dashboard";
-import Students from "./components/pages/Students";
-import Help from "./components/pages/Help";
-
-import Classes from "./components/pages/Classes";
-
 // temp
-import TeacherManagement from "./pages/TeachersPage/components/v2/TeacherManagement2"; // /teachers2
-import ClassGradesPage from "./pages/DepartmentPage/ClassGradesPage/ClassGradesPage"; // /grades
+import ClassGradesPage from "./pages/DepartmentPage/ClassGradesPage/ClassGradesPage"; // ovo onaj v3 stranica za ocjene, nemoj brisati
 
 import {
 	LecturesPage,
@@ -36,6 +29,7 @@ import {
 	ParentsPage,
 	Assessments, // temp
 	ClassManagement, //WIP
+	Dashboard,
 } from "./pages";
 
 import "./App.css";
@@ -53,23 +47,19 @@ const AppContent = () => {
 
 					<Route element={<PrivateRoute />}>
 						<Route path="/" element={<Dashboard />} />
-						<Route path="/students" element={<Students />} />
-						<Route path="/help" element={<Help />} />
 						<Route path="/subjects" element={<SubjectsPage />} />
-						<Route path="/classes" element={<Classes />} />
 						<Route path="/parents" element={<ParentsPage />} />
 						<Route path="/schedule" element={<SchedulePage />} />
 						<Route path="/logs" element={<LogsPage />} />
-						<Route path="/teachers" element={<TeachersPage />} />
 						<Route path="/lectures/:departmentId" element={<LecturesPage />} />
-						<Route path="/courses/:subject" element={<AssessmentPage />} />
 						<Route path="/department" element={<DepartmentPage />} />
-						{/* temp */}
-						<Route path="/teachers2" element={<TeacherManagement />} />{" "}
-						<Route path="/assessments" element={<Assessments />} />
 						<Route path="/grades" element={<ClassGradesPage />} />
-						{/* WIP */}
-						<Route path="/classes2" element={<ClassManagement />} />
+						<Route path="/teachers" element={<TeachersPage />} />{" "}
+						<Route path="/classes" element={<ClassManagement />} />
+						{/* this is the original page for grades */}
+						<Route path="/courses/:subject" element={<AssessmentPage />} />
+						{/* this is the WIP */}
+						<Route path="/assessments" element={<Assessments />} />
 					</Route>
 				</Routes>
 			</div>

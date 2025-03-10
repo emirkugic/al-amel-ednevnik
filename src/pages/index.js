@@ -9,3 +9,4 @@ export { default as "SubjectsPage" } from "./SubjectsPage/SubjectsPage.js";
 export { default as "ParentsPage" } from "./ParentsPage/ParentsPage.js";
 export { default as "Assessments" } from "./Assessments/Assessments.js";
 export { default as "ClassManagement" } from "./ClassManagementPage/ClassManagement.js";
+export { default as "Dashboard" } from "./DashboardPage/Dashboard.js";

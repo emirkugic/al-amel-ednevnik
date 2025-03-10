@@ -1,6 +1,6 @@
 import React from "react";
 
-import { TeacherManagement } from "./components/index";
+import TeacherManagement from "./components/TeacherManagement";
 
 const TeachersPage = () => {
 	return <TeacherManagement />;

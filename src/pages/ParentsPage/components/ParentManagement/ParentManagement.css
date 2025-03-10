@@ -115,7 +115,7 @@
 	width: 100%;
 	padding: 12px 16px 12px 40px;
 	border: 1px solid var(--parent-mgmt-border-color);
-	border-radius: 24px; /* More rounded for better appearance */
+	border-radius: 6px; /* More rounded for better appearance */
 	font-size: 14px;
 	box-shadow: var(--parent-mgmt-shadow-sm);
 	transition: all 0.2s;
@@ -148,12 +148,11 @@
 	font-size: 14px;
 }
 
-/* Enhanced Add New Parent button styling */
 .parent-mgmt-add-btn {
 	background-color: var(--parent-mgmt-primary-color);
 	color: white;
 	border: none;
-	border-radius: 24px; /* More rounded button */
+	border-radius: 6px;
 	padding: 12px 20px;
 	font-size: 14px;
 	font-weight: 500;
