@@ -27,8 +27,8 @@ import {
 	LoginPage,
 	SubjectsPage,
 	ParentsPage,
-	Assessments, // temp
-	ClassManagement, //WIP
+	Assessments, // WIP v2 stranica za upisivanje ocjena, nemoj brisati
+	ClassManagement,
 	Dashboard,
 } from "./pages";
 
