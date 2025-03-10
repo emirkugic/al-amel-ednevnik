@@ -78,13 +78,17 @@
 	margin: 0;
 	color: var(--parent-mgmt-text-dark);
 	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .parent-mgmt-search-filter-row {
 	display: flex;
 	align-items: center;
-	gap: 16px;
 	width: 100%;
+	justify-content: center;
+	gap: 16px;
 }
 
 .parent-mgmt-stat-pill {
@@ -103,42 +107,15 @@
 	position: relative;
 	display: flex;
 	align-items: center;
-	flex: 1;
-	max-width: 400px;
-}
-
-.parent-mgmt-search-bar input {
-	width: 100%;
-	padding: 8px 16px 8px 32px;
-	border: 1px solid var(--parent-mgmt-border-color);
-	border-radius: 4px;
-	font-size: 14px;
-	box-shadow: var(--parent-mgmt-shadow-sm);
-	transition: all 0.2s;
-}
-
-/* Search and Filter Area */
-.parent-mgmt-search-filter-container {
-	padding: 20px 30px;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 16px;
-	border-bottom: 1px solid var(--parent-mgmt-border-color);
-	align-items: center;
-}
-
-.parent-mgmt-search-bar {
-	position: relative;
-	flex-grow: 1;
-	display: flex;
-	align-items: center;
+	flex: 0 1 400px; /* Limit width but allow it to shrink */
+	margin: 0 auto; /* Center the search bar */
 }
 
 .parent-mgmt-search-bar input {
 	width: 100%;
 	padding: 12px 16px 12px 40px;
 	border: 1px solid var(--parent-mgmt-border-color);
-	border-radius: 4px;
+	border-radius: 24px; /* More rounded for better appearance */
 	font-size: 14px;
 	box-shadow: var(--parent-mgmt-shadow-sm);
 	transition: all 0.2s;
@@ -171,41 +148,45 @@
 	font-size: 14px;
 }
 
-.parent-mgmt-filter-actions {
-	display: flex;
-	gap: 10px;
-}
-
-.parent-mgmt-filter-toggle,
-.parent-mgmt-clear-filters {
-	background-color: var(--parent-mgmt-background-white);
-	border: 1px solid var(--parent-mgmt-border-color);
-	border-radius: 4px;
-	padding: 12px 16px;
+/* Enhanced Add New Parent button styling */
+.parent-mgmt-add-btn {
+	background-color: var(--parent-mgmt-primary-color);
+	color: white;
+	border: none;
+	border-radius: 24px; /* More rounded button */
+	padding: 12px 20px;
 	font-size: 14px;
+	font-weight: 500;
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	transition: all 0.2s;
+	transition: all 0.3s ease;
+	box-shadow: var(--parent-mgmt-shadow-sm);
 }
 
-.parent-mgmt-filter-toggle:hover,
-.parent-mgmt-clear-filters:hover {
-	background-color: var(--parent-mgmt-background-light);
+.parent-mgmt-add-btn:hover {
+	background-color: var(--parent-mgmt-primary-dark);
+	box-shadow: var(--parent-mgmt-shadow-md);
+	transform: translateY(-2px);
 }
 
-.parent-mgmt-filter-toggle.active {
-	background-color: var(--parent-mgmt-primary-light);
-	border-color: var(--parent-mgmt-primary-color);
-	color: var(--parent-mgmt-primary-dark);
+.parent-mgmt-add-btn:active {
+	transform: translateY(0);
 }
 
-.parent-mgmt-clear-filters {
-	color: var(--parent-mgmt-error-color);
+/* Search and Filter Area */
+.parent-mgmt-search-filter-container {
+	padding: 20px 30px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	border-bottom: 1px solid var(--parent-mgmt-border-color);
+	align-items: center;
 }
 
-/* Advanced filters area */
+/* Advanced filters area - commented out since not needed anymore */
+/*
 .parent-mgmt-advanced-filters {
 	display: flex;
 	flex-wrap: wrap;
@@ -249,6 +230,7 @@
 	color: white;
 	border-color: var(--parent-mgmt-primary-color);
 }
+*/
 
 /* Table styles */
 .parent-mgmt-table-container {
@@ -320,6 +302,8 @@
 .parent-mgmt-children-details {
 	padding-top: 15px;
 	padding-bottom: 15px;
+	/* bottom shadow */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .parent-mgmt-children-details h4 {
@@ -731,26 +715,18 @@
 @media (max-width: 992px) {
 	.parent-mgmt-header {
 		flex-direction: column;
-		align-items: flex-start;
+		align-items: center;
 		gap: 16px;
 	}
 
-	.parent-mgmt-search-filter-container {
-		flex-direction: column;
-		align-items: stretch;
+	.parent-mgmt-search-filter-row {
+		justify-content: center;
+		width: 100%;
 	}
 
-	.parent-mgmt-advanced-filters {
-		flex-direction: column;
-	}
-
-	.parent-mgmt-sort-options {
-		flex-wrap: wrap;
-	}
-
-	.parent-mgmt-table th,
-	.parent-mgmt-table td {
-		padding: 12px;
+	.parent-mgmt-search-bar {
+		width: 100%;
+		max-width: 100%;
 	}
 
 	.parent-mgmt-form-grid {

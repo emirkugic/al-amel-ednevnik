@@ -41,7 +41,6 @@ const ParentManagement = () => {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [sortBy, setSortBy] = useState("name");
 	const [sortDirection, setSortDirection] = useState("asc");
-	const [showFilters, setShowFilters] = useState(false);
 	const [expandedParent, setExpandedParent] = useState(null);
 	const [childrenByParent, setChildrenByParent] = useState({});
 	const [loadingStudents, setLoadingStudents] = useState(true);
@@ -178,7 +177,6 @@ const ParentManagement = () => {
 	};
 
 	// Filter and sort parents
-	// Filter and sort parents
 	const getFilteredParents = () => {
 		let filtered = [...parents];
 
@@ -289,26 +287,6 @@ const ParentManagement = () => {
 								</button>
 							)}
 						</div>
-
-						<div className="parent-mgmt-filter-actions">
-							<button
-								className={`parent-mgmt-filter-toggle ${
-									showFilters ? "active" : ""
-								}`}
-								onClick={() => setShowFilters(!showFilters)}
-							>
-								<FontAwesomeIcon icon={faFilter} />
-								{showFilters ? "Hide Filters" : "Show Filters"}
-							</button>
-							{searchTerm && (
-								<button
-									className="parent-mgmt-clear-filters"
-									onClick={clearFilters}
-								>
-									<FontAwesomeIcon icon={faTimes} /> Clear
-								</button>
-							)}
-						</div>
 					</div>
 				</div>
 				<button
@@ -318,56 +296,6 @@ const ParentManagement = () => {
 					<FontAwesomeIcon icon={faPlus} /> Add New Parent
 				</button>
 			</div>
-
-			{/* Advanced filters */}
-			{showFilters && (
-				<div className="parent-mgmt-advanced-filters">
-					<div className="parent-mgmt-filter-group">
-						<label>Sort By</label>
-						<div className="parent-mgmt-sort-options">
-							<button
-								className={`parent-mgmt-sort-btn ${
-									sortBy === "name" ? "active" : ""
-								}`}
-								onClick={() => handleSort("name")}
-							>
-								Name
-								{sortBy === "name" && (
-									<FontAwesomeIcon
-										icon={sortDirection === "asc" ? faArrowUp : faArrowDown}
-									/>
-								)}
-							</button>
-							<button
-								className={`parent-mgmt-sort-btn ${
-									sortBy === "email" ? "active" : ""
-								}`}
-								onClick={() => handleSort("email")}
-							>
-								Email
-								{sortBy === "email" && (
-									<FontAwesomeIcon
-										icon={sortDirection === "asc" ? faArrowUp : faArrowDown}
-									/>
-								)}
-							</button>
-							<button
-								className={`parent-mgmt-sort-btn ${
-									sortBy === "phone" ? "active" : ""
-								}`}
-								onClick={() => handleSort("phone")}
-							>
-								Phone
-								{sortBy === "phone" && (
-									<FontAwesomeIcon
-										icon={sortDirection === "asc" ? faArrowUp : faArrowDown}
-									/>
-								)}
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
 
 			{/* Parent Table */}
 			{filteredParents.length > 0 ? (
