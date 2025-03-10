@@ -24,6 +24,7 @@ import TextInput from "../../../../components/ui/TextInput/TextInput";
 import useAuth from "../../../../hooks/useAuth";
 import useParents from "../../../../hooks/useParents";
 import parentApi from "../../../../api/parentApi";
+import studentApi from "../../../../api/studentApi";
 
 const ParentManagement = () => {
 	const { user } = useAuth();
@@ -42,14 +43,19 @@ const ParentManagement = () => {
 	const [sortDirection, setSortDirection] = useState("asc");
 	const [showFilters, setShowFilters] = useState(false);
 	const [expandedParent, setExpandedParent] = useState(null);
-	const [childrenData, setChildrenData] = useState({});
-	const [loadingChildren, setLoadingChildren] = useState(false);
+	const [childrenByParent, setChildrenByParent] = useState({});
+	const [loadingStudents, setLoadingStudents] = useState(true);
 
 	const handleInputChange = (name, value) => {
 		setFormData((prev) => ({
 			...prev,
 			[name]: value,
 		}));
+	};
+
+	const clearFilters = () => {
+		setSearchTerm("");
+		setSortBy("name");
 	};
 
 	const handleSaveParent = async () => {
@@ -124,37 +130,41 @@ const ParentManagement = () => {
 		setIsModalOpen(false);
 	};
 
-	const clearFilters = () => {
-		setSearchTerm("");
-	};
+	// Fetch all students when component loads and organize them by parent
+	useEffect(() => {
+		const fetchAllStudents = async () => {
+			if (!user?.token) return;
 
-	// Toggle expanded view for a parent and fetch children data
-	const toggleExpand = async (parentId) => {
-		if (expandedParent === parentId) {
-			setExpandedParent(null);
-			return;
-		}
-
-		setExpandedParent(parentId);
-
-		// If we don't already have the children data for this parent, fetch it
-		if (!childrenData[parentId]) {
-			setLoadingChildren(true);
 			try {
-				const children = await parentApi.getChildrenByParentId(
-					parentId,
-					user.token
-				);
-				setChildrenData((prev) => ({
-					...prev,
-					[parentId]: children,
-				}));
+				setLoadingStudents(true);
+				const allStudents = await studentApi.getAllStudents(user.token);
+
+				// Create a mapping of parentId to children
+				const studentsByParent = {};
+
+				allStudents.forEach((student) => {
+					if (student.parentId) {
+						if (!studentsByParent[student.parentId]) {
+							studentsByParent[student.parentId] = [];
+						}
+						studentsByParent[student.parentId].push(student);
+					}
+				});
+
+				setChildrenByParent(studentsByParent);
 			} catch (error) {
-				console.error("Error fetching children:", error);
+				console.error("Error fetching students:", error);
 			} finally {
-				setLoadingChildren(false);
+				setLoadingStudents(false);
 			}
-		}
+		};
+
+		fetchAllStudents();
+	}, [user?.token]);
+
+	// Toggle expanded view for a parent
+	const toggleExpand = (parentId) => {
+		setExpandedParent(expandedParent === parentId ? null : parentId);
 	};
 
 	// Toggle sort direction
@@ -443,20 +453,23 @@ const ParentManagement = () => {
 														/>
 														Children
 													</h4>
-													{loadingChildren ? (
+													{loadingStudents ? (
 														<div className="parent-mgmt-loading-children">
 															<div className="parent-mgmt-mini-spinner"></div>
 															<span>Loading children...</span>
 														</div>
-													) : childrenData[parent.id]?.length > 0 ? (
+													) : childrenByParent[parent.id]?.length > 0 ? (
 														<table className="parent-mgmt-children-table">
 															<thead>
 																<tr>
 																	<th>Name</th>
+																	<th>Date of Birth</th>
+																	<th>Place of Birth</th>
+																	<th>Citizenship</th>
 																</tr>
 															</thead>
 															<tbody>
-																{childrenData[parent.id].map((child) => (
+																{childrenByParent[parent.id].map((child) => (
 																	<tr key={child.id}>
 																		<td>
 																			<div className="parent-mgmt-child-name">
@@ -467,6 +480,13 @@ const ParentManagement = () => {
 																				{child.firstName} {child.lastName}
 																			</div>
 																		</td>
+																		<td>
+																			{new Date(
+																				child.dateOfBirth
+																			).toLocaleDateString()}
+																		</td>
+																		<td>{child.placeOfBirth}</td>
+																		<td>{child.citizenship}</td>
 																	</tr>
 																))}
 															</tbody>

@@ -318,7 +318,8 @@
 }
 
 .parent-mgmt-children-details {
-	padding: 16px 24px;
+	padding-top: 15px;
+	padding-bottom: 15px;
 }
 
 .parent-mgmt-children-details h4 {
@@ -332,9 +333,12 @@
 
 .parent-mgmt-child-icon {
 	color: var(--parent-mgmt-primary-color);
+	padding-left: 15px;
 }
 
 .parent-mgmt-children-table {
+	/* margin-left: -25px; */
+	max-width: calc(100% + 50px);
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 8px;
