@@ -178,6 +178,7 @@ const ParentManagement = () => {
 	};
 
 	// Filter and sort parents
+	// Filter and sort parents
 	const getFilteredParents = () => {
 		let filtered = [...parents];
 
@@ -194,11 +195,24 @@ const ParentManagement = () => {
 
 				const searchLower = searchTerm.toLowerCase();
 
-				return (
+				// Check if parent matches search criteria
+				const parentMatches =
 					fullName.includes(searchLower) ||
 					email.includes(searchLower) ||
-					phone.includes(searchTerm)
-				);
+					phone.includes(searchTerm);
+
+				// Check if any of the parent's children match search criteria
+				const childrenMatch =
+					childrenByParent[parent.id]?.some((child) => {
+						const childFullName =
+							child.firstName && child.lastName
+								? `${child.firstName} ${child.lastName}`.toLowerCase()
+								: "";
+						return childFullName.includes(searchLower);
+					}) || false;
+
+				// Return true if either parent or any of their children match
+				return parentMatches || childrenMatch;
 			});
 		}
 
