@@ -1,63 +1,498 @@
-.edit-log-modal-overlay {
+/* Edit Log Modal - Unique CSS with "elm-" prefix */
+.elm-modal-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, 0.5);
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	height: 100vh;
 	z-index: 9999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(0, 0, 0, 0.2);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	animation: elm-fadeIn 0.2s ease-in;
 }
 
-.edit-log-modal {
-	background: #ffffff;
-	padding: 20px;
-	border-radius: 8px;
-	width: 90%;
-	max-width: 400px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.elm-modal-container {
+	/* width: 100hw; */
+	max-width: 850px;
+	max-height: 100%;
+	position: relative;
+	animation: elm-slideUp 0.3s ease-out;
+	height: 80vh;
 }
 
-.edit-log-modal h2 {
-	margin-bottom: 20px;
+.elm-modal-content {
+	background: rgba(255, 255, 255, 0.98);
+	border-radius: 16px;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	height: 100%;
+	max-height: 700px;
+}
+
+/* Modal header */
+.elm-modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 18px 24px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.elm-modal-header h2 {
+	margin: 0;
+	font-size: 1.5rem;
+	font-weight: 600;
 	color: #333;
 }
 
-.notification {
-	color: red;
-	margin-top: 10px;
-}
-
-.modal-actions {
+.elm-close-button {
+	background: none;
+	border: none;
+	color: #888;
+	font-size: 1.2rem;
+	cursor: pointer;
 	display: flex;
-	justify-content: space-between;
-	margin-top: 20px;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	transition: all 0.2s ease;
 }
 
-.loading-bar {
+.elm-close-button:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+	color: #333;
+}
+
+/* Notifications */
+.elm-notifications {
+	padding: 0 24px;
+	margin-top: 8px;
+}
+
+.elm-notification {
+	display: flex;
+	align-items: center;
+	padding: 12px 16px;
+	border-radius: 8px;
+	margin-bottom: 8px;
+	animation: elm-fadeIn 0.3s ease;
+}
+
+.elm-notification-error {
+	background-color: #fdeeee;
+	border-left: 4px solid #d32f2f;
+}
+
+.elm-notification-success {
+	background-color: #edf7ed;
+	border-left: 4px solid #2e7d32;
+}
+
+.elm-notification svg {
+	color: #d32f2f;
+	margin-right: 12px;
+}
+
+.elm-notification-success svg {
+	color: #2e7d32;
+}
+
+.elm-notification span {
+	flex: 1;
+	font-size: 0.9rem;
+	color: #333;
+}
+
+.elm-notification button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #888;
+}
+
+/* Loading indicator */
+.elm-loading-indicator {
 	position: absolute;
 	top: 0;
 	left: 0;
-	height: 4px;
-	width: 0;
-	background-color: #04abfd;
-	animation: loadingAnimation 2s infinite;
-	border-radius: 2px;
+	width: 100%;
+	height: 3px;
+	overflow: hidden;
+	z-index: 10;
 }
 
-@keyframes loadingAnimation {
+.elm-loading-indicator::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 30%;
+	height: 100%;
+	background-color: #04abfd;
+	animation: elm-loading 1.5s infinite ease-in-out;
+}
+
+/* Two-column layout */
+.elm-modal-body {
+	display: flex;
+	flex: 1;
+	overflow: hidden;
+	height: calc(100% - 140px); /* Adjust based on header/footer height */
+}
+
+.elm-class-info-column,
+.elm-attendance-column {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	position: relative;
+}
+
+.elm-class-info-column {
+	border-right: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.elm-section-header {
+	padding: 16px 24px 12px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.elm-section-header h3 {
+	margin: 0;
+	font-size: 1.1rem;
+	font-weight: 500;
+	color: #04abfd;
+}
+
+/* Form styling */
+.elm-form-fields {
+	padding: 20px;
+	overflow-y: auto;
+	height: 100%;
+}
+
+.elm-form-group {
+	margin-bottom: 20px;
+}
+
+.elm-form-group label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 0.9rem;
+	color: #555;
+	margin-bottom: 8px;
+	font-weight: 500;
+}
+
+.elm-field-icon {
+	color: #04abfd;
+}
+
+.elm-select,
+.elm-text-input {
+	width: 100%;
+	padding: 12px 14px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 8px;
+	font-size: 0.95rem;
+	background-color: #fff;
+	transition: all 0.2s ease;
+}
+
+.elm-select:focus,
+.elm-text-input:focus {
+	outline: none;
+	border-color: #04abfd;
+	box-shadow: 0 0 0 3px rgba(4, 171, 253, 0.15);
+}
+
+/* Summary section */
+.elm-summary {
+	margin-top: 24px;
+	padding-top: 16px;
+	border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.elm-attendance-summary h4 {
+	font-size: 0.95rem;
+	font-weight: 500;
+	margin: 0 0 12px 0;
+	color: #333;
+}
+
+.elm-summary-stats {
+	display: flex;
+	gap: 20px;
+	flex-wrap: wrap;
+}
+
+.elm-stat {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.elm-stat-label {
+	font-size: 0.85rem;
+	color: #666;
+}
+
+.elm-stat-value {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #333;
+}
+
+.elm-absent-count {
+	color: #d32f2f;
+}
+
+/* Student search */
+.elm-student-search {
+	padding: 16px 24px;
+	position: relative;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.elm-search-icon {
+	position: absolute;
+	left: 36px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #888;
+}
+
+.elm-search-input {
+	width: 100%;
+	padding: 10px 14px 10px 40px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 8px;
+	font-size: 0.95rem;
+}
+
+.elm-search-input:focus {
+	outline: none;
+	border-color: #04abfd;
+	box-shadow: 0 0 0 3px rgba(4, 171, 253, 0.15);
+}
+
+/* Students list */
+.elm-students-list {
+	overflow-y: auto;
+	padding: 8px 24px;
+	flex: 1;
+}
+
+.elm-student-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px 16px;
+	margin-bottom: 8px;
+	border-radius: 8px;
+	background-color: #f8f9fa;
+	transition: all 0.2s ease;
+}
+
+.elm-student-item:hover {
+	background-color: #f0f0f0;
+}
+
+.elm-student-item.elm-absent {
+	background-color: #fff2f2;
+}
+
+.elm-student-name {
+	font-weight: 500;
+	font-size: 0.95rem;
+	color: #333;
+}
+
+/* Toggle switch */
+.elm-toggle-switch {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+.elm-toggle-switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.elm-toggle-slider {
+	position: relative;
+	display: inline-block;
+	width: 38px;
+	height: 20px;
+	background-color: #ccc;
+	border-radius: 34px;
+	transition: 0.3s;
+	margin-right: 8px;
+}
+
+.elm-toggle-slider:before {
+	position: absolute;
+	content: "";
+	height: 16px;
+	width: 16px;
+	left: 2px;
+	bottom: 2px;
+	background-color: white;
+	border-radius: 50%;
+	transition: 0.3s;
+}
+
+.elm-toggle-switch input:checked + .elm-toggle-slider {
+	background-color: #d32f2f;
+}
+
+.elm-toggle-switch input:focus + .elm-toggle-slider {
+	box-shadow: 0 0 1px #d32f2f;
+}
+
+.elm-toggle-switch input:checked + .elm-toggle-slider:before {
+	transform: translateX(18px);
+}
+
+.elm-status-label {
+	font-size: 0.8rem;
+	transition: 0.3s;
+	min-width: 50px;
+}
+
+.elm-toggle-switch input:checked ~ .elm-status-label {
+	color: #d32f2f;
+	font-weight: 500;
+}
+
+.elm-no-results {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 150px;
+	color: #888;
+	font-style: italic;
+}
+
+/* Footer with action buttons */
+.elm-modal-footer {
+	border-top: 1px solid rgba(0, 0, 0, 0.06);
+	padding: 16px 24px;
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
+}
+
+.elm-cancel-button {
+	padding: 10px 20px;
+	background-color: #f5f5f5;
+	color: #333;
+	border: none;
+	border-radius: 8px;
+	font-size: 0.95rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.elm-cancel-button:hover {
+	background-color: #e0e0e0;
+}
+
+.elm-submit-button {
+	padding: 10px 24px;
+	background-color: #04abfd;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	font-size: 0.95rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.elm-submit-button:hover {
+	background-color: #0386c7;
+}
+
+.elm-submit-button:disabled,
+.elm-cancel-button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes elm-fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes elm-slideUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes elm-loading {
 	0% {
-		width: 0;
-		left: 0;
+		left: -30%;
 	}
 	50% {
-		width: 80%;
-		left: 10%;
+		left: 100%;
 	}
 	100% {
-		width: 0;
-		left: 0;
+		left: 100%;
+	}
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.elm-modal-container {
+		width: 95%;
+		max-height: 95vh;
+	}
+
+	.elm-modal-body {
+		flex-direction: column;
+		height: auto;
+		overflow-y: auto;
+	}
+
+	.elm-class-info-column,
+	.elm-attendance-column {
+		width: 100%;
+		flex: none;
+	}
+
+	.elm-class-info-column {
+		border-right: none;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+	}
+
+	.elm-students-list {
+		max-height: 300px;
 	}
 }
