@@ -1,4 +1,4 @@
-.class-log-form-modal {
+.clm-modal-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -8,93 +8,434 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	animation: fadeIn 0.05s ease-in;
+	background-color: rgba(0, 0, 0, 0.2);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	animation: clm-fadeIn 0.2s ease-in;
 }
 
-.modal-background {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
-	cursor: pointer;
-}
-
-.modal-content {
-	position: relative;
-	background: #ffffff;
+.clm-modal-container {
 	width: 90%;
-	max-width: 450px;
-	margin: 0 auto;
-	border-radius: 10px;
-	padding: 20px 25px;
-	box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
-	z-index: 10;
-	animation: scaleUp 0.02s ease;
+	max-width: 800px;
+	max-height: 100%;
+	height: 80vh;
+	position: relative;
+	animation: clm-slideUp 0.3s ease-out;
 }
 
-.modal-title {
-	margin-top: 0;
+.clm-modal-content {
+	background: rgba(255, 255, 255, 0.98);
+	border-radius: 16px;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	height: 100%;
+	max-height: 700px;
+}
+
+/* Modal header */
+.clm-modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 18px 24px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.clm-modal-header h2 {
+	margin: 0;
 	font-size: 1.5rem;
-	font-weight: bold;
-	text-align: center;
+	font-weight: 600;
 	color: #333;
 }
 
-.modal-subtitle {
-	font-size: 0.95rem;
-	text-align: center;
-	color: #555;
-	margin-bottom: 20px;
+.clm-close-button {
+	background: none;
+	border: none;
+	color: #888;
+	font-size: 1.2rem;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	transition: all 0.2s ease;
 }
 
-.loading-bar {
+.clm-close-button:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+	color: #333;
+}
+
+/* Notifications */
+.clm-notifications {
+	padding: 0 24px;
+	margin-top: 8px;
+}
+
+.clm-notification {
+	display: flex;
+	align-items: center;
+	padding: 12px 16px;
+	border-radius: 8px;
+	margin-bottom: 8px;
+	animation: clm-fadeIn 0.3s ease;
+}
+
+.clm-notification-error {
+	background-color: #fdeeee;
+	border-left: 4px solid #d32f2f;
+}
+
+.clm-notification-success {
+	background-color: #edf7ed;
+	border-left: 4px solid #2e7d32;
+}
+
+.clm-notification svg {
+	color: #d32f2f;
+	margin-right: 12px;
+}
+
+.clm-notification-success svg {
+	color: #2e7d32;
+}
+
+.clm-notification span {
+	flex: 1;
+	font-size: 0.9rem;
+	color: #333;
+}
+
+.clm-notification button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #888;
+}
+
+/* Loading indicator */
+.clm-loading-indicator {
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 0%;
+	width: 100%;
 	height: 3px;
-	background-color: #007bff;
-	animation: loadingAnim 2s linear infinite;
-	border-radius: 2px;
+	overflow: hidden;
+	z-index: 10;
 }
 
-@keyframes loadingAnim {
-	0% {
-		width: 0%;
-	}
-	50% {
-		width: 80%;
-	}
-	100% {
-		width: 100%;
-	}
+.clm-loading-indicator::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 30%;
+	height: 100%;
+	background-color: #04abfd;
+	animation: clm-loading 1.5s infinite ease-in-out;
 }
 
-.notification {
-	margin: 10px 0;
+/* Two-column layout */
+.clm-modal-body {
+	display: flex;
+	flex: 1;
+	overflow: hidden;
+	height: calc(100% - 140px); /* Adjust based on header/footer height */
+}
+
+.clm-class-info-column,
+.clm-attendance-column {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	position: relative;
+}
+
+.clm-class-info-column {
+	border-right: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.clm-section-header {
+	padding: 16px 24px 12px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.clm-section-header h3 {
+	margin: 0;
+	font-size: 1.1rem;
+	font-weight: 500;
+	color: #04abfd;
+}
+
+/* Form styling */
+.clm-form-fields {
+	padding: 20px;
+	overflow-y: auto;
+	height: 100%;
+}
+
+.clm-form-group {
+	margin-bottom: 20px;
+}
+
+.clm-form-group label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
 	font-size: 0.9rem;
-	color: #dc3545;
-	text-align: center;
-	white-space: pre-wrap;
+	color: #555;
+	margin-bottom: 8px;
+	font-weight: 500;
 }
 
-.button-container {
+.clm-field-icon {
+	color: #04abfd;
+}
+
+.clm-select,
+.clm-text-input {
+	width: 100%;
+	padding: 12px 14px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 8px;
+	font-size: 0.95rem;
+	background-color: #fff;
+	transition: all 0.2s ease;
+}
+
+.clm-select:focus,
+.clm-text-input:focus {
+	outline: none;
+	border-color: #04abfd;
+	box-shadow: 0 0 0 3px rgba(4, 171, 253, 0.15);
+}
+
+/* Summary section */
+.clm-summary {
+	margin-top: 24px;
+	padding-top: 16px;
+	border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.clm-attendance-summary h4 {
+	font-size: 0.95rem;
+	font-weight: 500;
+	margin: 0 0 12px 0;
+	color: #333;
+}
+
+.clm-summary-stats {
+	display: flex;
+	gap: 20px;
+	flex-wrap: wrap;
+}
+
+.clm-stat {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.clm-stat-label {
+	font-size: 0.85rem;
+	color: #666;
+}
+
+.clm-stat-value {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #333;
+}
+
+.clm-absent-count {
+	color: #d32f2f;
+}
+
+/* Student search */
+.clm-student-search {
+	padding: 16px 24px;
+	position: relative;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.clm-search-icon {
+	position: absolute;
+	left: 36px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #888;
+}
+
+.clm-search-input {
+	width: 100%;
+	padding: 10px 14px 10px 40px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 8px;
+	font-size: 0.95rem;
+}
+
+.clm-search-input:focus {
+	outline: none;
+	border-color: #04abfd;
+	box-shadow: 0 0 0 3px rgba(4, 171, 253, 0.15);
+}
+
+/* Students list */
+.clm-students-list {
+	overflow-y: auto;
+	padding: 8px 24px;
+	flex: 1;
+}
+
+.clm-student-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px 16px;
+	margin-bottom: 8px;
+	border-radius: 8px;
+	background-color: #f8f9fa;
+	transition: all 0.2s ease;
+}
+
+.clm-student-item:hover {
+	background-color: #f0f0f0;
+}
+
+.clm-student-item.clm-absent {
+	background-color: #fff2f2;
+}
+
+.clm-student-name {
+	font-weight: 500;
+	font-size: 0.95rem;
+	color: #333;
+}
+
+/* Toggle switch */
+.clm-toggle-switch {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+.clm-toggle-switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.clm-toggle-slider {
+	position: relative;
+	display: inline-block;
+	width: 38px;
+	height: 20px;
+	background-color: #ccc;
+	border-radius: 34px;
+	transition: 0.3s;
+	margin-right: 8px;
+}
+
+.clm-toggle-slider:before {
+	position: absolute;
+	content: "";
+	height: 16px;
+	width: 16px;
+	left: 2px;
+	bottom: 2px;
+	background-color: white;
+	border-radius: 50%;
+	transition: 0.3s;
+}
+
+.clm-toggle-switch input:checked + .clm-toggle-slider {
+	background-color: #d32f2f;
+}
+
+.clm-toggle-switch input:focus + .clm-toggle-slider {
+	box-shadow: 0 0 1px #d32f2f;
+}
+
+.clm-toggle-switch input:checked + .clm-toggle-slider:before {
+	transform: translateX(18px);
+}
+
+.clm-status-label {
+	font-size: 0.8rem;
+	transition: 0.3s;
+	min-width: 50px;
+}
+
+.clm-toggle-switch input:checked ~ .clm-status-label {
+	color: #d32f2f;
+	font-weight: 500;
+}
+
+.clm-no-results {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 150px;
+	color: #888;
+	font-style: italic;
+}
+
+/* Footer with action buttons */
+.clm-modal-footer {
+	border-top: 1px solid rgba(0, 0, 0, 0.06);
+	padding: 16px 24px;
 	display: flex;
 	justify-content: flex-end;
-	gap: 10px;
-	margin-top: 20px;
+	gap: 12px;
 }
 
-.dropdown-row {
-	display: flex;
-	gap: 10px;
+.clm-cancel-button {
+	padding: 10px 20px;
+	background-color: #f5f5f5;
+	color: #333;
+	border: none;
+	border-radius: 8px;
+	font-size: 0.95rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
 }
 
-.new-ui-mode .dropdown-select {
-	margin-bottom: 10px;
+.clm-cancel-button:hover {
+	background-color: #e0e0e0;
 }
 
-@keyframes fadeIn {
+.clm-submit-button {
+	padding: 10px 24px;
+	background-color: #04abfd;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	font-size: 0.95rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.clm-submit-button:hover {
+	background-color: #0386c7;
+}
+
+.clm-submit-button:disabled,
+.clm-cancel-button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes clm-fadeIn {
 	from {
 		opacity: 0;
 	}
@@ -103,24 +444,54 @@
 	}
 }
 
-@keyframes scaleUp {
+@keyframes clm-slideUp {
 	from {
-		transform: scale(0.95);
-		opacity: 0.95;
+		opacity: 0;
+		transform: translateY(20px);
 	}
 	to {
-		transform: scale(1);
 		opacity: 1;
+		transform: translateY(0);
 	}
 }
 
-@media (max-width: 600px) {
-	.modal-content {
-		width: 95%;
-		padding: 15px 20px;
+@keyframes clm-loading {
+	0% {
+		left: -30%;
 	}
-	.button-container {
+	50% {
+		left: 100%;
+	}
+	100% {
+		left: 100%;
+	}
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.clm-modal-container {
+		width: 95%;
+		max-height: 95vh;
+	}
+
+	.clm-modal-body {
 		flex-direction: column;
-		align-items: stretch;
+		height: auto;
+		overflow-y: auto;
+	}
+
+	.clm-class-info-column,
+	.clm-attendance-column {
+		width: 100%;
+		flex: none;
+	}
+
+	.clm-class-info-column {
+		border-right: none;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+	}
+
+	.clm-students-list {
+		max-height: 300px;
 	}
 }
