@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faPlus,
@@ -10,29 +10,23 @@ import {
 	faChalkboardTeacher,
 	faBook,
 	faSave,
+	faChevronDown,
+	faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
+import classApi from "../../api/classApi";
+import departmentApi from "../../api/departmentApi";
+import subjectApi from "../../api/subjectApi";
+import teacherApi from "../../api/teacherApi";
+import useAuth from "../../hooks/useAuth";
 import "./ClassManagement.css";
 
 const ClassManagement = () => {
+	const { user } = useAuth();
 	// State for classes, teachers, and subjects
 	const [classes, setClasses] = useState([]);
-	const [teachers] = useState([
-		{ id: 1, name: "John Doe" },
-		{ id: 2, name: "Jane Smith" },
-		{ id: 3, name: "Robert Johnson" },
-		{ id: 4, name: "Mary Williams" },
-		{ id: 5, name: "David Brown" },
-	]);
-	const [subjects] = useState([
-		{ id: 1, name: "Mathematics" },
-		{ id: 2, name: "Science" },
-		{ id: 3, name: "English" },
-		{ id: 4, name: "History" },
-		{ id: 5, name: "Geography" },
-		{ id: 6, name: "Computer Science" },
-		{ id: 7, name: "Physical Education" },
-		{ id: 8, name: "Art" },
-	]);
+	const [teachers, setTeachers] = useState([]);
+	const [subjects, setSubjects] = useState([]);
+	const [departments, setDepartments] = useState([]);
 
 	// State for modals and forms
 	const [showClassModal, setShowClassModal] = useState(false);
@@ -56,149 +50,292 @@ const ClassManagement = () => {
 	const [editDepartmentName, setEditDepartmentName] = useState("");
 	const [editTeacher, setEditTeacher] = useState("");
 
+	// Fetch initial data
+	useEffect(() => {
+		if (!user?.token) return;
+
+		const fetchData = async () => {
+			try {
+				const [classData, departmentData, subjectData, teacherData] =
+					await Promise.all([
+						classApi.getAllClasses(user.token),
+						departmentApi.getAllDepartments(user.token),
+						subjectApi.getAllSubjects(user.token),
+						teacherApi.getAllTeachers(user.token),
+					]);
+
+				// Transform backend data to match the UI structure
+				const transformedClasses = classData.map((cls) => ({
+					id: cls.id,
+					grade: cls.gradeLevel,
+					subjects: cls.subjects.map((subId) => {
+						const subject = subjectData.find((s) => s.id === subId);
+						return {
+							id: subId,
+							name: subject ? subject.name : "Unknown Subject",
+						};
+					}),
+					departments: [],
+				}));
+
+				// Group departments by classId
+				departmentData.forEach((dept) => {
+					const classIndex = transformedClasses.findIndex(
+						(cls) => cls.id === dept.classId
+					);
+					if (classIndex !== -1) {
+						const teacherObj = teacherData.find(
+							(t) => t.id === dept.classTeacherId
+						);
+						transformedClasses[classIndex].departments.push({
+							id: dept.id,
+							name: dept.departmentName,
+							teacherId: dept.classTeacherId || "",
+							teacherName: teacherObj
+								? `${teacherObj.firstName} ${teacherObj.lastName}`
+								: "",
+						});
+					}
+				});
+
+				setClasses(transformedClasses);
+				setDepartments(departmentData);
+				setSubjects(subjectData);
+				setTeachers(teacherData);
+			} catch (error) {
+				console.error("Error fetching data:", error);
+			}
+		};
+
+		fetchData();
+	}, [user]);
+
 	// Handler for creating a new class
-	const handleCreateClass = () => {
+	const handleCreateClass = async () => {
 		if (newGrade && selectedSubjects.length > 0) {
-			const newClass = {
-				id: Date.now(),
-				grade: newGrade,
-				subjects: selectedSubjects.map((id) => {
-					const subject = subjects.find((s) => s.id === id);
-					return { id: subject.id, name: subject.name };
-				}),
-				departments: [],
+			const classData = {
+				gradeLevel: newGrade,
+				subjects: selectedSubjects,
 			};
-			setClasses([...classes, newClass]);
-			setNewGrade("");
-			setSelectedSubjects([]);
-			setShowClassModal(false);
+
+			try {
+				const newClass = await classApi.createClass(classData, user.token);
+
+				// Transform for UI
+				const transformedClass = {
+					id: newClass.id,
+					grade: newClass.gradeLevel,
+					subjects: selectedSubjects.map((id) => {
+						const subject = subjects.find((s) => s.id === id);
+						return { id, name: subject ? subject.name : "Unknown Subject" };
+					}),
+					departments: [],
+				};
+
+				setClasses([...classes, transformedClass]);
+				setNewGrade("");
+				setSelectedSubjects([]);
+				setShowClassModal(false);
+			} catch (error) {
+				console.error("Error creating class:", error);
+			}
 		}
 	};
 
 	// Handler for editing a class
-	const handleEditClass = () => {
+	const handleEditClass = async () => {
 		if (classToEdit && editGrade && editSubjects.length > 0) {
-			setClasses(
-				classes.map((cls) => {
-					if (cls.id === classToEdit.id) {
-						return {
-							...cls,
-							grade: editGrade,
-							subjects: editSubjects.map((id) => {
-								const subject = subjects.find((s) => s.id === id);
-								return { id: subject.id, name: subject.name };
-							}),
-						};
-					}
-					return cls;
-				})
-			);
+			const classData = {
+				id: classToEdit.id,
+				gradeLevel: editGrade,
+				subjects: editSubjects,
+			};
 
-			setClassToEdit(null);
-			setEditGrade("");
-			setEditSubjects([]);
-			setShowEditClassModal(false);
+			try {
+				await classApi.updateClass(classToEdit.id, classData, user.token);
+
+				setClasses(
+					classes.map((cls) => {
+						if (cls.id === classToEdit.id) {
+							return {
+								...cls,
+								grade: editGrade,
+								subjects: editSubjects.map((id) => {
+									const subject = subjects.find((s) => s.id === id);
+									return {
+										id,
+										name: subject ? subject.name : "Unknown Subject",
+									};
+								}),
+							};
+						}
+						return cls;
+					})
+				);
+
+				setClassToEdit(null);
+				setEditGrade("");
+				setEditSubjects([]);
+				setShowEditClassModal(false);
+			} catch (error) {
+				console.error("Error updating class:", error);
+			}
 		}
 	};
 
 	// Handler for creating a new department
-	const handleCreateDepartment = () => {
-		if (selectedClassForDept && newDepartmentName && selectedTeacher) {
-			const teacherObj = teachers.find(
-				(t) => t.id.toString() === selectedTeacher.toString()
-			);
-			const newDepartment = {
-				id: Date.now(),
-				name: newDepartmentName,
-				teacherId: teacherObj.id,
-				teacherName: teacherObj.name,
+	const handleCreateDepartment = async () => {
+		if (selectedClassForDept && newDepartmentName) {
+			const departmentData = {
+				classId: selectedClassForDept.id,
+				departmentName: newDepartmentName,
+				classTeacherId: selectedTeacher || null,
 			};
 
-			setClasses(
-				classes.map((cls) => {
-					if (cls.id === selectedClassForDept.id) {
-						return {
-							...cls,
-							departments: [...cls.departments, newDepartment],
-						};
-					}
-					return cls;
-				})
-			);
+			try {
+				const newDepartment = await departmentApi.createDepartment(
+					departmentData,
+					user.token
+				);
 
-			setNewDepartmentName("");
-			setSelectedTeacher("");
-			setShowDepartmentModal(false);
+				const teacherObj = teachers.find(
+					(t) => t.id === (selectedTeacher || "")
+				);
+				const uiDepartment = {
+					id: newDepartment.id,
+					name: newDepartment.departmentName,
+					teacherId: newDepartment.classTeacherId || "",
+					teacherName: teacherObj
+						? `${teacherObj.firstName} ${teacherObj.lastName}`
+						: "",
+				};
+
+				setClasses(
+					classes.map((cls) => {
+						if (cls.id === selectedClassForDept.id) {
+							return {
+								...cls,
+								departments: [...cls.departments, uiDepartment],
+							};
+						}
+						return cls;
+					})
+				);
+
+				// Update departments list
+				setDepartments([...departments, newDepartment]);
+
+				setNewDepartmentName("");
+				setSelectedTeacher("");
+				setShowDepartmentModal(false);
+			} catch (error) {
+				console.error("Error creating department:", error);
+			}
 		}
 	};
 
 	// Handler for editing a department
-	const handleEditDepartment = () => {
-		if (
-			departmentToEdit &&
-			departmentParentClass &&
-			editDepartmentName &&
-			editTeacher
-		) {
-			const teacherObj = teachers.find(
-				(t) => t.id.toString() === editTeacher.toString()
-			);
+	const handleEditDepartment = async () => {
+		if (departmentToEdit && departmentParentClass && editDepartmentName) {
+			const departmentData = {
+				id: departmentToEdit.id,
+				classId: departmentParentClass.id,
+				departmentName: editDepartmentName,
+				classTeacherId: editTeacher || null,
+			};
 
-			setClasses(
-				classes.map((cls) => {
-					if (cls.id === departmentParentClass.id) {
-						return {
-							...cls,
-							departments: cls.departments.map((dept) => {
-								if (dept.id === departmentToEdit.id) {
-									return {
-										...dept,
-										name: editDepartmentName,
-										teacherId: teacherObj.id,
-										teacherName: teacherObj.name,
-									};
-								}
-								return dept;
-							}),
-						};
-					}
-					return cls;
-				})
-			);
+			try {
+				await departmentApi.updateDepartment(
+					departmentToEdit.id,
+					departmentData,
+					user.token
+				);
 
-			setDepartmentToEdit(null);
-			setDepartmentParentClass(null);
-			setEditDepartmentName("");
-			setEditTeacher("");
-			setShowEditDepartmentModal(false);
+				const teacherObj = teachers.find((t) => t.id === (editTeacher || ""));
+
+				setClasses(
+					classes.map((cls) => {
+						if (cls.id === departmentParentClass.id) {
+							return {
+								...cls,
+								departments: cls.departments.map((dept) => {
+									if (dept.id === departmentToEdit.id) {
+										return {
+											...dept,
+											name: editDepartmentName,
+											teacherId: editTeacher || "",
+											teacherName: teacherObj
+												? `${teacherObj.firstName} ${teacherObj.lastName}`
+												: "",
+										};
+									}
+									return dept;
+								}),
+							};
+						}
+						return cls;
+					})
+				);
+
+				// Update departments list
+				setDepartments(
+					departments.map((dept) =>
+						dept.id === departmentToEdit.id ? departmentData : dept
+					)
+				);
+
+				setDepartmentToEdit(null);
+				setDepartmentParentClass(null);
+				setEditDepartmentName("");
+				setEditTeacher("");
+				setShowEditDepartmentModal(false);
+			} catch (error) {
+				console.error("Error updating department:", error);
+			}
 		}
 	};
 
 	// Handler for deleting a class
-	const handleDeleteClass = (classId) => {
+	const handleDeleteClass = async (classId) => {
 		if (
 			window.confirm(
 				"Are you sure you want to delete this class and all its departments?"
 			)
 		) {
-			setClasses(classes.filter((c) => c.id !== classId));
+			try {
+				await classApi.deleteClass(classId, user.token);
+				setClasses(classes.filter((c) => c.id !== classId));
+			} catch (error) {
+				console.error("Error deleting class:", error);
+			}
 		}
 	};
 
 	// Handler for deleting a department
-	const handleDeleteDepartment = (classId, departmentId) => {
+	const handleDeleteDepartment = async (classId, departmentId) => {
 		if (window.confirm("Are you sure you want to delete this department?")) {
-			setClasses(
-				classes.map((cls) => {
-					if (cls.id === classId) {
-						return {
-							...cls,
-							departments: cls.departments.filter((d) => d.id !== departmentId),
-						};
-					}
-					return cls;
-				})
-			);
+			try {
+				await departmentApi.deleteDepartment(departmentId, user.token);
+
+				setClasses(
+					classes.map((cls) => {
+						if (cls.id === classId) {
+							return {
+								...cls,
+								departments: cls.departments.filter(
+									(d) => d.id !== departmentId
+								),
+							};
+						}
+						return cls;
+					})
+				);
+
+				// Update departments list
+				setDepartments(departments.filter((d) => d.id !== departmentId));
+			} catch (error) {
+				console.error("Error deleting department:", error);
+			}
 		}
 	};
 
@@ -241,7 +378,9 @@ const ClassManagement = () => {
 		setDepartmentParentClass(classObj);
 		setDepartmentToEdit(departmentObj);
 		setEditDepartmentName(departmentObj.name);
-		setEditTeacher(departmentObj.teacherId.toString());
+		setEditTeacher(
+			departmentObj.teacherId ? departmentObj.teacherId.toString() : ""
+		);
 		setShowEditDepartmentModal(true);
 	};
 
@@ -355,7 +494,7 @@ const ClassManagement = () => {
 									cls.departments.map((dept) => (
 										<div className="cm-dept-card" key={dept.id}>
 											<div className="cm-dept-name">
-												{cls.grade}
+												{/* {cls.grade} */}
 												{dept.name}
 											</div>
 											<div className="cm-dept-teacher">
@@ -363,7 +502,7 @@ const ClassManagement = () => {
 													icon={faUser}
 													className="cm-dept-icon"
 												/>
-												<span>{dept.teacherName}</span>
+												<span>{dept.teacherName || "No teacher assigned"}</span>
 											</div>
 											<div className="cm-dept-actions">
 												<button
@@ -587,7 +726,7 @@ const ClassManagement = () => {
 									<option value="">Select Class Teacher</option>
 									{teachers.map((teacher) => (
 										<option key={teacher.id} value={teacher.id}>
-											{teacher.name}
+											{teacher.firstName} {teacher.lastName}
 										</option>
 									))}
 								</select>
@@ -603,7 +742,7 @@ const ClassManagement = () => {
 							<button
 								className="cm-btn cm-btn-primary"
 								onClick={handleCreateDepartment}
-								disabled={!newDepartmentName || !selectedTeacher}
+								disabled={!newDepartmentName}
 							>
 								<FontAwesomeIcon icon={faPlus} className="cm-btn-icon-left" />
 								Add Department
@@ -656,7 +795,7 @@ const ClassManagement = () => {
 									<option value="">Select Class Teacher</option>
 									{teachers.map((teacher) => (
 										<option key={teacher.id} value={teacher.id}>
-											{teacher.name}
+											{teacher.firstName} {teacher.lastName}
 										</option>
 									))}
 								</select>
@@ -672,7 +811,7 @@ const ClassManagement = () => {
 							<button
 								className="cm-btn cm-btn-primary"
 								onClick={handleEditDepartment}
-								disabled={!editDepartmentName || !editTeacher}
+								disabled={!editDepartmentName}
 							>
 								<FontAwesomeIcon icon={faSave} className="cm-btn-icon-left" />
 								Save Changes
