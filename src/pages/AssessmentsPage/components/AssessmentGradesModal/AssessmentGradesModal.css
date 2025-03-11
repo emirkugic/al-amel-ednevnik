@@ -1,0 +1,83 @@
+.assessment-modal-overlay {
+	position: fixed !important;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.6);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1001 !important;
+}
+
+.assessment-modal-content {
+	background-color: #fff;
+	position: relative;
+	padding: 0;
+	width: 450px;
+	height: 500px;
+	max-width: 90%;
+	max-height: 80vh;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	font-family: Arial, sans-serif;
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+	border-radius: 8px;
+}
+
+.assessment-modal-header {
+	padding: 20px;
+	margin: 0;
+	background-color: #007bff;
+	color: #fff;
+	font-size: 1.5rem;
+	border-radius: 8px 8px 0 0;
+	text-align: center;
+}
+
+.assessment-modal-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0;
+}
+
+.assessment-modal-table th,
+.assessment-modal-table td {
+	padding: 10px;
+	border-bottom: 1px solid #ddd;
+	text-align: left;
+	font-size: 0.9rem;
+}
+
+.assessment-modal-table th {
+	background-color: #f4f4f4;
+	font-weight: bold;
+}
+
+.assessment-modal-button {
+	border: none;
+	background: none;
+	cursor: pointer;
+	font-size: 1.2rem;
+	padding: 5px;
+	border-radius: 4px;
+	transition: background-color 0.2s;
+}
+
+.assessment-modal-button.edit {
+	color: #1e90ff;
+}
+
+.assessment-modal-button.save {
+	color: #4caf50;
+}
+
+.assessment-modal-button:hover {
+	background-color: #f0f0f0;
+}
+
+.assessment-modal-content * {
+	box-sizing: border-box;
+}

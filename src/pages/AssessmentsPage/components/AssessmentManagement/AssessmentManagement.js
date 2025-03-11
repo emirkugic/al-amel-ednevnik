@@ -21,6 +21,7 @@ import useAuth from "../../../../hooks/useAuth";
 import useAssessments from "../../../../hooks/useAssessments";
 import departmentApi from "../../../../api/departmentApi";
 import "./AssessmentManagement.css";
+import AssessmentGradesModal from "../AssessmentGradesModal/AssessmentGradesModal";
 
 // Constants
 const FIRST_SEMESTER_MONTHS = ["September", "October", "November", "December"];
@@ -67,6 +68,8 @@ const getAssessmentTypeIcon = (type) => {
 	}
 };
 
+// Assessment Grades Modal Component
+
 const AssessmentManagement = () => {
 	// Get subject ID from URL params
 	const { subject } = useParams();
@@ -87,6 +90,10 @@ const AssessmentManagement = () => {
 	const [loading, setLoading] = useState(false);
 	const [selectedMonth, setSelectedMonth] = useState("");
 
+	// Modal state
+	const [selectedAssessment, setSelectedAssessment] = useState(null);
+	const [isGradesModalOpen, setIsGradesModalOpen] = useState(false);
+
 	// Form state
 	const [title, setTitle] = useState("");
 	const [type, setType] = useState("Exam");
@@ -101,6 +108,21 @@ const AssessmentManagement = () => {
 		(subj) => subj.subjectId === subject
 	);
 	const departmentIds = currentSubject ? currentSubject.departmentId : [];
+
+	// Modal functions
+	const openGradesModal = async (assessment) => {
+		try {
+			setSelectedAssessment(assessment);
+			setIsGradesModalOpen(true);
+		} catch (err) {
+			console.error("Error opening grades modal:", err);
+		}
+	};
+
+	const closeGradesModal = () => {
+		setIsGradesModalOpen(false);
+		setSelectedAssessment(null);
+	};
 
 	// Fetch department names
 	useEffect(() => {
@@ -270,15 +292,6 @@ const AssessmentManagement = () => {
 							/>
 							Assessment Management
 						</h1>
-						{/* <p>
-							<span className="asmnt-stat-pill grades">
-								<FontAwesomeIcon icon={faCalendarAlt} /> {selectedSemester}
-							</span>
-							<span className="asmnt-stat-pill">
-								<FontAwesomeIcon icon={faClipboardList} /> {assessments.length}{" "}
-								assessments
-							</span>
-						</p> */}
 					</div>
 				</header>
 
@@ -471,6 +484,7 @@ const AssessmentManagement = () => {
 											<div
 												key={assessment.id}
 												className="asmnt-assessment-item"
+												onClick={() => openGradesModal(assessment)}
 											>
 												<div className="asmnt-assessment-item-header">
 													<div className="asmnt-assessment-type">
@@ -514,10 +528,7 @@ const AssessmentManagement = () => {
 																onClick={(e) => {
 																	e.preventDefault();
 																	e.stopPropagation();
-																	// This will be implemented later
-																	alert(
-																		"Grading functionality will be added later"
-																	);
+																	openGradesModal(assessment);
 																}}
 																title="Grade assessments"
 															>
@@ -539,6 +550,14 @@ const AssessmentManagement = () => {
 					</main>
 				</div>
 			</div>
+
+			{isGradesModalOpen && selectedAssessment && (
+				<AssessmentGradesModal
+					assessment={selectedAssessment}
+					token={user?.token}
+					onClose={closeGradesModal}
+				/>
+			)}
 		</div>
 	);
 };
