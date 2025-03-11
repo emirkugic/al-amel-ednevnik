@@ -1,206 +1,467 @@
-.weekly-logs {
-	padding: 10px;
-	max-width: 900px;
-	margin: 0 auto;
-	background: #f5f7fa;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-/* Loading/error placeholders */
-.loading,
-.error {
-	margin: 1rem 0;
-	font-size: 1rem;
-	text-align: center;
-	color: #555;
-}
-
-/* ----- TIMETABLE (DESKTOP) ----- */
-.timetable {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-}
-
-.timetable-row {
-	display: flex;
-	gap: 6px;
-	align-items: stretch;
-}
-
-.day-label {
-	background: #eceff1;
-	padding: 6px;
-	text-align: center;
-	border-radius: 4px;
-	min-width: 70px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	font-weight: 600;
-}
-
-.day-label .day-name {
-	font-size: 1rem;
-	margin-bottom: 2px;
-}
-
-.day-label .date {
-	font-size: 0.75rem;
-	color: #555;
-}
-
-/* Periods grid */
-.periods {
-	flex: 1;
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-	gap: 6px;
-}
-
-/* ----- PERIOD CELLS ----- */
-.timetable-cell {
+.timetable-container {
 	background: #fff;
-	padding: 6px;
-	border-radius: 4px;
-	border: 1px solid #ddd;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
-	overflow: hidden;
-	transition: background 0.3s, transform 0.2s;
-	position: relative;
+	height: 94vh;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+		Arial, sans-serif;
 }
 
-.timetable-cell:hover {
-	transform: translateY(-1px);
-	background: #f9f9f9;
+@media (min-width: 992px) {
+	.timetable-container {
+		margin-left: 10px;
+	}
 }
 
-.cell-header {
-	margin-bottom: 2px;
+/* Header styling */
+.timetable-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px 24px;
+	border-bottom: 1px solid #eaeaea;
+	background-color: #fff;
+}
+
+.header-left {
+	display: flex;
+	flex-direction: column;
+}
+
+.header-left h2 {
+	margin: 0;
+	font-size: 22px;
+	font-weight: 600;
+	color: #333;
+}
+
+.week-selector {
 	display: flex;
 	align-items: center;
-	flex-wrap: wrap;
+	margin-top: 12px;
+	gap: 12px;
 }
 
-.period-number {
-	font-weight: bold;
-	color: #1976d2;
-	font-size: 0.85rem;
+.week-range {
+	font-size: 15px;
+	color: #666;
+	font-weight: 500;
 }
 
-.duplicate-label {
-	font-size: 0.75rem;
-	color: #e63946;
-	margin-left: 4px;
+.btn-nav {
+	background: #f5f5f5;
+	border: none;
+	width: 32px;
+	height: 32px;
+	border-radius: 6px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #555;
 	cursor: pointer;
+	transition: all 0.15s ease;
 }
 
-.cell-content {
-	font-size: 0.85rem;
-	line-height: 1.25;
-	overflow: hidden;
-	text-overflow: ellipsis;
+.btn-nav:hover:not(.disabled) {
+	background: #e0e0e0;
+	color: #333;
 }
 
-.no-log {
-	color: #d32f2f;
-	font-weight: bold;
+.btn-nav.disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.btn-today {
+	background: #f0f5ff;
+	border: none;
+	border-radius: 6px;
+	padding: 8px 12px;
+	font-size: 13px;
+	color: #4264eb;
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.btn-today:hover {
+	background: #e0ebff;
+}
+
+.header-right {
+	display: flex;
+	gap: 12px;
+}
+
+.dept-selector select,
+.day-selector select {
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	padding: 8px 12px;
+	font-size: 14px;
+	color: #333;
+	min-width: 160px;
+	appearance: none;
+	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 12px center;
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.dept-selector select:focus,
+.day-selector select:focus {
+	outline: none;
+	border-color: #4264eb;
+	box-shadow: 0 0 0 2px rgba(66, 100, 235, 0.1);
+}
+
+/* Timetable itself */
+.timetable {
+	flex: 1;
+	overflow: auto;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Days header (horizontal) */
+.timetable-days-header {
+	display: grid;
+	grid-template-columns: 80px repeat(5, 1fr);
+	border-bottom: 1px solid #eaeaea;
+	background-color: #fcfcfc;
+	position: sticky;
+	top: 0;
+	z-index: 10;
+}
+
+.day-header {
+	padding: 12px 16px;
 	text-align: center;
-	padding: 6px 0;
+	border-left: 1px solid #eaeaea;
 }
 
-.missing {
-	background: #ffcdd2;
-	color: #c62828;
+.day-header.today {
+	background-color: #f0f5ff;
 }
 
-.log-entry .lecture-title {
-	font-weight: bold;
-	white-space: nowrap;
+.day-name {
+	font-weight: 600;
+	font-size: 14px;
+	color: #333;
+}
+
+.day-date {
+	font-size: 13px;
+	color: #666;
+	margin-top: 4px;
+}
+
+/* Mobile day header */
+.mobile-day-header {
+	display: none;
+	padding: 12px 16px;
+	background-color: #fcfcfc;
+	border-bottom: 1px solid #eaeaea;
+}
+
+.mobile-day-info {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.today-badge {
+	font-size: 11px;
+	font-weight: 600;
+	color: #fff;
+	background-color: #4264eb;
+	padding: 2px 6px;
+	border-radius: 4px;
+	margin-left: 8px;
+}
+
+/* Periods container */
+.periods-container {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Period row */
+.period-row {
+	display: grid;
+	grid-template-columns: 80px repeat(5, 1fr);
+	border-bottom: 1px solid #eaeaea;
+	flex: 1;
+}
+
+.period-row:last-child {
+	border-bottom: none;
+}
+
+.period-label {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 600;
+	font-size: 13px;
+	color: #555;
+	background-color: #f8f8f8;
+	padding: 0;
+}
+
+/* Day cells container */
+.day-cells {
+	display: contents;
+}
+
+/* Individual day cell */
+.day-cell {
+	min-height: 60px;
+	padding: 8px 10px;
+	border-left: 1px solid #eaeaea;
+	position: relative;
+	transition: all 0.15s ease;
+}
+
+.day-cell:hover {
+	background-color: #fafafa;
+}
+
+.day-cell.today {
+	background-color: #fafeff;
+}
+
+/* Missing log */
+.day-cell.missing {
+	background-color: #ffefef;
+}
+
+.missing-log {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	color: #e57373;
+	gap: 6px;
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.missing-log:hover {
+	color: #f44336;
+}
+
+.missing-log .add-icon {
+	font-size: 20px;
+	font-weight: 300;
+	color: #f44336;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.missing-log span {
+	font-size: 13px;
+	font-weight: 500;
+}
+
+/* Log entry */
+.log-entry {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.log-title {
+	font-weight: 600;
+	font-size: 13px;
+	color: #333;
+	margin-bottom: 6px;
 	overflow: hidden;
-	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
 }
 
 .log-details {
-	font-size: 0.75rem;
-	color: #555;
-	margin-top: 2px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: auto;
+	font-size: 12px;
+	color: #666;
 }
 
-/* ----- RESPONSIVE (MOBILE) ----- */
+.sequence {
+	font-weight: 500;
+}
+
+.teacher {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+/* Duplicate indicator */
+.day-cell.duplicate {
+	background-color: #fff8e1;
+}
+
+.duplicate-indicator {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	background-color: #ffa000;
+	color: white;
+	border-radius: 10px;
+	font-size: 11px;
+	font-weight: 500;
+	padding: 2px 6px;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+/* Loading state */
+.timetable-loading {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	color: #666;
+}
+
+.loading-spinner {
+	width: 40px;
+	height: 40px;
+	border: 3px solid #f3f3f3;
+	border-top: 3px solid #4264eb;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin-bottom: 16px;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* Error state */
+.timetable-error {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	padding: 0 24px;
+	text-align: center;
+}
+
+.error-icon {
+	font-size: 40px;
+	color: #f44336;
+	margin-bottom: 16px;
+}
+
+.timetable-error h3 {
+	margin: 0 0 8px 0;
+	font-size: 18px;
+	color: #333;
+}
+
+.timetable-error p {
+	margin: 0 0 20px 0;
+	color: #666;
+	max-width: 400px;
+}
+
+.btn-retry {
+	background-color: #4264eb;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	padding: 10px 16px;
+	font-size: 14px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	transition: all 0.15s ease;
+}
+
+.btn-retry:hover {
+	background-color: #3251cc;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+	.timetable-container {
+		height: calc(100vh - 100px);
+	}
+
+	.timetable-header {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.header-right {
+		margin-top: 16px;
+		width: 100%;
+	}
+
+	.dept-selector,
+	.day-selector {
+		flex: 1;
+	}
+
+	.dept-selector select,
+	.day-selector select {
+		width: 100%;
+	}
+}
+
 @media (max-width: 768px) {
-	/* Timetable becomes stacked day cards */
-	.timetable {
-		display: block;
-	}
-
-	.timetable-row {
-		display: block;
-		margin-bottom: 16px;
-		background: #fff;
-		border-radius: 6px;
-		border: 1px solid #ddd;
-		padding: 10px;
-	}
-
-	.day-label {
-		text-align: left;
-		background: none;
-		padding: 0;
-		font-weight: 700;
-		margin-bottom: 8px;
+	.timetable-container {
 		border-radius: 0;
-		min-width: auto;
+		margin: 0;
 	}
 
-	.day-label .day-name {
-		font-size: 1.1rem;
-		margin-bottom: 0;
-	}
-	.day-label .date {
-		font-size: 0.9rem;
-		color: #666;
+	.timetable-days-header {
+		display: none;
 	}
 
-	.periods {
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
+	.mobile-day-header {
+		display: block;
 	}
 
-	.timetable-cell {
-		display: flex;
-		flex-direction: column;
-		box-shadow: none;
-		border: 1px solid #ececec;
-		padding: 8px;
+	.period-row {
+		display: grid;
+		grid-template-columns: 60px 1fr;
 	}
 
-	.cell-header {
-		margin-bottom: 4px;
-		font-size: 1rem;
+	.period-label {
+		font-size: 12px;
 	}
 
-	.period-number {
-		font-size: 1rem;
-		margin-right: 6px;
+	.day-cells {
+		display: block;
 	}
 
-	.cell-content {
-		font-size: 0.95rem;
-		line-height: 1.3;
-	}
-
-	.no-log,
-	.missing {
-		font-size: 0.95rem;
-		text-align: left;
-		font-weight: 600;
-		background: #ffcdd2;
-		padding: 6px;
-		border-radius: 4px;
-		margin-top: 4px;
+	.day-cell {
+		border-left: none;
+		min-height: 60px;
 	}
 }
