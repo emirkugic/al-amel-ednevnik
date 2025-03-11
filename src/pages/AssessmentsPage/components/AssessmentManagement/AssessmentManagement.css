@@ -35,7 +35,7 @@ body {
 
 /* Main container */
 .assessment-page {
-	padding: 20px;
+	padding: 0px;
 	height: calc(100vh - 40px);
 	overflow: hidden;
 }
@@ -263,33 +263,72 @@ body {
 .month-nav {
 	padding: 20px 30px;
 	display: flex;
-	align-items: center;
-	justify-content: space-between;
+	flex-direction: column;
 	border-bottom: 1px solid var(--gray-200);
+}
+
+.month-nav-header {
+	margin-bottom: 16px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.month-nav-title {
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--gray-700);
+	margin: 0;
+	display: flex;
+	align-items: center;
+	gap: 8px;
 }
 
 .month-indicators {
 	display: flex;
-	gap: 6px;
+	gap: 10px;
 }
 
 .month-indicator {
-	padding: 6px 12px;
-	border-radius: 20px;
+	padding: 8px 16px;
+	border-radius: var(--radius);
 	font-size: 14px;
-	color: var(--gray-600);
+	color: var(--gray-700);
 	cursor: pointer;
 	transition: var(--transition);
+	border: 1px solid var(--gray-200);
+	background-color: var(--white);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-width: 100px;
+	box-shadow: var(--shadow-sm);
 }
 
 .month-indicator:hover {
-	background-color: var(--gray-100);
+	border-color: var(--gray-300);
+	transform: translateY(-2px);
 }
 
 .month-indicator.active {
 	background-color: var(--primary-light);
 	color: var(--primary-dark);
 	font-weight: 500;
+	border-color: var(--primary);
+}
+
+.month-name {
+	font-weight: 500;
+	margin-bottom: 4px;
+}
+
+.month-points {
+	font-size: 15px;
+	font-weight: 600;
+	color: var(--primary);
+	display: flex;
+	align-items: center;
+	gap: 4px;
 }
 
 /* Assessment list */
@@ -484,7 +523,6 @@ body {
 	color: var(--gray-500);
 }
 
-/* Mobile responsive styles */
 @media (max-width: 768px) {
 	.assessment-layout {
 		grid-template-columns: 1fr;
@@ -505,14 +543,18 @@ body {
 	}
 
 	.month-nav {
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 12px;
+		padding: 16px;
 	}
 
 	.month-indicators {
 		width: 100%;
 		overflow-x: auto;
 		padding-bottom: 6px;
+		gap: 8px;
+	}
+
+	.month-indicator {
+		min-width: 80px;
+		padding: 8px;
 	}
 }

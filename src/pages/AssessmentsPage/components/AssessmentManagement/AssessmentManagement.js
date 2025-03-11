@@ -392,19 +392,91 @@ const AssessmentManagement = () => {
 					<main className="assessment-content">
 						{/* Month navigation */}
 						<div className="month-nav">
-							<div className="month-indicators">
-								{monthsToDisplay.map((month) => (
-									<div
-										key={month}
-										className={`month-indicator ${
-											selectedMonth === month ? "active" : ""
-										}`}
-										onClick={() => setSelectedMonth(month)}
-									>
-										{month}
-									</div>
-								))}
+							<div className="month-nav-header">
+								<h3 className="month-nav-title">
+									<FontAwesomeIcon icon={faCalendarAlt} /> Monthly Assessments
+								</h3>
 							</div>
+
+							<div className="month-indicators">
+								{monthsToDisplay.map((month) => {
+									const monthAssessments = groupedAssessments[month] || [];
+									const monthPoints = monthAssessments.reduce(
+										(sum, a) => sum + Number(a.points),
+										0
+									);
+
+									return (
+										<div
+											key={month}
+											className={`month-indicator ${
+												selectedMonth === month ? "active" : ""
+											}`}
+											onClick={() => setSelectedMonth(month)}
+										>
+											<span className="month-name">{month}</span>
+											<span className="month-points">
+												<FontAwesomeIcon icon={faCalculator} />
+												{monthPoints} pts
+											</span>
+										</div>
+									);
+								})}
+							</div>
+
+							{/* <div className="points-overview">
+								<table className="points-table">
+									<thead>
+										<tr>
+											{monthsToDisplay.map((month) => (
+												<th
+													key={month}
+													className={
+														selectedMonth === month ? "month-current" : ""
+													}
+												>
+													{month.substring(0, 3)}
+												</th>
+											))}
+											<th>Total</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											{monthsToDisplay.map((month) => {
+												const monthAssessments =
+													groupedAssessments[month] || [];
+												const monthPoints = monthAssessments.reduce(
+													(sum, a) => sum + Number(a.points),
+													0
+												);
+
+												return (
+													<td
+														key={month}
+														className={
+															monthPoints === 0
+																? "points-zero"
+																: monthPoints > 30
+																? "points-high"
+																: ""
+														}
+													>
+														{monthPoints > 0 ? `${monthPoints} pts` : "-"}
+													</td>
+												);
+											})}
+											<td className="points-high">
+												{assessments.reduce(
+													(sum, a) => sum + Number(a.points),
+													0
+												)}{" "}
+												pts
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div> */}
 						</div>
 
 						{/* Assessment list */}
