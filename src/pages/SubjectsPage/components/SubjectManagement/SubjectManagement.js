@@ -167,10 +167,7 @@ const SubjectManagement = () => {
 			{/* Header */}
 			<div className="subject-header">
 				<div className="subject-title">
-					<h1>
-						<FontAwesomeIcon icon={faBook} className="subject-title-icon" />
-						Subject Management
-					</h1>
+					<h1>Subject Management</h1>
 					<p>
 						<span className="subject-stat-pill">
 							<FontAwesomeIcon icon={faBook} /> {subjects.length} subjects
