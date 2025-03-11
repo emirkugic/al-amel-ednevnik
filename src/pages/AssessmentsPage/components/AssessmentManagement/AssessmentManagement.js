@@ -245,30 +245,53 @@ const AssessmentManagement = () => {
 		0
 	);
 
+	// Show loading state if user not authenticated yet
+	if (!user?.token) {
+		return (
+			<div className="asmnt-page">
+				<div className="asmnt-dashboard-card asmnt-loading-container">
+					<div className="asmnt-loading-spinner"></div>
+					<p>Loading...</p>
+				</div>
+			</div>
+		);
+	}
+
 	return (
-		<div className="assessment-page">
-			<div className="assessment-card">
+		<div className="asmnt-page">
+			<div className="asmnt-dashboard-card">
 				{/* Header */}
-				<header className="assessment-header">
-					<h1 className="assessment-title">
-						<FontAwesomeIcon
-							icon={faGraduationCap}
-							className="assessment-title-icon"
-						/>
-						Assessment Management
-					</h1>
+				<header className="asmnt-header">
+					<div className="asmnt-title">
+						<h1>
+							<FontAwesomeIcon
+								icon={faGraduationCap}
+								className="asmnt-title-icon"
+							/>
+							Assessment Management
+						</h1>
+						{/* <p>
+							<span className="asmnt-stat-pill grades">
+								<FontAwesomeIcon icon={faCalendarAlt} /> {selectedSemester}
+							</span>
+							<span className="asmnt-stat-pill">
+								<FontAwesomeIcon icon={faClipboardList} /> {assessments.length}{" "}
+								assessments
+							</span>
+						</p> */}
+					</div>
 				</header>
 
 				{/* Main layout */}
-				<div className="assessment-layout">
+				<div className="asmnt-layout">
 					{/* Sidebar with controls */}
-					<aside className="assessment-sidebar">
+					<aside className="asmnt-sidebar">
 						{/* Semester switch */}
-						<div className="semester-switch">
-							<label className="semester-switch-label">Semester</label>
-							<div className="semester-tabs">
+						<div className="asmnt-semester-switch">
+							<label className="asmnt-semester-switch-label">Semester</label>
+							<div className="asmnt-semester-tabs">
 								<div
-									className={`semester-tab ${
+									className={`asmnt-semester-tab ${
 										selectedSemester === "First Semester" ? "active" : ""
 									}`}
 									onClick={() => setSelectedSemester("First Semester")}
@@ -276,7 +299,7 @@ const AssessmentManagement = () => {
 									First Semester
 								</div>
 								<div
-									className={`semester-tab ${
+									className={`asmnt-semester-tab ${
 										selectedSemester === "Second Semester" ? "active" : ""
 									}`}
 									onClick={() => setSelectedSemester("Second Semester")}
@@ -287,10 +310,10 @@ const AssessmentManagement = () => {
 						</div>
 
 						{/* Department selector */}
-						<div className="department-selector">
-							<label className="selector-label">Department</label>
+						<div className="asmnt-department-selector">
+							<label className="asmnt-selector-label">Department</label>
 							<select
-								className="selector-control"
+								className="asmnt-selector-control"
 								value={selectedDepartment || ""}
 								onChange={(e) => setSelectedDepartment(e.target.value)}
 								disabled={loading || departmentNames.length === 0}
@@ -309,33 +332,36 @@ const AssessmentManagement = () => {
 						</div>
 
 						{/* Add Assessment form */}
-						<div className="sidebar-section">
-							<h2 className="section-title">
-								<FontAwesomeIcon icon={faPlus} className="section-title-icon" />
+						<div className="asmnt-sidebar-section">
+							<h2 className="asmnt-section-title">
+								<FontAwesomeIcon
+									icon={faPlus}
+									className="asmnt-section-title-icon"
+								/>
 								Add New Assessment
 							</h2>
 
-							<div className="form-group">
-								<label className="form-label" htmlFor="title">
+							<div className="asmnt-form-group">
+								<label className="asmnt-form-label" htmlFor="title">
 									Assessment Title
 								</label>
 								<input
 									id="title"
 									type="text"
-									className="form-control"
+									className="asmnt-form-control"
 									placeholder="Enter assessment title"
 									value={title}
 									onChange={(e) => setTitle(e.target.value)}
 								/>
 							</div>
 
-							<div className="form-group">
-								<label className="form-label" htmlFor="type">
+							<div className="asmnt-form-group">
+								<label className="asmnt-form-label" htmlFor="type">
 									Assessment Type
 								</label>
 								<select
 									id="type"
-									className="form-control"
+									className="asmnt-form-control"
 									value={type}
 									onChange={(e) => setType(e.target.value)}
 								>
@@ -347,15 +373,15 @@ const AssessmentManagement = () => {
 								</select>
 							</div>
 
-							<div className="form-row">
-								<div className="form-group">
-									<label className="form-label" htmlFor="points">
+							<div className="asmnt-form-row">
+								<div className="asmnt-form-group">
+									<label className="asmnt-form-label" htmlFor="points">
 										Points
 									</label>
 									<input
 										id="points"
 										type="number"
-										className="form-control"
+										className="asmnt-form-control"
 										placeholder="Points"
 										min="0"
 										max="100"
@@ -364,14 +390,14 @@ const AssessmentManagement = () => {
 									/>
 								</div>
 
-								<div className="form-group">
-									<label className="form-label" htmlFor="date">
+								<div className="asmnt-form-group">
+									<label className="asmnt-form-label" htmlFor="date">
 										Date
 									</label>
 									<input
 										id="date"
 										type="date"
-										className="form-control"
+										className="asmnt-form-control"
 										value={date}
 										onChange={(e) => setDate(e.target.value)}
 									/>
@@ -379,7 +405,7 @@ const AssessmentManagement = () => {
 							</div>
 
 							<button
-								className="btn btn-primary btn-block"
+								className="asmnt-btn asmnt-btn-primary asmnt-btn-block"
 								onClick={handleAddAssessment}
 								disabled={!selectedDepartment}
 							>
@@ -389,16 +415,16 @@ const AssessmentManagement = () => {
 					</aside>
 
 					{/* Main content area */}
-					<main className="assessment-content">
+					<main className="asmnt-content">
 						{/* Month navigation */}
-						<div className="month-nav">
-							<div className="month-nav-header">
-								<h3 className="month-nav-title">
+						<div className="asmnt-month-nav">
+							<div className="asmnt-month-nav-header">
+								<h3 className="asmnt-month-nav-title">
 									<FontAwesomeIcon icon={faCalendarAlt} /> Monthly Assessments
 								</h3>
 							</div>
 
-							<div className="month-indicators">
+							<div className="asmnt-month-indicators">
 								{monthsToDisplay.map((month) => {
 									const monthAssessments = groupedAssessments[month] || [];
 									const monthPoints = monthAssessments.reduce(
@@ -409,13 +435,13 @@ const AssessmentManagement = () => {
 									return (
 										<div
 											key={month}
-											className={`month-indicator ${
+											className={`asmnt-month-indicator ${
 												selectedMonth === month ? "active" : ""
 											}`}
 											onClick={() => setSelectedMonth(month)}
 										>
-											<span className="month-name">{month}</span>
-											<span className="month-points">
+											<span className="asmnt-month-name">{month}</span>
+											<span className="asmnt-month-points">
 												<FontAwesomeIcon icon={faCalculator} />
 												{monthPoints} pts
 											</span>
@@ -423,110 +449,59 @@ const AssessmentManagement = () => {
 									);
 								})}
 							</div>
-
-							{/* <div className="points-overview">
-								<table className="points-table">
-									<thead>
-										<tr>
-											{monthsToDisplay.map((month) => (
-												<th
-													key={month}
-													className={
-														selectedMonth === month ? "month-current" : ""
-													}
-												>
-													{month.substring(0, 3)}
-												</th>
-											))}
-											<th>Total</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											{monthsToDisplay.map((month) => {
-												const monthAssessments =
-													groupedAssessments[month] || [];
-												const monthPoints = monthAssessments.reduce(
-													(sum, a) => sum + Number(a.points),
-													0
-												);
-
-												return (
-													<td
-														key={month}
-														className={
-															monthPoints === 0
-																? "points-zero"
-																: monthPoints > 30
-																? "points-high"
-																: ""
-														}
-													>
-														{monthPoints > 0 ? `${monthPoints} pts` : "-"}
-													</td>
-												);
-											})}
-											<td className="points-high">
-												{assessments.reduce(
-													(sum, a) => sum + Number(a.points),
-													0
-												)}{" "}
-												pts
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div> */}
 						</div>
 
 						{/* Assessment list */}
-						<div className="assessment-list">
+						<div className="asmnt-assessment-list">
 							{currentMonthAssessments.length > 0 ? (
 								<>
-									<div className="month-summary">
-										<div className="month-total">
+									<div className="asmnt-month-summary">
+										<div className="asmnt-month-total">
 											<FontAwesomeIcon icon={faCalculator} />
 											{totalMonthPoints} points total
 										</div>
-										<div className="month-count">
+										<div className="asmnt-month-count">
 											<FontAwesomeIcon icon={faChartBar} />
 											{currentMonthAssessments.length} assessments
 										</div>
 									</div>
 
-									<div className="assessment-grid">
+									<div className="asmnt-assessment-grid">
 										{currentMonthAssessments.map((assessment) => (
-											<div key={assessment.id} className="assessment-item">
-												<div className="assessment-item-header">
-													<div className="assessment-type">
+											<div
+												key={assessment.id}
+												className="asmnt-assessment-item"
+											>
+												<div className="asmnt-assessment-item-header">
+													<div className="asmnt-assessment-type">
 														<FontAwesomeIcon
 															icon={getAssessmentTypeIcon(assessment.type)}
-															className="assessment-type-icon"
+															className="asmnt-assessment-type-icon"
 														/>
 														{assessment.type}
 													</div>
-													<div className="assessment-date">
+													<div className="asmnt-assessment-date">
 														<FontAwesomeIcon icon={faCalendarAlt} />
 														{formatDate(assessment.date)}
 													</div>
 												</div>
 
-												<div className="assessment-item-body">
-													<h3 className="assessment-item-title">
+												<div className="asmnt-assessment-item-body">
+													<h3 className="asmnt-assessment-item-title">
 														{assessment.title}
 													</h3>
 
-													<div className="assessment-meta">
-														<div className="assessment-points">
+													<div className="asmnt-assessment-meta">
+														<div className="asmnt-assessment-points">
 															{assessment.points}
-															<span className="assessment-points-label">
+															<span className="asmnt-assessment-points-label">
 																points
 															</span>
 														</div>
 
-														<div className="assessment-actions">
+														<div className="asmnt-assessment-actions">
 															<button
-																className="action-btn delete"
+																className="asmnt-action-btn delete"
 																onClick={(e) =>
 																	handleDeleteAssessment(e, assessment.id)
 																}
@@ -535,7 +510,7 @@ const AssessmentManagement = () => {
 																<FontAwesomeIcon icon={faTrashAlt} />
 															</button>
 															<button
-																className="action-btn grade"
+																className="asmnt-action-btn grade"
 																onClick={(e) => {
 																	e.preventDefault();
 																	e.stopPropagation();
@@ -556,7 +531,7 @@ const AssessmentManagement = () => {
 									</div>
 								</>
 							) : (
-								<div className="assessment-empty">
+								<div className="asmnt-assessment-empty">
 									No assessments scheduled for {selectedMonth}
 								</div>
 							)}
