@@ -30,20 +30,41 @@ import {
 	Assessments, // WIP v2 stranica za upisivanje ocjena, nemoj brisati
 	ClassManagement,
 	Dashboard,
+	NotFoundPage,
 } from "./pages";
 
 import "./App.css";
 
 const AppContent = () => {
 	const location = useLocation();
+
 	const isLoginPage = location.pathname === "/login";
+	const is404Page =
+		!isLoginPage &&
+		![
+			"/",
+			"/subjects",
+			"/parents",
+			"/schedule",
+			"/logs",
+			"/department",
+			"/grades",
+			"/teachers",
+			"/classes",
+			"/assessments",
+		].includes(location.pathname) &&
+		!location.pathname.startsWith("/lectures/") &&
+		!location.pathname.startsWith("/courses/");
+
+	const hideSidebars = isLoginPage || is404Page;
 
 	return (
 		<div className="App">
-			{!isLoginPage && <Sidebar />}
-			<div className={`main-content ${isLoginPage ? "no-margins" : ""}`}>
+			{!hideSidebars && <Sidebar />}
+			<div className={`main-content ${hideSidebars ? "no-margins" : ""}`}>
 				<Routes>
 					<Route path="/login" element={<LoginPage />} />
+					<Route path="*" element={<NotFoundPage />} />
 
 					<Route element={<PrivateRoute />}>
 						<Route path="/" element={<Dashboard />} />
@@ -63,7 +84,7 @@ const AppContent = () => {
 					</Route>
 				</Routes>
 			</div>
-			{!isLoginPage && <RightSidebar />}
+			{!hideSidebars && <RightSidebar />}
 		</div>
 	);
 };

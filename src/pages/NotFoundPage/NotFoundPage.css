@@ -1,0 +1,152 @@
+.not-found-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 94vh;
+	background-color: #f8f9fa;
+	padding: 20px;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+		Arial, sans-serif;
+}
+
+.not-found-content {
+	max-width: 500px;
+	text-align: center;
+	background-color: white;
+	border-radius: 12px;
+	padding: 40px;
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+	animation: fadeInUp 0.6s ease-out;
+}
+
+.not-found-graphic {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 24px;
+}
+
+.digit {
+	font-size: 80px;
+	font-weight: 700;
+	color: #333;
+	line-height: 1;
+}
+
+.circle {
+	width: 64px;
+	height: 64px;
+	background-color: #4264eb;
+	border-radius: 50%;
+	margin: 0 4px;
+	position: relative;
+	overflow: hidden;
+}
+
+.circle::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 80%;
+	height: 80%;
+	background-color: white;
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+}
+
+h1 {
+	margin: 0 0 16px 0;
+	font-size: 28px;
+	color: #333;
+	font-weight: 600;
+}
+
+.not-found-message {
+	color: #666;
+	font-size: 16px;
+	line-height: 1.5;
+	margin-bottom: 32px;
+}
+
+.not-found-actions {
+	display: flex;
+	justify-content: center;
+	gap: 16px;
+}
+
+.btn-back,
+.btn-home {
+	padding: 12px 20px;
+	border-radius: 6px;
+	font-size: 14px;
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	text-decoration: none;
+}
+
+.btn-back {
+	background-color: #f5f5f5;
+	color: #333;
+	border: none;
+}
+
+.btn-back:hover {
+	background-color: #e9e9e9;
+}
+
+.btn-home {
+	background-color: #4264eb;
+	color: white;
+	border: none;
+}
+
+.btn-home:hover {
+	background-color: #3251cc;
+}
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+	.not-found-content {
+		padding: 30px 20px;
+	}
+
+	.digit {
+		font-size: 64px;
+	}
+
+	.circle {
+		width: 52px;
+		height: 52px;
+	}
+
+	h1 {
+		font-size: 24px;
+	}
+
+	.not-found-actions {
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.btn-back,
+	.btn-home {
+		width: 100%;
+	}
+}
