@@ -1,82 +1,518 @@
-.ram-container {
-	border-radius: 12px;
+/* Assessment Management - Modern, Clean Design */
+:root {
+	--primary: #04abfd;
+	--primary-light: #e3f6ff;
+	--primary-dark: #0386c7;
+	--danger: #f44336;
+	--success: #4caf50;
+	--warning: #ff9800;
+	--gray-50: #f9fafb;
+	--gray-100: #f3f4f6;
+	--gray-200: #e5e7eb;
+	--gray-300: #d1d5db;
+	--gray-400: #9ca3af;
+	--gray-500: #6b7280;
+	--gray-600: #4b5563;
+	--gray-700: #374151;
+	--gray-800: #1f2937;
+	--white: #ffffff;
+	--radius: 8px;
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+	--shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+		0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	--transition: all 0.2s ease;
+}
+
+body {
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+		Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	background-color: var(--gray-50);
+	color: var(--gray-800);
+}
+
+/* Main container */
+.assessment-page {
+	padding: 20px;
+	height: calc(100vh - 40px);
 	overflow: hidden;
+}
+
+/* Card layout */
+.assessment-card {
+	background-color: var(--white);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	height: 100%;
 	display: flex;
 	flex-direction: column;
-	padding: 10px;
-	position: relative;
+	max-width: 1400px;
+	margin: 0 auto;
 }
 
-.ram-tab-row {
-	display: flex;
-	align-items: flex-end;
-	position: relative;
+/* Header */
+.assessment-header {
+	padding: 20px 30px;
+	border-bottom: 1px solid var(--gray-200);
 }
 
-.ram-tabs {
-	display: flex;
-	gap: 5px;
-}
-
-.ram-tab {
-	background: #f2f2f2;
-	border: 1px solid #ddd;
-	border-bottom: none;
-	border-radius: 8px 8px 0 0;
-	padding: 10px 15px;
-	font-size: 0.9rem;
-	cursor: pointer;
-	color: #555;
-	transition: background 0.2s;
-	position: relative;
-	z-index: 1;
-}
-
-.ram-tab:hover {
-	background: #e9e9e9;
-}
-
-.ram-tab.active {
-	background: #fff;
-	color: #333;
+.assessment-title {
+	margin: 0;
+	font-size: 22px;
 	font-weight: 600;
-	position: relative;
-	z-index: 2;
-}
-
-.ram-tab.active::after,
-.ram-tab.active::before {
-	display: none;
-}
-
-.ram-options-row {
-	border: 1px solid #ddd;
-	border-top: none;
-	padding: 15px;
-	background: #fff;
-	border-radius: 0 0 12px 12px;
-}
-
-.ram-modal-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.3);
+	color: var(--gray-800);
 	display: flex;
-	justify-content: center;
 	align-items: center;
-	z-index: 999;
+	gap: 10px;
+}
+
+.assessment-title-icon {
+	color: var(--primary);
+}
+
+/* Two-column layout */
+.assessment-layout {
+	display: grid;
+	grid-template-columns: 320px 1fr;
+	height: calc(100% - 72px); /* Subtract header height */
+	overflow: hidden;
+}
+
+/* Sidebar for controls */
+.assessment-sidebar {
+	border-right: 1px solid var(--gray-200);
+	background-color: var(--gray-50);
+	overflow-y: auto;
 	padding: 20px;
+}
+
+/* Main content area */
+.assessment-content {
+	overflow-y: auto;
+	padding: 0;
+}
+
+/* Semester switch */
+.semester-switch {
+	margin-bottom: 24px;
+}
+
+.semester-switch-label {
+	display: block;
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--gray-600);
+	margin-bottom: 8px;
+}
+
+.semester-tabs {
+	display: flex;
+	background-color: var(--gray-100);
+	border-radius: var(--radius);
+	padding: 3px;
+}
+
+.semester-tab {
+	flex: 1;
+	text-align: center;
+	padding: 10px;
+	font-size: 14px;
+	border-radius: calc(var(--radius) - 2px);
+	color: var(--gray-600);
+	cursor: pointer;
+	transition: var(--transition);
+}
+
+.semester-tab.active {
+	background-color: var(--white);
+	color: var(--gray-800);
+	font-weight: 500;
+	box-shadow: var(--shadow-sm);
+}
+
+/* Department selector */
+.department-selector {
+	margin-bottom: 24px;
+}
+
+.selector-label {
+	display: block;
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--gray-600);
+	margin-bottom: 8px;
+}
+
+.selector-control {
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid var(--gray-300);
+	border-radius: var(--radius);
+	font-size: 15px;
+	color: var(--gray-800);
+	appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 12px center;
+	background-size: 16px;
+	transition: var(--transition);
+}
+
+.selector-control:focus {
+	outline: none;
+	border-color: var(--primary);
+	box-shadow: 0 0 0 2px rgba(4, 171, 253, 0.1);
+}
+
+/* Section headings */
+.sidebar-section {
+	margin-bottom: 24px;
+}
+
+.section-title {
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--gray-700);
+	margin: 0 0 16px 0;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.section-title-icon {
+	color: var(--primary);
+}
+
+/* Form styling */
+.form-group {
+	margin-bottom: 16px;
+}
+
+.form-label {
+	display: block;
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--gray-600);
+	margin-bottom: 6px;
+}
+
+.form-control {
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid var(--gray-300);
+	border-radius: var(--radius);
+	font-size: 15px;
+	transition: var(--transition);
 	box-sizing: border-box;
 }
 
-.ram-modal {
-	background: #fff;
-	border-radius: 10px;
-	max-width: 400px;
+.form-control:focus {
+	outline: none;
+	border-color: var(--primary);
+	box-shadow: 0 0 0 2px rgba(4, 171, 253, 0.1);
+}
+
+.form-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+}
+
+/* Button styles */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px 16px;
+	border-radius: var(--radius);
+	font-size: 15px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: var(--transition);
+	gap: 8px;
+	border: none;
+}
+
+.btn-primary {
+	background-color: var(--primary);
+	color: var(--white);
+}
+
+.btn-primary:hover {
+	background-color: var(--primary-dark);
+}
+
+.btn-outline {
+	background-color: transparent;
+	border: 1px solid var(--gray-300);
+	color: var(--gray-700);
+}
+
+.btn-outline:hover {
+	border-color: var(--gray-400);
+	background-color: var(--gray-100);
+}
+
+.btn-block {
 	width: 100%;
-	padding: 20px;
-	position: relative;
+}
+
+/* Month navigation */
+.month-nav {
+	padding: 20px 30px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid var(--gray-200);
+}
+
+.month-indicators {
+	display: flex;
+	gap: 6px;
+}
+
+.month-indicator {
+	padding: 6px 12px;
+	border-radius: 20px;
+	font-size: 14px;
+	color: var(--gray-600);
+	cursor: pointer;
+	transition: var(--transition);
+}
+
+.month-indicator:hover {
+	background-color: var(--gray-100);
+}
+
+.month-indicator.active {
+	background-color: var(--primary-light);
+	color: var(--primary-dark);
+	font-weight: 500;
+}
+
+/* Assessment list */
+.assessment-list {
+	padding: 20px 30px;
+}
+
+.assessment-empty {
+	padding: 24px;
+	text-align: center;
+	color: var(--gray-500);
+	background-color: var(--gray-50);
+	border-radius: var(--radius);
+	font-size: 15px;
+	border: 1px dashed var(--gray-300);
+}
+
+.assessment-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 20px;
+}
+
+/* Assessment card */
+.assessment-item {
+	background-color: var(--white);
+	border-radius: var(--radius);
+	border: 1px solid var(--gray-200);
+	transition: var(--transition);
+	overflow: hidden;
+}
+
+.assessment-item:hover {
+	box-shadow: var(--shadow);
+	transform: translateY(-2px);
+	border-color: var(--gray-300);
+}
+
+.assessment-item-header {
+	padding: 16px;
+	background-color: var(--gray-50);
+	border-bottom: 1px solid var(--gray-200);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.assessment-type {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-weight: 500;
+	color: var(--gray-700);
+	font-size: 14px;
+}
+
+.assessment-type-icon {
+	color: var(--primary);
+}
+
+.assessment-date {
+	font-size: 14px;
+	color: var(--gray-500);
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.assessment-item-body {
+	padding: 16px;
+}
+
+.assessment-item-title {
+	font-size: 16px;
+	font-weight: 600;
+	margin: 0 0 12px 0;
+	color: var(--gray-800);
+}
+
+.assessment-meta {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 16px;
+}
+
+.assessment-points {
+	font-size: 20px;
+	font-weight: 600;
+	color: var(--primary-dark);
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.assessment-points-label {
+	font-size: 13px;
+	color: var(--gray-500);
+	font-weight: normal;
+}
+
+.assessment-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.action-btn {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: var(--transition);
+	border: none;
+	background: none;
+	color: var(--gray-500);
+}
+
+.action-btn:hover {
+	background-color: var(--gray-100);
+	color: var(--gray-700);
+}
+
+.action-btn.delete:hover {
+	background-color: rgba(244, 67, 54, 0.1);
+	color: var(--danger);
+}
+
+.action-btn.grade:hover {
+	background-color: rgba(4, 171, 253, 0.1);
+	color: var(--primary);
+}
+
+/* Month summary */
+.month-summary {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin-bottom: 20px;
+}
+
+.month-total {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	background-color: var(--primary-light);
+	color: var(--primary-dark);
+	padding: 6px 12px;
+	border-radius: 20px;
+	font-size: 14px;
+	font-weight: 500;
+}
+
+.month-count {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	color: var(--gray-700);
+	font-size: 14px;
+}
+
+/* Empty state */
+.empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	padding: 40px;
+	text-align: center;
+	color: var(--gray-500);
+}
+
+.empty-icon {
+	font-size: 48px;
+	color: var(--gray-400);
+	margin-bottom: 16px;
+}
+
+.empty-title {
+	font-size: 18px;
+	font-weight: 600;
+	margin: 0 0 8px 0;
+	color: var(--gray-700);
+}
+
+.empty-message {
+	max-width: 400px;
+	margin: 0 0 24px 0;
+	color: var(--gray-500);
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+	.assessment-layout {
+		grid-template-columns: 1fr;
+	}
+
+	.assessment-sidebar {
+		border-right: none;
+		border-bottom: 1px solid var(--gray-200);
+		padding: 16px;
+	}
+
+	.assessment-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.form-row {
+		grid-template-columns: 1fr;
+	}
+
+	.month-nav {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 12px;
+	}
+
+	.month-indicators {
+		width: 100%;
+		overflow-x: auto;
+		padding-bottom: 6px;
+	}
 }
