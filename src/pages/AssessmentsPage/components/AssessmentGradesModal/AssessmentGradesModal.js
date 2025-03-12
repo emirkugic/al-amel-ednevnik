@@ -18,6 +18,7 @@ import {
 	faKeyboard,
 	faLightbulb,
 	faPercentage,
+	faQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import "./AssessmentGradesModal.css";
 import useGrades from "../../../../hooks/useGrades";
@@ -640,30 +641,7 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 								<div className="agm-stat-label">Graded</div>
 							</div>
 						</div>
-
-						<button className="agm-close-button" onClick={onClose}>
-							<FontAwesomeIcon icon={faTimes} />
-						</button>
 					</div>
-
-					{/* Notification */}
-					{notification && (
-						<div
-							className={`agm-notification agm-notification-${notification.type}`}
-						>
-							<FontAwesomeIcon
-								icon={
-									notification.type === "success"
-										? faCheckCircle
-										: faExclamationCircle
-								}
-							/>
-							<span>{notification.message}</span>
-							<button onClick={() => setNotification(null)}>
-								<FontAwesomeIcon icon={faTimes} />
-							</button>
-						</div>
-					)}
 
 					{/* Loading indicator */}
 					{isLoading && <div className="agm-loading-indicator"></div>}
@@ -844,27 +822,21 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 								>
 									Apply
 								</button>
+								<button
+									className={`agm-quick-edit-button ${
+										quickEditMode ? "agm-active" : ""
+									}`}
+									onClick={
+										quickEditMode ? exitQuickEditMode : enterQuickEditMode
+									}
+									title="Quick edit mode"
+								>
+									<FontAwesomeIcon icon={faKeyboard} />
+									<span>
+										{quickEditMode ? "Exit Quick Edit" : "Quick Edit"}
+									</span>
+								</button>
 							</div>
-
-							<button
-								className={`agm-action-button ${
-									quickEditMode ? "agm-active" : ""
-								}`}
-								onClick={quickEditMode ? exitQuickEditMode : enterQuickEditMode}
-								title="Quick edit mode"
-							>
-								<FontAwesomeIcon icon={faKeyboard} />
-								<span>{quickEditMode ? "Exit Quick Edit" : "Quick Edit"}</span>
-							</button>
-
-							<button
-								className="agm-action-button"
-								onClick={toggleKeyboardShortcuts}
-								title="Keyboard shortcuts"
-							>
-								<FontAwesomeIcon icon={faLightbulb} />
-								<span>Shortcuts</span>
-							</button>
 						</div>
 					</div>
 
@@ -872,7 +844,7 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 					{showKeyboardShortcuts && (
 						<div className="agm-keyboard-shortcuts">
 							<div className="agm-shortcuts-header">
-								<h3>Keyboard Shortcuts</h3>
+								<h3>Keyboard Shortcuts for Quick Edit</h3>
 								<button onClick={toggleKeyboardShortcuts}>
 									<FontAwesomeIcon icon={faTimes} />
 								</button>
@@ -994,13 +966,21 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 
 					{/* Footer */}
 					<div className="agm-modal-footer">
-						<div className="agm-footer-stats">
-							Showing {filteredGrades.length} of {grades.length} students
-							{selectedRows.length > 0 && ` • ${selectedRows.length} selected`}
-						</div>
-						<button className="agm-close-btn" onClick={onClose}>
-							Close
+						<button
+							className="agm-shortcuts-button"
+							onClick={toggleKeyboardShortcuts}
+							title="Keyboard shortcuts"
+						>
+							<FontAwesomeIcon icon={faQuestionCircle} />
 						</button>
+						<div className="agm-footer-buttons">
+							<button className="agm-cancel-btn" onClick={onClose}>
+								Cancel
+							</button>
+							<button className="agm-close-btn" onClick={onClose}>
+								Close
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
