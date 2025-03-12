@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -88,7 +88,11 @@ const AssessmentManagement = () => {
 	const [selectedDepartment, setSelectedDepartment] = useState("");
 	const [departmentNames, setDepartmentNames] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [assessmentsLoading, setAssessmentsLoading] = useState(false);
 	const [selectedMonth, setSelectedMonth] = useState("");
+
+	// Use refs to track previous values and prevent infinite loops
+	const prevDeptRef = useRef(null);
 
 	// Modal state
 	const [selectedAssessment, setSelectedAssessment] = useState(null);
@@ -153,13 +157,35 @@ const AssessmentManagement = () => {
 		if (departmentIds.length > 0 && user?.token) {
 			fetchDepartmentNames();
 		}
-	}, [departmentIds, user?.token, selectedDepartment]);
+	}, [departmentIds, user?.token]); // Removed selectedDepartment from dependencies
 
 	// Fetch assessments when department or subject changes
 	useEffect(() => {
-		if (user?.id && subject && selectedDepartment) {
-			fetchFilteredAssessments(user.id, subject, selectedDepartment, start);
-		}
+		// Skip if nothing changed or missing required data
+		if (!user?.id || !subject || !selectedDepartment) return;
+
+		// Prevent duplicate fetches for the same department
+		if (prevDeptRef.current === selectedDepartment) return;
+
+		const fetchAssessments = async () => {
+			try {
+				setAssessmentsLoading(true);
+				await fetchFilteredAssessments(
+					user.id,
+					subject,
+					selectedDepartment,
+					start
+				);
+				// Store the current department we just fetched for
+				prevDeptRef.current = selectedDepartment;
+			} catch (error) {
+				console.error("Error fetching assessments:", error);
+			} finally {
+				setAssessmentsLoading(false);
+			}
+		};
+
+		fetchAssessments();
 	}, [user?.id, subject, selectedDepartment, start, fetchFilteredAssessments]);
 
 	// Set default selected month
@@ -296,7 +322,11 @@ const AssessmentManagement = () => {
 				</header>
 
 				{/* Main layout */}
-				<div className="asmnt-layout">
+				<div
+					className={`asmnt-layout ${
+						assessmentsLoading ? "assessments-loading" : ""
+					}`}
+				>
 					{/* Sidebar with controls */}
 					<aside className="asmnt-sidebar">
 						{/* Semester switch */}
@@ -466,7 +496,12 @@ const AssessmentManagement = () => {
 
 						{/* Assessment list */}
 						<div className="asmnt-assessment-list">
-							{currentMonthAssessments.length > 0 ? (
+							{assessmentsLoading ? (
+								<div className="asmnt-assessment-empty">
+									<div className="asmnt-loading-spinner"></div>
+									<p>Loading assessments...</p>
+								</div>
+							) : currentMonthAssessments.length > 0 ? (
 								<>
 									<div className="asmnt-month-summary">
 										<div className="asmnt-month-total">
