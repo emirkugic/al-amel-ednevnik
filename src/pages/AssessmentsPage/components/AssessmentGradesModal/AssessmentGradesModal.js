@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faTimes,
@@ -12,11 +12,9 @@ import {
 	faAward,
 	faExclamationTriangle,
 	faFilter,
-	faFileExport,
 	faSortAmountDown,
 	faSortAmountUp,
 	faKeyboard,
-	faLightbulb,
 	faPercentage,
 	faQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
@@ -24,12 +22,26 @@ import "./AssessmentGradesModal.css";
 import useGrades from "../../../../hooks/useGrades";
 
 const AssessmentGradesModal = ({ assessment, token, onClose }) => {
-	const { grades, fetchGrades, updateGrade, createGrade } = useGrades(token);
-	const [editing, setEditing] = useState({});
-	const [localGrades, setLocalGrades] = useState({});
-	const [searchTerm, setSearchTerm] = useState("");
+	// ================= REFS & DOM ACCESS =================
+	// Use refs to bypass the React re-rendering system for updates
+	const studentRowsRef = useRef({});
+	const gradeDisplaysRef = useRef({});
+	const inputRefs = useRef({});
+	const initialLoadCompleteRef = useRef(false);
+
+	// ================= DATA STATE =================
+	// We'll keep a master list of students that never changes order
+	const [originalStudentList, setOriginalStudentList] = useState([]);
+	const [gradeValues, setGradeValues] = useState({});
+
+	// ================= UI STATE =================
 	const [isLoading, setIsLoading] = useState(true);
-	const [notification, setNotification] = useState(null);
+	const [searchTerm, setSearchTerm] = useState("");
+	const [filterMode, setFilterMode] = useState("all");
+	const [sortConfig, setSortConfig] = useState({
+		key: "studentName",
+		direction: "asc",
+	});
 	const [stats, setStats] = useState({
 		average: 0,
 		highest: 0,
@@ -37,79 +49,78 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 		graded: 0,
 		ungraded: 0,
 	});
-
-	// New state variables for enhanced functionality
-	const [sortConfig, setSortConfig] = useState({
-		key: "studentName",
-		direction: "asc",
-	});
-	const [filterMode, setFilterMode] = useState("all"); // 'all', 'graded', 'ungraded'
 	const [selectedRows, setSelectedRows] = useState([]);
+	const [editingRow, setEditingRow] = useState(null);
 	const [quickEditMode, setQuickEditMode] = useState(false);
 	const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
 	const [customGradeValue, setCustomGradeValue] = useState("");
-	const currentFocusRef = useRef(null);
-	const inputRefs = useRef({});
 
-	// Fetch grades on mount
+	// ================= DATA FETCHING =================
+	const { grades, fetchGrades, updateGrade, createGrade } = useGrades(token);
+
+	// Fetch grades on mount - only once
 	useEffect(() => {
+		if (!assessment || !token) return;
+
 		let isMounted = true;
+		setIsLoading(true);
 
-		if (assessment) {
-			setIsLoading(true);
-			fetchGrades(assessment.id)
-				.then(() => {
-					if (isMounted) {
-						setIsLoading(false);
-					}
-				})
-				.catch((err) => {
-					console.error("Error fetching grades:", err);
-					if (isMounted) {
-						showNotification(
-							"error",
-							"Failed to load grades. Please try again."
-						);
-						setIsLoading(false);
-					}
-				});
-		}
+		fetchGrades(assessment.id)
+			.then(() => {
+				if (isMounted) {
+					setIsLoading(false);
+					initialLoadCompleteRef.current = true;
+				}
+			})
+			.catch((err) => {
+				console.error("Error fetching grades:", err);
+				if (isMounted) {
+					setIsLoading(false);
+				}
+			});
 
-		// Cleanup function to prevent state updates on unmounted component
 		return () => {
 			isMounted = false;
 		};
-	}, [assessment.id]);
+	}, [assessment.id, token]);
 
-	// Initialize local grades from fetched data only once when grades are loaded
+	// When grades arrive from API, process them once - we'll maintain our own state after this
 	useEffect(() => {
-		if (grades.length > 0 && Object.keys(localGrades).length === 0) {
-			setLocalGrades(
-				grades.reduce((acc, grade) => {
-					acc[grade.studentId] = grade.grade || "";
-					return acc;
-				}, {})
+		if (grades.length > 0 && originalStudentList.length === 0) {
+			// Create a stable master list of students that will never change order
+			setOriginalStudentList(
+				grades.map((grade) => ({
+					studentId: grade.studentId,
+					studentName: grade.studentName,
+					gradeId: grade.gradeId,
+				}))
 			);
 
-			// Calculate statistics
-			calculateStats();
+			// Create a map of grades by student ID
+			const gradeMap = {};
+			grades.forEach((grade) => {
+				gradeMap[grade.studentId] = grade.grade;
+			});
+			setGradeValues(gradeMap);
+
+			// Calculate initial stats
+			calculateStats(gradeMap);
 		}
 	}, [grades]);
 
-	// Calculate grade statistics
-	const calculateStats = useCallback(() => {
-		const gradedValues = grades
-			.filter((g) => g.grade && g.grade.trim() !== "")
-			.map((g) => parseFloat(g.grade));
+	// Calculate statistics from the grade values
+	const calculateStats = (gradeData) => {
+		const values = Object.values(gradeData)
+			.filter((g) => g !== "0")
+			.map((g) => parseFloat(g));
+		const graded = values.length;
+		const ungraded = Object.keys(gradeData).length - graded;
 
-		const graded = gradedValues.length;
-		const ungraded = grades.length - graded;
-
-		if (gradedValues.length > 0) {
-			const sum = gradedValues.reduce((a, b) => a + b, 0);
-			const highest = Math.max(...gradedValues);
-			const lowest = Math.min(...gradedValues);
-			const average = sum / gradedValues.length;
+		if (values.length > 0) {
+			const sum = values.reduce((a, b) => a + b, 0);
+			const average = sum / values.length;
+			const highest = Math.max(...values);
+			const lowest = Math.min(...values);
 
 			setStats({
 				average: average.toFixed(1),
@@ -127,291 +138,218 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 				ungraded,
 			});
 		}
-	}, [grades]);
-
-	// Show notification
-	const showNotification = (type, message) => {
-		setNotification({ type, message });
-		setTimeout(() => {
-			setNotification(null);
-		}, 3000);
 	};
 
+	// ================= GRADE OPERATIONS =================
 	// Handle grade input change
-	const handleGradeChange = (studentId, grade) => {
-		// Allow empty string for clearing grades
-		if (grade === "") {
-			setLocalGrades((prev) => ({ ...prev, [studentId]: "" }));
-			return;
+	const handleGradeChange = (studentId, value) => {
+		// Empty string is treated as "0" (ungraded)
+		if (value === "") {
+			value = "0";
 		}
 
-		// Only allow numbers and decimal point
+		// Validate grade format (number or decimal)
 		const validGradeRegex = /^(\d*\.?\d*)$/;
-		if (!validGradeRegex.test(grade)) {
+		if (!validGradeRegex.test(value)) {
 			return;
 		}
 
-		// Convert to number to check range
-		const numericGrade = parseFloat(grade);
-
-		// Don't allow negative numbers
-		if (numericGrade < 0) {
+		// Validate grade range
+		const numericGrade = parseFloat(value);
+		if (
+			numericGrade < 0 ||
+			(numericGrade > Number(assessment.points) && value !== "0")
+		) {
 			return;
 		}
 
-		// Don't allow grades higher than max points
-		if (numericGrade > Number(assessment.points)) {
-			return;
-		}
-
-		// Update local state with valid input
-		setLocalGrades((prev) => ({ ...prev, [studentId]: grade }));
+		// Update our local state
+		setGradeValues((prev) => ({
+			...prev,
+			[studentId]: value,
+		}));
 	};
 
-	// Save grade - optimistically update UI first to prevent glitches
+	// Save a grade for a student
 	const saveGrade = async (studentId) => {
-		const originalGrades = { ...localGrades };
-		const gradeToUpdate = grades.find((g) => g.studentId === studentId);
-		const gradeValue = localGrades[studentId];
+		// Get the current grade value
+		const gradeValue = gradeValues[studentId];
 
-		// Final validation before saving
-		if (gradeValue !== "") {
+		// Don't save if the grade is invalid
+		if (gradeValue !== "0") {
 			const numericGrade = parseFloat(gradeValue);
-
-			// Check for invalid values
-			if (isNaN(numericGrade)) {
-				showNotification(
-					"error",
-					"Invalid grade value. Please enter a valid number."
-				);
-				return;
-			}
-
-			// Check for negative values
-			if (numericGrade < 0) {
-				showNotification("error", "Grades cannot be negative.");
-				return;
-			}
-
-			// Check for exceeding maximum points
-			if (numericGrade > Number(assessment.points)) {
-				showNotification(
-					"error",
-					`Grade cannot exceed the maximum points (${assessment.points})`
-				);
+			if (
+				isNaN(numericGrade) ||
+				numericGrade < 0 ||
+				numericGrade > Number(assessment.points)
+			) {
 				return;
 			}
 		}
 
-		// Remove from editing state immediately to prevent flicker
-		setEditing((prev) => ({ ...prev, [studentId]: false }));
+		// Find the student in our master list
+		const student = originalStudentList.find((s) => s.studentId === studentId);
+		if (!student) return;
+
+		// Exit editing mode immediately (don't wait for API response)
+		setEditingRow(null);
+
+		// Directly update the display in the DOM for immediate feedback
+		if (gradeDisplaysRef.current[studentId]) {
+			// Update directly in the DOM
+			const display = gradeDisplaysRef.current[studentId];
+			display.textContent = gradeValue === "0" ? "Not Graded" : gradeValue;
+			display.className = `agm-grade-display ${
+				gradeValue === "0" ? "agm-not-graded" : ""
+			}`;
+		}
 
 		try {
-			// If no existing grade, create new one
-			if (!gradeToUpdate || !gradeToUpdate.gradeId) {
+			// Call the API to persist the change
+			if (!student.gradeId) {
+				// Create a new grade
 				await createGrade({
 					studentId,
 					subjectAssessmentId: assessment.id,
-					grade: String(gradeValue),
+					grade: gradeValue,
 				});
-			} else if (gradeToUpdate.grade !== gradeValue) {
-				// Otherwise update existing grade
-				await updateGrade(gradeToUpdate.gradeId, {
-					id: gradeToUpdate.gradeId,
+
+				// Update our master list with the new grade ID when returned
+				setOriginalStudentList((prev) =>
+					prev.map((s) =>
+						s.studentId === studentId ? { ...s, gradeId: "pending" } : s
+					)
+				);
+			} else {
+				// Update existing grade
+				await updateGrade(student.gradeId, {
+					id: student.gradeId,
 					subjectAssessmentId: assessment.id,
 					studentId,
-					grade: String(gradeValue),
+					grade: gradeValue,
 				});
 			}
 
-			// Update the stats without triggering a re-fetch
-			const updatedGrades = grades.map((g) => {
-				if (g.studentId === studentId) {
-					return { ...g, grade: gradeValue };
-				}
-				return g;
-			});
+			// Recalculate stats after saving
+			calculateStats(gradeValues);
 
-			// Calculate stats manually without fetching
-			const gradedValues = updatedGrades
-				.filter((g) => g.grade && g.grade.trim() !== "")
-				.map((g) => parseFloat(g.grade));
-
-			const graded = gradedValues.length;
-			const ungraded = updatedGrades.length - graded;
-
-			if (gradedValues.length > 0) {
-				const sum = gradedValues.reduce((a, b) => a + b, 0);
-				const highest = Math.max(...gradedValues);
-				const lowest = Math.min(...gradedValues);
-				const average = sum / gradedValues.length;
-
-				setStats({
-					average: average.toFixed(1),
-					highest: highest.toFixed(1),
-					lowest: lowest.toFixed(1),
-					graded,
-					ungraded,
-				});
-			}
-
-			showNotification("success", "Grade saved successfully");
-
-			// If in quick edit mode, move focus to next student
+			// If in quick edit mode, move to next student
 			if (quickEditMode) {
-				moveFocusToNextStudent(studentId);
+				moveToNextStudent(studentId);
 			}
 		} catch (err) {
 			console.error("Error saving grade:", err);
-			// Revert to original grade on error
-			setLocalGrades(originalGrades);
-			setEditing((prev) => ({ ...prev, [studentId]: true }));
-			showNotification("error", "Failed to save grade. Please try again.");
+			alert("Failed to save grade");
 		}
 	};
 
-	// New functionality: Batch save selected grades with a specific value
+	// Save grades for multiple selected students
 	const saveSelectedGrades = async (value) => {
 		if (selectedRows.length === 0) {
-			showNotification("error", "No students selected");
+			alert("No students selected");
 			return;
 		}
 
+		// Validate grade
 		const numericValue = parseFloat(value);
-
-		// Validate the value
 		if (
-			isNaN(numericValue) ||
-			numericValue < 0 ||
-			numericValue > Number(assessment.points)
+			value !== "0" &&
+			(isNaN(numericValue) ||
+				numericValue < 0 ||
+				numericValue > Number(assessment.points))
 		) {
-			showNotification(
-				"error",
-				`Grade must be between 0 and ${assessment.points}`
-			);
+			alert(`Grade must be between 0 and ${assessment.points}`);
 			return;
 		}
 
-		// Update local grades first
-		const updatedLocalGrades = { ...localGrades };
+		// Update the UI immediately for all selected students
+		const updatedGrades = { ...gradeValues };
 		selectedRows.forEach((studentId) => {
-			updatedLocalGrades[studentId] = value;
+			updatedGrades[studentId] = value;
+
+			// Update DOM directly for immediate feedback
+			if (gradeDisplaysRef.current[studentId]) {
+				const display = gradeDisplaysRef.current[studentId];
+				display.textContent = value === "0" ? "Not Graded" : value;
+				display.className = `agm-grade-display ${
+					value === "0" ? "agm-not-graded" : ""
+				}`;
+			}
 		});
-		setLocalGrades(updatedLocalGrades);
 
-		// Save each grade
+		// Update our state
+		setGradeValues(updatedGrades);
+
 		try {
+			// Process the API calls for each student
 			setIsLoading(true);
-			const promises = selectedRows.map(async (studentId) => {
-				const gradeToUpdate = grades.find((g) => g.studentId === studentId);
+			const promises = selectedRows.map((studentId) => {
+				const student = originalStudentList.find(
+					(s) => s.studentId === studentId
+				);
+				if (!student) return Promise.resolve();
 
-				if (!gradeToUpdate || !gradeToUpdate.gradeId) {
+				if (!student.gradeId) {
 					return createGrade({
 						studentId,
 						subjectAssessmentId: assessment.id,
-						grade: String(value),
+						grade: value,
 					});
 				} else {
-					return updateGrade(gradeToUpdate.gradeId, {
-						id: gradeToUpdate.gradeId,
+					return updateGrade(student.gradeId, {
+						id: student.gradeId,
 						subjectAssessmentId: assessment.id,
 						studentId,
-						grade: String(value),
+						grade: value,
 					});
 				}
 			});
 
 			await Promise.all(promises);
 
-			// Clear selection after successful save
+			// Clear selection
 			setSelectedRows([]);
 
-			// Recalculate stats
-			calculateStats();
+			// Update stats
+			calculateStats(updatedGrades);
 
 			setIsLoading(false);
-			showNotification(
-				"success",
-				`Grades saved for ${selectedRows.length} students`
-			);
 		} catch (err) {
 			console.error("Error saving batch grades:", err);
 			setIsLoading(false);
-			showNotification("error", "Failed to save grades. Please try again.");
 		}
 	};
 
-	// New functionality: Export grades to CSV
-	const exportGrades = () => {
-		// Create CSV content
-		let csvContent = "Student Name,Grade\n";
-
-		grades.forEach((grade) => {
-			const studentGrade = localGrades[grade.studentId] || "";
-			csvContent += `"${grade.studentName}",${studentGrade}\n`;
-		});
-
-		// Create download link
-		const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-		const url = URL.createObjectURL(blob);
-		const link = document.createElement("a");
-		link.setAttribute("href", url);
-		link.setAttribute("download", `${assessment.title}_grades.csv`);
-		link.style.visibility = "hidden";
-		document.body.appendChild(link);
-		link.click();
-		document.body.removeChild(link);
-
-		showNotification("success", "Grades exported successfully");
-	};
-
-	// Sort students
-	const requestSort = (key) => {
-		let direction = "asc";
-		if (sortConfig.key === key && sortConfig.direction === "asc") {
-			direction = "desc";
-		}
-		setSortConfig({ key, direction });
-	};
-
-	// Handle keyboard navigation
-	const handleKeyDown = (e, studentId, index) => {
+	// ================= KEYBOARD NAVIGATION =================
+	const handleKeyDown = (e, studentId) => {
 		if (e.key === "Enter") {
 			saveGrade(studentId);
 		} else if (e.key === "Escape") {
 			// Cancel editing
-			setEditing((prev) => ({ ...prev, [studentId]: false }));
-			// Restore original grade
-			const originalGrade =
-				grades.find((g) => g.studentId === studentId)?.grade || "";
-			setLocalGrades((prev) => ({ ...prev, [studentId]: originalGrade }));
+			setEditingRow(null);
 		} else if (quickEditMode) {
 			if (e.key === "ArrowDown") {
 				e.preventDefault();
-				moveFocusToNextStudent(studentId);
+				moveToNextStudent(studentId);
 			} else if (e.key === "ArrowUp") {
 				e.preventDefault();
-				moveFocusToPreviousStudent(studentId);
+				moveToPreviousStudent(studentId);
 			}
 		}
 	};
 
-	// Move focus to next student
-	const moveFocusToNextStudent = (currentStudentId) => {
-		const filteredStudents = getFilteredAndSortedGrades();
+	// Move to next student in quick edit mode
+	const moveToNextStudent = (currentStudentId) => {
+		const filteredStudents = getVisibleStudents();
 		const currentIndex = filteredStudents.findIndex(
-			(g) => g.studentId === currentStudentId
+			(s) => s.studentId === currentStudentId
 		);
 
 		if (currentIndex < filteredStudents.length - 1) {
 			const nextStudent = filteredStudents[currentIndex + 1];
-			setEditing((prev) => ({
-				...prev,
-				[currentStudentId]: false,
-				[nextStudent.studentId]: true,
-			}));
+			setEditingRow(nextStudent.studentId);
 
-			// Wait for the input to be rendered and then focus it
+			// Focus the input after React has updated the DOM
 			setTimeout(() => {
 				if (inputRefs.current[nextStudent.studentId]) {
 					inputRefs.current[nextStudent.studentId].focus();
@@ -420,22 +358,18 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 		}
 	};
 
-	// Move focus to previous student
-	const moveFocusToPreviousStudent = (currentStudentId) => {
-		const filteredStudents = getFilteredAndSortedGrades();
+	// Move to previous student in quick edit mode
+	const moveToPreviousStudent = (currentStudentId) => {
+		const filteredStudents = getVisibleStudents();
 		const currentIndex = filteredStudents.findIndex(
-			(g) => g.studentId === currentStudentId
+			(s) => s.studentId === currentStudentId
 		);
 
 		if (currentIndex > 0) {
 			const prevStudent = filteredStudents[currentIndex - 1];
-			setEditing((prev) => ({
-				...prev,
-				[currentStudentId]: false,
-				[prevStudent.studentId]: true,
-			}));
+			setEditingRow(prevStudent.studentId);
 
-			// Wait for the input to be rendered and then focus it
+			// Focus the input after React has updated the DOM
 			setTimeout(() => {
 				if (inputRefs.current[prevStudent.studentId]) {
 					inputRefs.current[prevStudent.studentId].focus();
@@ -444,8 +378,72 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 		}
 	};
 
-	// Toggle selection of a student row
-	const toggleRowSelection = (studentId) => {
+	// ================= FILTERING & SORTING =================
+	// Get the list of students that should be visible based on filters and sorting
+	const getVisibleStudents = () => {
+		if (originalStudentList.length === 0) return [];
+
+		// First apply search filter
+		let filtered = originalStudentList;
+		if (searchTerm) {
+			filtered = filtered.filter((student) =>
+				student.studentName.toLowerCase().includes(searchTerm.toLowerCase())
+			);
+		}
+
+		// Then apply graded/ungraded filter
+		if (filterMode === "graded") {
+			filtered = filtered.filter(
+				(student) => gradeValues[student.studentId] !== "0"
+			);
+		} else if (filterMode === "ungraded") {
+			filtered = filtered.filter(
+				(student) => gradeValues[student.studentId] === "0"
+			);
+		}
+
+		// Create a copy of the filtered list for sorting
+		const sorted = [...filtered];
+
+		// Apply sorting
+		if (sortConfig.key) {
+			sorted.sort((a, b) => {
+				if (sortConfig.key === "studentName") {
+					const result = a.studentName.localeCompare(b.studentName);
+					return sortConfig.direction === "asc" ? result : -result;
+				} else if (sortConfig.key === "grade") {
+					const gradeA = gradeValues[a.studentId] || "0";
+					const gradeB = gradeValues[b.studentId] || "0";
+
+					// Handle "Not Graded" ("0") values
+					if (gradeA === "0" && gradeB !== "0") return 1;
+					if (gradeA !== "0" && gradeB === "0") return -1;
+
+					// Compare numeric values
+					const numA = gradeA === "0" ? 0 : parseFloat(gradeA);
+					const numB = gradeB === "0" ? 0 : parseFloat(gradeB);
+
+					return sortConfig.direction === "asc" ? numA - numB : numB - numA;
+				}
+				return 0;
+			});
+		}
+
+		return sorted;
+	};
+
+	// Request a change in sort direction
+	const requestSort = (key) => {
+		let direction = "asc";
+		if (sortConfig.key === key && sortConfig.direction === "asc") {
+			direction = "desc";
+		}
+		setSortConfig({ key, direction });
+	};
+
+	// ================= ROW SELECTION =================
+	// Toggle selection for a single student
+	const toggleSelection = (studentId) => {
 		setSelectedRows((prev) => {
 			if (prev.includes(studentId)) {
 				return prev.filter((id) => id !== studentId);
@@ -455,28 +453,27 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 		});
 	};
 
-	// Toggle selection of all visible students
+	// Toggle selection for all visible students
 	const toggleSelectAll = () => {
-		const filteredStudents = getFilteredAndSortedGrades();
+		const visibleStudents = getVisibleStudents();
+		const visibleIds = visibleStudents.map((s) => s.studentId);
 
-		if (selectedRows.length === filteredStudents.length) {
+		if (selectedRows.length === visibleIds.length) {
 			// Deselect all
 			setSelectedRows([]);
 		} else {
 			// Select all visible
-			setSelectedRows(filteredStudents.map((g) => g.studentId));
+			setSelectedRows(visibleIds);
 		}
 	};
 
-	// Apply a quick grade to selected students
+	// Apply a quick grade to all selected students
 	const applyQuickGrade = (value) => {
-		// If no students are selected, show notification
 		if (selectedRows.length === 0) {
-			showNotification("error", "No students selected");
 			return;
 		}
 
-		// Convert to percentage if using percentage
+		// Convert to points based on assessment
 		let gradeValue = value;
 		if (value === "100%") {
 			gradeValue = assessment.points.toString();
@@ -489,19 +486,17 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 		saveSelectedGrades(gradeValue);
 	};
 
-	// Enter quick edit mode for all students
+	// Enter quick edit mode
 	const enterQuickEditMode = () => {
 		setQuickEditMode(true);
-		const filteredStudents = getFilteredAndSortedGrades();
+		const visibleStudents = getVisibleStudents();
+		if (visibleStudents.length > 0) {
+			setEditingRow(visibleStudents[0].studentId);
 
-		if (filteredStudents.length > 0) {
-			const firstStudentId = filteredStudents[0].studentId;
-			setEditing({ [firstStudentId]: true });
-
-			// Focus the first input after it's rendered
+			// Focus the first input
 			setTimeout(() => {
-				if (inputRefs.current[firstStudentId]) {
-					inputRefs.current[firstStudentId].focus();
+				if (inputRefs.current[visibleStudents[0].studentId]) {
+					inputRefs.current[visibleStudents[0].studentId].focus();
 				}
 			}, 50);
 		}
@@ -510,7 +505,7 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 	// Exit quick edit mode
 	const exitQuickEditMode = () => {
 		setQuickEditMode(false);
-		setEditing({});
+		setEditingRow(null);
 	};
 
 	// Toggle keyboard shortcuts modal
@@ -518,89 +513,14 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 		setShowKeyboardShortcuts((prev) => !prev);
 	};
 
-	// Get filtered and sorted students
-	const getFilteredAndSortedGrades = () => {
-		// First apply search filter
-		let result = grades.filter((grade) =>
-			grade && grade.studentName
-				? grade.studentName.toLowerCase().includes(searchTerm.toLowerCase())
-				: false
-		);
-
-		// Then apply graded/ungraded filter
-		if (filterMode === "graded") {
-			result = result.filter(
-				(grade) => grade.grade && grade.grade.trim() !== ""
-			);
-		} else if (filterMode === "ungraded") {
-			result = result.filter(
-				(grade) => !grade.grade || grade.grade.trim() === ""
-			);
-		}
-
-		// Finally sort
-		if (sortConfig.key) {
-			result.sort((a, b) => {
-				if (sortConfig.key === "studentName") {
-					return sortConfig.direction === "asc"
-						? a.studentName.localeCompare(b.studentName)
-						: b.studentName.localeCompare(a.studentName);
-				} else if (sortConfig.key === "grade") {
-					const gradeA = parseFloat(localGrades[a.studentId] || 0);
-					const gradeB = parseFloat(localGrades[b.studentId] || 0);
-
-					// Handle empty grades (always at the bottom)
-					const isEmptyA =
-						!localGrades[a.studentId] || localGrades[a.studentId].trim() === "";
-					const isEmptyB =
-						!localGrades[b.studentId] || localGrades[b.studentId].trim() === "";
-
-					if (isEmptyA && !isEmptyB) return 1;
-					if (!isEmptyA && isEmptyB) return -1;
-
-					return sortConfig.direction === "asc"
-						? gradeA - gradeB
-						: gradeB - gradeA;
-				}
-				return 0;
-			});
-		}
-
-		return result;
-	};
-
-	// Calculate grade distribution data
-	const getGradeDistribution = () => {
-		const maxPoints = Number(assessment.points);
-		const segments = 5; // Number of grade ranges
-		const segmentSize = maxPoints / segments;
-
-		// Initialize distribution with zeros
-		const distribution = Array(segments).fill(0);
-
-		// Count grades in each segment
-		grades.forEach((grade) => {
-			const gradeValue = parseFloat(localGrades[grade.studentId]);
-			if (!isNaN(gradeValue)) {
-				const segmentIndex = Math.min(
-					Math.floor(gradeValue / segmentSize),
-					segments - 1
-				);
-				distribution[segmentIndex]++;
-			}
-		});
-
-		return distribution;
-	};
-
-	// Get filtered grades
-	const filteredGrades = getFilteredAndSortedGrades();
+	// Calculate which students should be visible
+	const visibleStudents = getVisibleStudents();
 
 	return (
 		<div className="agm-modal-overlay">
 			<div className="agm-modal-container">
 				<div className="agm-modal-content">
-					{/* Header */}
+					{/* ==================== HEADER ==================== */}
 					<div className="agm-modal-header">
 						<div className="agm-header-left">
 							<h2 className="agm-title">
@@ -636,17 +556,19 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 							<div className="agm-stat-item">
 								<FontAwesomeIcon icon={faChartLine} className="agm-stat-icon" />
 								<div className="agm-stat-value">
-									{stats.graded}/{grades.length}
+									{stats.graded}/{originalStudentList.length}
 								</div>
 								<div className="agm-stat-label">Graded</div>
 							</div>
 						</div>
 					</div>
 
-					{/* Loading indicator */}
-					{isLoading && <div className="agm-loading-indicator"></div>}
+					{/* ==================== LOADING INDICATOR ==================== */}
+					{isLoading && !initialLoadCompleteRef.current && (
+						<div className="agm-loading-indicator"></div>
+					)}
 
-					{/* Top section with search and filters */}
+					{/* ==================== TOP SECTION ==================== */}
 					<div className="agm-top-section">
 						<div className="agm-search-container">
 							<FontAwesomeIcon icon={faSearch} className="agm-search-icon" />
@@ -737,15 +659,15 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 						</div>
 					</div>
 
-					{/* New: Batch Actions Bar */}
+					{/* ==================== BATCH ACTIONS ==================== */}
 					<div className="agm-batch-actions">
 						<div className="agm-batch-selection">
 							<label className="agm-checkbox-container">
 								<input
 									type="checkbox"
 									checked={
-										selectedRows.length === filteredGrades.length &&
-										filteredGrades.length > 0
+										selectedRows.length === visibleStudents.length &&
+										visibleStudents.length > 0
 									}
 									onChange={toggleSelectAll}
 								/>
@@ -840,11 +762,11 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 						</div>
 					</div>
 
-					{/* New: Keyboard Shortcuts Info Modal */}
+					{/* ==================== KEYBOARD SHORTCUTS ==================== */}
 					{showKeyboardShortcuts && (
 						<div className="agm-keyboard-shortcuts">
 							<div className="agm-shortcuts-header">
-								<h3>Keyboard Shortcuts for Quick Edit</h3>
+								<h3>Keyboard Shortcuts</h3>
 								<button onClick={toggleKeyboardShortcuts}>
 									<FontAwesomeIcon icon={faTimes} />
 								</button>
@@ -870,93 +792,98 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 						</div>
 					)}
 
-					{/* Student grades table */}
+					{/* ==================== STUDENT LIST ==================== */}
 					<div className="agm-students-container">
-						{filteredGrades.length > 0 ? (
-							filteredGrades.map((grade, index) => (
-								<div
-									key={grade.studentId}
-									className={`agm-student-row ${
-										editing[grade.studentId] ? "agm-editing" : ""
-									} ${
-										selectedRows.includes(grade.studentId) ? "agm-selected" : ""
-									}`}
-								>
-									<div className="agm-checkbox-column">
-										<label className="agm-checkbox-container">
-											<input
-												type="checkbox"
-												checked={selectedRows.includes(grade.studentId)}
-												onChange={() => toggleRowSelection(grade.studentId)}
-											/>
-											<span className="agm-checkbox-checkmark"></span>
-										</label>
-									</div>
+						{visibleStudents.length > 0 ? (
+							visibleStudents.map((student, index) => {
+								const { studentId, studentName } = student;
+								const isEditing = editingRow === studentId;
+								const isSelected = selectedRows.includes(studentId);
+								const gradeValue = gradeValues[studentId] || "0";
+								const isUngraded = gradeValue === "0";
 
-									<div className="agm-student-name">{grade.studentName}</div>
-									<div className="agm-student-grade">
-										{editing[grade.studentId] ? (
-											<input
-												type="text"
-												className="agm-grade-input"
-												value={localGrades[grade.studentId]}
-												onChange={(e) =>
-													handleGradeChange(grade.studentId, e.target.value)
-												}
-												onKeyDown={(e) =>
-													handleKeyDown(e, grade.studentId, index)
-												}
-												ref={(el) => (inputRefs.current[grade.studentId] = el)}
-												autoFocus
-											/>
-										) : (
-											<span
-												className={`agm-grade-display ${
-													!localGrades[grade.studentId] ? "agm-not-graded" : ""
-												}`}
-												onClick={() => {
-													if (quickEditMode) {
-														setEditing((prev) => ({
-															...prev,
-															[grade.studentId]: true,
-														}));
-														setTimeout(() => {
-															if (inputRefs.current[grade.studentId]) {
-																inputRefs.current[grade.studentId].focus();
-															}
-														}, 50);
+								return (
+									<div
+										key={studentId}
+										className={`agm-student-row ${
+											isEditing ? "agm-editing" : ""
+										} ${isSelected ? "agm-selected" : ""}`}
+										ref={(el) => (studentRowsRef.current[studentId] = el)}
+									>
+										<div className="agm-checkbox-column">
+											<label className="agm-checkbox-container">
+												<input
+													type="checkbox"
+													checked={isSelected}
+													onChange={() => toggleSelection(studentId)}
+												/>
+												<span className="agm-checkbox-checkmark"></span>
+											</label>
+										</div>
+
+										<div className="agm-student-name">{studentName}</div>
+
+										<div className="agm-student-grade">
+											{isEditing ? (
+												<input
+													type="text"
+													className="agm-grade-input"
+													value={isUngraded ? "" : gradeValue}
+													onChange={(e) =>
+														handleGradeChange(studentId, e.target.value)
 													}
-												}}
-											>
-												{localGrades[grade.studentId] || "Not Graded"}
-											</span>
-										)}
+													onKeyDown={(e) => handleKeyDown(e, studentId)}
+													ref={(el) => (inputRefs.current[studentId] = el)}
+													autoFocus
+												/>
+											) : (
+												<span
+													className={`agm-grade-display ${
+														isUngraded ? "agm-not-graded" : ""
+													}`}
+													onClick={() => {
+														if (quickEditMode) {
+															setEditingRow(studentId);
+															setTimeout(() => {
+																if (inputRefs.current[studentId]) {
+																	inputRefs.current[studentId].focus();
+																}
+															}, 50);
+														}
+													}}
+													ref={(el) =>
+														(gradeDisplaysRef.current[studentId] = el)
+													}
+												>
+													{isUngraded ? "Not Graded" : gradeValue}
+												</span>
+											)}
+										</div>
+
+										<div className="agm-student-actions">
+											{isEditing ? (
+												<button
+													onClick={() => saveGrade(studentId)}
+													className="agm-button agm-save-button"
+													title="Save grade"
+												>
+													<FontAwesomeIcon icon={faSave} />
+													<span>Save</span>
+												</button>
+											) : (
+												<button
+													onClick={() => setEditingRow(studentId)}
+													className="agm-button agm-edit-button"
+													title="Edit grade"
+												>
+													<FontAwesomeIcon icon={faPen} />
+													<span>Edit</span>
+												</button>
+											)}
+										</div>
 									</div>
-									<div className="agm-student-actions">
-										{editing[grade.studentId] ? (
-											<button
-												onClick={() => saveGrade(grade.studentId)}
-												className="agm-button agm-save-button"
-												title="Save grade"
-											>
-												<FontAwesomeIcon icon={faSave} />
-												<span>Save</span>
-											</button>
-										) : (
-											<button
-												onClick={() =>
-													setEditing({ ...editing, [grade.studentId]: true })
-												}
-												className="agm-button agm-edit-button"
-												title="Edit grade"
-											>
-												<FontAwesomeIcon icon={faPen} />
-												<span>Edit</span>
-											</button>
-										)}
-									</div>
-								</div>
-							))
+								);
+							})
 						) : (
 							<div className="agm-no-results">
 								<p>No students found matching your search criteria.</p>
@@ -964,7 +891,7 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 						)}
 					</div>
 
-					{/* Footer */}
+					{/* ==================== FOOTER ==================== */}
 					<div className="agm-modal-footer">
 						<button
 							className="agm-shortcuts-button"

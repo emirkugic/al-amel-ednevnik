@@ -48,6 +48,7 @@
 	max-width: 900px;
 	width: 750px;
 	max-height: 80vh;
+	height: 80vh;
 	position: relative;
 	animation: agm-slideUp 0.3s ease-out;
 	display: flex;
@@ -830,4 +831,96 @@
 	.agm-button span {
 		display: none;
 	}
+}
+
+/* Add these to your AssessmentGradesModal.css */
+
+/* Force students to remain visible */
+.agm-student-row {
+	/* Prevent any transitions that could cause flickering */
+	transition: none !important;
+	/* Prevent style animations */
+	animation: none !important;
+	/* Force GPU acceleration for smooth rendering */
+	transform: translateZ(0);
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	will-change: opacity, transform;
+	/* Ensure visibility */
+	opacity: 1 !important;
+	visibility: visible !important;
+}
+
+/* Only hide when explicitly set through display property */
+.agm-student-row[style*="display: none"] {
+	display: none !important;
+}
+
+/* Prevent any animation on the grade display that might cause flickering */
+.agm-grade-display {
+	transition: none !important;
+	animation: none !important;
+}
+
+/* Ensure loading indicator doesn't cause layout shifts */
+.agm-loading-indicator {
+	position: absolute;
+	height: 3px;
+	pointer-events: none;
+	z-index: 100;
+}
+
+/* CSS to help with grading UI stability */
+.agm-modal-content {
+	/* Prevent content jumps by ensuring stable height/width */
+	contain: layout style size;
+}
+
+.agm-students-container {
+	/* Enforce stable layout */
+	contain: layout;
+	position: relative;
+}
+
+/* Ensure quick animations for changes */
+.agm-student-row.agm-editing {
+	/* Force immediate UI updates */
+	transition: background-color 0ms !important;
+	/* Add a slight visual indicator that doesn't cause DOM shifts */
+	border-left: 3px solid var(--agm-primary);
+}
+
+.agm-checkbox-container {
+	/* Prevent checkbox interaction from causing reflows */
+	contain: layout style;
+}
+
+/* Stabilize filter menu */
+.agm-filter-menu {
+	/* Use fixed position instead of absolute to prevent layout shifts */
+	transform: translateZ(0);
+	/* Ensure the menu stays visible when open */
+	contain: layout;
+}
+
+/* Enhanced loading indicator style */
+.agm-loading-indicator::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 30%;
+	height: 100%;
+	background-color: var(--agm-primary);
+	animation: agm-loading 1.5s infinite ease-in-out;
+	transform: translateZ(0);
+}
+
+/* Additional class to forcibly show an element */
+.agm-force-visible {
+	display: block !important;
+	opacity: 1 !important;
+	visibility: visible !important;
+	position: relative !important;
+	z-index: 10 !important;
 }
