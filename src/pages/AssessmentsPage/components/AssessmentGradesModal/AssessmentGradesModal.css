@@ -1,4 +1,4 @@
-/* AssessmentGradesModal.css - Modern redesign with unique class prefix */
+/* AssessmentGradesModal.css - Enhanced version with additional features */
 :root {
 	--agm-primary: #04abfd;
 	--agm-primary-dark: #0386c7;
@@ -26,7 +26,7 @@
 	--agm-transition: all 0.2s ease;
 }
 
-/* Modal overlay */
+/* Modal overlay - unchanged */
 .agm-modal-overlay {
 	position: fixed;
 	top: 0;
@@ -43,7 +43,7 @@
 	animation: agm-fadeIn 0.2s ease-in;
 }
 
-/* Modal container */
+/* Modal container - unchanged */
 .agm-modal-container {
 	max-width: 850px;
 	max-height: 90vh;
@@ -64,7 +64,7 @@
 	max-height: 700px;
 }
 
-/* Modal header */
+/* Modal header - updated with stats */
 .agm-modal-header {
 	display: flex;
 	align-items: center;
@@ -72,6 +72,11 @@
 	padding: 20px 24px;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 	background-color: var(--agm-primary-ultralight);
+}
+
+.agm-header-left {
+	display: flex;
+	flex-direction: column;
 }
 
 .agm-title {
@@ -111,7 +116,7 @@
 	color: var(--agm-gray-700);
 }
 
-/* Notifications */
+/* Notifications - unchanged */
 .agm-notification {
 	display: flex;
 	align-items: center;
@@ -159,7 +164,7 @@
 	justify-content: center;
 }
 
-/* Loading indicator */
+/* Loading indicator - unchanged */
 .agm-loading-indicator {
 	position: absolute;
 	top: 0;
@@ -181,7 +186,7 @@
 	animation: agm-loading 1.5s infinite ease-in-out;
 }
 
-/* Top section with search and stats */
+/* Top section with search and filters - updated */
 .agm-top-section {
 	padding: 20px 24px;
 	background-color: var(--agm-white);
@@ -221,9 +226,102 @@
 	box-shadow: 0 0 0 3px var(--agm-primary-shadow);
 }
 
+/* New filter and sort components */
+.agm-filter-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.agm-filter-dropdown {
+	position: relative;
+}
+
+.agm-filter-button {
+	background-color: var(--agm-gray-100);
+	border: 1px solid var(--agm-gray-300);
+	border-radius: var(--agm-radius);
+	padding: 8px 12px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 0.85rem;
+	color: var(--agm-gray-700);
+	cursor: pointer;
+	transition: var(--agm-transition);
+}
+
+.agm-filter-button:hover {
+	background-color: var(--agm-gray-200);
+}
+
+.agm-filter-menu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 160px;
+	background-color: var(--agm-white);
+	border: 1px solid var(--agm-gray-300);
+	border-radius: var(--agm-radius);
+	box-shadow: var(--agm-shadow-md);
+	z-index: 5;
+	margin-top: 4px;
+	display: none;
+}
+
+.agm-filter-dropdown:hover .agm-filter-menu {
+	display: block;
+	animation: agm-fadeIn 0.2s ease;
+}
+
+.agm-filter-option {
+	width: 100%;
+	padding: 8px 12px;
+	text-align: left;
+	background: none;
+	border: none;
+	font-size: 0.85rem;
+	color: var(--agm-gray-700);
+	cursor: pointer;
+	transition: var(--agm-transition);
+}
+
+.agm-filter-option:hover {
+	background-color: var(--agm-gray-100);
+}
+
+.agm-filter-option.agm-active {
+	background-color: var(--agm-primary-light);
+	color: var(--agm-primary-dark);
+	font-weight: 500;
+}
+
+.agm-sort-button {
+	background-color: var(--agm-gray-100);
+	border: 1px solid var(--agm-gray-300);
+	border-radius: var(--agm-radius);
+	padding: 8px 12px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 0.85rem;
+	color: var(--agm-gray-700);
+	cursor: pointer;
+	transition: var(--agm-transition);
+}
+
+.agm-sort-button:hover {
+	background-color: var(--agm-gray-200);
+}
+
+.agm-sort-button.agm-active {
+	background-color: var(--agm-primary-light);
+	border-color: var(--agm-primary);
+	color: var(--agm-primary-dark);
+}
+
 .agm-stats-container {
 	display: flex;
-	gap: 24px;
+	gap: 20px;
 }
 
 .agm-stat-item {
@@ -234,23 +332,259 @@
 }
 
 .agm-stat-icon {
-	font-size: 1rem;
+	font-size: 0.9rem;
 	color: var(--agm-primary);
-	margin-bottom: 4px;
+	margin-bottom: 3px;
 }
 
 .agm-stat-value {
-	font-size: 1.2rem;
+	font-size: 1.1rem;
 	font-weight: 600;
 	color: var(--agm-gray-800);
 }
 
 .agm-stat-label {
-	font-size: 0.75rem;
+	font-size: 0.7rem;
 	color: var(--agm-gray-500);
 }
 
-/* Students container */
+/* New batch actions bar */
+.agm-batch-actions {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px 24px;
+	background-color: var(--agm-primary-ultralight);
+	border-bottom: 1px solid var(--agm-gray-200);
+}
+
+.agm-batch-selection {
+	display: flex;
+	align-items: center;
+}
+
+.agm-checkbox-container {
+	display: flex;
+	align-items: center;
+	position: relative;
+	cursor: pointer;
+	font-size: 0.9rem;
+	color: var(--agm-gray-700);
+	user-select: none;
+}
+
+.agm-checkbox-container input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+}
+
+.agm-checkbox-checkmark {
+	position: relative;
+	height: 18px;
+	width: 18px;
+	background-color: var(--agm-white);
+	border: 1px solid var(--agm-gray-300);
+	border-radius: 3px;
+	margin-right: 8px;
+	transition: var(--agm-transition);
+}
+
+.agm-checkbox-container:hover input ~ .agm-checkbox-checkmark {
+	border-color: var(--agm-primary);
+}
+
+.agm-checkbox-container input:checked ~ .agm-checkbox-checkmark {
+	background-color: var(--agm-primary);
+	border-color: var(--agm-primary);
+}
+
+.agm-checkbox-checkmark:after {
+	content: "";
+	position: absolute;
+	display: none;
+	left: 6px;
+	top: 2px;
+	width: 5px;
+	height: 10px;
+	border: solid white;
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+}
+
+.agm-checkbox-container input:checked ~ .agm-checkbox-checkmark:after {
+	display: block;
+}
+
+.agm-checkbox-label {
+	font-size: 0.85rem;
+}
+
+.agm-action-buttons {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.agm-action-button {
+	padding: 8px 12px;
+	background-color: var(--agm-white);
+	border: 1px solid var(--agm-gray-300);
+	border-radius: var(--agm-radius);
+	font-size: 0.85rem;
+	color: var(--agm-gray-700);
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	cursor: pointer;
+	transition: var(--agm-transition);
+}
+
+.agm-action-button:hover:not(:disabled) {
+	background-color: var(--agm-gray-100);
+}
+
+.agm-action-button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.agm-action-button.agm-active {
+	background-color: var(--agm-primary);
+	border-color: var(--agm-primary);
+	color: white;
+}
+
+.agm-action-button svg {
+	font-size: 0.9rem;
+}
+
+/* Custom grade input */
+.agm-custom-grade {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.agm-custom-grade-input {
+	width: 80px;
+	padding: 8px 10px;
+	font-size: 0.85rem;
+	border: 1px solid var(--agm-gray-300);
+	border-radius: var(--agm-radius);
+	outline: none;
+	transition: var(--agm-transition);
+}
+
+.agm-custom-grade-input:focus {
+	border-color: var(--agm-primary);
+	box-shadow: 0 0 0 2px var(--agm-primary-shadow);
+}
+
+.agm-custom-grade-input:disabled {
+	background-color: var(--agm-gray-100);
+	color: var(--agm-gray-500);
+	cursor: not-allowed;
+}
+
+.agm-custom-grade-button {
+	padding: 8px 10px;
+	background-color: var(--agm-primary);
+	color: white;
+	border: none;
+	border-radius: var(--agm-radius);
+	font-size: 0.85rem;
+	cursor: pointer;
+	transition: var(--agm-transition);
+}
+
+.agm-custom-grade-button:hover:not(:disabled) {
+	background-color: var(--agm-primary-dark);
+}
+
+.agm-custom-grade-button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+/* Keyboard shortcuts panel */
+.agm-keyboard-shortcuts {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 300px;
+	background-color: var(--agm-white);
+	border-radius: var(--agm-radius);
+	box-shadow: var(--agm-shadow-lg);
+	z-index: 20;
+	border: 1px solid var(--agm-gray-200);
+	animation: agm-fadeIn 0.2s ease;
+}
+
+.agm-shortcuts-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px 16px;
+	border-bottom: 1px solid var(--agm-gray-200);
+}
+
+.agm-shortcuts-header h3 {
+	margin: 0;
+	font-size: 1rem;
+	color: var(--agm-gray-800);
+}
+
+.agm-shortcuts-header button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: var(--agm-gray-500);
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	transition: var(--agm-transition);
+}
+
+.agm-shortcuts-header button:hover {
+	background-color: var(--agm-gray-100);
+	color: var(--agm-gray-700);
+}
+
+.agm-shortcuts-content {
+	padding: 12px 16px;
+}
+
+.agm-shortcut-item {
+	display: flex;
+	margin-bottom: 12px;
+}
+
+.agm-shortcut-key {
+	background-color: var(--agm-gray-100);
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-family: monospace;
+	font-size: 0.85rem;
+	color: var(--agm-gray-800);
+	margin-right: 12px;
+	min-width: 60px;
+	text-align: center;
+	border: 1px solid var(--agm-gray-300);
+}
+
+.agm-shortcut-desc {
+	font-size: 0.85rem;
+	color: var(--agm-gray-700);
+}
+
+/* Students container - updated */
 .agm-students-container {
 	flex: 1;
 	overflow-y: auto;
@@ -275,10 +609,21 @@
 	border-left: 3px solid var(--agm-primary);
 }
 
+.agm-student-row.agm-selected {
+	background-color: rgba(4, 171, 253, 0.05);
+}
+
+.agm-checkbox-column {
+	width: 30px;
+	display: flex;
+	align-items: center;
+}
+
 .agm-student-name {
 	flex: 1;
 	font-weight: 500;
 	color: var(--agm-gray-700);
+	margin-left: 8px;
 }
 
 .agm-student-grade {
@@ -290,6 +635,9 @@
 	font-weight: 600;
 	color: var(--agm-gray-800);
 	font-size: 1rem;
+	padding: 6px 8px;
+	border-radius: var(--agm-radius);
+	transition: var(--agm-transition);
 }
 
 .agm-grade-display.agm-not-graded {
@@ -354,7 +702,7 @@
 	background-color: rgba(76, 175, 80, 0.1);
 }
 
-/* No results */
+/* No results - unchanged */
 .agm-no-results {
 	display: flex;
 	justify-content: center;
@@ -364,12 +712,18 @@
 	font-style: italic;
 }
 
-/* Modal footer */
+/* Modal footer - updated */
 .agm-modal-footer {
 	border-top: 1px solid var(--agm-gray-200);
 	padding: 16px 24px;
 	display: flex;
-	justify-content: flex-end;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.agm-footer-stats {
+	font-size: 0.85rem;
+	color: var(--agm-gray-600);
 }
 
 .agm-close-btn {
@@ -388,7 +742,7 @@
 	background-color: var(--agm-primary-dark);
 }
 
-/* Animations */
+/* Animations - unchanged */
 @keyframes agm-fadeIn {
 	from {
 		opacity: 0;
@@ -421,11 +775,26 @@
 	}
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments - updated */
 @media (max-width: 768px) {
 	.agm-modal-container {
 		width: 95%;
 		max-height: 95vh;
+	}
+
+	.agm-modal-header {
+		flex-wrap: wrap;
+		gap: 15px;
+	}
+
+	.agm-header-left {
+		width: 100%;
+	}
+
+	.agm-stats-container {
+		margin: 0 auto;
+		justify-content: space-between;
+		width: 100%;
 	}
 
 	.agm-top-section {
@@ -437,9 +806,29 @@
 		width: 100%;
 	}
 
-	.agm-stats-container {
+	.agm-filter-actions {
+		margin-top: 10px;
 		justify-content: space-between;
 		width: 100%;
+	}
+
+	.agm-batch-actions {
+		flex-direction: column;
+		gap: 12px;
+		align-items: flex-start;
+	}
+
+	.agm-action-buttons {
+		width: 100%;
+		justify-content: flex-start;
+	}
+
+	.agm-custom-grade {
+		width: 100%;
+	}
+
+	.agm-custom-grade-input {
+		flex: 1;
 	}
 
 	.agm-student-row {
@@ -456,6 +845,7 @@
 		text-align: left;
 	}
 
+	.agm-action-button span,
 	.agm-button span {
 		display: none;
 	}
