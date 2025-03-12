@@ -1,83 +1,462 @@
-.assessment-modal-overlay {
-	position: fixed !important;
+/* AssessmentGradesModal.css - Modern redesign with unique class prefix */
+:root {
+	--agm-primary: #04abfd;
+	--agm-primary-dark: #0386c7;
+	--agm-primary-light: #e3f6ff;
+	--agm-primary-ultralight: #f5fbff;
+	--agm-primary-transparent: rgba(4, 171, 253, 0.1);
+	--agm-primary-shadow: rgba(4, 171, 253, 0.2);
+	--agm-danger: #f44336;
+	--agm-success: #4caf50;
+	--agm-warning: #ff9800;
+	--agm-gray-50: #f9fafb;
+	--agm-gray-100: #f3f4f6;
+	--agm-gray-200: #e5e7eb;
+	--agm-gray-300: #d1d5db;
+	--agm-gray-400: #9ca3af;
+	--agm-gray-500: #6b7280;
+	--agm-gray-600: #4b5563;
+	--agm-gray-700: #374151;
+	--agm-gray-800: #1f2937;
+	--agm-white: #ffffff;
+	--agm-radius: 8px;
+	--agm-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+	--agm-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+	--agm-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+	--agm-transition: all 0.2s ease;
+}
+
+/* Modal overlay */
+.agm-modal-overlay {
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.6);
+	height: 100vh;
+	z-index: 9999;
 	display: flex;
-	justify-content: center;
 	align-items: center;
-	z-index: 1001 !important;
+	justify-content: center;
+	background-color: rgba(0, 0, 0, 0.2);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	animation: agm-fadeIn 0.2s ease-in;
 }
 
-.assessment-modal-content {
-	background-color: #fff;
+/* Modal container */
+.agm-modal-container {
+	max-width: 850px;
+	max-height: 90vh;
+	width: 90%;
 	position: relative;
-	padding: 0;
-	width: 450px;
-	height: 500px;
-	max-width: 90%;
-	max-height: 80vh;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-	font-family: Arial, sans-serif;
+	animation: agm-slideUp 0.3s ease-out;
+}
+
+.agm-modal-content {
+	background: rgba(255, 255, 255, 0.98);
+	border-radius: var(--agm-radius);
+	box-shadow: var(--agm-shadow-lg);
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
-	overflow-y: auto;
-	border-radius: 8px;
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	height: 100%;
+	max-height: 700px;
 }
 
-.assessment-modal-header {
-	padding: 20px;
+/* Modal header */
+.agm-modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px 24px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+	background-color: var(--agm-primary-ultralight);
+}
+
+.agm-title {
 	margin: 0;
-	background-color: #007bff;
-	color: #fff;
 	font-size: 1.5rem;
-	border-radius: 8px 8px 0 0;
+	font-weight: 600;
+	color: var(--agm-primary-dark);
+	display: flex;
+	flex-direction: column;
+	line-height: 1.3;
+}
+
+.agm-subtitle {
+	font-size: 0.9rem;
+	font-weight: 400;
+	color: var(--agm-gray-600);
+	margin-top: 4px;
+}
+
+.agm-close-button {
+	background: none;
+	border: none;
+	color: var(--agm-gray-500);
+	font-size: 1.2rem;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	transition: var(--agm-transition);
+}
+
+.agm-close-button:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+	color: var(--agm-gray-700);
+}
+
+/* Notifications */
+.agm-notification {
+	display: flex;
+	align-items: center;
+	padding: 12px 24px;
+	margin: 12px 24px 0;
+	border-radius: var(--agm-radius);
+	animation: agm-fadeIn 0.3s ease;
+}
+
+.agm-notification-success {
+	background-color: #edf7ed;
+	border-left: 4px solid var(--agm-success);
+}
+
+.agm-notification-error {
+	background-color: #fdeeee;
+	border-left: 4px solid var(--agm-danger);
+}
+
+.agm-notification svg {
+	color: var(--agm-danger);
+	margin-right: 12px;
+}
+
+.agm-notification-success svg {
+	color: var(--agm-success);
+}
+
+.agm-notification span {
+	flex: 1;
+	font-size: 0.9rem;
+	color: var(--agm-gray-700);
+}
+
+.agm-notification button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: var(--agm-gray-500);
+	padding: 0;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Loading indicator */
+.agm-loading-indicator {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 3px;
+	overflow: hidden;
+	z-index: 10;
+}
+
+.agm-loading-indicator::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 30%;
+	height: 100%;
+	background-color: var(--agm-primary);
+	animation: agm-loading 1.5s infinite ease-in-out;
+}
+
+/* Top section with search and stats */
+.agm-top-section {
+	padding: 20px 24px;
+	background-color: var(--agm-white);
+	border-bottom: 1px solid var(--agm-gray-200);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.agm-search-container {
+	position: relative;
+	width: 280px;
+}
+
+.agm-search-icon {
+	position: absolute;
+	left: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: var(--agm-gray-400);
+}
+
+.agm-search-input {
+	width: 100%;
+	padding: 10px 10px 10px 36px;
+	border: 1px solid var(--agm-gray-300);
+	border-radius: var(--agm-radius);
+	font-size: 0.9rem;
+	transition: var(--agm-transition);
+}
+
+.agm-search-input:focus {
+	outline: none;
+	border-color: var(--agm-primary);
+	box-shadow: 0 0 0 3px var(--agm-primary-shadow);
+}
+
+.agm-stats-container {
+	display: flex;
+	gap: 24px;
+}
+
+.agm-stat-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	text-align: center;
 }
 
-.assessment-modal-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin: 0;
+.agm-stat-icon {
+	font-size: 1rem;
+	color: var(--agm-primary);
+	margin-bottom: 4px;
 }
 
-.assessment-modal-table th,
-.assessment-modal-table td {
-	padding: 10px;
-	border-bottom: 1px solid #ddd;
-	text-align: left;
+.agm-stat-value {
+	font-size: 1.2rem;
+	font-weight: 600;
+	color: var(--agm-gray-800);
+}
+
+.agm-stat-label {
+	font-size: 0.75rem;
+	color: var(--agm-gray-500);
+}
+
+/* Students container */
+.agm-students-container {
+	flex: 1;
+	overflow-y: auto;
+	padding: 0;
+	background-color: var(--agm-gray-50);
+}
+
+.agm-student-row {
+	display: flex;
+	align-items: center;
+	padding: 12px 24px;
+	border-bottom: 1px solid var(--agm-gray-200);
+	transition: var(--agm-transition);
+}
+
+.agm-student-row:hover {
+	background-color: var(--agm-gray-100);
+}
+
+.agm-student-row.agm-editing {
+	background-color: var(--agm-primary-ultralight);
+	border-left: 3px solid var(--agm-primary);
+}
+
+.agm-student-name {
+	flex: 1;
+	font-weight: 500;
+	color: var(--agm-gray-700);
+}
+
+.agm-student-grade {
+	width: 120px;
+	text-align: center;
+}
+
+.agm-grade-display {
+	font-weight: 600;
+	color: var(--agm-gray-800);
+	font-size: 1rem;
+}
+
+.agm-grade-display.agm-not-graded {
+	color: var(--agm-gray-500);
+	font-style: italic;
+	font-weight: normal;
 	font-size: 0.9rem;
 }
 
-.assessment-modal-table th {
-	background-color: #f4f4f4;
-	font-weight: bold;
+.agm-grade-input {
+	width: 90px;
+	padding: 8px 12px;
+	border: 1px solid var(--agm-primary);
+	border-radius: var(--agm-radius);
+	text-align: center;
+	font-size: 1rem;
+	font-weight: 600;
+	color: var(--agm-gray-800);
+	background-color: var(--agm-white);
+	box-shadow: 0 0 0 3px var(--agm-primary-shadow);
+	outline: none;
 }
 
-.assessment-modal-button {
-	border: none;
+.agm-grade-input:invalid {
+	border-color: var(--agm-danger);
+	box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.2);
+}
+
+.agm-student-actions {
+	width: 100px;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.agm-button {
 	background: none;
+	border: none;
+	padding: 8px 12px;
 	cursor: pointer;
-	font-size: 1.2rem;
-	padding: 5px;
-	border-radius: 4px;
-	transition: background-color 0.2s;
+	border-radius: var(--agm-radius);
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	transition: var(--agm-transition);
+	font-size: 0.85rem;
+	font-weight: 500;
 }
 
-.assessment-modal-button.edit {
-	color: #1e90ff;
+.agm-edit-button {
+	color: var(--agm-primary);
 }
 
-.assessment-modal-button.save {
-	color: #4caf50;
+.agm-edit-button:hover {
+	background-color: var(--agm-primary-transparent);
 }
 
-.assessment-modal-button:hover {
-	background-color: #f0f0f0;
+.agm-save-button {
+	color: var(--agm-success);
 }
 
-.assessment-modal-content * {
-	box-sizing: border-box;
+.agm-save-button:hover {
+	background-color: rgba(76, 175, 80, 0.1);
+}
+
+/* No results */
+.agm-no-results {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 150px;
+	color: var(--agm-gray-500);
+	font-style: italic;
+}
+
+/* Modal footer */
+.agm-modal-footer {
+	border-top: 1px solid var(--agm-gray-200);
+	padding: 16px 24px;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.agm-close-btn {
+	padding: 10px 24px;
+	background-color: var(--agm-primary);
+	color: white;
+	border: none;
+	border-radius: var(--agm-radius);
+	font-size: 0.95rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: var(--agm-transition);
+}
+
+.agm-close-btn:hover {
+	background-color: var(--agm-primary-dark);
+}
+
+/* Animations */
+@keyframes agm-fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes agm-slideUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes agm-loading {
+	0% {
+		left: -30%;
+	}
+	50% {
+		left: 100%;
+	}
+	100% {
+		left: 100%;
+	}
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.agm-modal-container {
+		width: 95%;
+		max-height: 95vh;
+	}
+
+	.agm-top-section {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.agm-search-container {
+		width: 100%;
+	}
+
+	.agm-stats-container {
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.agm-student-row {
+		flex-wrap: wrap;
+	}
+
+	.agm-student-name {
+		width: 100%;
+		margin-bottom: 8px;
+	}
+
+	.agm-student-grade {
+		flex: 1;
+		text-align: left;
+	}
+
+	.agm-button span {
+		display: none;
+	}
 }
