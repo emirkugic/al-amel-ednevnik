@@ -102,7 +102,7 @@ const AssessmentManagement = () => {
 	const [title, setTitle] = useState("");
 	const [type, setType] = useState("Exam");
 	const [points, setPoints] = useState("");
-	const [date, setDate] = useState(new Date().toISOString().substring(0, 10));
+	const [formMonth, setFormMonth] = useState("");
 
 	// Get school year
 	const { start } = calculateSchoolYear();
@@ -112,6 +112,54 @@ const AssessmentManagement = () => {
 		(subj) => subj.subjectId === subject
 	);
 	const departmentIds = currentSubject ? currentSubject.departmentId : [];
+
+	// Helper function to get first day of a month
+	const getFirstDayOfMonth = (month) => {
+		const monthIndex = [
+			"January",
+			"February",
+			"March",
+			"April",
+			"May",
+			"June",
+			"July",
+			"August",
+			"September",
+			"October",
+			"November",
+			"December",
+		].indexOf(month);
+
+		// Determine year based on semester and current date
+		const currentDate = new Date();
+		const currentYear = currentDate.getFullYear();
+		const currentMonth = currentDate.getMonth(); // 0-11
+
+		let year = currentYear;
+
+		// If we're in the first semester (Sep-Dec) of current year
+		if (selectedSemester === "First Semester") {
+			// If selecting for next year's first semester but we're still in current year
+			if (
+				currentMonth < 8 &&
+				["September", "October", "November", "December"].includes(month)
+			) {
+				year = currentYear - 1;
+			}
+		}
+		// If we're in second semester (Feb-May)
+		else if (selectedSemester === "Second Semester") {
+			// If we're in the fall and selecting for spring months, use next year
+			if (
+				currentMonth >= 8 &&
+				["February", "March", "April", "May"].includes(month)
+			) {
+				year = currentYear + 1;
+			}
+		}
+
+		return new Date(year, monthIndex, 1);
+	};
 
 	// Modal functions
 	const openGradesModal = async (assessment) => {
@@ -203,9 +251,11 @@ const AssessmentManagement = () => {
 		// Check if current month is in the selected semester
 		if (monthsToDisplay.includes(currentMonth)) {
 			setSelectedMonth(currentMonth);
+			setFormMonth(currentMonth); // Set form month as well
 		} else {
 			// Otherwise, select the first month of the semester
 			setSelectedMonth(monthsToDisplay[0]);
+			setFormMonth(monthsToDisplay[0]); // Set form month as well
 		}
 	}, [selectedSemester]);
 
@@ -233,14 +283,16 @@ const AssessmentManagement = () => {
 			!title ||
 			!type ||
 			!points ||
-			!date
+			!formMonth
 		) {
 			alert("Please fill in all fields");
 			return;
 		}
 
 		try {
-			const formattedDate = new Date(date).toISOString();
+			const dateObj = getFirstDayOfMonth(formMonth);
+			const formattedDate = dateObj.toISOString();
+
 			const newAssessment = {
 				departmentId: selectedDepartment,
 				subjectId: subject,
@@ -257,7 +309,7 @@ const AssessmentManagement = () => {
 			setTitle("");
 			setType("Exam");
 			setPoints("");
-			setDate(new Date().toISOString().substring(0, 10));
+			// Don't reset formMonth so it stays on the same month for the next assessment
 		} catch (error) {
 			console.error("Error adding assessment:", error);
 		}
@@ -270,16 +322,6 @@ const AssessmentManagement = () => {
 		if (window.confirm("Are you sure you want to delete this assessment?")) {
 			deleteAssessment(assessmentId);
 		}
-	};
-
-	// Format date for display
-	const formatDate = (dateString) => {
-		const date = new Date(dateString);
-		return date.toLocaleDateString("default", {
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-		});
 	};
 
 	// Get current month's assessments
@@ -434,16 +476,21 @@ const AssessmentManagement = () => {
 								</div>
 
 								<div className="asmnt-form-group">
-									<label className="asmnt-form-label" htmlFor="date">
-										Date
+									<label className="asmnt-form-label" htmlFor="month">
+										Month
 									</label>
-									<input
-										id="date"
-										type="date"
+									<select
+										id="month"
 										className="asmnt-form-control"
-										value={date}
-										onChange={(e) => setDate(e.target.value)}
-									/>
+										value={formMonth}
+										onChange={(e) => setFormMonth(e.target.value)}
+									>
+										{monthsToDisplay.map((month) => (
+											<option key={month} value={month}>
+												{month}
+											</option>
+										))}
+									</select>
 								</div>
 							</div>
 
@@ -528,10 +575,6 @@ const AssessmentManagement = () => {
 															className="asmnt-assessment-type-icon"
 														/>
 														{assessment.type}
-													</div>
-													<div className="asmnt-assessment-date">
-														<FontAwesomeIcon icon={faCalendarAlt} />
-														{formatDate(assessment.date)}
 													</div>
 												</div>
 
