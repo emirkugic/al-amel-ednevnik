@@ -358,10 +358,6 @@ const LoggedClassesOverview = ({ departmentId }) => {
 						<FontAwesomeIcon icon={faSort} />
 						{sortOrder === "asc" ? "Oldest first" : "Newest first"}
 					</button>
-
-					<button className="export-button">
-						<FontAwesomeIcon icon={faFileExport} /> Export
-					</button>
 				</div>
 			</div>
 
