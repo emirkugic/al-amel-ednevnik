@@ -1,0 +1,262 @@
+/* LogDetailsModal.css - Using ldm- prefix to avoid conflicts */
+:root {
+	--ldm-primary-color: #04abfd;
+	--ldm-primary-dark: #0386c7;
+	--ldm-primary-light: #e1f5fe;
+	--ldm-secondary-color: #6c757d;
+	--ldm-success-color: #4caf50;
+	--ldm-success-light: #e8f5e9;
+	--ldm-danger-color: #f44336;
+	--ldm-danger-light: #ffebee;
+	--ldm-white: #ffffff;
+	--ldm-text-color: #333333;
+	--ldm-text-light: #757575;
+	--ldm-bg-light: #f8f9fa;
+	--ldm-border-color: #e0e0e0;
+	--ldm-border-radius: 8px;
+	--ldm-border-radius-sm: 4px;
+	--ldm-border-radius-lg: 12px;
+	--ldm-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	--ldm-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+	--ldm-transition: all 0.2s ease-in-out;
+}
+
+/* Modal overlay */
+.ldm-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 9999;
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+	animation: ldm-fadeIn 0.2s ease-out;
+}
+
+/* Modal container */
+.ldm-container {
+	background-color: var(--ldm-white);
+	border-radius: var(--ldm-border-radius-lg);
+	box-shadow: var(--ldm-shadow-lg);
+	width: 90%;
+	max-width: 600px;
+	max-height: 90vh;
+	display: flex;
+	flex-direction: column;
+	animation: ldm-slideUp 0.3s ease-out;
+	overflow: hidden;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+		Arial, sans-serif;
+}
+
+/* Modal header */
+.ldm-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px 20px;
+	border-bottom: 1px solid var(--ldm-border-color);
+}
+
+.ldm-header h3 {
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
+	color: var(--ldm-text-color);
+}
+
+.ldm-close-btn {
+	background: none;
+	border: none;
+	width: 32px;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	color: var(--ldm-text-light);
+	cursor: pointer;
+	transition: var(--ldm-transition);
+}
+
+.ldm-close-btn:hover {
+	background-color: var(--ldm-bg-light);
+	color: var(--ldm-text-color);
+}
+
+/* Modal body */
+.ldm-body {
+	padding: 20px;
+	overflow-y: auto;
+	flex: 1;
+}
+
+.ldm-details-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 16px;
+	margin-bottom: 24px;
+}
+
+.ldm-detail-row {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.ldm-detail-label {
+	font-size: 13px;
+	color: var(--ldm-text-light);
+}
+
+.ldm-detail-value {
+	font-size: 15px;
+	font-weight: 500;
+	color: var(--ldm-text-color);
+}
+
+/* Attendance section */
+.ldm-attendance-section h4 {
+	margin: 0 0 16px;
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--ldm-text-color);
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.ldm-attendance-summary {
+	display: flex;
+	align-items: center;
+	margin-bottom: 16px;
+	padding: 10px 16px;
+	background-color: var(--ldm-danger-light);
+	color: var(--ldm-danger-color);
+	border-radius: var(--ldm-border-radius-sm);
+	font-weight: 500;
+}
+
+.ldm-attendance-summary.ldm-full {
+	background-color: var(--ldm-success-light);
+	color: var(--ldm-success-color);
+}
+
+.ldm-summary-icon {
+	margin-right: 10px;
+	font-size: 16px;
+}
+
+.ldm-summary-icon.ldm-absent {
+	color: var(--ldm-danger-color);
+}
+
+.ldm-summary-icon.ldm-present {
+	color: var(--ldm-success-color);
+}
+
+.ldm-absent-students {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+	gap: 10px;
+}
+
+.ldm-absent-student {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	background-color: var(--ldm-bg-light);
+	border-radius: var(--ldm-border-radius-sm);
+	font-size: 14px;
+}
+
+/* Modal footer */
+.ldm-footer {
+	display: flex;
+	justify-content: flex-end;
+	padding: 16px 20px;
+	gap: 10px;
+	border-top: 1px solid var(--ldm-border-color);
+}
+
+/* Buttons */
+.ldm-btn {
+	border-radius: var(--ldm-border-radius-sm);
+	padding: 8px 16px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	transition: var(--ldm-transition);
+}
+
+.ldm-btn-primary {
+	background-color: var(--ldm-primary-color);
+	color: var(--ldm-white);
+	border: none;
+}
+
+.ldm-btn-primary:hover {
+	background-color: var(--ldm-primary-dark);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ldm-btn-secondary {
+	background-color: var(--ldm-white);
+	color: var(--ldm-text-color);
+	border: 1px solid var(--ldm-border-color);
+}
+
+.ldm-btn-secondary:hover {
+	background-color: var(--ldm-bg-light);
+}
+
+.ldm-btn-danger {
+	background-color: var(--ldm-danger-color);
+	color: var(--ldm-white);
+	border: none;
+}
+
+.ldm-btn-danger:hover {
+	background-color: #d32f2f;
+}
+
+/* Animations */
+@keyframes ldm-fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes ldm-slideUp {
+	from {
+		transform: translateY(30px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.ldm-details-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.ldm-absent-students {
+		grid-template-columns: 1fr;
+	}
+}
