@@ -34,7 +34,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 	// State management
 	const [searchQuery, setSearchQuery] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
-	const [sortOrder, setSortOrder] = useState("desc");
+	const [sortOrder, setSortOrder] = useState("asc");
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedSubject, setSelectedSubject] = useState("");
 	const [subjects, setSubjects] = useState([]);
@@ -131,9 +131,11 @@ const LoggedClassesOverview = ({ departmentId }) => {
 				return matchesSubject || matchesTitle || matchesStudent;
 			})
 			.sort((a, b) => {
-				const dateA = new Date(a.classDate);
-				const dateB = new Date(b.classDate);
-				return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+				const sequenceA = a.sequence;
+				const sequenceB = b.sequence;
+				return sortOrder === "desc"
+					? sequenceA - sequenceB
+					: sequenceB - sequenceA;
 			});
 	}, [departmentLogs, selectedSubject, searchQuery, sortOrder]);
 
@@ -356,7 +358,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 				<div className="view-buttons">
 					<button className="sort-button" onClick={toggleSortOrder}>
 						<FontAwesomeIcon icon={faSort} />
-						{sortOrder === "asc" ? "Oldest first" : "Newest first"}
+						{sortOrder === "asc" ? "Change sort order" : "Change sort order"}
 					</button>
 				</div>
 			</div>
