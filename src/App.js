@@ -27,7 +27,6 @@ import {
 	LoginPage,
 	SubjectsPage,
 	ParentsPage,
-	Assessments, // WIP v2 stranica za upisivanje ocjena, nemoj brisati
 	ClassManagement,
 	Dashboard,
 	NotFoundPage,
@@ -51,7 +50,6 @@ const AppContent = () => {
 			"/grades",
 			"/teachers",
 			"/classes",
-			"/assessments",
 		].includes(location.pathname) &&
 		!location.pathname.startsWith("/lectures/") &&
 		!location.pathname.startsWith("/courses/");
@@ -77,10 +75,7 @@ const AppContent = () => {
 						<Route path="/grades" element={<ClassGradesPage />} />
 						<Route path="/teachers" element={<TeachersPage />} />{" "}
 						<Route path="/classes" element={<ClassManagement />} />
-						{/* this is the original page for grades */}
 						<Route path="/courses/:subject" element={<AssessmentPage />} />
-						{/* this is the WIP */}
-						<Route path="/assessments" element={<Assessments />} />
 					</Route>
 				</Routes>
 			</div>
