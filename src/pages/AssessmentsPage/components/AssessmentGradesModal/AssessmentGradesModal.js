@@ -170,7 +170,6 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 		}));
 	};
 
-	// Save a grade for a student
 	const saveGrade = async (studentId) => {
 		// Get the current grade value
 		const gradeValue = gradeValues[studentId];
@@ -221,12 +220,12 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 					)
 				);
 			} else {
-				// Update existing grade
 				await updateGrade(student.gradeId, {
-					id: student.gradeId,
+					id: student.gradeId, // Must include ID in body to match URL parameter
 					subjectAssessmentId: assessment.id,
 					studentId,
 					grade: gradeValue,
+					date: new Date(), // Include the date field as required by the model
 				});
 			}
 
