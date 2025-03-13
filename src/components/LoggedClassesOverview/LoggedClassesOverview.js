@@ -17,6 +17,7 @@ import "./LoggedClassesOverview.css";
 
 // Import existing components and APIs
 import ClassLogFormModal from "../ClassLogFormModal/ClassLogFormModal";
+import LogDetailsModal from "../LogDetailsModal/LogDetailsModal";
 import EditLogModal from "./EditLogModal";
 import teacherApi from "../../api/teacherApi";
 import subjectApi from "../../api/subjectApi";
@@ -39,6 +40,10 @@ const LoggedClassesOverview = ({ departmentId }) => {
 	const [subjects, setSubjects] = useState([]);
 	const [departmentName, setDepartmentName] = useState("");
 	const [editingLog, setEditingLog] = useState(null);
+
+	// New state for details modal
+	const [selectedLogForDetails, setSelectedLogForDetails] = useState(null);
+	const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
 	const logsPerPage = 10;
 
@@ -183,13 +188,31 @@ const LoggedClassesOverview = ({ departmentId }) => {
 						: log
 				)
 			);
+
+			// Close details modal if the deleted log was being viewed
+			if (selectedLogForDetails?.classLogId === logId) {
+				setIsDetailsModalOpen(false);
+				setSelectedLogForDetails(null);
+			}
 		} catch (error) {
 			console.error("Error deleting class log:", error);
 			alert("Failed to delete class log. Please try again.");
 		}
 	};
 
+	// New handler for showing log details
+	const handleLogClick = (log) => {
+		setSelectedLogForDetails(log);
+		setIsDetailsModalOpen(true);
+	};
+
 	const closeModal = () => setIsModalOpen(false);
+
+	// Close details modal
+	const closeDetailsModal = () => {
+		setIsDetailsModalOpen(false);
+		setSelectedLogForDetails(null);
+	};
 
 	const closeEditModal = () => setEditingLog(null);
 
@@ -217,6 +240,11 @@ const LoggedClassesOverview = ({ departmentId }) => {
 				};
 			})
 		);
+
+		// Update selected log for details if it's currently being viewed
+		if (selectedLogForDetails?.classLogId === updatedLog.classLogId) {
+			setSelectedLogForDetails({ ...selectedLogForDetails, ...updatedLog });
+		}
 	};
 
 	// Check if a log is editable (within 50 days)
@@ -356,7 +384,11 @@ const LoggedClassesOverview = ({ departmentId }) => {
 							</thead>
 							<tbody>
 								{currentLogs.map((log) => (
-									<tr key={log.classLogId}>
+									<tr
+										key={log.classLogId}
+										onClick={() => handleLogClick(log)}
+										style={{ cursor: "pointer" }}
+									>
 										<td className="date-cell">{formatDate(log.classDate)}</td>
 										<td className="subject-cell">{log.subject}</td>
 										<td>{log.period}</td>
@@ -374,7 +406,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 												</div>
 											</div>
 										</td>
-										<td>
+										<td onClick={(e) => e.stopPropagation()}>
 											<div className="action-buttons">
 												{isEditable(log) && (
 													<button
@@ -418,7 +450,12 @@ const LoggedClassesOverview = ({ departmentId }) => {
 				<div className="mobile-logs">
 					{filteredLogs.length > 0 ? (
 						currentLogs.map((log) => (
-							<div className="log-card" key={log.classLogId}>
+							<div
+								className="log-card"
+								key={log.classLogId}
+								onClick={() => handleLogClick(log)}
+								style={{ cursor: "pointer" }}
+							>
 								<div className="card-header">
 									<div className="card-subject">{log.subject}</div>
 									<div className="card-date">{formatDate(log.classDate)}</div>
@@ -452,7 +489,10 @@ const LoggedClassesOverview = ({ departmentId }) => {
 										)}
 									</div>
 								</div>
-								<div className="card-footer">
+								<div
+									className="card-footer"
+									onClick={(e) => e.stopPropagation()}
+								>
 									{isEditable(log) && (
 										<button
 											className="card-button card-edit"
@@ -559,6 +599,18 @@ const LoggedClassesOverview = ({ departmentId }) => {
 					handleUpdateLog={handleUpdateLog}
 				/>
 			)}
+
+			{/* Details Modal */}
+			<LogDetailsModal
+				log={selectedLogForDetails}
+				isOpen={isDetailsModalOpen}
+				onClose={closeDetailsModal}
+				onEdit={handleEditLog}
+				onDelete={handleDeleteLog}
+				isEditable={
+					selectedLogForDetails ? isEditable(selectedLogForDetails) : false
+				}
+			/>
 		</div>
 	);
 };
