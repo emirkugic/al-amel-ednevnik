@@ -18,9 +18,10 @@ import useAuth from "../../../hooks/useAuth";
 import useClassLogDetails from "../../../hooks/useClassLogDetails";
 import classLogApi from "../../../api/classLogApi";
 
-// Import modal component
+// Import modal components
 import ClassLogFormModal from "../../../components/ClassLogFormModal/ClassLogFormModal";
 import LogDetailsModal from "../../../components/LogDetailsModal/LogDetailsModal";
+import EditLogModal from "../../../components/EditLogModal/EditLogModal";
 
 // Import styling
 import "./WeeklyLogs.css";
@@ -34,6 +35,7 @@ const WeeklyLogs = () => {
 		classLogs,
 		loading: logsLoading,
 		error: logsError,
+		refetchLogs,
 	} = useAllClassLogs(token);
 	const {
 		departments,
@@ -66,6 +68,10 @@ const WeeklyLogs = () => {
 	const [initialLogTitle, setInitialLogTitle] = useState("");
 	const [showDetailsModal, setShowDetailsModal] = useState(false);
 	const [currentRequestId, setCurrentRequestId] = useState(null);
+
+	// State for edit log modal
+	const [showEditModal, setShowEditModal] = useState(false);
+	const [logToEdit, setLogToEdit] = useState(null);
 
 	// Use the custom hook to fetch log details when a log ID is selected
 	const {
@@ -207,7 +213,6 @@ const WeeklyLogs = () => {
 		setShowDetailsModal(false);
 
 		// Force a re-render cycle to clear any previous data
-		// This is critical to ensure we don't show stale data
 		setSelectedLogId(null);
 
 		// Generate a new request ID
@@ -237,10 +242,41 @@ const WeeklyLogs = () => {
 
 	// Handler for editing a log
 	const handleEditLog = (log) => {
-		// Redirect to edit page or show edit modal
-		console.log("Edit log:", log);
-		// For now, we'll just log the action
-		alert("Edit functionality to be implemented");
+		// Prepare the log data for edit
+		const formattedLog = {
+			...log,
+			classLogId: log.classLogId || log.id,
+			// Ensure we keep the original teacherId and departmentId
+			teacherId: log.teacherId,
+			departmentId: log.departmentId,
+			// Make sure we have absentStudents property formatted correctly
+			absentStudents: log.absentStudents || [],
+		};
+
+		// Set the log to edit
+		setLogToEdit(formattedLog);
+
+		// Close the details modal and open the edit modal
+		setShowDetailsModal(false);
+		setShowEditModal(true);
+	};
+
+	// Handler for updating a log
+	const handleUpdateLog = (updatedLog) => {
+		// Update the log in the allLogs array
+		setAllLogs((prevLogs) =>
+			prevLogs.map((log) =>
+				log.id === updatedLog.id || log.classLogId === updatedLog.classLogId
+					? { ...log, ...updatedLog }
+					: log
+			)
+		);
+
+		// Close the edit modal
+		setShowEditModal(false);
+
+		// Refetch logs to ensure we have the latest data
+		refetchLogs();
 	};
 
 	// Handler for deleting a log
@@ -538,6 +574,15 @@ const WeeklyLogs = () => {
 				initialTitle={initialLogTitle}
 				requestId={currentRequestId}
 			/>
+
+			{/* Edit Log Modal */}
+			{showEditModal && logToEdit && (
+				<EditLogModal
+					log={logToEdit}
+					onClose={() => setShowEditModal(false)}
+					handleUpdateLog={handleUpdateLog}
+				/>
+			)}
 		</div>
 	);
 };
