@@ -9,54 +9,127 @@ export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [assignedSubjects, setAssignedSubjects] = useState([]);
 	const [timetable, setTimetable] = useState([]);
+	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		const storedUser = JSON.parse(localStorage.getItem("user"));
-		if (storedUser && storedUser.token) {
-			const decodedToken = jwtDecode(storedUser.token);
-
-			if (decodedToken.exp * 1000 < Date.now()) {
-				logout();
-			} else {
-				const userWithRoleAndId = {
-					...storedUser,
-					role: decodedToken.role,
-					id: decodedToken.unique_name,
-				};
-				setUser(userWithRoleAndId);
-				setAssignedSubjects(storedUser.assignedSubjects || []);
-				setTimetable(storedUser.timetable || []);
-
-				const timeout = decodedToken.exp * 1000 - Date.now();
-				setTimeout(logout, timeout);
-			}
+	// This function checks if the token is valid
+	const isTokenValid = (token) => {
+		try {
+			const decodedToken = jwtDecode(token);
+			return decodedToken.exp * 1000 > Date.now();
+		} catch (error) {
+			return false;
 		}
-	}, []);
+	};
 
-	const login = async (email, password) => {
-		const data = await authApi.login(email, password);
-		const decodedToken = jwtDecode(data.token);
+	// Load user data from localStorage on mount
+	useEffect(() => {
+		const initializeAuth = () => {
+			try {
+				setLoading(true);
+				const storedUser = JSON.parse(localStorage.getItem("user"));
 
-		const userWithRoleAndId = {
-			token: data.token,
-			role: decodedToken.role,
-			id: decodedToken.unique_name,
+				if (storedUser && storedUser.token && isTokenValid(storedUser.token)) {
+					const decodedToken = jwtDecode(storedUser.token);
+
+					const userWithRoleAndId = {
+						...storedUser,
+						role: decodedToken.role,
+						id: decodedToken.unique_name,
+					};
+
+					setUser(userWithRoleAndId);
+					setAssignedSubjects(storedUser.assignedSubjects || []);
+					setTimetable(storedUser.timetable || []);
+
+					// Set up auto-logout when token expires
+					const timeout = decodedToken.exp * 1000 - Date.now();
+					if (timeout > 0) {
+						setTimeout(logout, timeout);
+					}
+				} else if (storedUser && storedUser.token) {
+					// Token is invalid or expired
+					logout();
+				}
+			} catch (error) {
+				console.error("Error initializing auth:", error);
+				logout();
+			} finally {
+				setLoading(false);
+			}
 		};
 
-		setUser(userWithRoleAndId);
-		setAssignedSubjects(data.assignedSubjects || []);
-		setTimetable(data.timetable || []);
-		localStorage.setItem(
-			"user",
-			JSON.stringify({ ...userWithRoleAndId, ...data })
-		);
+		initializeAuth();
 
-		//automatically log out the user when the token expires
-		const timeout = decodedToken.exp * 1000 - Date.now();
-		setTimeout(logout, timeout);
+		// Add an event listener for storage events to sync auth across tabs
+		window.addEventListener("storage", handleStorageChange);
 
-		navigate("/logs");
+		return () => {
+			window.removeEventListener("storage", handleStorageChange);
+		};
+	}, []);
+
+	// Handle storage events (for multi-tab synchronization)
+	const handleStorageChange = (event) => {
+		if (event.key === "user") {
+			if (!event.newValue) {
+				// User was logged out in another tab
+				setUser(null);
+				setAssignedSubjects([]);
+				setTimetable([]);
+			} else {
+				// User was updated in another tab
+				const storedUser = JSON.parse(event.newValue);
+				if (storedUser && storedUser.token && isTokenValid(storedUser.token)) {
+					const decodedToken = jwtDecode(storedUser.token);
+					setUser({
+						...storedUser,
+						role: decodedToken.role,
+						id: decodedToken.unique_name,
+					});
+					setAssignedSubjects(storedUser.assignedSubjects || []);
+					setTimetable(storedUser.timetable || []);
+				}
+			}
+		}
+	};
+
+	const login = async (email, password) => {
+		try {
+			const data = await authApi.login(email, password);
+			const decodedToken = jwtDecode(data.token);
+
+			const userWithRoleAndId = {
+				token: data.token,
+				role: decodedToken.role,
+				id: decodedToken.unique_name,
+			};
+
+			setUser(userWithRoleAndId);
+			setAssignedSubjects(data.assignedSubjects || []);
+			setTimetable(data.timetable || []);
+
+			// Store complete user info in localStorage
+			localStorage.setItem(
+				"user",
+				JSON.stringify({
+					...userWithRoleAndId,
+					...data,
+					assignedSubjects: data.assignedSubjects || [],
+					timetable: data.timetable || [],
+				})
+			);
+
+			// Set up auto-logout when token expires
+			const timeout = decodedToken.exp * 1000 - Date.now();
+			setTimeout(logout, timeout);
+
+			navigate("/logs");
+			return userWithRoleAndId;
+		} catch (error) {
+			console.error("Login error:", error);
+			throw error;
+		}
 	};
 
 	const logout = () => {
@@ -75,6 +148,7 @@ export const AuthProvider = ({ children }) => {
 				timetable,
 				login,
 				logout,
+				loading,
 			}}
 		>
 			{children}
