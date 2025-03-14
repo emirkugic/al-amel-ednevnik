@@ -92,8 +92,8 @@ const AssessmentManagement = () => {
 	const [assessmentsLoading, setAssessmentsLoading] = useState(false);
 	const [selectedMonth, setSelectedMonth] = useState("");
 
-	// Mobile responsive state
-	const [isFormExpanded, setIsFormExpanded] = useState(false);
+	// Mobile responsive state - ensure form is collapsed by default
+	const [formVisible, setFormVisible] = useState(false);
 	const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
 	// Use refs to track previous values and prevent infinite loops
@@ -121,10 +121,12 @@ const AssessmentManagement = () => {
 	// Check for mobile view on resize
 	useEffect(() => {
 		const handleResize = () => {
-			setIsMobile(window.innerWidth <= 768);
+			const newIsMobile = window.innerWidth <= 768;
+			setIsMobile(newIsMobile);
+
 			// Auto-collapse form when switching to mobile
-			if (window.innerWidth <= 768) {
-				setIsFormExpanded(false);
+			if (newIsMobile) {
+				setFormVisible(false);
 			}
 		};
 
@@ -132,9 +134,10 @@ const AssessmentManagement = () => {
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
-	// Toggle form expanded state
-	const toggleFormExpanded = () => {
-		setIsFormExpanded(!isFormExpanded);
+	// Toggle form visibility
+	const toggleForm = () => {
+		console.log("Toggling form:", formVisible, "->", !formVisible);
+		setFormVisible(!formVisible);
 	};
 
 	// Helper function to get first day of a month
@@ -337,7 +340,7 @@ const AssessmentManagement = () => {
 
 			// Collapse form on mobile after adding assessment
 			if (isMobile) {
-				setIsFormExpanded(false);
+				setFormVisible(false);
 			}
 		} catch (error) {
 			console.error("Error adding assessment:", error);
@@ -396,134 +399,252 @@ const AssessmentManagement = () => {
 					</div>
 				</header>
 
-				{/* Mobile view controls - only shown on mobile */}
-				{isMobile && (
-					<div className="asmnt-mobile-controls">
-						<div className="asmnt-mobile-title">
-							<FontAwesomeIcon
-								icon={faGraduationCap}
-								className="asmnt-title-icon"
-							/>
-							Assessment Management
-						</div>
-						<button
-							className="asmnt-mobile-toggle"
-							onClick={toggleFormExpanded}
-						>
-							<FontAwesomeIcon
-								icon={isFormExpanded ? faChevronUp : faChevronDown}
-							/>
-							{isFormExpanded ? "Hide Form" : "Add Assessment"}
-						</button>
-					</div>
-				)}
-
-				{/* Main layout */}
+				{/* Main layout - desktop uses two-column, mobile is single-column with continuous scroll */}
 				<div
 					className={`asmnt-layout ${
 						assessmentsLoading ? "assessments-loading" : ""
 					}`}
 				>
-					{/* Sidebar with controls - collapsible on mobile */}
-					<aside
-						className={`asmnt-sidebar ${
-							isMobile && !isFormExpanded ? "asmnt-sidebar-collapsed" : ""
-						}`}
-					>
-						{/* Semester switch */}
-						<div className="asmnt-semester-switch">
-							<label className="asmnt-semester-switch-label">Semester</label>
-							<div className="asmnt-semester-tabs">
-								<div
-									className={`asmnt-semester-tab ${
-										selectedSemester === "First Semester" ? "active" : ""
-									}`}
-									onClick={() => setSelectedSemester("First Semester")}
-								>
-									First Semester
-								</div>
-								<div
-									className={`asmnt-semester-tab ${
-										selectedSemester === "Second Semester" ? "active" : ""
-									}`}
-									onClick={() => setSelectedSemester("Second Semester")}
-								>
-									Second Semester
+					{/* Desktop: Sidebar with controls */}
+					{!isMobile && (
+						<aside className="asmnt-sidebar">
+							{/* Semester switch */}
+							<div className="asmnt-semester-switch">
+								<label className="asmnt-semester-switch-label">Semester</label>
+								<div className="asmnt-semester-tabs">
+									<div
+										className={`asmnt-semester-tab ${
+											selectedSemester === "First Semester" ? "active" : ""
+										}`}
+										onClick={() => setSelectedSemester("First Semester")}
+									>
+										First Semester
+									</div>
+									<div
+										className={`asmnt-semester-tab ${
+											selectedSemester === "Second Semester" ? "active" : ""
+										}`}
+										onClick={() => setSelectedSemester("Second Semester")}
+									>
+										Second Semester
+									</div>
 								</div>
 							</div>
-						</div>
 
-						{/* Department selector */}
-						<div className="asmnt-department-selector">
-							<label className="asmnt-selector-label">Department</label>
-							<select
-								className="asmnt-selector-control"
-								value={selectedDepartment || ""}
-								onChange={(e) => setSelectedDepartment(e.target.value)}
-								disabled={loading || departmentNames.length === 0}
-							>
-								<option value="" disabled>
-									{loading
-										? "Loading departments..."
-										: "-- Select Department --"}
-								</option>
-								{departmentNames.map((dept) => (
-									<option key={dept.id} value={dept.id}>
-										{dept.name}
-									</option>
-								))}
-							</select>
-						</div>
-
-						{/* Add Assessment form */}
-						<div className="asmnt-sidebar-section">
-							<h2 className="asmnt-section-title">
-								<FontAwesomeIcon
-									icon={faPlus}
-									className="asmnt-section-title-icon"
-								/>
-								Add New Assessment
-							</h2>
-
-							<div className="asmnt-form-group">
-								<label className="asmnt-form-label" htmlFor="title">
-									Assessment Title
-								</label>
-								<input
-									id="title"
-									type="text"
-									className="asmnt-form-control"
-									placeholder="Enter assessment title"
-									value={title}
-									onChange={(e) => setTitle(e.target.value)}
-								/>
-							</div>
-
-							<div className="asmnt-form-group">
-								<label className="asmnt-form-label" htmlFor="type">
-									Assessment Type
-								</label>
+							{/* Department selector */}
+							<div className="asmnt-department-selector">
+								<label className="asmnt-selector-label">Department</label>
 								<select
-									id="type"
-									className="asmnt-form-control"
-									value={type}
-									onChange={(e) => setType(e.target.value)}
+									className="asmnt-selector-control"
+									value={selectedDepartment || ""}
+									onChange={(e) => setSelectedDepartment(e.target.value)}
+									disabled={loading || departmentNames.length === 0}
 								>
-									{ASSESSMENT_TYPES.map((t) => (
-										<option key={t} value={t}>
-											{t}
+									<option value="" disabled>
+										{loading
+											? "Loading departments..."
+											: "-- Select Department --"}
+									</option>
+									{departmentNames.map((dept) => (
+										<option key={dept.id} value={dept.id}>
+											{dept.name}
 										</option>
 									))}
 								</select>
 							</div>
 
-							<div className="asmnt-form-row">
+							{/* Add Assessment form */}
+							<div className="asmnt-sidebar-section">
+								<h2 className="asmnt-section-title">
+									<FontAwesomeIcon
+										icon={faPlus}
+										className="asmnt-section-title-icon"
+									/>
+									Add New Assessment
+								</h2>
+
 								<div className="asmnt-form-group">
-									<label className="asmnt-form-label" htmlFor="points">
+									<label className="asmnt-form-label" htmlFor="title">
+										Assessment Title
+									</label>
+									<input
+										id="title"
+										type="text"
+										className="asmnt-form-control"
+										placeholder="Enter assessment title"
+										value={title}
+										onChange={(e) => setTitle(e.target.value)}
+									/>
+								</div>
+
+								<div className="asmnt-form-group">
+									<label className="asmnt-form-label" htmlFor="type">
+										Assessment Type
+									</label>
+									<select
+										id="type"
+										className="asmnt-form-control"
+										value={type}
+										onChange={(e) => setType(e.target.value)}
+									>
+										{ASSESSMENT_TYPES.map((t) => (
+											<option key={t} value={t}>
+												{t}
+											</option>
+										))}
+									</select>
+								</div>
+
+								<div className="asmnt-form-row">
+									<div className="asmnt-form-group">
+										<label className="asmnt-form-label" htmlFor="points">
+											Points
+										</label>
+										<input
+											id="points"
+											type="number"
+											className="asmnt-form-control"
+											placeholder="Points"
+											min="0"
+											max="100"
+											value={points}
+											onChange={(e) => setPoints(e.target.value)}
+										/>
+									</div>
+
+									<div className="asmnt-form-group">
+										<label className="asmnt-form-label" htmlFor="month">
+											Month
+										</label>
+										<select
+											id="month"
+											className="asmnt-form-control"
+											value={formMonth}
+											onChange={(e) => setFormMonth(e.target.value)}
+										>
+											{monthsToDisplay.map((month) => (
+												<option key={month} value={month}>
+													{month}
+												</option>
+											))}
+										</select>
+									</div>
+								</div>
+
+								<button
+									className="asmnt-btn asmnt-btn-primary asmnt-btn-block"
+									onClick={handleAddAssessment}
+									disabled={!selectedDepartment}
+								>
+									<FontAwesomeIcon icon={faPlus} /> Add Assessment
+								</button>
+							</div>
+						</aside>
+					)}
+
+					{/* Desktop: Main content area (or full mobile content) */}
+					<main className="asmnt-content">
+						{/* Mobile view only: Heading and controls */}
+						{isMobile && (
+							<div className="asmnt-mobile-controls">
+								{/* Mobile: Semester switch */}
+								<div className="asmnt-semester-switch">
+									<div className="asmnt-semester-tabs">
+										<div
+											className={`asmnt-semester-tab ${
+												selectedSemester === "First Semester" ? "active" : ""
+											}`}
+											onClick={() => setSelectedSemester("First Semester")}
+										>
+											First Semester
+										</div>
+										<div
+											className={`asmnt-semester-tab ${
+												selectedSemester === "Second Semester" ? "active" : ""
+											}`}
+											onClick={() => setSelectedSemester("Second Semester")}
+										>
+											Second Semester
+										</div>
+									</div>
+								</div>
+
+								{/* Mobile: Department selector */}
+								<div className="asmnt-department-selector">
+									<select
+										className="asmnt-selector-control"
+										value={selectedDepartment || ""}
+										onChange={(e) => setSelectedDepartment(e.target.value)}
+										disabled={loading || departmentNames.length === 0}
+									>
+										<option value="" disabled>
+											{loading
+												? "Loading departments..."
+												: "-- Select Department --"}
+										</option>
+										{departmentNames.map((dept) => (
+											<option key={dept.id} value={dept.id}>
+												{dept.name}
+											</option>
+										))}
+									</select>
+								</div>
+
+								{/* Mobile: Add Assessment toggle button */}
+								<button
+									className="asmnt-mobile-toggle"
+									onClick={toggleForm}
+									type="button"
+								>
+									<FontAwesomeIcon
+										icon={formVisible ? faChevronUp : faChevronDown}
+									/>
+									{formVisible ? "Hide Form" : "Add Assessment"}
+								</button>
+							</div>
+						)}
+
+						{/* Mobile: Add Assessment form (collapsible) */}
+						{isMobile && formVisible && (
+							<div className="asmnt-mobile-form">
+								<div className="asmnt-form-group">
+									<label className="asmnt-form-label" htmlFor="mobile-title">
+										Assessment Title
+									</label>
+									<input
+										id="mobile-title"
+										type="text"
+										className="asmnt-form-control"
+										placeholder="Enter assessment title"
+										value={title}
+										onChange={(e) => setTitle(e.target.value)}
+									/>
+								</div>
+
+								<div className="asmnt-form-group">
+									<label className="asmnt-form-label" htmlFor="mobile-type">
+										Assessment Type
+									</label>
+									<select
+										id="mobile-type"
+										className="asmnt-form-control"
+										value={type}
+										onChange={(e) => setType(e.target.value)}
+									>
+										{ASSESSMENT_TYPES.map((t) => (
+											<option key={t} value={t}>
+												{t}
+											</option>
+										))}
+									</select>
+								</div>
+
+								<div className="asmnt-form-group">
+									<label className="asmnt-form-label" htmlFor="mobile-points">
 										Points
 									</label>
 									<input
-										id="points"
+										id="mobile-points"
 										type="number"
 										className="asmnt-form-control"
 										placeholder="Points"
@@ -535,11 +656,11 @@ const AssessmentManagement = () => {
 								</div>
 
 								<div className="asmnt-form-group">
-									<label className="asmnt-form-label" htmlFor="month">
+									<label className="asmnt-form-label" htmlFor="mobile-month">
 										Month
 									</label>
 									<select
-										id="month"
+										id="mobile-month"
 										className="asmnt-form-control"
 										value={formMonth}
 										onChange={(e) => setFormMonth(e.target.value)}
@@ -551,30 +672,19 @@ const AssessmentManagement = () => {
 										))}
 									</select>
 								</div>
+
+								<div className="asmnt-mobile-form-actions">
+									<button
+										className="asmnt-btn asmnt-btn-primary"
+										onClick={handleAddAssessment}
+										disabled={!selectedDepartment}
+									>
+										<FontAwesomeIcon icon={faPlus} /> Add Assessment
+									</button>
+								</div>
 							</div>
-
-							<button
-								className="asmnt-btn asmnt-btn-primary asmnt-btn-block"
-								onClick={handleAddAssessment}
-								disabled={!selectedDepartment}
-							>
-								<FontAwesomeIcon icon={faPlus} /> Add Assessment
-							</button>
-						</div>
-
-						{/* Close button for mobile form */}
-						{isMobile && isFormExpanded && (
-							<button
-								className="asmnt-mobile-close-form"
-								onClick={toggleFormExpanded}
-							>
-								<FontAwesomeIcon icon={faTimes} /> Close Form
-							</button>
 						)}
-					</aside>
 
-					{/* Main content area */}
-					<main className="asmnt-content">
 						{/* Month navigation */}
 						<div className="asmnt-month-nav">
 							<div className="asmnt-month-nav-header">
