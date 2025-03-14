@@ -68,7 +68,7 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 			const formattedDate = new Date(log.classDate).toISOString().split("T")[0];
 			setSelectedDay(formattedDate);
 		}
-	}, [log.classDate, weekDays]);
+	}, [log.classDate]);
 
 	useEffect(() => {
 		if (!log.departmentId) return;
@@ -294,27 +294,30 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 									/>
 								</div>
 
-								<div className="elm-summary">
-									<div className="elm-attendance-summary">
-										<h4>Attendance Summary</h4>
-										<div className="elm-summary-stats">
-											<div className="elm-stat">
-												<span className="elm-stat-label">Present:</span>
-												<span className="elm-stat-value">
-													{studentOptions.length - absentStudents.length}
-												</span>
-											</div>
-											<div className="elm-stat">
-												<span className="elm-stat-label">Absent:</span>
-												<span className="elm-stat-value elm-absent-count">
-													{absentStudents.length}
-												</span>
-											</div>
-											<div className="elm-stat">
-												<span className="elm-stat-label">Total:</span>
-												<span className="elm-stat-value">
-													{studentOptions.length}
-												</span>
+								{/* Attendance summary for mobile only */}
+								<div className="elm-mobile-only">
+									<div className="elm-summary">
+										<div className="elm-attendance-summary">
+											<h4>Attendance Summary</h4>
+											<div className="elm-summary-stats">
+												<div className="elm-stat">
+													<span className="elm-stat-label">Present:</span>
+													<span className="elm-stat-value">
+														{studentOptions.length - absentStudents.length}
+													</span>
+												</div>
+												<div className="elm-stat">
+													<span className="elm-stat-label">Absent:</span>
+													<span className="elm-stat-value elm-absent-count">
+														{absentStudents.length}
+													</span>
+												</div>
+												<div className="elm-stat">
+													<span className="elm-stat-label">Total:</span>
+													<span className="elm-stat-value">
+														{studentOptions.length}
+													</span>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -375,22 +378,48 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 						</div>
 					</div>
 
-					{/* Footer with action buttons */}
+					{/* Footer with attendance summary and action buttons */}
 					<div className="elm-modal-footer">
-						<button
-							className="elm-cancel-button"
-							onClick={onClose}
-							disabled={isLoading}
-						>
-							Cancel
-						</button>
-						<button
-							className="elm-submit-button"
-							onClick={handleSubmit}
-							disabled={isLoading}
-						>
-							{isLoading ? "Saving..." : "Save Changes"}
-						</button>
+						<div className="elm-footer-left elm-desktop-only">
+							<div className="elm-attendance-summary">
+								<div className="elm-summary-stats">
+									<div className="elm-stat">
+										<span className="elm-stat-label">Present:</span>
+										<span className="elm-stat-value">
+											{studentOptions.length - absentStudents.length}
+										</span>
+									</div>
+									<div className="elm-stat">
+										<span className="elm-stat-label">Absent:</span>
+										<span className="elm-stat-value elm-absent-count">
+											{absentStudents.length}
+										</span>
+									</div>
+									<div className="elm-stat">
+										<span className="elm-stat-label">Total:</span>
+										<span className="elm-stat-value">
+											{studentOptions.length}
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div className="elm-footer-right">
+							<button
+								className="elm-cancel-button"
+								onClick={onClose}
+								disabled={isLoading}
+							>
+								Cancel
+							</button>
+							<button
+								className="elm-submit-button"
+								onClick={handleSubmit}
+								disabled={isLoading}
+							>
+								{isLoading ? "Saving..." : "Save Changes"}
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>

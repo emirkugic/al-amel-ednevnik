@@ -16,7 +16,6 @@
 }
 
 .elm-modal-container {
-	/* width: 100hw; */
 	max-width: 850px;
 	max-height: 100%;
 	position: relative;
@@ -176,9 +175,9 @@
 
 /* Form styling */
 .elm-form-fields {
-	padding: 20px;
-	overflow-y: auto;
-	height: 100%;
+	padding: 20px 20px 0;
+	overflow-y: visible;
+	height: auto;
 }
 
 .elm-form-group {
@@ -217,6 +216,15 @@
 	box-shadow: 0 0 0 3px rgba(4, 171, 253, 0.15);
 }
 
+/* Mobile/Desktop visibility helpers */
+.elm-mobile-only {
+	display: none;
+}
+
+.elm-desktop-only {
+	display: flex;
+}
+
 /* Summary section */
 .elm-summary {
 	margin-top: 24px;
@@ -249,7 +257,7 @@
 }
 
 .elm-stat-value {
-	font-size: 1.1rem;
+	font-size: 1rem;
 	font-weight: 600;
 	color: #333;
 }
@@ -388,15 +396,42 @@
 	font-style: italic;
 }
 
-/* Footer with action buttons */
+/* Footer with attendance summary */
 .elm-modal-footer {
 	border-top: 1px solid rgba(0, 0, 0, 0.06);
 	padding: 16px 24px;
 	display: flex;
-	justify-content: flex-end;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.elm-footer-left {
+	display: flex;
+}
+
+.elm-footer-right {
+	display: flex;
 	gap: 12px;
 }
 
+/* Attendance summary in footer */
+.elm-modal-footer .elm-attendance-summary {
+	display: flex;
+	align-items: center;
+}
+
+.elm-modal-footer .elm-summary-stats {
+	display: flex;
+	gap: 20px;
+}
+
+.elm-modal-footer .elm-stat {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+/* Action buttons */
 .elm-cancel-button {
 	padding: 10px 20px;
 	background-color: #f5f5f5;
@@ -494,5 +529,26 @@
 
 	.elm-students-list {
 		max-height: 300px;
+	}
+
+	/* Switch visibility for mobile/desktop elements */
+	.elm-mobile-only {
+		display: block;
+	}
+
+	.elm-desktop-only {
+		display: none !important;
+	}
+
+	.elm-modal-footer {
+		justify-content: flex-end;
+	}
+
+	.elm-footer-right {
+		width: auto;
+	}
+
+	.elm-attendance-summary {
+		padding-bottom: 15px;
 	}
 }
