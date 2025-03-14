@@ -904,7 +904,7 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 								Cancel
 							</button>
 							<button className="agm-close-btn" onClick={onClose}>
-								Close
+								Done
 							</button>
 						</div>
 					</div>

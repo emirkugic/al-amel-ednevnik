@@ -924,3 +924,138 @@
 	position: relative !important;
 	z-index: 10 !important;
 }
+
+/* Add these mobile-specific styles to the bottom of your AssessmentGradesModal.css file */
+
+/* Mobile-specific styles - only applied on smaller screens */
+@media (max-width: 768px) {
+	.agm-cancel-btn {
+		display: none;
+	}
+
+	/* Simplify the header for mobile */
+	.agm-modal-header {
+		padding: 12px 16px;
+	}
+
+	/* Hide statistics on mobile */
+	.agm-stats-container {
+		display: none;
+	}
+
+	/* Make the search bar more prominent */
+	.agm-top-section {
+		padding: 12px 16px;
+		gap: 8px;
+	}
+
+	.agm-search-container {
+		width: 100%;
+	}
+
+	/* Hide all filter and sort actions except search */
+	.agm-filter-actions {
+		display: none;
+	}
+
+	/* Hide batch actions completely */
+	.agm-batch-actions {
+		display: none;
+	}
+
+	/* Simplify student rows for mobile */
+	.agm-student-row {
+		padding: 12px 16px;
+		gap: 8px;
+		align-items: center;
+	}
+
+	/* Hide checkboxes on mobile */
+	.agm-checkbox-column {
+		display: none;
+	}
+
+	/* Adjust student name to take more space */
+	.agm-student-name {
+		flex: 1;
+		font-size: 14px;
+		margin-left: 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	/* Make grade display more compact */
+	.agm-student-grade {
+		width: auto;
+		margin-right: 8px;
+	}
+
+	.agm-grade-display {
+		font-size: 14px;
+		padding: 4px 6px;
+	}
+
+	/* Make input fields more touch-friendly */
+	.agm-grade-input {
+		width: 70px;
+		padding: 8px;
+		font-size: 14px;
+	}
+
+	/* Simplify action buttons */
+	.agm-student-actions {
+		width: auto;
+	}
+
+	.agm-button {
+		padding: 6px;
+		border-radius: 4px;
+	}
+
+	.agm-button span {
+		display: none;
+	}
+
+	/* Footer adjustments */
+	.agm-modal-footer {
+		padding: 12px 16px;
+	}
+
+	/* Hide keyboard shortcuts button */
+	.agm-shortcuts-button {
+		display: none;
+	}
+
+	/* Make close button more prominent */
+	.agm-close-btn {
+		flex: 1;
+	}
+
+	/* Ensure editing experience is touch-friendly */
+	.agm-student-row.agm-editing {
+		background-color: var(--agm-primary-ultralight);
+		padding-top: 14px;
+		padding-bottom: 14px;
+	}
+
+	/* Improve touch targets for all interactive elements */
+	.agm-edit-button,
+	.agm-save-button {
+		min-width: 40px;
+		min-height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	/* Add visual separation while editing */
+	.agm-student-row.agm-editing {
+		box-shadow: 0 0 0 2px var(--agm-primary);
+	}
+
+	/* Hide keyboard shortcut modal completely */
+	.agm-keyboard-shortcuts {
+		display: none;
+	}
+}
