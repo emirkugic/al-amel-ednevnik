@@ -7,18 +7,18 @@ const MaintenancePage = () => {
 	const [timeRemaining, setTimeRemaining] = useState(null);
 	const [currentTime, setCurrentTime] = useState(new Date());
 
-	// Calculate time remaining until 2am
+	// Calculate time remaining until 1am
 	useEffect(() => {
 		const calculateTimeRemaining = () => {
 			const now = new Date();
 			setCurrentTime(now);
 
-			// Create a date object for 2am today
+			// Create a date object for 1am today
 			let endTime = new Date();
-			endTime.setHours(2, 0, 0, 0);
+			endTime.setHours(1, 0, 0, 0);
 
-			// If it's after 2am, set end time to 2am tomorrow
-			if (now.getHours() >= 2) {
+			// If it's after 1am, set end time to 1am tomorrow
+			if (now.getHours() >= 1) {
 				endTime.setDate(endTime.getDate() + 1);
 			}
 
@@ -45,14 +45,14 @@ const MaintenancePage = () => {
 	};
 
 	return (
-		<div className="maintenance-container">
-			<div className="maintenance-content">
-				<div className="maintenance-header">
-					<FontAwesomeIcon icon={faServer} className="server-icon" />
-					<h1 className="maintenance-title">Scheduled Maintenance</h1>
+		<div className="maint-container">
+			<div className="maint-content">
+				<div className="maint-header">
+					<FontAwesomeIcon icon={faServer} className="maint-server-icon" />
+					<h1 className="maint-title">Scheduled Maintenance</h1>
 				</div>
 
-				<div className="maintenance-message">
+				<div className="maint-message">
 					<p>The server is doing a scheduled backup.</p>
 					<p>
 						We'll be back online at <strong>1:00h</strong>.
@@ -60,50 +60,52 @@ const MaintenancePage = () => {
 
 					<p>We apologize for any inconvenience.</p>
 
-					<div className="status-container">
-						<div className="progress-bar">
-							<div className="progress"></div>
+					<div className="maint-status-container">
+						<div className="maint-progress-bar">
+							<div className="maint-progress"></div>
 						</div>
-						<div className="progress-label">Maintenance in progress...</div>
+						<div className="maint-progress-label">
+							Maintenance in progress...
+						</div>
 					</div>
 				</div>
 
-				<div className="time-info">
-					<div className="current-time">
+				<div className="maint-time-info">
+					<div className="maint-current-time">
 						Current time: {currentTime.toLocaleTimeString()}
 					</div>
 
 					{timeRemaining && (
-						<div className="countdown-container">
+						<div className="maint-countdown-container">
 							<h2>System will be available in:</h2>
-							<div className="countdown">
-								<div className="time-block">
-									<div className="time">
+							<div className="maint-countdown">
+								<div className="maint-time-block">
+									<div className="maint-time">
 										{formatNumber(timeRemaining.hours)}
 									</div>
-									<div className="label">Hours</div>
+									<div className="maint-label">Hours</div>
 								</div>
-								<div className="separator">:</div>
-								<div className="time-block">
-									<div className="time">
+								<div className="maint-separator">:</div>
+								<div className="maint-time-block">
+									<div className="maint-time">
 										{formatNumber(timeRemaining.minutes)}
 									</div>
-									<div className="label">Minutes</div>
+									<div className="maint-label">Minutes</div>
 								</div>
-								<div className="separator">:</div>
-								<div className="time-block">
-									<div className="time">
+								<div className="maint-separator">:</div>
+								<div className="maint-time-block">
+									<div className="maint-time">
 										{formatNumber(timeRemaining.seconds)}
 									</div>
-									<div className="label">Seconds</div>
+									<div className="maint-label">Seconds</div>
 								</div>
 							</div>
 						</div>
 					)}
 				</div>
 
-				<div className="maintenance-footer">
-					<FontAwesomeIcon icon={faClock} className="clock-icon" />
+				<div className="maint-footer">
+					<FontAwesomeIcon icon={faClock} className="maint-clock-icon" />
 					<p>Scheduled maintenance occurs daily from 23:00h to 1:00h</p>
 				</div>
 			</div>
