@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faChevronLeft,
@@ -62,6 +62,9 @@ const WeeklyLogs = () => {
 	const [missingPeriod, setMissingPeriod] = useState("");
 	const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 	const [selectedDayIndex, setSelectedDayIndex] = useState(0);
+
+	// Add a ref to track if we've already set the initial day
+	const initialDaySet = useRef(false);
 
 	// State for log details modal
 	const [selectedLogId, setSelectedLogId] = useState(null);
@@ -149,13 +152,26 @@ const WeeklyLogs = () => {
 		});
 	}
 
-	// Set selected day to today on first load
+	// Set selected day to today on FIRST LOAD ONLY
 	useEffect(() => {
+		// Skip if we've already set the initial day
+		if (initialDaySet.current) return;
+
 		const todayIndex = weekdays.findIndex((day) => day.isToday);
 		if (todayIndex !== -1) {
 			setSelectedDayIndex(todayIndex);
+			// Mark that we've set the initial day
+			initialDaySet.current = true;
 		}
 	}, [weekdays]);
+
+	// Reset selectedDayIndex when changing week to avoid out-of-bounds issues
+	useEffect(() => {
+		// If we're changing weeks, set to first day
+		if (selectedDayIndex >= weekdays.length) {
+			setSelectedDayIndex(0);
+		}
+	}, [weekOffset, weekdays.length, selectedDayIndex]);
 
 	// Helper functions
 	const getLogsFor = (dateFormatted, period) => {
@@ -205,6 +221,11 @@ const WeeklyLogs = () => {
 		setMissingDate(date);
 		setMissingPeriod(period.toString());
 		setShowModal(true);
+	};
+
+	// Handler for mobile day selection
+	const handleDaySelection = (e) => {
+		setSelectedDayIndex(Number(e.target.value));
 	};
 
 	// Handler for clicking on a log entry
@@ -260,9 +281,6 @@ const WeeklyLogs = () => {
 		setShowDetailsModal(false);
 		setShowEditModal(true);
 	};
-
-	// Handler for updating a log
-	// Just the handleUpdateLog function that needs to be updated:
 
 	// Handler for updating a log
 	const handleUpdateLog = (updatedLog) => {
@@ -422,10 +440,7 @@ const WeeklyLogs = () => {
 
 					{isMobile && (
 						<div className="day-selector">
-							<select
-								value={selectedDayIndex}
-								onChange={(e) => setSelectedDayIndex(Number(e.target.value))}
-							>
+							<select value={selectedDayIndex} onChange={handleDaySelection}>
 								{weekdays.map((day, idx) => (
 									<option key={day.dateFormatted} value={idx}>
 										{day.name} {day.isToday ? "(Today)" : ""}
