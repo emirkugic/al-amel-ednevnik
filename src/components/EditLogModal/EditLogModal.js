@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faChalkboardTeacher,
@@ -6,10 +6,13 @@ import {
 	faTimes,
 	faSearch,
 	faExclamationCircle,
+	faCalendar,
+	faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import studentApi from "../../api/studentApi";
 import classLogApi from "../../api/classLogApi";
 import useAuth from "../../hooks/useAuth";
+import { CLASS_PERIODS } from "../../constants";
 import "./EditLogModal.css";
 
 const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
@@ -23,6 +26,49 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [notification, setNotification] = useState("");
 	const [searchTerm, setSearchTerm] = useState("");
+
+	// Add states for day and period
+	const [selectedDay, setSelectedDay] = useState("");
+	const [period, setPeriod] = useState(log.period ? log.period.toString() : "");
+
+	// Generate weekdays based on the log's date
+	const weekDays = useMemo(() => {
+		const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+		// Use the log's date to find the Monday of that week
+		const logDate = new Date(log.classDate);
+		const dayOfWeek = logDate.getDay(); // 0 = Sunday, 1 = Monday, etc.
+
+		// Calculate how many days to go back to reach Monday
+		const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+		// Get Monday's date
+		const mondayDate = new Date(logDate);
+		mondayDate.setDate(logDate.getDate() - daysFromMonday);
+
+		// Generate array of weekdays
+		return dayNames.map((name, index) => {
+			const date = new Date(mondayDate);
+			date.setDate(mondayDate.getDate() + index);
+			return {
+				value: date.toISOString().split("T")[0], // Format as YYYY-MM-DD
+				label: `${name} (${date.toLocaleDateString("en-US", {
+					month: "short",
+					day: "numeric",
+				})})`,
+				date: date,
+			};
+		});
+	}, [log.classDate]);
+
+	// Initialize day based on classDate from log
+	useEffect(() => {
+		if (log.classDate) {
+			// Use the log's date directly
+			const formattedDate = new Date(log.classDate).toISOString().split("T")[0];
+			setSelectedDay(formattedDate);
+		}
+	}, [log.classDate, weekDays]);
 
 	useEffect(() => {
 		if (!log.departmentId) return;
@@ -67,12 +113,22 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 			return;
 		}
 
-		// Prepare the updated log data; parse the sequence from state.
+		if (!selectedDay) {
+			setNotification("Please select a day of the week.");
+			return;
+		}
+
+		if (!period) {
+			setNotification("Please select a period.");
+			return;
+		}
+
+		// Prepare the updated log data
 		const updatedLog = {
 			lectureTitle,
 			lectureType: log.lectureType || "Lecture",
-			classDate: log.classDate,
-			period: log.period,
+			classDate: selectedDay, // Use the selected day
+			period: period, // Use the selected period
 			sequence: parseInt(sequence, 10) || 1,
 			absentStudentIds: absentStudents.map((s) => s.value),
 		};
@@ -158,6 +214,52 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 							</div>
 
 							<div className="elm-form-fields">
+								{/* Day of the Week Selector */}
+								<div className="elm-form-group">
+									<label>
+										<FontAwesomeIcon
+											icon={faCalendar}
+											className="elm-field-icon"
+										/>
+										Day of the Week
+									</label>
+									<select
+										className="elm-select"
+										value={selectedDay}
+										onChange={(e) => setSelectedDay(e.target.value)}
+									>
+										<option value="">Select a day</option>
+										{weekDays.map((day) => (
+											<option key={day.value} value={day.value}>
+												{day.label}
+											</option>
+										))}
+									</select>
+								</div>
+
+								{/* Period Selector */}
+								<div className="elm-form-group">
+									<label>
+										<FontAwesomeIcon
+											icon={faClock}
+											className="elm-field-icon"
+										/>
+										Period
+									</label>
+									<select
+										className="elm-select"
+										value={period}
+										onChange={(e) => setPeriod(e.target.value)}
+									>
+										<option value="">Select a period</option>
+										{CLASS_PERIODS.map((period) => (
+											<option key={period.value} value={period.value}>
+												{period.label}
+											</option>
+										))}
+									</select>
+								</div>
+
 								<div className="elm-form-group">
 									<label>
 										<FontAwesomeIcon
