@@ -818,6 +818,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 				isEditable={
 					selectedLogForDetails ? isEditable(selectedLogForDetails) : false
 				}
+				fromOverviewPage={true}
 			/>
 		</div>
 	);

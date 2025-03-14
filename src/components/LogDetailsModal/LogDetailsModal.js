@@ -12,22 +12,24 @@ import {
 	faBookOpen,
 	faSchool,
 	faLayerGroup,
+	faExclamationCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import "./LogDetailsModal.css";
 import useAuth from "../../hooks/useAuth";
 
 const LogDetailsModal = ({
+	log, // Direct log data (from LoggedClassesOverview)
 	isOpen,
 	onClose,
 	onEdit,
 	onDelete,
 	isEditable,
-	detailedLog,
+	detailedLog, // Hook-based log data (from WeeklyLogs)
 	loadingDetails,
 	errorDetails,
 	initialTitle,
 	requestId,
-	faExclamationCircle,
+	fromOverviewPage = false, // Add this prop to indicate if coming from overview page
 }) => {
 	const { user } = useAuth();
 
@@ -78,15 +80,19 @@ const LogDetailsModal = ({
 		);
 	}
 
-	// Show loading state if data is loading or not yet available
-	const isDataReady = !loadingDetails && detailedLog && detailedLog.classLog;
+	const hasHookData = !loadingDetails && detailedLog && detailedLog.classLog;
+	const hasDirectData = log && log.classLogId && log.lectureTitle;
+	const isDataReady = hasHookData || hasDirectData;
+
+	const isFromOverviewPage =
+		fromOverviewPage || (hasDirectData && !hasHookData);
 
 	if (!isDataReady) {
 		return (
 			<div className="ldm-overlay">
 				<div className="ldm-container">
 					<div className="ldm-header">
-						<h3>{initialTitle || "Loading details..."}</h3>
+						<h3>{initialTitle || log?.lectureTitle || "Loading details..."}</h3>
 						<button
 							className="ldm-close-btn"
 							onClick={onClose}
@@ -111,21 +117,51 @@ const LogDetailsModal = ({
 		);
 	}
 
-	// Extract data from the detailed log
-	const logData = detailedLog.classLog;
-	const lectureTitle = logData.lectureTitle;
-	const classDate = logData.classDate;
-	const subjectName = detailedLog.subjectName;
-	const period = logData.period;
-	const sequence = logData.sequence;
-	const teacherId = logData.teacherId;
-	const classLogId = logData.id;
-	const absentStudents = detailedLog.absentStudents || [];
+	let logData,
+		lectureTitle,
+		classDate,
+		subjectName,
+		period,
+		sequence,
+		teacherId,
+		classLogId,
+		teacherName,
+		departmentName,
+		absentStudents;
+
+	if (hasHookData) {
+		logData = detailedLog.classLog;
+		lectureTitle = logData.lectureTitle;
+		classDate = logData.classDate;
+		subjectName = detailedLog.subjectName;
+		period = logData.period;
+		sequence = logData.sequence;
+		teacherId = logData.teacherId;
+		classLogId = logData.id;
+		teacherName = detailedLog.teacherName;
+		departmentName = detailedLog.departmentName;
+		absentStudents = detailedLog.absentStudents || [];
+	} else {
+		// Direct data (LoggedClassesOverview)
+		logData = log;
+		lectureTitle = log.lectureTitle;
+		classDate = log.classDate;
+		subjectName = log.subject;
+		period = log.period;
+		sequence = log.sequence;
+		teacherId = log.teacherId;
+		classLogId = log.classLogId;
+		teacherName = log.teacherName;
+		departmentName = log.departmentName;
+		absentStudents = log.absentStudents || [];
+	}
 
 	const isCreator = teacherId === user?.id;
 
+	// Use provided isEditable prop if available, otherwise calculate based on user role and creator status
 	const canEdit =
 		isEditable !== undefined ? isEditable : isCreator || user?.role === "Admin";
+
 	const canDelete = isCreator || user?.role === "Admin";
 
 	// Format date for display
@@ -142,17 +178,18 @@ const LogDetailsModal = ({
 	};
 
 	const handleEdit = () => {
+		// Create a consistent formatted log object regardless of data source
 		const formattedLog = {
-			classLogId: logData.id,
+			classLogId: classLogId,
 			departmentId: logData.departmentId,
 			subjectId: logData.subjectId,
-			teacherId: logData.teacherId,
-			lectureTitle: logData.lectureTitle,
-			classDate: logData.classDate,
-			period: logData.period,
-			sequence: logData.sequence,
-			absentStudents: detailedLog.absentStudents || [],
-			subject: detailedLog.subjectName,
+			teacherId: teacherId,
+			lectureTitle: lectureTitle,
+			classDate: classDate,
+			period: period,
+			sequence: sequence,
+			absentStudents: absentStudents,
+			subject: subjectName,
 		};
 		onEdit(formattedLog);
 		onClose();
@@ -218,23 +255,32 @@ const LogDetailsModal = ({
 							<div className="ldm-detail-value">#{sequence}</div>
 						</div>
 
-						<div className="ldm-detail-row">
-							<div className="ldm-detail-label">
-								<FontAwesomeIcon icon={faUser} className="ldm-detail-icon" />
-								Teacher
-							</div>
-							<div className="ldm-detail-value">{detailedLog.teacherName}</div>
-						</div>
+						{/* Only show Teacher and Class when not in overview page */}
+						{!isFromOverviewPage && (
+							<>
+								<div className="ldm-detail-row">
+									<div className="ldm-detail-label">
+										<FontAwesomeIcon
+											icon={faUser}
+											className="ldm-detail-icon"
+										/>
+										Teacher
+									</div>
+									<div className="ldm-detail-value">{teacherName}</div>
+								</div>
 
-						<div className="ldm-detail-row">
-							<div className="ldm-detail-label">
-								<FontAwesomeIcon icon={faSchool} className="ldm-detail-icon" />
-								Class
-							</div>
-							<div className="ldm-detail-value">
-								{detailedLog.departmentName}
-							</div>
-						</div>
+								<div className="ldm-detail-row">
+									<div className="ldm-detail-label">
+										<FontAwesomeIcon
+											icon={faSchool}
+											className="ldm-detail-icon"
+										/>
+										Class
+									</div>
+									<div className="ldm-detail-value">{departmentName}</div>
+								</div>
+							</>
+						)}
 					</div>
 
 					<div className="ldm-attendance-section">
