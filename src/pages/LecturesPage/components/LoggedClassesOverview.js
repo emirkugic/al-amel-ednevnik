@@ -342,10 +342,12 @@ const LoggedClassesOverview = ({ departmentId }) => {
 	// Render loading state
 	if (loading) {
 		return (
-			<div className="lco-logged-classes-overview">
-				<div className="lco-loading-container">
-					<div className="lco-loading-spinner"></div>
-					<p>Loading your class logs...</p>
+			<div className="lco-page">
+				<div className="lco-logged-classes-overview">
+					<div className="lco-loading-container">
+						<div className="lco-loading-spinner"></div>
+						<p>Loading your class logs...</p>
+					</div>
 				</div>
 			</div>
 		);
@@ -354,472 +356,489 @@ const LoggedClassesOverview = ({ departmentId }) => {
 	// Render error state
 	if (error) {
 		return (
-			<div className="lco-logged-classes-overview">
-				<div className="lco-error-container">
-					<FontAwesomeIcon
-						icon={faExclamationTriangle}
-						className="lco-error-icon"
-					/>
-					<h3 className="lco-error-title">Unable to load class logs</h3>
-					<p className="lco-error-message">{error}</p>
-					<button
-						className="lco-retry-button"
-						onClick={() => window.location.reload()}
-					>
-						Try again
-					</button>
+			<div className="lco-page">
+				<div className="lco-logged-classes-overview">
+					<div className="lco-error-container">
+						<FontAwesomeIcon
+							icon={faExclamationTriangle}
+							className="lco-error-icon"
+						/>
+						<h3 className="lco-error-title">Unable to load class logs</h3>
+						<p className="lco-error-message">{error}</p>
+						<button
+							className="lco-retry-button"
+							onClick={() => window.location.reload()}
+						>
+							Try again
+						</button>
+					</div>
 				</div>
 			</div>
 		);
 	}
 
 	return (
-		<div className="lco-logged-classes-overview">
-			{/* Dashboard Header */}
-			<div className="lco-dashboard-header">
-				<div className="lco-header-left">
-					<h2>
-						<span className="lco-subject-name">
-							{selectedSubjectName || "Loading..."}
-						</span>
-						<span className="lco-department-name">
-							{departmentName || "Loading..."} Class
-						</span>
-					</h2>
-					<div className="lco-header-subtitle">
-						Class Log Management Dashboard
+		<div className="lco-page">
+			<div className="lco-logged-classes-overview">
+				{/* Dashboard Header */}
+				<div className="lco-dashboard-header">
+					<div className="lco-header-left">
+						<h2>
+							<span className="lco-subject-name">
+								{selectedSubjectName || "Loading..."}
+							</span>
+							<span className="lco-department-name">
+								{departmentName || "Loading..."} Class
+							</span>
+						</h2>
+						<div className="lco-header-subtitle">
+							Class Log Management Dashboard
+						</div>
+					</div>
+
+					{/* Stats moved to header */}
+					<div className="lco-header-stats">
+						<div className="lco-stat-card">
+							<div className="lco-stat-icon">
+								<FontAwesomeIcon icon={faClipboardList} />
+							</div>
+							<div className="lco-stat-content">
+								<div className="lco-stat-value">{summaryStats.totalLogs}</div>
+								<div className="lco-stat-label">Total Logs</div>
+							</div>
+						</div>
+
+						<div className="lco-stat-card">
+							<div className="lco-stat-icon">
+								<FontAwesomeIcon icon={faCalendarAlt} />
+							</div>
+							<div className="lco-stat-content">
+								<div className="lco-stat-value">{summaryStats.recentLogs}</div>
+								<div className="lco-stat-label">Last 30 Days</div>
+							</div>
+						</div>
+
+						<div className="lco-stat-card">
+							<div className="lco-stat-icon">
+								<FontAwesomeIcon icon={faUserGraduate} />
+							</div>
+							<div className="lco-stat-content">
+								<div className="lco-stat-value">
+									{summaryStats.totalAbsences}
+								</div>
+								<div className="lco-stat-label">Total Absences</div>
+							</div>
+						</div>
+
+						<div className="lco-stat-card">
+							<div className="lco-stat-icon">
+								<FontAwesomeIcon icon={faEdit} />
+							</div>
+							<div className="lco-stat-content">
+								<div className="lco-stat-value">
+									{summaryStats.editableLogs}
+								</div>
+								<div className="lco-stat-label">Editable Logs</div>
+							</div>
+						</div>
 					</div>
 				</div>
 
-				{/* Stats moved to header */}
-				<div className="lco-header-stats">
-					<div className="lco-stat-card">
-						<div className="lco-stat-icon">
-							<FontAwesomeIcon icon={faClipboardList} />
-						</div>
-						<div className="lco-stat-content">
-							<div className="lco-stat-value">{summaryStats.totalLogs}</div>
-							<div className="lco-stat-label">Total Logs</div>
-						</div>
-					</div>
-
-					<div className="lco-stat-card">
-						<div className="lco-stat-icon">
-							<FontAwesomeIcon icon={faCalendarAlt} />
-						</div>
-						<div className="lco-stat-content">
-							<div className="lco-stat-value">{summaryStats.recentLogs}</div>
-							<div className="lco-stat-label">Last 30 Days</div>
-						</div>
-					</div>
-
-					<div className="lco-stat-card">
-						<div className="lco-stat-icon">
-							<FontAwesomeIcon icon={faUserGraduate} />
-						</div>
-						<div className="lco-stat-content">
-							<div className="lco-stat-value">{summaryStats.totalAbsences}</div>
-							<div className="lco-stat-label">Total Absences</div>
-						</div>
-					</div>
-
-					<div className="lco-stat-card">
-						<div className="lco-stat-icon">
-							<FontAwesomeIcon icon={faEdit} />
-						</div>
-						<div className="lco-stat-content">
-							<div className="lco-stat-value">{summaryStats.editableLogs}</div>
-							<div className="lco-stat-label">Editable Logs</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			{/* Control Panel */}
-			<div className="lco-control-panel">
-				<div className="lco-control-group lco-subject-selector">
-					<label htmlFor="subject-select">Subject</label>
-					<select
-						id="subject-select"
-						className="lco-subject-dropdown"
-						value={selectedSubject}
-						onChange={(e) => setSelectedSubject(e.target.value)}
-						disabled={subjects.length <= 1}
-					>
-						{subjects.map((subject) => (
-							<option key={subject.id} value={subject.id}>
-								{subject.name}
-							</option>
-						))}
-					</select>
-				</div>
-
-				<div className="lco-control-group lco-view-selector">
-					<label>View Mode</label>
-					<div className="lco-view-buttons">
-						<button
-							className={`lco-view-button ${
-								viewMode === "table" ? "active" : ""
-							}`}
-							onClick={() => setViewMode("table")}
-							title="Table View"
+				{/* Control Panel */}
+				<div className="lco-control-panel">
+					<div className="lco-control-group lco-subject-selector">
+						<label htmlFor="subject-select">Subject</label>
+						<select
+							id="subject-select"
+							className="lco-subject-dropdown"
+							value={selectedSubject}
+							onChange={(e) => setSelectedSubject(e.target.value)}
+							disabled={subjects.length <= 1}
 						>
-							<FontAwesomeIcon icon={faListOl} />
-						</button>
-						<button
-							className={`lco-view-button ${
-								viewMode === "card" ? "active" : ""
-							}`}
-							onClick={() => setViewMode("card")}
-							title="Card View"
-						>
-							<FontAwesomeIcon icon={faClipboardList} />
-						</button>
-						{/* temporary disabled */}
-						{/* <button
-							className={`lco-view-button ${
-								viewMode === "calendar" ? "active" : ""
-							}`}
-							onClick={() => setViewMode("calendar")}
-							title="Calendar View"
-						>
-							<FontAwesomeIcon icon={faCalendarAlt} />
-						</button> */}
+							{subjects.map((subject) => (
+								<option key={subject.id} value={subject.id}>
+									{subject.name}
+								</option>
+							))}
+						</select>
 					</div>
-				</div>
 
-				<div className="lco-control-group lco-search-container">
-					<label htmlFor="search-input">Search</label>
-					<div className="lco-search-input-wrapper">
-						<FontAwesomeIcon icon={faSearch} className="lco-search-icon" />
-						<input
-							id="search-input"
-							type="text"
-							className="lco-search-input"
-							placeholder="Search by title, subject or student..."
-							value={searchQuery}
-							onChange={(e) => setSearchQuery(e.target.value)}
-						/>
-						{searchQuery && (
+					<div className="lco-control-group lco-view-selector">
+						<label>View Mode</label>
+						<div className="lco-view-buttons">
 							<button
-								className="lco-clear-search"
-								onClick={() => setSearchQuery("")}
-								title="Clear search"
+								className={`lco-view-button ${
+									viewMode === "table" ? "active" : ""
+								}`}
+								onClick={() => setViewMode("table")}
+								title="Table View"
 							>
-								<FontAwesomeIcon icon={faTimes} />
+								<FontAwesomeIcon icon={faListOl} />
 							</button>
-						)}
+							<button
+								className={`lco-view-button ${
+									viewMode === "card" ? "active" : ""
+								}`}
+								onClick={() => setViewMode("card")}
+								title="Card View"
+							>
+								<FontAwesomeIcon icon={faClipboardList} />
+							</button>
+							{/* temporary disabled */}
+							{/* <button
+								className={`lco-view-button ${
+									viewMode === "calendar" ? "active" : ""
+								}`}
+								onClick={() => setViewMode("calendar")}
+								title="Calendar View"
+							>
+								<FontAwesomeIcon icon={faCalendarAlt} />
+							</button> */}
+						</div>
+					</div>
+
+					<div className="lco-control-group lco-search-container">
+						<label htmlFor="search-input">Search</label>
+						<div className="lco-search-input-wrapper">
+							<FontAwesomeIcon icon={faSearch} className="lco-search-icon" />
+							<input
+								id="search-input"
+								type="text"
+								className="lco-search-input"
+								placeholder="Search by title, subject or student..."
+								value={searchQuery}
+								onChange={(e) => setSearchQuery(e.target.value)}
+							/>
+							{searchQuery && (
+								<button
+									className="lco-clear-search"
+									onClick={() => setSearchQuery("")}
+									title="Clear search"
+								>
+									<FontAwesomeIcon icon={faTimes} />
+								</button>
+							)}
+						</div>
+					</div>
+
+					<div className="lco-control-group lco-button-container">
+						<label>&nbsp;</label>
+						<button className="lco-log-class-button" onClick={handleLogClass}>
+							<FontAwesomeIcon icon={faPlus} /> Log Class
+						</button>
 					</div>
 				</div>
 
-				<div className="lco-control-group lco-button-container">
-					<label>&nbsp;</label>
-					<button className="lco-log-class-button" onClick={handleLogClass}>
-						<FontAwesomeIcon icon={faPlus} /> Log Class
-					</button>
-				</div>
-			</div>
-
-			{/* Log Content */}
-			<div className="lco-logs-content">
-				{filteredLogs.length > 0 ? (
-					<>
-						{/* Table View */}
-						{viewMode === "table" && (
-							<div className="lco-logs-table-container">
-								<table className="lco-logs-table">
-									<thead>
-										<tr>
-											<th className="lco-date-header">Date</th>
-											<th>Period</th>
-											<th>Lecture Title</th>
-											<th className="lco-sequence-header">Sequence</th>
-											<th className="lco-absent-header">Absent</th>
-											<th className="lco-actions-header">Actions</th>
-										</tr>
-									</thead>
-									<tbody>
-										{currentLogs.map((log) => (
-											<tr
-												key={log.classLogId}
-												onClick={() => handleLogClick(log)}
-												className="lco-log-row"
-											>
-												<td className="lco-date-cell">
-													<div className="lco-date-container">
-														{formatDate(log.classDate)}
-													</div>
-												</td>
-												<td className="lco-period-cell">{log.period}</td>
-												<td className="lco-title-cell">
-													<div>
-														<span
-															className="lco-lecture-title"
-															title={log.lectureTitle}
+				{/* Log Content */}
+				<div className="lco-logs-content">
+					{filteredLogs.length > 0 ? (
+						<>
+							{/* Table View */}
+							{viewMode === "table" && (
+								<div className="lco-logs-table-container">
+									<table className="lco-logs-table">
+										<thead>
+											<tr>
+												<th className="lco-date-header">Date</th>
+												<th>Period</th>
+												<th>Lecture Title</th>
+												<th className="lco-sequence-header">Sequence</th>
+												<th className="lco-absent-header">Absent</th>
+												<th className="lco-actions-header">Actions</th>
+											</tr>
+										</thead>
+										<tbody>
+											{currentLogs.map((log) => (
+												<tr
+													key={log.classLogId}
+													onClick={() => handleLogClick(log)}
+													className="lco-log-row"
+												>
+													<td className="lco-date-cell">
+														<div className="lco-date-container">
+															{formatDate(log.classDate)}
+														</div>
+													</td>
+													<td className="lco-period-cell">{log.period}</td>
+													<td className="lco-title-cell">
+														<div>
+															<span
+																className="lco-lecture-title"
+																title={log.lectureTitle}
+															>
+																{log.lectureTitle}
+															</span>
+														</div>
+													</td>
+													<td className="lco-sequence-cell">
+														<div className="lco-sequence-container">
+															{log.sequence}
+														</div>
+													</td>
+													<td className="lco-absent-cell">
+														<div
+															className="lco-absent-badge"
+															title={getAbsentTooltip(log.absentStudents)}
 														>
-															{log.lectureTitle}
-														</span>
-													</div>
-												</td>
-												<td className="lco-sequence-cell">
-													<div className="lco-sequence-container">
+															{log.absentStudents?.length || 0}
+														</div>
+													</td>
+													<td
+														className="lco-actions-cell"
+														onClick={(e) => e.stopPropagation()}
+													>
+														<div className="lco-action-buttons">
+															<button
+																className="lco-edit-button"
+																onClick={() => handleEditLog(log)}
+																title="Edit log"
+																disabled={!isEditable(log)}
+															>
+																<FontAwesomeIcon icon={faEdit} />
+															</button>
+															<button
+																className="lco-delete-button"
+																onClick={() => handleDeleteLog(log.classLogId)}
+																title="Delete log"
+															>
+																<FontAwesomeIcon icon={faTrash} />
+															</button>
+														</div>
+													</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</div>
+							)}
+
+							{/* Card View */}
+							{viewMode === "card" && (
+								<div className="lco-logs-card-container">
+									{currentLogs.map((log) => (
+										<div
+											key={log.classLogId}
+											className={`lco-log-card ${
+												expandedCards[log.classLogId] ? "expanded" : ""
+											}`}
+										>
+											<div
+												className="lco-card-header"
+												onClick={() => toggleCardExpansion(log.classLogId)}
+											>
+												<div className="lco-card-title-area">
+													<div className="lco-card-sequence">
 														{log.sequence}
 													</div>
-												</td>
-												<td className="lco-absent-cell">
-													<div
-														className="lco-absent-badge"
-														title={getAbsentTooltip(log.absentStudents)}
+													<div className="lco-card-title-content">
+														<h3 className="lco-card-title">
+															{log.lectureTitle}
+														</h3>
+														<div className="lco-card-subtitle">
+															<span className="lco-card-date">
+																{formatDate(log.classDate)}
+															</span>
+															<span className="lco-card-period">
+																Period {log.period}
+															</span>
+														</div>
+													</div>
+												</div>
+												<button className="lco-expand-toggle">
+													<FontAwesomeIcon
+														icon={
+															expandedCards[log.classLogId]
+																? faAngleUp
+																: faAngleDown
+														}
+													/>
+												</button>
+											</div>
+
+											<div className="lco-card-body">
+												<div className="lco-card-info-group">
+													<div className="lco-card-info-item">
+														<span className="lco-info-label">Attendance</span>
+														<span className="lco-info-value lco-attendance-value">
+															{log.absentStudents?.length ? (
+																<span className="lco-absent-indicator">
+																	<FontAwesomeIcon icon={faTimesCircle} />
+																	{log.absentStudents.length} absent
+																</span>
+															) : (
+																<span className="lco-present-indicator">
+																	<FontAwesomeIcon icon={faCheckCircle} />
+																	All present
+																</span>
+															)}
+														</span>
+													</div>
+
+													{log.absentStudents?.length > 0 && (
+														<div className="lco-card-info-item lco-absent-list">
+															<span className="lco-info-label">
+																Absent Students
+															</span>
+															<span className="lco-info-value">
+																{log.absentStudents
+																	.map((s) => s.name)
+																	.join(", ")}
+															</span>
+														</div>
+													)}
+												</div>
+
+												<div className="lco-card-actions">
+													<button
+														className="lco-card-action lco-view-btn"
+														onClick={() => handleLogClick(log)}
 													>
-														{log.absentStudents?.length || 0}
-													</div>
-												</td>
-												<td
-													className="lco-actions-cell"
-													onClick={(e) => e.stopPropagation()}
-												>
-													<div className="lco-action-buttons">
-														<button
-															className="lco-edit-button"
-															onClick={() => handleEditLog(log)}
-															title="Edit log"
-															disabled={!isEditable(log)}
-														>
-															<FontAwesomeIcon icon={faEdit} />
-														</button>
-														<button
-															className="lco-delete-button"
-															onClick={() => handleDeleteLog(log.classLogId)}
-															title="Delete log"
-														>
-															<FontAwesomeIcon icon={faTrash} />
-														</button>
-													</div>
-												</td>
-											</tr>
-										))}
-									</tbody>
-								</table>
-							</div>
-						)}
+														<FontAwesomeIcon icon={faInfoCircle} /> View
+													</button>
 
-						{/* Card View */}
-						{viewMode === "card" && (
-							<div className="lco-logs-card-container">
-								{currentLogs.map((log) => (
-									<div
-										key={log.classLogId}
-										className={`lco-log-card ${
-											expandedCards[log.classLogId] ? "expanded" : ""
-										}`}
-									>
-										<div
-											className="lco-card-header"
-											onClick={() => toggleCardExpansion(log.classLogId)}
-										>
-											<div className="lco-card-title-area">
-												<div className="lco-card-sequence">{log.sequence}</div>
-												<div className="lco-card-title-content">
-													<h3 className="lco-card-title">{log.lectureTitle}</h3>
-													<div className="lco-card-subtitle">
-														<span className="lco-card-date">
-															{formatDate(log.classDate)}
-														</span>
-														<span className="lco-card-period">
-															Period {log.period}
-														</span>
-													</div>
+													<button
+														className="lco-card-action lco-edit-btn"
+														onClick={() => handleEditLog(log)}
+														disabled={!isEditable(log)}
+													>
+														<FontAwesomeIcon icon={faEdit} /> Edit
+													</button>
+
+													<button
+														className="lco-card-action lco-delete-btn"
+														onClick={() => handleDeleteLog(log.classLogId)}
+													>
+														<FontAwesomeIcon icon={faTrash} /> Delete
+													</button>
 												</div>
 											</div>
-											<button className="lco-expand-toggle">
-												<FontAwesomeIcon
-													icon={
-														expandedCards[log.classLogId]
-															? faAngleUp
-															: faAngleDown
-													}
-												/>
-											</button>
 										</div>
+									))}
+								</div>
+							)}
 
-										<div className="lco-card-body">
-											<div className="lco-card-info-group">
-												<div className="lco-card-info-item">
-													<span className="lco-info-label">Attendance</span>
-													<span className="lco-info-value lco-attendance-value">
-														{log.absentStudents?.length ? (
-															<span className="lco-absent-indicator">
-																<FontAwesomeIcon icon={faTimesCircle} />
-																{log.absentStudents.length} absent
-															</span>
-														) : (
-															<span className="lco-present-indicator">
-																<FontAwesomeIcon icon={faCheckCircle} />
-																All present
-															</span>
-														)}
-													</span>
-												</div>
-
-												{log.absentStudents?.length > 0 && (
-													<div className="lco-card-info-item lco-absent-list">
-														<span className="lco-info-label">
-															Absent Students
-														</span>
-														<span className="lco-info-value">
-															{log.absentStudents.map((s) => s.name).join(", ")}
-														</span>
-													</div>
-												)}
-											</div>
-
-											<div className="lco-card-actions">
-												<button
-													className="lco-card-action lco-view-btn"
-													onClick={() => handleLogClick(log)}
-												>
-													<FontAwesomeIcon icon={faInfoCircle} /> View
-												</button>
-
-												<button
-													className="lco-card-action lco-edit-btn"
-													onClick={() => handleEditLog(log)}
-													disabled={!isEditable(log)}
-												>
-													<FontAwesomeIcon icon={faEdit} /> Edit
-												</button>
-
-												<button
-													className="lco-card-action lco-delete-btn"
-													onClick={() => handleDeleteLog(log.classLogId)}
-												>
-													<FontAwesomeIcon icon={faTrash} /> Delete
-												</button>
-											</div>
-										</div>
+							{/* Calendar View */}
+							{viewMode === "calendar" && (
+								<div className="lco-calendar-view">
+									<div className="lco-calendar-placeholder">
+										<FontAwesomeIcon
+											icon={faCalendarAlt}
+											className="lco-calendar-icon"
+										/>
+										<p>Calendar view is in development.</p>
+										<p>Please use table or card view for now.</p>
 									</div>
-								))}
-							</div>
-						)}
+								</div>
+							)}
 
-						{/* Calendar View */}
-						{viewMode === "calendar" && (
-							<div className="lco-calendar-view">
-								<div className="lco-calendar-placeholder">
-									<FontAwesomeIcon
-										icon={faCalendarAlt}
-										className="lco-calendar-icon"
-									/>
-									<p>Calendar view is in development.</p>
-									<p>Please use table or card view for now.</p>
+							{/* Pagination */}
+							<div className="lco-pagination-container">
+								<div className="lco-pagination-info">
+									Showing {indexOfFirstLog + 1} to{" "}
+									{Math.min(indexOfLastLog, filteredLogs.length)} of{" "}
+									{filteredLogs.length} entries
+								</div>
+								<div className="lco-pagination-controls">
+									<button
+										className="lco-page-button lco-prev-button"
+										onClick={() => handlePageChange(currentPage - 1)}
+										disabled={currentPage === 1}
+									>
+										<FontAwesomeIcon icon={faChevronLeft} />
+									</button>
+
+									{Array.from({ length: totalPages }, (_, i) => i + 1)
+										.filter(
+											(page) =>
+												page === 1 ||
+												page === totalPages ||
+												(page >= currentPage - 1 && page <= currentPage + 1)
+										)
+										.map((page, index, array) => (
+											<React.Fragment key={page}>
+												{index > 0 && array[index - 1] !== page - 1 && (
+													<span className="lco-page-ellipsis">...</span>
+												)}
+												<button
+													className={`lco-page-button lco-number-button ${
+														page === currentPage ? "active" : ""
+													}`}
+													onClick={() => handlePageChange(page)}
+												>
+													{page}
+												</button>
+											</React.Fragment>
+										))}
+
+									<button
+										className="lco-page-button lco-next-button"
+										onClick={() => handlePageChange(currentPage + 1)}
+										disabled={currentPage === totalPages}
+									>
+										<FontAwesomeIcon icon={faChevronRight} />
+									</button>
 								</div>
 							</div>
-						)}
-
-						{/* Pagination */}
-						<div className="lco-pagination-container">
-							<div className="lco-pagination-info">
-								Showing {indexOfFirstLog + 1} to{" "}
-								{Math.min(indexOfLastLog, filteredLogs.length)} of{" "}
-								{filteredLogs.length} entries
-							</div>
-							<div className="lco-pagination-controls">
+						</>
+					) : (
+						<div className="lco-empty-state">
+							<FontAwesomeIcon icon={faBookOpen} className="lco-empty-icon" />
+							<h3 className="lco-empty-title">No class logs found</h3>
+							<p className="lco-empty-text">
+								"Start tracking your classes by adding your first log."
+							</p>
+							{!searchQuery === "all" && (
 								<button
-									className="lco-page-button lco-prev-button"
-									onClick={() => handlePageChange(currentPage - 1)}
-									disabled={currentPage === 1}
+									className="lco-log-class-button"
+									onClick={handleLogClass}
 								>
-									<FontAwesomeIcon icon={faChevronLeft} />
+									<FontAwesomeIcon icon={faPlus} /> Log your first class
 								</button>
-
-								{Array.from({ length: totalPages }, (_, i) => i + 1)
-									.filter(
-										(page) =>
-											page === 1 ||
-											page === totalPages ||
-											(page >= currentPage - 1 && page <= currentPage + 1)
-									)
-									.map((page, index, array) => (
-										<React.Fragment key={page}>
-											{index > 0 && array[index - 1] !== page - 1 && (
-												<span className="lco-page-ellipsis">...</span>
-											)}
-											<button
-												className={`lco-page-button lco-number-button ${
-													page === currentPage ? "active" : ""
-												}`}
-												onClick={() => handlePageChange(page)}
-											>
-												{page}
-											</button>
-										</React.Fragment>
-									))}
-
+							)}
+							{searchQuery && (
 								<button
-									className="lco-page-button lco-next-button"
-									onClick={() => handlePageChange(currentPage + 1)}
-									disabled={currentPage === totalPages}
+									className="lco-clear-filters-button"
+									onClick={() => {
+										setSearchQuery("");
+									}}
 								>
-									<FontAwesomeIcon icon={faChevronRight} />
+									<FontAwesomeIcon icon={faTimes} /> Clear search
 								</button>
-							</div>
+							)}
 						</div>
-					</>
-				) : (
-					<div className="lco-empty-state">
-						<FontAwesomeIcon icon={faBookOpen} className="lco-empty-icon" />
-						<h3 className="lco-empty-title">No class logs found</h3>
-						<p className="lco-empty-text">
-							"Start tracking your classes by adding your first log."
-						</p>
-						{!searchQuery === "all" && (
-							<button className="lco-log-class-button" onClick={handleLogClass}>
-								<FontAwesomeIcon icon={faPlus} /> Log your first class
-							</button>
-						)}
-						{searchQuery && (
-							<button
-								className="lco-clear-filters-button"
-								onClick={() => {
-									setSearchQuery("");
-								}}
-							>
-								<FontAwesomeIcon icon={faTimes} /> Clear search
-							</button>
-						)}
-					</div>
+					)}
+				</div>
+
+				{/* Modals */}
+				{isModalOpen && (
+					<ClassLogFormModal
+						onClose={closeModal}
+						departmentId={departmentId}
+						subjectId={selectedSubject}
+					/>
 				)}
+
+				{editingLog && (
+					<EditLogModal
+						log={editingLog}
+						onClose={closeEditModal}
+						handleUpdateLog={handleUpdateLog}
+					/>
+				)}
+
+				{/* Details Modal */}
+				<LogDetailsModal
+					log={selectedLogForDetails}
+					isOpen={isDetailsModalOpen}
+					onClose={closeDetailsModal}
+					onEdit={handleEditLog}
+					onDelete={handleDeleteLog}
+					isEditable={
+						selectedLogForDetails ? isEditable(selectedLogForDetails) : false
+					}
+					fromOverviewPage={true}
+				/>
 			</div>
-
-			{/* Modals */}
-			{isModalOpen && (
-				<ClassLogFormModal
-					onClose={closeModal}
-					departmentId={departmentId}
-					subjectId={selectedSubject}
-				/>
-			)}
-
-			{editingLog && (
-				<EditLogModal
-					log={editingLog}
-					onClose={closeEditModal}
-					handleUpdateLog={handleUpdateLog}
-				/>
-			)}
-
-			{/* Details Modal */}
-			<LogDetailsModal
-				log={selectedLogForDetails}
-				isOpen={isDetailsModalOpen}
-				onClose={closeDetailsModal}
-				onEdit={handleEditLog}
-				onDelete={handleDeleteLog}
-				isEditable={
-					selectedLogForDetails ? isEditable(selectedLogForDetails) : false
-				}
-				fromOverviewPage={true}
-			/>
 		</div>
 	);
 };
