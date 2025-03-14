@@ -262,20 +262,36 @@ const WeeklyLogs = () => {
 	};
 
 	// Handler for updating a log
+	// Just the handleUpdateLog function that needs to be updated:
+
+	// Handler for updating a log
 	const handleUpdateLog = (updatedLog) => {
-		// Update the log in the allLogs array
+		// Close the edit modal first
+		setShowEditModal(false);
+
+		// Format the updated log to match the expected structure in our UI
+		const formattedUpdatedLog = {
+			...updatedLog,
+			id: updatedLog.id || updatedLog.classLogId,
+			classLogId: updatedLog.classLogId || updatedLog.id,
+			subject:
+				updatedLog.subject ||
+				subjects.find((s) => s.id === updatedLog.subjectId)?.subjectName ||
+				"",
+			teacherName: getTeacherName(updatedLog.teacherId),
+		};
+
+		console.log("Updated log:", formattedUpdatedLog);
+
 		setAllLogs((prevLogs) =>
 			prevLogs.map((log) =>
-				log.id === updatedLog.id || log.classLogId === updatedLog.classLogId
-					? { ...log, ...updatedLog }
+				log.id === formattedUpdatedLog.id ||
+				log.classLogId === formattedUpdatedLog.classLogId
+					? { ...log, ...formattedUpdatedLog }
 					: log
 			)
 		);
 
-		// Close the edit modal
-		setShowEditModal(false);
-
-		// Refetch logs to ensure we have the latest data
 		refetchLogs();
 	};
 
