@@ -1,23 +1,23 @@
-/* LogDetailsModal.css - Using ldm- prefix to avoid conflicts */
+/* LogDetailsModal.css - Updated Modern Design */
 :root {
 	--ldm-primary-color: #04abfd;
 	--ldm-primary-dark: #0386c7;
-	--ldm-primary-light: #e1f5fe;
+	--ldm-primary-light: #f0f5ff;
 	--ldm-secondary-color: #6c757d;
 	--ldm-success-color: #4caf50;
 	--ldm-success-light: #e8f5e9;
 	--ldm-danger-color: #f44336;
-	--ldm-danger-light: #ffebee;
+	--ldm-danger-light: #ffefef;
 	--ldm-white: #ffffff;
 	--ldm-text-color: #333333;
-	--ldm-text-light: #757575;
-	--ldm-bg-light: #f8f9fa;
-	--ldm-border-color: #e0e0e0;
+	--ldm-text-light: #666666;
+	--ldm-bg-light: #f8f8f8;
+	--ldm-border-color: #eaeaea;
 	--ldm-border-radius: 8px;
-	--ldm-border-radius-sm: 4px;
+	--ldm-border-radius-sm: 6px;
 	--ldm-border-radius-lg: 12px;
-	--ldm-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	--ldm-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+	--ldm-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+	--ldm-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
 	--ldm-transition: all 0.2s ease-in-out;
 }
 
@@ -45,6 +45,8 @@
 	box-shadow: var(--ldm-shadow-lg);
 	width: 90%;
 	max-width: 600px;
+	min-width: 500px;
+	min-height: 400px;
 	max-height: 90vh;
 	display: flex;
 	flex-direction: column;
@@ -59,8 +61,9 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 16px 20px;
+	padding: 20px 24px;
 	border-bottom: 1px solid var(--ldm-border-color);
+	background-color: var(--ldm-white);
 }
 
 .ldm-header h3 {
@@ -71,47 +74,57 @@
 }
 
 .ldm-close-btn {
-	background: none;
+	background: var(--ldm-bg-light);
 	border: none;
 	width: 32px;
 	height: 32px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 50%;
+	border-radius: 6px;
 	color: var(--ldm-text-light);
 	cursor: pointer;
 	transition: var(--ldm-transition);
 }
 
 .ldm-close-btn:hover {
-	background-color: var(--ldm-bg-light);
+	background-color: #e0e0e0;
 	color: var(--ldm-text-color);
 }
 
 /* Modal body */
 .ldm-body {
-	padding: 20px;
+	padding: 24px;
 	overflow-y: auto;
 	flex: 1;
+	min-height: 300px;
+	display: flex;
+	flex-direction: column;
 }
 
 .ldm-details-grid {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	gap: 16px;
-	margin-bottom: 24px;
+	gap: 20px;
+	margin-bottom: 28px;
 }
 
 .ldm-detail-row {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 6px;
 }
 
 .ldm-detail-label {
 	font-size: 13px;
 	color: var(--ldm-text-light);
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.ldm-detail-icon {
+	color: var(--ldm-primary-color);
 }
 
 .ldm-detail-value {
@@ -121,6 +134,11 @@
 }
 
 /* Attendance section */
+.ldm-attendance-section {
+	border-top: 1px solid var(--ldm-border-color);
+	padding-top: 24px;
+}
+
 .ldm-attendance-section h4 {
 	margin: 0 0 16px;
 	font-size: 16px;
@@ -128,14 +146,14 @@
 	color: var(--ldm-text-color);
 	display: flex;
 	align-items: center;
-	gap: 8px;
+	gap: 10px;
 }
 
 .ldm-attendance-summary {
 	display: flex;
 	align-items: center;
 	margin-bottom: 16px;
-	padding: 10px 16px;
+	padding: 12px 16px;
 	background-color: var(--ldm-danger-light);
 	color: var(--ldm-danger-color);
 	border-radius: var(--ldm-border-radius-sm);
@@ -170,25 +188,31 @@
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	padding: 8px 12px;
+	padding: 10px 14px;
 	background-color: var(--ldm-bg-light);
 	border-radius: var(--ldm-border-radius-sm);
 	font-size: 14px;
+	transition: var(--ldm-transition);
+}
+
+.ldm-absent-student:hover {
+	background-color: #f0f0f0;
 }
 
 /* Modal footer */
 .ldm-footer {
 	display: flex;
 	justify-content: flex-end;
-	padding: 16px 20px;
-	gap: 10px;
+	padding: 16px 24px;
+	gap: 12px;
 	border-top: 1px solid var(--ldm-border-color);
+	background-color: var(--ldm-white);
 }
 
 /* Buttons */
 .ldm-btn {
 	border-radius: var(--ldm-border-radius-sm);
-	padding: 8px 16px;
+	padding: 10px 16px;
 	font-size: 14px;
 	font-weight: 500;
 	cursor: pointer;
@@ -229,6 +253,53 @@
 	background-color: #d32f2f;
 }
 
+/* Loading Container - Updated to match WeeklyLogs style */
+.ldm-loading-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	min-height: 250px;
+	color: var(--ldm-text-light);
+}
+
+.ldm-spinner {
+	width: 40px;
+	height: 40px;
+	border: 3px solid #f3f3f3;
+	border-top: 3px solid var(--ldm-primary-color);
+	border-radius: 50%;
+	animation: ldm-spin 1s linear infinite;
+	margin-bottom: 16px;
+}
+
+@keyframes ldm-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.ldm-loading-container p {
+	font-size: 15px;
+	color: var(--ldm-text-light);
+}
+
+/* Error state */
+.ldm-error {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	padding: 24px;
+	text-align: center;
+	color: var(--ldm-danger-color);
+}
+
 /* Animations */
 @keyframes ldm-fadeIn {
 	from {
@@ -252,49 +323,26 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+	.ldm-container {
+		min-width: 90%;
+		width: 90%;
+	}
+
 	.ldm-details-grid {
 		grid-template-columns: 1fr;
+		gap: 14px;
 	}
 
 	.ldm-absent-students {
 		grid-template-columns: 1fr;
 	}
-}
 
-/* Add these styles to your LogDetailsModal.css file */
+	.ldm-body {
+		padding: 16px;
+	}
 
-.ldm-loading-container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	height: 100%;
-	min-height: 250px;
-	color: var(--ldm-text-light);
-}
-
-.ldm-spinner {
-	font-size: 32px;
-	color: var(--ldm-primary-color);
-	margin-bottom: 16px;
-}
-
-.ldm-body {
-	min-height: 300px;
-	height: auto;
-	display: flex;
-	flex-direction: column;
-}
-
-.ldm-container {
-	min-width: 500px;
-	min-height: 400px;
-	max-height: 90vh;
-}
-
-@media (max-width: 768px) {
-	.ldm-container {
-		min-width: 90%;
-		width: 90%;
+	.ldm-header,
+	.ldm-footer {
+		padding: 14px 16px;
 	}
 }

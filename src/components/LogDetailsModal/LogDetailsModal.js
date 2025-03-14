@@ -8,9 +8,10 @@ import {
 	faCheckCircle,
 	faUserSlash,
 	faUser,
+	faCalendarAlt,
 	faBookOpen,
 	faSchool,
-	faSpinner,
+	faLayerGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import "./LogDetailsModal.css";
 import useAuth from "../../hooks/useAuth";
@@ -26,6 +27,7 @@ const LogDetailsModal = ({
 	errorDetails,
 	initialTitle,
 	requestId,
+	faExclamationCircle,
 }) => {
 	const { user } = useAuth();
 
@@ -59,6 +61,10 @@ const LogDetailsModal = ({
 					</div>
 					<div className="ldm-body">
 						<div className="ldm-error">
+							<FontAwesomeIcon
+								icon={faExclamationCircle}
+								style={{ fontSize: "32px", marginBottom: "16px" }}
+							/>
 							<p>{errorDetails}</p>
 						</div>
 					</div>
@@ -91,7 +97,7 @@ const LogDetailsModal = ({
 					</div>
 					<div className="ldm-body">
 						<div className="ldm-loading-container">
-							<FontAwesomeIcon icon={faSpinner} spin className="ldm-spinner" />
+							<div className="ldm-spinner"></div>
 							<p>Loading log details...</p>
 						</div>
 					</div>
@@ -169,23 +175,47 @@ const LogDetailsModal = ({
 				<div className="ldm-body">
 					<div className="ldm-details-grid">
 						<div className="ldm-detail-row">
-							<div className="ldm-detail-label">Date</div>
+							<div className="ldm-detail-label">
+								<FontAwesomeIcon
+									icon={faCalendarAlt}
+									className="ldm-detail-icon"
+								/>
+								Date
+							</div>
 							<div className="ldm-detail-value">{formatDate(classDate)}</div>
 						</div>
 
 						<div className="ldm-detail-row">
-							<div className="ldm-detail-label">Subject</div>
+							<div className="ldm-detail-label">
+								<FontAwesomeIcon
+									icon={faBookOpen}
+									className="ldm-detail-icon"
+								/>
+								Subject
+							</div>
 							<div className="ldm-detail-value">{subjectName}</div>
 						</div>
 
 						<div className="ldm-detail-row">
-							<div className="ldm-detail-label">Period</div>
-							<div className="ldm-detail-value">{period}</div>
+							<div className="ldm-detail-label">
+								<FontAwesomeIcon
+									icon={faLayerGroup}
+									className="ldm-detail-icon"
+								/>
+								Period
+							</div>
+							<div className="ldm-detail-value">Period {period}</div>
 						</div>
 
 						<div className="ldm-detail-row">
-							<div className="ldm-detail-label">Sequence</div>
-							<div className="ldm-detail-value">{sequence}</div>
+							<div className="ldm-detail-label">
+								<FontAwesomeIcon
+									icon={faLayerGroup}
+									className="ldm-detail-icon"
+								/>
+								Sequence
+							</div>
+							<div className="ldm-detail-value">#{sequence}</div>
 						</div>
 
 						<div className="ldm-detail-row">
