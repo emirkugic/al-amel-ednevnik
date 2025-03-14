@@ -65,7 +65,7 @@
 
 .asmnt-title {
 	margin: 0;
-	font-size: 22px;
+	font-size: 22px !important;
 	font-weight: 600;
 	color: var(--asmnt-gray-800);
 	display: flex;

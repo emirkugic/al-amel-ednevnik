@@ -10,3 +10,4 @@ export { default as "ParentsPage" } from "./ParentsPage/ParentsPage.js";
 export { default as "ClassManagement" } from "./ClassManagementPage/ClassManagement.js";
 export { default as "Dashboard" } from "./DashboardPage/Dashboard.js";
 export { default as "NotFoundPage" } from "./NotFoundPage/NotFoundPage.js";
+export { default as "MaintenancePage" } from "./MaintenancePage/MaintenancePage.js";

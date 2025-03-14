@@ -1,0 +1,195 @@
+.maintenance-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 94vh;
+	padding: 20px;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+		Arial, sans-serif;
+}
+
+.maintenance-content {
+	max-width: 600px;
+	text-align: center;
+	background-color: #ffffff;
+	border-radius: 8px;
+	padding: 17px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.maintenance-header {
+	margin-bottom: 30px;
+}
+
+.server-icon {
+	font-size: 32px;
+	color: #04abfd;
+	margin-bottom: 16px;
+}
+
+.maintenance-title {
+	font-size: 28px;
+	margin: 0 0 10px 0;
+	color: #333;
+	font-weight: 600;
+}
+
+.maintenance-message {
+	margin-bottom: 30px;
+}
+
+.maintenance-message p {
+	font-size: 16px;
+	line-height: 1.6;
+	color: #555;
+	margin-bottom: 20px;
+}
+
+.status-container {
+	margin: 25px 0;
+}
+
+.progress-bar {
+	height: 8px;
+	background-color: #f0f0f0;
+	border-radius: 4px;
+	overflow: hidden;
+	margin-bottom: 8px;
+}
+
+.progress {
+	height: 100%;
+	width: 60%;
+	background-color: #04abfd;
+	border-radius: 4px;
+	animation: progress 2s ease-in-out infinite alternate;
+}
+
+.progress-label {
+	font-size: 14px;
+	color: #666;
+	text-align: center;
+}
+
+.time-info {
+	margin-bottom: 30px;
+	padding: 20px;
+	background-color: #f8f9fa;
+	border-radius: 8px;
+}
+
+.current-time {
+	font-size: 14px;
+	color: #666;
+	margin-bottom: 15px;
+}
+
+.countdown-container h2 {
+	font-size: 18px;
+	margin-bottom: 15px;
+	color: #333;
+	font-weight: 500;
+}
+
+.countdown {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+}
+
+.time-block {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.time {
+	font-size: 28px;
+	font-weight: 600;
+	background-color: #04abfd;
+	color: white;
+	padding: 10px 15px;
+	border-radius: 6px;
+	min-width: 60px;
+}
+
+.label {
+	font-size: 12px;
+	color: #666;
+	margin-top: 8px;
+}
+
+.separator {
+	font-size: 28px;
+	font-weight: 600;
+	align-self: flex-start;
+	margin-top: 10px;
+	color: #333;
+}
+
+.maintenance-footer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	padding: 15px;
+	background-color: #f0f7ff;
+	border-radius: 6px;
+	color: #333;
+}
+
+.clock-icon {
+	color: #04abfd;
+}
+
+/* Simple Animation */
+@keyframes progress {
+	0% {
+		width: 15%;
+	}
+	100% {
+		width: 85%;
+	}
+}
+
+/* Responsive adjustments */
+@media (max-width: 700px) {
+	.maintenance-content {
+		max-width: 90%;
+		padding: 30px 20px;
+	}
+
+	.maintenance-title {
+		font-size: 24px;
+	}
+
+	.maintenance-message p {
+		font-size: 15px;
+	}
+}
+
+@media (max-width: 480px) {
+	.time {
+		font-size: 22px;
+		min-width: 50px;
+		padding: 8px;
+	}
+
+	.separator {
+		font-size: 22px;
+	}
+
+	.countdown {
+		gap: 5px;
+	}
+
+	.maintenance-footer {
+		flex-direction: column;
+		text-align: center;
+		padding: 12px;
+	}
+
+	.maintenance-footer p {
+		font-size: 14px;
+	}
+}

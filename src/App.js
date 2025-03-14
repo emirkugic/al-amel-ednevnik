@@ -30,6 +30,7 @@ import {
 	ClassManagement,
 	Dashboard,
 	NotFoundPage,
+	MaintenancePage,
 } from "./pages";
 
 import "./App.css";
@@ -38,6 +39,7 @@ const AppContent = () => {
 	const location = useLocation();
 
 	const isLoginPage = location.pathname === "/login";
+	const isMaintenancePage = location.pathname === "/maintenance";
 	const is404Page =
 		!isLoginPage &&
 		![
@@ -50,11 +52,12 @@ const AppContent = () => {
 			"/grades",
 			"/teachers",
 			"/classes",
+			"/maintenance",
 		].includes(location.pathname) &&
 		!location.pathname.startsWith("/lectures/") &&
 		!location.pathname.startsWith("/courses/");
 
-	const hideSidebars = isLoginPage || is404Page;
+	const hideSidebars = isLoginPage || is404Page || isMaintenancePage;
 
 	return (
 		<div className="App">
@@ -76,6 +79,7 @@ const AppContent = () => {
 						<Route path="/teachers" element={<TeachersPage />} />{" "}
 						<Route path="/classes" element={<ClassManagement />} />
 						<Route path="/courses/:subject" element={<AssessmentPage />} />
+						<Route path="/maintenance" element={<MaintenancePage />} />
 					</Route>
 				</Routes>
 			</div>
