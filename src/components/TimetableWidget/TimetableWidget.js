@@ -52,12 +52,15 @@ const TimetableWidget = () => {
 				{ start: "13:40", end: "14:20", label: "7th Period" },
 			],
 			Friday: [
-				{ start: "08:20", end: "08:50", label: "1st Period" },
-				{ start: "08:55", end: "09:25", label: "2nd Period" },
-				{ start: "09:30", end: "10:00", label: "3rd Period" },
-				{ start: "10:00", end: "10:15", label: "Break" },
-				{ start: "10:20", end: "10:50", label: "4th Period" },
-				{ start: "10:55", end: "11:25", label: "5th Period" },
+				{ start: "08:30", end: "09:10", label: "1st Period" },
+				{ start: "09:15", end: "09:55", label: "2nd Period" },
+				{ start: "10:00", end: "10:40", label: "3rd Period" },
+				{ start: "10:40", end: "11:00", label: "Break" },
+				{ start: "11:05", end: "11:45", label: "4th Period" },
+				{ start: "11:50", end: "12:30", label: "5th Period" },
+				{ start: "12:35", end: "12:50", label: "Break 2" },
+				{ start: "12:55", end: "13:35", label: "6th Period" },
+				{ start: "13:40", end: "14:20", label: "7th Period" },
 			],
 		},
 	};
@@ -75,19 +78,19 @@ const TimetableWidget = () => {
 	};
 
 	return (
-		<div className="ttw-widget">
-			<div className="ttw-timetable">
+		<div className="mtt-widget">
+			<div className="mtt-timetable">
 				{currentTimetable.map((item, index) => (
 					<div
 						key={index}
-						className={`ttw-row ${
-							isCurrentPeriod(item.start, item.end) ? "ttw-current" : ""
+						className={`mtt-row ${
+							isCurrentPeriod(item.start, item.end) ? "mtt-current" : ""
 						}`}
 					>
-						<div className="ttw-time">
+						<div className="mtt-time">
 							{item.start} - {item.end}
 						</div>
-						<div className="ttw-label">{item.label}</div>
+						<div className="mtt-label">{item.label}</div>
 					</div>
 				))}
 			</div>

@@ -1,25 +1,56 @@
-.right-sidebar {
+.mts-right-sidebar {
 	width: 350px;
 	height: 100vh;
 	background-color: #ffffff;
-	padding: 20px;
-	display: flex;
-	flex-direction: column;
 	position: fixed;
 	top: 0;
 	right: 0;
-	z-index: 1000;
+	z-index: 950;
 	user-select: none;
+	box-sizing: border-box;
+	box-shadow: -2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.mts-sidebar-scroll-container {
+	height: 100%;
+	overflow-y: auto;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
 	box-sizing: border-box;
 }
 
-.right-sidebar .timetable-widget {
-	margin-top: 10px;
+.mts-sidebar-calendar-wrapper {
+	flex-shrink: 0;
+}
+
+.mts-sidebar-timetable-wrapper {
+	flex-shrink: 0;
+}
+
+/* Scrollbar styling for the container */
+.mts-sidebar-scroll-container::-webkit-scrollbar {
+	width: 6px;
+}
+
+.mts-sidebar-scroll-container::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 6px;
+}
+
+.mts-sidebar-scroll-container::-webkit-scrollbar-thumb {
+	background: #cccccc;
+	border-radius: 6px;
+}
+
+.mts-sidebar-scroll-container::-webkit-scrollbar-thumb:hover {
+	background: #aaaaaa;
 }
 
 /* Hide the sidebar on mobile view (screen width less than 768px) */
 @media (max-width: 768px) {
-	.right-sidebar {
+	.mts-right-sidebar {
 		display: none;
 	}
 }

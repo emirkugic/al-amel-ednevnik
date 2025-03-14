@@ -49,7 +49,9 @@ const CalendarWidget = () => {
 		const daysInMonth = getDaysInMonth(currentDate);
 
 		for (let i = 0; i < startDay; i++) {
-			days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
+			days.push(
+				<div key={`empty-${i}`} className="mtc-calendar-day mtc-empty"></div>
+			);
 		}
 
 		for (let day = 1; day <= daysInMonth; day++) {
@@ -61,7 +63,10 @@ const CalendarWidget = () => {
 					day
 				).toDateString();
 			days.push(
-				<div key={day} className={`calendar-day ${isToday ? "today" : ""}`}>
+				<div
+					key={day}
+					className={`mtc-calendar-day ${isToday ? "mtc-today" : ""}`}
+				>
 					{day}
 				</div>
 			);
@@ -71,9 +76,9 @@ const CalendarWidget = () => {
 	};
 
 	return (
-		<div className="calendar-widget">
-			<div className="calendar-header">
-				<button onClick={handlePreviousMonth} className="arrow-button">
+		<div className="mtc-calendar-widget">
+			<div className="mtc-calendar-header">
+				<button onClick={handlePreviousMonth} className="mtc-arrow-button">
 					<svg
 						width="16"
 						height="16"
@@ -93,7 +98,7 @@ const CalendarWidget = () => {
 				<span>
 					{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
 				</span>
-				<button onClick={handleNextMonth} className="arrow-button">
+				<button onClick={handleNextMonth} className="mtc-arrow-button">
 					<svg
 						width="16"
 						height="16"
@@ -111,9 +116,9 @@ const CalendarWidget = () => {
 					</svg>
 				</button>
 			</div>
-			<div className="calendar-days">
+			<div className="mtc-calendar-days">
 				{daysOfWeek.map((day) => (
-					<div key={day} className="calendar-day-header">
+					<div key={day} className="mtc-calendar-day-header">
 						{day}
 					</div>
 				))}

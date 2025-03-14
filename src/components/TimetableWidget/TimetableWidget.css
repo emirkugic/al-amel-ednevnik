@@ -1,43 +1,43 @@
-.ttw-widget {
-	max-width: 300px;
+.mtt-widget {
+	width: 100%;
 	background-color: #ffffff;
 	border-radius: 12px;
 	padding: 15px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 	font-family: Arial, sans-serif;
 	color: #333;
-	margin-top: 20px;
+	box-sizing: border-box;
 }
 
-.ttw-timetable {
+.mtt-timetable {
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
 }
 
-.ttw-row {
+.mtt-row {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 8px;
+	padding: 6px 8px;
 	border-radius: 8px;
 	background-color: #f4f4f4;
 	transition: background-color 0.3s ease;
-	font-size: 0.9em;
+	font-size: 1em;
 	color: #5a5a5a;
 }
 
-.ttw-row.ttw-current {
+.mtt-row.mtt-current {
 	background-color: #cce4f6;
 	color: #007acc;
 	font-weight: bold;
 }
 
-.ttw-time {
+.mtt-time {
 	font-weight: bold;
 	color: #007acc;
 }
 
-.ttw-label {
+.mtt-label {
 	color: #5a5a5a;
 }
