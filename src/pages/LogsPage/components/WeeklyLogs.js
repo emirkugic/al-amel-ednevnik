@@ -62,16 +62,18 @@ const WeeklyLogs = () => {
 	const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 
 	// State for log details modal
-	const [selectedLog, setSelectedLog] = useState(null);
+	const [selectedLogId, setSelectedLogId] = useState(null);
+	const [initialLogTitle, setInitialLogTitle] = useState("");
 	const [showDetailsModal, setShowDetailsModal] = useState(false);
+	const [currentRequestId, setCurrentRequestId] = useState(null);
 
-	// Use the custom hook to fetch log details when a log is selected
+	// Use the custom hook to fetch log details when a log ID is selected
 	const {
 		logDetails,
 		loading: detailsLoading,
 		error: detailsError,
 		refetchDetails,
-	} = useClassLogDetails(selectedLog?.id || selectedLog?.classLogId);
+	} = useClassLogDetails(selectedLogId);
 
 	// Update logs when data is loaded
 	useEffect(() => {
@@ -201,14 +203,36 @@ const WeeklyLogs = () => {
 
 	// Handler for clicking on a log entry
 	const handleLogClick = (log) => {
-		setSelectedLog(log);
-		setShowDetailsModal(true);
+		// First, close any open modal
+		setShowDetailsModal(false);
+
+		// Force a re-render cycle to clear any previous data
+		// This is critical to ensure we don't show stale data
+		setSelectedLogId(null);
+
+		// Generate a new request ID
+		const requestId = Date.now().toString();
+		setCurrentRequestId(requestId);
+
+		// Set the initial title from the basic log info
+		setInitialLogTitle(log.lectureTitle);
+
+		// Very brief timeout to ensure state is cleared before proceeding
+		setTimeout(() => {
+			// Open the modal with loading state
+			setShowDetailsModal(true);
+
+			// Set the ID to trigger the data fetch
+			setSelectedLogId(log.id || log.classLogId);
+		}, 10);
 	};
 
 	// Handler for closing the details modal
 	const handleCloseDetailsModal = () => {
 		setShowDetailsModal(false);
-		setSelectedLog(null);
+		setSelectedLogId(null);
+		setInitialLogTitle("");
+		setCurrentRequestId(null);
 	};
 
 	// Handler for editing a log
@@ -504,7 +528,6 @@ const WeeklyLogs = () => {
 
 			{/* Log Details Modal */}
 			<LogDetailsModal
-				log={selectedLog}
 				isOpen={showDetailsModal}
 				onClose={handleCloseDetailsModal}
 				onEdit={handleEditLog}
@@ -512,6 +535,8 @@ const WeeklyLogs = () => {
 				detailedLog={logDetails}
 				loadingDetails={detailsLoading}
 				errorDetails={detailsError}
+				initialTitle={initialLogTitle}
+				requestId={currentRequestId}
 			/>
 		</div>
 	);

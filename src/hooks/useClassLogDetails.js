@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import classLogApi from "../api/classLogApi";
 import useAuth from "./useAuth";
 
@@ -9,47 +9,85 @@ import useAuth from "./useAuth";
  */
 const useClassLogDetails = (logId) => {
 	const [logDetails, setLogDetails] = useState(null);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const { user } = useAuth();
 
+	// Keep track of the current request ID to prevent stale data
+	const currentRequestIdRef = useRef(null);
+
+	// Clear logDetails when logId changes
 	useEffect(() => {
+		// Reset the state immediately when logId changes
+		setLogDetails(null);
+
+		if (!logId || !user?.token) {
+			setLoading(false);
+			return;
+		}
+
 		const fetchLogDetails = async () => {
-			if (!logId || !user?.token) {
-				setLoading(false);
-				return;
-			}
+			// Create a unique ID for this request
+			const requestId = Date.now();
+			currentRequestIdRef.current = requestId;
+
+			setLoading(true);
 
 			try {
-				setLoading(true);
 				const data = await classLogApi.getClassLogDetails(logId, user.token);
-				setLogDetails(data);
-				setError(null);
+
+				// Only update state if this is still the current request
+				if (currentRequestIdRef.current === requestId) {
+					setLogDetails(data);
+					setError(null);
+				}
 			} catch (err) {
-				console.error("Error fetching class log details:", err);
-				setError("Failed to load class log details. Please try again.");
+				// Only update error if this is still the current request
+				if (currentRequestIdRef.current === requestId) {
+					console.error("Error fetching class log details:", err);
+					setError("Failed to load class log details. Please try again.");
+				}
 			} finally {
-				setLoading(false);
+				// Only update loading state if this is still the current request
+				if (currentRequestIdRef.current === requestId) {
+					setLoading(false);
+				}
 			}
 		};
 
 		fetchLogDetails();
+
+		// Cleanup function to handle component unmount or logId change
+		return () => {
+			// Mark any in-progress requests as stale
+			currentRequestIdRef.current = null;
+		};
 	}, [logId, user?.token]);
 
-	// Function to manually refetch the details
+	// Function to manually refetch the details with the same guard
 	const refetchDetails = async () => {
 		if (!logId || !user?.token) return;
+
+		const requestId = Date.now();
+		currentRequestIdRef.current = requestId;
 
 		try {
 			setLoading(true);
 			const data = await classLogApi.getClassLogDetails(logId, user.token);
-			setLogDetails(data);
-			setError(null);
+
+			if (currentRequestIdRef.current === requestId) {
+				setLogDetails(data);
+				setError(null);
+			}
 		} catch (err) {
-			console.error("Error refetching class log details:", err);
-			setError("Failed to reload class log details. Please try again.");
+			if (currentRequestIdRef.current === requestId) {
+				console.error("Error refetching class log details:", err);
+				setError("Failed to reload class log details. Please try again.");
+			}
 		} finally {
-			setLoading(false);
+			if (currentRequestIdRef.current === requestId) {
+				setLoading(false);
+			}
 		}
 	};
 

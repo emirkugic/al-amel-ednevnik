@@ -260,3 +260,41 @@
 		grid-template-columns: 1fr;
 	}
 }
+
+/* Add these styles to your LogDetailsModal.css file */
+
+.ldm-loading-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	min-height: 250px;
+	color: var(--ldm-text-light);
+}
+
+.ldm-spinner {
+	font-size: 32px;
+	color: var(--ldm-primary-color);
+	margin-bottom: 16px;
+}
+
+.ldm-body {
+	min-height: 300px;
+	height: auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.ldm-container {
+	min-width: 500px;
+	min-height: 400px;
+	max-height: 90vh;
+}
+
+@media (max-width: 768px) {
+	.ldm-container {
+		min-width: 90%;
+		width: 90%;
+	}
+}

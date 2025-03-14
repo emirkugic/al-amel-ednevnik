@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faTimes,
@@ -10,12 +10,12 @@ import {
 	faUser,
 	faBookOpen,
 	faSchool,
+	faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import "./LogDetailsModal.css";
 import useAuth from "../../hooks/useAuth";
 
 const LogDetailsModal = ({
-	log,
 	isOpen,
 	onClose,
 	onEdit,
@@ -24,94 +24,23 @@ const LogDetailsModal = ({
 	detailedLog,
 	loadingDetails,
 	errorDetails,
+	initialTitle,
+	requestId,
 }) => {
 	const { user } = useAuth();
 
-	if (!isOpen || (!log && !detailedLog)) return null;
+	// Track which request is currently being rendered
+	const [currentRequest, setCurrentRequest] = useState(null);
 
-	// Determine if we're using the new detailed log format or the old format
-	const isDetailedFormat = !!detailedLog;
-
-	// Extract data based on the format we're using
-	const logData = isDetailedFormat ? detailedLog.classLog : log;
-	const lectureTitle = isDetailedFormat
-		? logData.lectureTitle
-		: log.lectureTitle;
-	const classDate = isDetailedFormat ? logData.classDate : log.classDate;
-	const subjectName = isDetailedFormat ? detailedLog.subjectName : log.subject;
-	const period = isDetailedFormat ? logData.period : log.period;
-	const sequence = isDetailedFormat ? logData.sequence : log.sequence;
-	const teacherId = isDetailedFormat ? logData.teacherId : log.teacherId;
-	const classLogId = isDetailedFormat ? logData.id : log.classLogId;
-	const absentStudents = isDetailedFormat
-		? detailedLog.absentStudents
-		: log.absentStudents;
-
-	const isCreator = teacherId === user?.id;
-
-	const canEdit =
-		isEditable !== undefined ? isEditable : isCreator || user?.role === "Admin";
-	const canDelete = isCreator || user?.role === "Admin";
-
-	// Format date for display
-	const formatDate = (dateString) => {
-		const options = { year: "numeric", month: "short", day: "numeric" };
-		return new Date(dateString).toLocaleDateString(undefined, options);
-	};
-
-	const handleDelete = () => {
-		if (window.confirm("Are you sure you want to delete this log?")) {
-			onDelete(classLogId);
-			onClose();
+	// Reset the rendered data when requestId changes
+	useEffect(() => {
+		if (requestId) {
+			setCurrentRequest(requestId);
 		}
-	};
+	}, [requestId]);
 
-	const handleEdit = () => {
-		// If using detailed format, convert to the format expected by the edit handler
-		if (isDetailedFormat) {
-			const formattedLog = {
-				classLogId: logData.id,
-				departmentId: logData.departmentId,
-				subjectId: logData.subjectId,
-				teacherId: logData.teacherId,
-				lectureTitle: logData.lectureTitle,
-				classDate: logData.classDate,
-				period: logData.period,
-				sequence: logData.sequence,
-				absentStudents: detailedLog.absentStudents || [],
-				subject: detailedLog.subjectName,
-			};
-			onEdit(formattedLog);
-		} else {
-			onEdit(log);
-		}
-		onClose();
-	};
-
-	// Show loading state while fetching details
-	if (loadingDetails) {
-		return (
-			<div className="ldm-overlay">
-				<div className="ldm-container">
-					<div className="ldm-header">
-						<h3>Loading details...</h3>
-						<button
-							className="ldm-close-btn"
-							onClick={onClose}
-							aria-label="Close modal"
-						>
-							<FontAwesomeIcon icon={faTimes} />
-						</button>
-					</div>
-					<div className="ldm-body">
-						<div className="ldm-loading">
-							<div className="ldm-loading-spinner"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		);
-	}
+	// Don't render anything if modal isn't open
+	if (!isOpen) return null;
 
 	// Show error state if there was an error fetching details
 	if (errorDetails) {
@@ -142,6 +71,86 @@ const LogDetailsModal = ({
 			</div>
 		);
 	}
+
+	// Show loading state if data is loading or not yet available
+	const isDataReady = !loadingDetails && detailedLog && detailedLog.classLog;
+
+	if (!isDataReady) {
+		return (
+			<div className="ldm-overlay">
+				<div className="ldm-container">
+					<div className="ldm-header">
+						<h3>{initialTitle || "Loading details..."}</h3>
+						<button
+							className="ldm-close-btn"
+							onClick={onClose}
+							aria-label="Close modal"
+						>
+							<FontAwesomeIcon icon={faTimes} />
+						</button>
+					</div>
+					<div className="ldm-body">
+						<div className="ldm-loading-container">
+							<FontAwesomeIcon icon={faSpinner} spin className="ldm-spinner" />
+							<p>Loading log details...</p>
+						</div>
+					</div>
+					<div className="ldm-footer">
+						<button className="ldm-btn ldm-btn-secondary" onClick={onClose}>
+							<span>Close</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
+	// Extract data from the detailed log
+	const logData = detailedLog.classLog;
+	const lectureTitle = logData.lectureTitle;
+	const classDate = logData.classDate;
+	const subjectName = detailedLog.subjectName;
+	const period = logData.period;
+	const sequence = logData.sequence;
+	const teacherId = logData.teacherId;
+	const classLogId = logData.id;
+	const absentStudents = detailedLog.absentStudents || [];
+
+	const isCreator = teacherId === user?.id;
+
+	const canEdit =
+		isEditable !== undefined ? isEditable : isCreator || user?.role === "Admin";
+	const canDelete = isCreator || user?.role === "Admin";
+
+	// Format date for display
+	const formatDate = (dateString) => {
+		const options = { year: "numeric", month: "short", day: "numeric" };
+		return new Date(dateString).toLocaleDateString(undefined, options);
+	};
+
+	const handleDelete = () => {
+		if (window.confirm("Are you sure you want to delete this log?")) {
+			onDelete(classLogId);
+			onClose();
+		}
+	};
+
+	const handleEdit = () => {
+		const formattedLog = {
+			classLogId: logData.id,
+			departmentId: logData.departmentId,
+			subjectId: logData.subjectId,
+			teacherId: logData.teacherId,
+			lectureTitle: logData.lectureTitle,
+			classDate: logData.classDate,
+			period: logData.period,
+			sequence: logData.sequence,
+			absentStudents: detailedLog.absentStudents || [],
+			subject: detailedLog.subjectName,
+		};
+		onEdit(formattedLog);
+		onClose();
+	};
 
 	return (
 		<div className="ldm-overlay">
@@ -179,35 +188,23 @@ const LogDetailsModal = ({
 							<div className="ldm-detail-value">{sequence}</div>
 						</div>
 
-						{isDetailedFormat && (
-							<>
-								<div className="ldm-detail-row">
-									<div className="ldm-detail-label">
-										<FontAwesomeIcon
-											icon={faUser}
-											className="ldm-detail-icon"
-										/>
-										Teacher
-									</div>
-									<div className="ldm-detail-value">
-										{detailedLog.teacherName}
-									</div>
-								</div>
+						<div className="ldm-detail-row">
+							<div className="ldm-detail-label">
+								<FontAwesomeIcon icon={faUser} className="ldm-detail-icon" />
+								Teacher
+							</div>
+							<div className="ldm-detail-value">{detailedLog.teacherName}</div>
+						</div>
 
-								<div className="ldm-detail-row">
-									<div className="ldm-detail-label">
-										<FontAwesomeIcon
-											icon={faSchool}
-											className="ldm-detail-icon"
-										/>
-										Class
-									</div>
-									<div className="ldm-detail-value">
-										{detailedLog.departmentName}
-									</div>
-								</div>
-							</>
-						)}
+						<div className="ldm-detail-row">
+							<div className="ldm-detail-label">
+								<FontAwesomeIcon icon={faSchool} className="ldm-detail-icon" />
+								Class
+							</div>
+							<div className="ldm-detail-value">
+								{detailedLog.departmentName}
+							</div>
+						</div>
 					</div>
 
 					<div className="ldm-attendance-section">
