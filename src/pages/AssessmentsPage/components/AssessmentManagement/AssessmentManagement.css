@@ -107,6 +107,65 @@
 	overflow: hidden;
 }
 
+/* Mobile-specific controls */
+.asmnt-mobile-controls {
+	display: none;
+	padding: 12px 16px;
+	border-bottom: 1px solid var(--asmnt-gray-200);
+	background-color: var(--asmnt-white);
+	position: sticky;
+	top: 0;
+	z-index: 10;
+}
+
+.asmnt-mobile-title {
+	font-size: 18px;
+	font-weight: 600;
+	color: var(--asmnt-gray-800);
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+
+.asmnt-mobile-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	background-color: var(--asmnt-primary);
+	color: var(--asmnt-white);
+	border: none;
+	border-radius: var(--asmnt-radius);
+	padding: 8px 16px;
+	font-weight: 500;
+	cursor: pointer;
+	width: 100%;
+	font-size: 14px;
+}
+
+.asmnt-mobile-toggle:hover {
+	background-color: var(--asmnt-primary-dark);
+}
+
+.asmnt-mobile-close-form {
+	display: none;
+	margin-top: 16px;
+	padding: 8px 16px;
+	background-color: var(--asmnt-gray-200);
+	color: var(--asmnt-gray-700);
+	border: none;
+	border-radius: var(--asmnt-radius);
+	font-weight: 500;
+	cursor: pointer;
+	width: 100%;
+	font-size: 14px;
+}
+
+.asmnt-mobile-close-form:hover {
+	background-color: var(--asmnt-gray-300);
+}
+
 /* Stop transitions during loading to reduce flickering */
 .asmnt-layout.assessments-loading * {
 	transition: none !important;
@@ -568,45 +627,99 @@
 	}
 }
 
-/* Responsive adjustments */
+/* Mobile Responsive Styles */
 @media (max-width: 768px) {
+	/* Core layout changes */
+	.asmnt-page {
+		height: 100vh;
+		overflow: auto;
+	}
+
 	.asmnt-dashboard-card {
 		margin-left: 0;
 		border-radius: 0;
 		height: 100vh;
 	}
 
-	.asmnt-layout {
-		grid-template-columns: 1fr;
+	/* Hide the header in mobile view */
+	.asmnt-mobile-view .asmnt-header {
+		display: none;
 	}
 
-	.asmnt-sidebar {
+	/* Show mobile controls in mobile view */
+	.asmnt-mobile-view .asmnt-mobile-controls {
+		display: block;
+	}
+
+	/* Adjust layout for mobile */
+	.asmnt-mobile-view .asmnt-layout {
+		grid-template-columns: 1fr;
+		height: auto;
+	}
+
+	/* Sidebar behavior */
+	.asmnt-mobile-view .asmnt-sidebar {
 		border-right: none;
 		border-bottom: 1px solid var(--asmnt-gray-200);
 		padding: 16px;
+		overflow: visible;
+		transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
 	}
 
-	.asmnt-assessment-grid {
-		grid-template-columns: 1fr;
+	/* Collapsed sidebar */
+	.asmnt-mobile-view .asmnt-sidebar-collapsed {
+		max-height: 0;
+		padding: 0 16px;
+		overflow: hidden;
+		opacity: 0;
+		border-bottom: none;
 	}
 
-	.asmnt-form-row {
-		grid-template-columns: 1fr;
+	/* Display close button in mobile expanded form */
+	.asmnt-mobile-view .asmnt-mobile-close-form {
+		display: block;
 	}
 
-	.asmnt-month-nav {
+	/* Content area adjustments */
+	.asmnt-mobile-view .asmnt-content {
+		padding: 0;
+	}
+
+	/* Month navigation */
+	.asmnt-mobile-view .asmnt-month-nav {
 		padding: 16px;
 	}
 
-	.asmnt-month-indicators {
-		width: 100%;
-		overflow-x: auto;
+	.asmnt-mobile-view .asmnt-month-indicators {
 		padding-bottom: 6px;
 		gap: 8px;
 	}
 
-	.asmnt-month-indicator {
+	.asmnt-mobile-view .asmnt-month-indicator {
 		min-width: 80px;
 		padding: 8px;
+	}
+
+	/* Assessment list */
+	.asmnt-mobile-view .asmnt-assessment-list {
+		padding: 16px;
+	}
+
+	.asmnt-mobile-view .asmnt-assessment-grid {
+		grid-template-columns: 1fr;
+		gap: 16px;
+	}
+
+	/* Form layout */
+	.asmnt-mobile-view .asmnt-form-row {
+		grid-template-columns: 1fr;
+		gap: 16px;
+	}
+
+	/* Month summary */
+	.asmnt-mobile-view .asmnt-month-summary {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
 	}
 }

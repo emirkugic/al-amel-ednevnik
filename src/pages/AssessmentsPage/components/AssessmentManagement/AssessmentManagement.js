@@ -16,6 +16,9 @@ import {
 	faCalculator,
 	faChartBar,
 	faChevronRight,
+	faTimes,
+	faChevronDown,
+	faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 import useAuth from "../../../../hooks/useAuth";
 import useAssessments from "../../../../hooks/useAssessments";
@@ -68,8 +71,6 @@ const getAssessmentTypeIcon = (type) => {
 	}
 };
 
-// Assessment Grades Modal Component
-
 const AssessmentManagement = () => {
 	// Get subject ID from URL params
 	const { subject } = useParams();
@@ -90,6 +91,10 @@ const AssessmentManagement = () => {
 	const [loading, setLoading] = useState(false);
 	const [assessmentsLoading, setAssessmentsLoading] = useState(false);
 	const [selectedMonth, setSelectedMonth] = useState("");
+
+	// Mobile responsive state
+	const [isFormExpanded, setIsFormExpanded] = useState(false);
+	const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
 	// Use refs to track previous values and prevent infinite loops
 	const prevDeptRef = useRef(null);
@@ -112,6 +117,25 @@ const AssessmentManagement = () => {
 		(subj) => subj.subjectId === subject
 	);
 	const departmentIds = currentSubject ? currentSubject.departmentId : [];
+
+	// Check for mobile view on resize
+	useEffect(() => {
+		const handleResize = () => {
+			setIsMobile(window.innerWidth <= 768);
+			// Auto-collapse form when switching to mobile
+			if (window.innerWidth <= 768) {
+				setIsFormExpanded(false);
+			}
+		};
+
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
+
+	// Toggle form expanded state
+	const toggleFormExpanded = () => {
+		setIsFormExpanded(!isFormExpanded);
+	};
 
 	// Helper function to get first day of a month
 	const getFirstDayOfMonth = (month) => {
@@ -310,6 +334,11 @@ const AssessmentManagement = () => {
 			setType("Exam");
 			setPoints("");
 			// Don't reset formMonth so it stays on the same month for the next assessment
+
+			// Collapse form on mobile after adding assessment
+			if (isMobile) {
+				setIsFormExpanded(false);
+			}
 		} catch (error) {
 			console.error("Error adding assessment:", error);
 		}
@@ -349,8 +378,12 @@ const AssessmentManagement = () => {
 
 	return (
 		<div className="asmnt-page">
-			<div className="asmnt-dashboard-card">
-				{/* Header */}
+			<div
+				className={`asmnt-dashboard-card ${
+					isMobile ? "asmnt-mobile-view" : ""
+				}`}
+			>
+				{/* Header - hidden on mobile */}
 				<header className="asmnt-header">
 					<div className="asmnt-title">
 						<h1>
@@ -363,14 +396,40 @@ const AssessmentManagement = () => {
 					</div>
 				</header>
 
+				{/* Mobile view controls - only shown on mobile */}
+				{isMobile && (
+					<div className="asmnt-mobile-controls">
+						<div className="asmnt-mobile-title">
+							<FontAwesomeIcon
+								icon={faGraduationCap}
+								className="asmnt-title-icon"
+							/>
+							Assessment Management
+						</div>
+						<button
+							className="asmnt-mobile-toggle"
+							onClick={toggleFormExpanded}
+						>
+							<FontAwesomeIcon
+								icon={isFormExpanded ? faChevronUp : faChevronDown}
+							/>
+							{isFormExpanded ? "Hide Form" : "Add Assessment"}
+						</button>
+					</div>
+				)}
+
 				{/* Main layout */}
 				<div
 					className={`asmnt-layout ${
 						assessmentsLoading ? "assessments-loading" : ""
 					}`}
 				>
-					{/* Sidebar with controls */}
-					<aside className="asmnt-sidebar">
+					{/* Sidebar with controls - collapsible on mobile */}
+					<aside
+						className={`asmnt-sidebar ${
+							isMobile && !isFormExpanded ? "asmnt-sidebar-collapsed" : ""
+						}`}
+					>
 						{/* Semester switch */}
 						<div className="asmnt-semester-switch">
 							<label className="asmnt-semester-switch-label">Semester</label>
@@ -502,6 +561,16 @@ const AssessmentManagement = () => {
 								<FontAwesomeIcon icon={faPlus} /> Add Assessment
 							</button>
 						</div>
+
+						{/* Close button for mobile form */}
+						{isMobile && isFormExpanded && (
+							<button
+								className="asmnt-mobile-close-form"
+								onClick={toggleFormExpanded}
+							>
+								<FontAwesomeIcon icon={faTimes} /> Close Form
+							</button>
+						)}
 					</aside>
 
 					{/* Main content area */}
