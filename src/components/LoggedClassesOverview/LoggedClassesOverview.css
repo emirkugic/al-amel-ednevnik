@@ -1192,3 +1192,176 @@
 		z-index: 1000;
 	}
 }
+
+/* Update the existing media query for mobile */
+@media (max-width: 768px) {
+	.lco-logged-classes-overview {
+		height: 100vh;
+		border-radius: 0;
+		margin: 0;
+	}
+
+	/* Keep header clean */
+	.lco-dashboard-header {
+		padding: 12px 15px;
+	}
+
+	/* Hide stat cards in mobile view */
+	.lco-header-stats {
+		display: none;
+	}
+
+	/* Hide view mode selector in mobile */
+	.lco-view-selector {
+		display: none;
+	}
+
+	/* Simplify control panel */
+	.lco-control-panel {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 10px;
+		padding: 12px 15px;
+	}
+
+	.lco-subject-selector,
+	.lco-search-container,
+	.lco-button-container {
+		width: 100%;
+	}
+
+	/* Always show table view in mobile, regardless of selected view */
+	.lco-logs-table-container {
+		display: block !important;
+		overflow-x: hidden;
+	}
+
+	/* Hide card and calendar views */
+	.lco-logs-card-container,
+	.lco-calendar-view {
+		display: none !important;
+	}
+
+	/* Simplify table for mobile */
+	.lco-logs-table {
+		table-layout: fixed;
+	}
+
+	.lco-logs-table th,
+	.lco-logs-table td {
+		padding: 10px 8px;
+	}
+
+	/* Hide columns we don't need on mobile (Period, Absent, Actions) */
+	.lco-logs-table th:nth-child(2),
+	.lco-logs-table td:nth-child(2),
+	.lco-logs-table th:nth-child(5),
+	.lco-logs-table td:nth-child(5),
+	.lco-logs-table th:nth-child(6),
+	.lco-logs-table td:nth-child(6) {
+		display: none;
+	}
+
+	/* Adjust column widths for mobile */
+	.lco-date-header,
+	.lco-date-cell {
+		width: 35%;
+	}
+
+	.lco-sequence-header,
+	.lco-sequence-cell {
+		width: 20%;
+	}
+
+	/* Title column takes remaining space */
+	.lco-logs-table th:nth-child(3),
+	.lco-logs-table td:nth-child(3) {
+		width: 45%;
+	}
+
+	/* Ensure title is properly truncated on mobile */
+	.lco-lecture-title {
+		max-width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		display: block;
+		font-size: 14px;
+	}
+
+	/* Adjust pagination for mobile */
+	.lco-pagination-container {
+		flex-direction: column;
+		gap: 10px;
+		align-items: center;
+		padding: 12px 15px;
+	}
+
+	/* Simplify empty state for mobile */
+	.lco-empty-state {
+		padding: 30px 15px;
+	}
+
+	.lco-empty-icon {
+		font-size: 50px;
+		margin-bottom: 15px;
+	}
+
+	.lco-empty-title {
+		font-size: 18px;
+	}
+
+	.lco-empty-text {
+		font-size: 14px;
+	}
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+	/* Further simplify for very small screens */
+	.lco-logs-table th,
+	.lco-logs-table td {
+		padding: 8px 5px;
+		font-size: 13px;
+	}
+
+	.lco-date-cell .lco-date-container {
+		font-size: 13px;
+	}
+
+	.lco-lecture-title {
+		font-size: 13px;
+	}
+
+	.lco-sequence-cell .lco-sequence-container {
+		width: 22px;
+		height: 22px;
+		font-size: 12px;
+	}
+
+	/* Simplify pagination on very small screens */
+	.lco-pagination-controls {
+		gap: 3px;
+	}
+
+	.lco-page-button {
+		min-width: 28px;
+		height: 28px;
+		font-size: 12px;
+	}
+	.lco-header-subtitle,
+	.lco-pagination-info,
+	.lco-control-group.lco-search-container {
+		display: none;
+	}
+
+	.lco-control-group.lco-button-container {
+		margin-top: -20px;
+		margin-bottom: -5px;
+	}
+	.lco-pagination-container,
+	.lco-logs-table-container {
+		margin-left: -20px;
+		margin-right: -20px;
+	}
+}
