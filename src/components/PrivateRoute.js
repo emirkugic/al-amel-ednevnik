@@ -6,9 +6,9 @@ const PrivateRoute = () => {
 	const { user, loading } = useAuth();
 	const location = useLocation();
 
-	// Show a loading indicator or nothing while checking authentication
+	// Show a loading indicator while checking authentication
 	if (loading) {
-		return <div className="loading-container">Loading...</div>; // You can replace this with a spinner or other loading UI
+		return <div className="loading-container">Loading...</div>;
 	}
 
 	// Check if the route is restricted to admins only
@@ -16,6 +16,7 @@ const PrivateRoute = () => {
 		return <Navigate to="/" />; // Redirect non-admins to the home page
 	}
 
+	// Normal auth check
 	return user ? <Outlet /> : <Navigate to="/login" />;
 };
 

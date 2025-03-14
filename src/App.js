@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
 	BrowserRouter as Router,
 	Routes,
@@ -13,9 +13,11 @@ import {
 import PrivateRoute from "./components/PrivateRoute";
 import Sidebar from "./components/Sidebar/Sidebar";
 import RightSidebar from "./components/RightSidebar/RightSidebar";
+import MaintenancePage from "./pages/MaintenancePage/MaintenancePage";
+import useAuth from "./hooks/useAuth";
 
 // temp
-import ClassGradesPage from "./pages/DepartmentPage/ClassGradesPage/ClassGradesPage"; // ovo onaj v3 stranica za ocjene, nemoj brisati
+import ClassGradesPage from "./pages/DepartmentPage/ClassGradesPage/ClassGradesPage";
 
 import {
 	LecturesPage,
@@ -30,16 +32,34 @@ import {
 	ClassManagement,
 	Dashboard,
 	NotFoundPage,
-	MaintenancePage,
 } from "./pages";
 
 import "./App.css";
 
 const AppContent = () => {
 	const location = useLocation();
+	const { user } = useAuth();
+	const [isMaintenanceTime, setIsMaintenanceTime] = useState(false);
+
+	useEffect(() => {
+		// Function to check if current time is within maintenance window
+		const checkMaintenanceWindow = () => {
+			const now = new Date();
+			const hour = now.getHours();
+
+			// Check if time is between 23:00h (11 PM) and 1:00h (1 AM)
+			const inMaintenanceWindow = hour >= 23 || hour < 1;
+			setIsMaintenanceTime(inMaintenanceWindow);
+		};
+
+		checkMaintenanceWindow();
+
+		const intervalId = setInterval(checkMaintenanceWindow, 60000);
+
+		return () => clearInterval(intervalId);
+	}, []);
 
 	const isLoginPage = location.pathname === "/login";
-	const isMaintenancePage = location.pathname === "/maintenance";
 	const is404Page =
 		!isLoginPage &&
 		![
@@ -52,12 +72,18 @@ const AppContent = () => {
 			"/grades",
 			"/teachers",
 			"/classes",
-			"/maintenance",
 		].includes(location.pathname) &&
 		!location.pathname.startsWith("/lectures/") &&
 		!location.pathname.startsWith("/courses/");
 
-	const hideSidebars = isLoginPage || is404Page || isMaintenancePage;
+	const isAdmin = user?.role === "Admin";
+
+	const hideSidebars =
+		(isMaintenanceTime && !isAdmin) || isLoginPage || is404Page;
+
+	if (isMaintenanceTime && !isAdmin && location.pathname !== "/login") {
+		return <MaintenancePage />;
+	}
 
 	return (
 		<div className="App">
@@ -79,7 +105,6 @@ const AppContent = () => {
 						<Route path="/teachers" element={<TeachersPage />} />{" "}
 						<Route path="/classes" element={<ClassManagement />} />
 						<Route path="/courses/:subject" element={<AssessmentPage />} />
-						<Route path="/maintenance" element={<MaintenancePage />} />
 					</Route>
 				</Routes>
 			</div>
