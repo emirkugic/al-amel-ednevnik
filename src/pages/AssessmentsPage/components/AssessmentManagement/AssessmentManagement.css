@@ -722,4 +722,7 @@
 		align-items: flex-start;
 		gap: 8px;
 	}
+	.asmnt-section-title {
+		display: none;
+	}
 }
