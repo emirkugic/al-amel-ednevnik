@@ -475,7 +475,8 @@ const LoggedClassesOverview = ({ departmentId }) => {
 						>
 							<FontAwesomeIcon icon={faClipboardList} />
 						</button>
-						<button
+						{/* temporary disabled */}
+						{/* <button
 							className={`lco-view-button ${
 								viewMode === "calendar" ? "active" : ""
 							}`}
@@ -483,7 +484,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 							title="Calendar View"
 						>
 							<FontAwesomeIcon icon={faCalendarAlt} />
-						</button>
+						</button> */}
 					</div>
 				</div>
 
