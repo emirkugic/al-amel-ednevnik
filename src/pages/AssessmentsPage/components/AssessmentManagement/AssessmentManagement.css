@@ -40,6 +40,10 @@
 	.asmnt-page {
 		margin-left: -15px;
 	}
+
+	.asmnt-title h1 {
+		font-size: 24px !important;
+	}
 }
 
 /* Card layout similar to subject dashboard */
