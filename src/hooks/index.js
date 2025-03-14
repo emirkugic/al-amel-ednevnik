@@ -11,3 +11,4 @@ export { default as useStudents } from "./useStudents";
 export { default as useSubjects } from "./useSubjects";
 export { default as useTeachers } from "./useTeachers";
 export { default as useUpdateLog } from "./useUpdateLog";
+export { default as useClassLogDetails } from "./useClassLogDetails.js";

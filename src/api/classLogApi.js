@@ -17,6 +17,14 @@ const classLogApi = {
 		return response.data;
 	},
 
+	// Get detailed class log information
+	getClassLogDetails: async (id, token) => {
+		const response = await apiClient.get(`/ClassLog/details/${id}`, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		return response.data;
+	},
+
 	// Create a new class log
 	createClassLog: async (classLogData, token) => {
 		const response = await apiClient.post("/ClassLog", classLogData, {

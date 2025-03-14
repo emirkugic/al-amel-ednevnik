@@ -15,9 +15,12 @@ import useDepartments from "../../../hooks/useDepartments";
 import useTeachers from "../../../hooks/useTeachers";
 import useSubjects from "../../../hooks/useSubjects";
 import useAuth from "../../../hooks/useAuth";
+import useClassLogDetails from "../../../hooks/useClassLogDetails";
+import classLogApi from "../../../api/classLogApi";
 
 // Import modal component
 import ClassLogFormModal from "../../../components/ClassLogFormModal/ClassLogFormModal";
+import LogDetailsModal from "../../../components/LogDetailsModal/LogDetailsModal";
 
 // Import styling
 import "./WeeklyLogs.css";
@@ -57,6 +60,18 @@ const WeeklyLogs = () => {
 	const [missingPeriod, setMissingPeriod] = useState("");
 	const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 	const [selectedDayIndex, setSelectedDayIndex] = useState(0);
+
+	// State for log details modal
+	const [selectedLog, setSelectedLog] = useState(null);
+	const [showDetailsModal, setShowDetailsModal] = useState(false);
+
+	// Use the custom hook to fetch log details when a log is selected
+	const {
+		logDetails,
+		loading: detailsLoading,
+		error: detailsError,
+		refetchDetails,
+	} = useClassLogDetails(selectedLog?.id || selectedLog?.classLogId);
 
 	// Update logs when data is loaded
 	useEffect(() => {
@@ -182,6 +197,48 @@ const WeeklyLogs = () => {
 		setMissingDate(date);
 		setMissingPeriod(period.toString());
 		setShowModal(true);
+	};
+
+	// Handler for clicking on a log entry
+	const handleLogClick = (log) => {
+		setSelectedLog(log);
+		setShowDetailsModal(true);
+	};
+
+	// Handler for closing the details modal
+	const handleCloseDetailsModal = () => {
+		setShowDetailsModal(false);
+		setSelectedLog(null);
+	};
+
+	// Handler for editing a log
+	const handleEditLog = (log) => {
+		// Redirect to edit page or show edit modal
+		console.log("Edit log:", log);
+		// For now, we'll just log the action
+		alert("Edit functionality to be implemented");
+	};
+
+	// Handler for deleting a log
+	const handleDeleteLog = async (logId) => {
+		if (!window.confirm("Are you sure you want to delete this log?")) {
+			return;
+		}
+
+		try {
+			await classLogApi.deleteClassLog(logId, token);
+
+			// Remove the deleted log from the state
+			setAllLogs((prev) =>
+				prev.filter((log) => log.id !== logId && log.classLogId !== logId)
+			);
+
+			// Close the modal
+			handleCloseDetailsModal();
+		} catch (error) {
+			console.error("Error deleting class log:", error);
+			alert("Failed to delete class log. Please try again.");
+		}
 	};
 
 	// Determine which days to render based on viewport
@@ -382,7 +439,10 @@ const WeeklyLogs = () => {
 															<span>Add</span>
 														</div>
 													) : (
-														<div className="log-entry">
+														<div
+															className="log-entry"
+															onClick={() => handleLogClick(logs[0])}
+														>
 															<div
 																className="log-title"
 																title={logs[0].lectureTitle}
@@ -441,6 +501,18 @@ const WeeklyLogs = () => {
 					subjects={subjects}
 				/>
 			)}
+
+			{/* Log Details Modal */}
+			<LogDetailsModal
+				log={selectedLog}
+				isOpen={showDetailsModal}
+				onClose={handleCloseDetailsModal}
+				onEdit={handleEditLog}
+				onDelete={handleDeleteLog}
+				detailedLog={logDetails}
+				loadingDetails={detailsLoading}
+				errorDetails={detailsError}
+			/>
 		</div>
 	);
 };
