@@ -28,15 +28,15 @@ import {
 import "./LoggedClassesOverview.css";
 
 // Import existing components and APIs
-import ClassLogFormModal from "../ClassLogFormModal/ClassLogFormModal";
-import LogDetailsModal from "../LogDetailsModal/LogDetailsModal";
-import EditLogModal from "./EditLogModal";
-import teacherApi from "../../api/teacherApi";
-import subjectApi from "../../api/subjectApi";
-import departmentApi from "../../api/departmentApi";
-import useAuth from "../../hooks/useAuth";
-import { ClassLogsContext } from "../../contexts/ClassLogsContext";
-import classLogApi from "../../api/classLogApi";
+import ClassLogFormModal from "../../../components/ClassLogFormModal/ClassLogFormModal";
+import LogDetailsModal from "../../../components/LogDetailsModal/LogDetailsModal";
+import EditLogModal from "../../../components/EditLogModal/EditLogModal";
+import teacherApi from "../../../api/teacherApi";
+import subjectApi from "../../../api/subjectApi";
+import departmentApi from "../../../api/departmentApi";
+import useAuth from "../../../hooks/useAuth";
+import { ClassLogsContext } from "../../../contexts/ClassLogsContext";
+import classLogApi from "../../../api/classLogApi";
 
 const LoggedClassesOverview = ({ departmentId }) => {
 	const { user } = useAuth();
