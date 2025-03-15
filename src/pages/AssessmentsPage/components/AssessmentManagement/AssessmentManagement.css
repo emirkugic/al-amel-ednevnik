@@ -735,6 +735,7 @@
 		border-radius: var(--asmnt-radius);
 		margin: 0 16px 16px 16px;
 		border: 1px solid var(--asmnt-gray-200);
+		margin-top: 15px;
 	}
 
 	.asmnt-mobile-view .asmnt-mobile-form-actions {

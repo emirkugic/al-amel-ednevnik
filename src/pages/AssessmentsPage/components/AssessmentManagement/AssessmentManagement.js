@@ -122,17 +122,17 @@ const AssessmentManagement = () => {
 	useEffect(() => {
 		const handleResize = () => {
 			const newIsMobile = window.innerWidth <= 768;
-			setIsMobile(newIsMobile);
 
-			// Auto-collapse form when switching to mobile
-			if (newIsMobile) {
+			if (newIsMobile && !isMobile) {
 				setFormVisible(false);
 			}
+
+			setIsMobile(newIsMobile);
 		};
 
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
-	}, []);
+	}, [isMobile]); // Add isMobile to dependencies
 
 	// Toggle form visibility
 	const toggleForm = () => {
