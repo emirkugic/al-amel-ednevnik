@@ -690,7 +690,7 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 								<span>Full Points</span>
 							</button>
 
-							<button
+							{/* <button
 								className="agm-action-button"
 								disabled={selectedRows.length === 0}
 								onClick={() =>
@@ -700,7 +700,7 @@ const AssessmentGradesModal = ({ assessment, token, onClose }) => {
 							>
 								<FontAwesomeIcon icon={faPercentage} />
 								<span>Half Points</span>
-							</button>
+							</button> */}
 
 							<button
 								className="agm-action-button"
