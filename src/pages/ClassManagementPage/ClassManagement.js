@@ -18,10 +18,13 @@ import departmentApi from "../../api/departmentApi";
 import subjectApi from "../../api/subjectApi";
 import teacherApi from "../../api/teacherApi";
 import useAuth from "../../hooks/useAuth";
+import { useLanguage } from "../../contexts";
 import "./ClassManagement.css";
 
 const ClassManagement = () => {
 	const { user } = useAuth();
+	const { t } = useLanguage();
+
 	// State for classes, teachers, and subjects
 	const [classes, setClasses] = useState([]);
 	const [teachers, setTeachers] = useState([]);
@@ -297,11 +300,7 @@ const ClassManagement = () => {
 
 	// Handler for deleting a class
 	const handleDeleteClass = async (classId) => {
-		if (
-			window.confirm(
-				"Are you sure you want to delete this class and all its departments?"
-			)
-		) {
+		if (window.confirm(t("classes.deleteClassConfirm"))) {
 			try {
 				await classApi.deleteClass(classId, user.token);
 				setClasses(classes.filter((c) => c.id !== classId));
@@ -313,7 +312,7 @@ const ClassManagement = () => {
 
 	// Handler for deleting a department
 	const handleDeleteDepartment = async (classId, departmentId) => {
-		if (window.confirm("Are you sure you want to delete this department?")) {
+		if (window.confirm(t("classes.deleteDepartmentConfirm"))) {
 			try {
 				await departmentApi.deleteDepartment(departmentId, user.token);
 
@@ -388,17 +387,15 @@ const ClassManagement = () => {
 		<div className="cm-container">
 			<div className="cm-header">
 				<div className="cm-header-title">
-					<h1>Class Management</h1>
-					<p className="cm-subtitle">
-						Manage your school classes and departments
-					</p>
+					<h1>{t("classes.pageTitle")}</h1>
+					<p className="cm-subtitle">{t("classes.subtitle")}</p>
 				</div>
 				<button
 					className="cm-btn cm-btn-primary"
 					onClick={() => setShowClassModal(true)}
 				>
 					<FontAwesomeIcon icon={faPlus} className="cm-btn-icon-left" />
-					Create New Class
+					{t("classes.createNewClass")}
 				</button>
 			</div>
 
@@ -407,14 +404,14 @@ const ClassManagement = () => {
 					<div className="cm-empty-icon">
 						<FontAwesomeIcon icon={faGraduationCap} />
 					</div>
-					<h2>No Classes Created</h2>
-					<p>Add your first class to get started with class management</p>
+					<h2>{t("classes.noClassesTitle")}</h2>
+					<p>{t("classes.noClassesDesc")}</p>
 					<button
 						className="cm-btn cm-btn-primary"
 						onClick={() => setShowClassModal(true)}
 					>
 						<FontAwesomeIcon icon={faPlus} className="cm-btn-icon-left" />
-						Create Class
+						{t("classes.createClass")}
 					</button>
 				</div>
 			) : (
@@ -428,7 +425,7 @@ const ClassManagement = () => {
 											icon={faGraduationCap}
 											className="cm-header-icon"
 										/>
-										Grade {cls.grade}
+										{t("classes.grade")} {cls.grade}
 									</h2>
 									<div className="cm-badge-container">
 										{cls.subjects.slice(0, 3).map((subj) => (
@@ -452,19 +449,19 @@ const ClassManagement = () => {
 											icon={faPlus}
 											className="cm-btn-icon-left"
 										/>
-										Add Department
+										{t("classes.addDepartment")}
 									</button>
 									<button
 										className="cm-btn cm-btn-icon cm-btn-edit"
 										onClick={() => handleOpenEditClass(cls)}
-										aria-label="Edit class"
+										aria-label={t("classes.editClass")}
 									>
 										<FontAwesomeIcon icon={faEdit} />
 									</button>
 									<button
 										className="cm-btn cm-btn-icon cm-btn-danger-subtle"
 										onClick={() => handleDeleteClass(cls.id)}
-										aria-label="Delete class"
+										aria-label={t("classes.deleteClass")}
 									>
 										<FontAwesomeIcon icon={faTrashAlt} />
 									</button>
@@ -478,7 +475,7 @@ const ClassManagement = () => {
 											icon={faChalkboardTeacher}
 											className="cm-empty-dept-icon"
 										/>
-										<p>No departments created for this class</p>
+										<p>{t("classes.noDepartments")}</p>
 										<button
 											className="cm-btn cm-btn-outline"
 											onClick={() => handleAddDepartment(cls)}
@@ -487,28 +484,27 @@ const ClassManagement = () => {
 												icon={faPlus}
 												className="cm-btn-icon-left"
 											/>
-											Add Department
+											{t("classes.addDepartment")}
 										</button>
 									</div>
 								) : (
 									cls.departments.map((dept) => (
 										<div className="cm-dept-card" key={dept.id}>
-											<div className="cm-dept-name">
-												{/* {cls.grade} */}
-												{dept.name}
-											</div>
+											<div className="cm-dept-name">{dept.name}</div>
 											<div className="cm-dept-teacher">
 												<FontAwesomeIcon
 													icon={faUser}
 													className="cm-dept-icon"
 												/>
-												<span>{dept.teacherName || "No teacher assigned"}</span>
+												<span>
+													{dept.teacherName || t("classes.noTeacherAssigned")}
+												</span>
 											</div>
 											<div className="cm-dept-actions">
 												<button
 													className="cm-btn cm-btn-icon cm-btn-edit"
 													onClick={() => handleOpenEditDepartment(cls, dept)}
-													aria-label="Edit department"
+													aria-label={t("classes.editDepartment")}
 												>
 													<FontAwesomeIcon icon={faEdit} />
 												</button>
@@ -517,7 +513,7 @@ const ClassManagement = () => {
 													onClick={() =>
 														handleDeleteDepartment(cls.id, dept.id)
 													}
-													aria-label="Delete department"
+													aria-label={t("common.delete")}
 												>
 													<FontAwesomeIcon icon={faTrashAlt} />
 												</button>
@@ -541,26 +537,26 @@ const ClassManagement = () => {
 									icon={faGraduationCap}
 									className="cm-modal-header-icon"
 								/>
-								Create New Class
+								{t("classes.createNewClass")}
 							</h2>
 							<button
 								className="cm-btn cm-btn-icon"
 								onClick={() => setShowClassModal(false)}
-								aria-label="Close modal"
+								aria-label={t("common.cancel")}
 							>
 								<FontAwesomeIcon icon={faTimes} />
 							</button>
 						</div>
 						<div className="cm-modal-body">
 							<div className="cm-form-group">
-								<label htmlFor="class-grade">Grade:</label>
+								<label htmlFor="class-grade">{t("classes.gradeLabel")}</label>
 								<select
 									id="class-grade"
 									className="cm-select"
 									value={newGrade}
 									onChange={(e) => setNewGrade(e.target.value)}
 								>
-									<option value="">Select Grade</option>
+									<option value="">{t("classes.selectGrade")}</option>
 									{[...Array(12)].map((_, i) => (
 										<option key={i + 1} value={i + 1}>
 											{i + 1}
@@ -569,7 +565,7 @@ const ClassManagement = () => {
 								</select>
 							</div>
 							<div className="cm-form-group">
-								<label>Subjects:</label>
+								<label>{t("classes.subjects")}</label>
 								<div className="cm-subject-selector">
 									{subjects.map((subject) => (
 										<div className="cm-subject-option" key={subject.id}>
@@ -592,7 +588,7 @@ const ClassManagement = () => {
 								className="cm-btn cm-btn-secondary"
 								onClick={() => setShowClassModal(false)}
 							>
-								Cancel
+								{t("classes.cancel")}
 							</button>
 							<button
 								className="cm-btn cm-btn-primary"
@@ -600,7 +596,7 @@ const ClassManagement = () => {
 								disabled={!newGrade || selectedSubjects.length === 0}
 							>
 								<FontAwesomeIcon icon={faPlus} className="cm-btn-icon-left" />
-								Create Class
+								{t("classes.createClass")}
 							</button>
 						</div>
 					</div>
@@ -617,26 +613,28 @@ const ClassManagement = () => {
 									icon={faEdit}
 									className="cm-modal-header-icon"
 								/>
-								Edit Class
+								{t("classes.editClass")}
 							</h2>
 							<button
 								className="cm-btn cm-btn-icon"
 								onClick={() => setShowEditClassModal(false)}
-								aria-label="Close modal"
+								aria-label={t("common.cancel")}
 							>
 								<FontAwesomeIcon icon={faTimes} />
 							</button>
 						</div>
 						<div className="cm-modal-body">
 							<div className="cm-form-group">
-								<label htmlFor="edit-class-grade">Grade:</label>
+								<label htmlFor="edit-class-grade">
+									{t("classes.gradeLabel")}
+								</label>
 								<select
 									id="edit-class-grade"
 									className="cm-select"
 									value={editGrade}
 									onChange={(e) => setEditGrade(e.target.value)}
 								>
-									<option value="">Select Grade</option>
+									<option value="">{t("classes.selectGrade")}</option>
 									{[...Array(12)].map((_, i) => (
 										<option key={i + 1} value={i + 1}>
 											{i + 1}
@@ -645,7 +643,7 @@ const ClassManagement = () => {
 								</select>
 							</div>
 							<div className="cm-form-group">
-								<label>Subjects:</label>
+								<label>{t("classes.subjects")}</label>
 								<div className="cm-subject-selector">
 									{subjects.map((subject) => (
 										<div className="cm-subject-option" key={subject.id}>
@@ -668,7 +666,7 @@ const ClassManagement = () => {
 								className="cm-btn cm-btn-secondary"
 								onClick={() => setShowEditClassModal(false)}
 							>
-								Cancel
+								{t("classes.cancel")}
 							</button>
 							<button
 								className="cm-btn cm-btn-primary"
@@ -676,7 +674,7 @@ const ClassManagement = () => {
 								disabled={!editGrade || editSubjects.length === 0}
 							>
 								<FontAwesomeIcon icon={faSave} className="cm-btn-icon-left" />
-								Save Changes
+								{t("classes.saveChanges")}
 							</button>
 						</div>
 					</div>
@@ -693,37 +691,42 @@ const ClassManagement = () => {
 									icon={faChalkboardTeacher}
 									className="cm-modal-header-icon"
 								/>
-								Add Department to Grade {selectedClassForDept?.grade}
+								{t("classes.addDepartment")} {t("classes.grade")}{" "}
+								{selectedClassForDept?.grade}
 							</h2>
 							<button
 								className="cm-btn cm-btn-icon"
 								onClick={() => setShowDepartmentModal(false)}
-								aria-label="Close modal"
+								aria-label={t("common.cancel")}
 							>
 								<FontAwesomeIcon icon={faTimes} />
 							</button>
 						</div>
 						<div className="cm-modal-body">
 							<div className="cm-form-group">
-								<label htmlFor="department-name">Department Name:</label>
+								<label htmlFor="department-name">
+									{t("classes.departmentName")}
+								</label>
 								<input
 									id="department-name"
 									type="text"
 									className="cm-input"
-									placeholder="e.g., A, B, C"
+									placeholder={t("classes.departmentPlaceholder")}
 									value={newDepartmentName}
 									onChange={(e) => setNewDepartmentName(e.target.value)}
 								/>
 							</div>
 							<div className="cm-form-group">
-								<label htmlFor="class-teacher">Class Teacher:</label>
+								<label htmlFor="class-teacher">
+									{t("classes.classTeacher")}
+								</label>
 								<select
 									id="class-teacher"
 									className="cm-select"
 									value={selectedTeacher}
 									onChange={(e) => setSelectedTeacher(e.target.value)}
 								>
-									<option value="">Select Class Teacher</option>
+									<option value="">{t("classes.selectTeacher")}</option>
 									{teachers.map((teacher) => (
 										<option key={teacher.id} value={teacher.id}>
 											{teacher.firstName} {teacher.lastName}
@@ -737,7 +740,7 @@ const ClassManagement = () => {
 								className="cm-btn cm-btn-secondary"
 								onClick={() => setShowDepartmentModal(false)}
 							>
-								Cancel
+								{t("classes.cancel")}
 							</button>
 							<button
 								className="cm-btn cm-btn-primary"
@@ -745,7 +748,7 @@ const ClassManagement = () => {
 								disabled={!newDepartmentName}
 							>
 								<FontAwesomeIcon icon={faPlus} className="cm-btn-icon-left" />
-								Add Department
+								{t("classes.addDepartment")}
 							</button>
 						</div>
 					</div>
@@ -762,37 +765,41 @@ const ClassManagement = () => {
 									icon={faEdit}
 									className="cm-modal-header-icon"
 								/>
-								Edit Department
+								{t("classes.editDepartment")}
 							</h2>
 							<button
 								className="cm-btn cm-btn-icon"
 								onClick={() => setShowEditDepartmentModal(false)}
-								aria-label="Close modal"
+								aria-label={t("common.cancel")}
 							>
 								<FontAwesomeIcon icon={faTimes} />
 							</button>
 						</div>
 						<div className="cm-modal-body">
 							<div className="cm-form-group">
-								<label htmlFor="edit-department-name">Department Name:</label>
+								<label htmlFor="edit-department-name">
+									{t("classes.departmentName")}
+								</label>
 								<input
 									id="edit-department-name"
 									type="text"
 									className="cm-input"
-									placeholder="e.g., A, B, C"
+									placeholder={t("classes.departmentPlaceholder")}
 									value={editDepartmentName}
 									onChange={(e) => setEditDepartmentName(e.target.value)}
 								/>
 							</div>
 							<div className="cm-form-group">
-								<label htmlFor="edit-class-teacher">Class Teacher:</label>
+								<label htmlFor="edit-class-teacher">
+									{t("classes.classTeacher")}
+								</label>
 								<select
 									id="edit-class-teacher"
 									className="cm-select"
 									value={editTeacher}
 									onChange={(e) => setEditTeacher(e.target.value)}
 								>
-									<option value="">Select Class Teacher</option>
+									<option value="">{t("classes.selectTeacher")}</option>
 									{teachers.map((teacher) => (
 										<option key={teacher.id} value={teacher.id}>
 											{teacher.firstName} {teacher.lastName}
@@ -806,7 +813,7 @@ const ClassManagement = () => {
 								className="cm-btn cm-btn-secondary"
 								onClick={() => setShowEditDepartmentModal(false)}
 							>
-								Cancel
+								{t("classes.cancel")}
 							</button>
 							<button
 								className="cm-btn cm-btn-primary"
@@ -814,7 +821,7 @@ const ClassManagement = () => {
 								disabled={!editDepartmentName}
 							>
 								<FontAwesomeIcon icon={faSave} className="cm-btn-icon-left" />
-								Save Changes
+								{t("classes.saveChanges")}
 							</button>
 						</div>
 					</div>

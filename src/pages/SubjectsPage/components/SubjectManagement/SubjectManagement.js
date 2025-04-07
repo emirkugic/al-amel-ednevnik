@@ -17,9 +17,11 @@ import {
 import AddEditSubjectModal from "../AddEditSubjectModal/AddEditSubjectModal";
 import subjectApi from "../../../../api/subjectApi";
 import useAuth from "../../../../hooks/useAuth";
+import { useLanguage } from "../../../../contexts";
 
 const SubjectManagement = () => {
 	const { user } = useAuth();
+	const { t } = useLanguage();
 	const [subjects, setSubjects] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalData, setModalData] = useState(null);
@@ -127,7 +129,7 @@ const SubjectManagement = () => {
 
 	const handleDelete = async (id, e) => {
 		e.stopPropagation();
-		if (window.confirm("Are you sure you want to delete this subject?")) {
+		if (window.confirm(t("subjects.deleteConfirm"))) {
 			try {
 				await subjectApi.deleteSubject(id, user.token);
 				setSubjects((prev) => prev.filter((subject) => subject.id !== id));
@@ -157,7 +159,7 @@ const SubjectManagement = () => {
 		return (
 			<div className="subject-dashboard-card subject-loading-card">
 				<div className="subject-loading-spinner"></div>
-				<p>Loading...</p>
+				<p>{t("common.loading")}</p>
 			</div>
 		);
 	}
@@ -167,15 +169,16 @@ const SubjectManagement = () => {
 			{/* Header */}
 			<div className="subject-header">
 				<div className="subject-title">
-					<h1>Subject Management</h1>
+					<h1>{t("subjects.pageTitle")}</h1>
 					<p>
 						<span className="subject-stat-pill">
-							<FontAwesomeIcon icon={faBook} /> {subjects.length} subjects
+							<FontAwesomeIcon icon={faBook} /> {subjects.length}{" "}
+							{t("subjects.subjectsCount")}
 						</span>
 					</p>
 				</div>
 				<button className="subject-add-btn" onClick={openAddModal}>
-					<FontAwesomeIcon icon={faPlus} /> Add New Subject
+					<FontAwesomeIcon icon={faPlus} /> {t("subjects.addNewSubject")}
 				</button>
 			</div>
 
@@ -183,17 +186,19 @@ const SubjectManagement = () => {
 			{isLoading ? (
 				<div className="subject-loading-container">
 					<div className="subject-loading-spinner"></div>
-					<p>Loading subjects...</p>
+					<p>{t("subjects.loading")}</p>
 				</div>
 			) : filteredSubjects.length > 0 ? (
 				<div className="subject-table-container">
 					<table className="subject-table">
 						<thead>
 							<tr>
-								<th>Subject</th>
-								<th>Grade Levels</th>
-								<th className="subject-count-col">Grade Count</th>
-								<th className="subject-actions-col">Actions</th>
+								<th>{t("subjects.subject")}</th>
+								<th>{t("subjects.gradeLevels")}</th>
+								<th className="subject-count-col">
+									{t("subjects.gradeCount")}
+								</th>
+								<th className="subject-actions-col">{t("subjects.actions")}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -218,7 +223,7 @@ const SubjectManagement = () => {
 												))
 											) : (
 												<span className="subject-no-grades-text">
-													No grades assigned
+													{t("subjects.noGradesAssigned")}
 												</span>
 											)}
 										</div>
@@ -233,14 +238,14 @@ const SubjectManagement = () => {
 											<button
 												className="subject-edit-btn"
 												onClick={(e) => openEditModal(subject, e)}
-												aria-label="Edit subject"
+												aria-label={t("subjects.editSubject")}
 											>
 												<FontAwesomeIcon icon={faEdit} />
 											</button>
 											<button
 												className="subject-delete-btn"
 												onClick={(e) => handleDelete(subject.id, e)}
-												aria-label="Delete subject"
+												aria-label={t("subjects.deleteSubject")}
 											>
 												<FontAwesomeIcon icon={faTrash} />
 											</button>
@@ -254,9 +259,9 @@ const SubjectManagement = () => {
 			) : (
 				<div className="subject-no-results">
 					<FontAwesomeIcon icon={faBook} className="subject-no-results-icon" />
-					<p>No subjects found matching your criteria.</p>
+					<p>{t("subjects.noSubjectsFound")}</p>
 					<button onClick={clearFilters}>
-						<FontAwesomeIcon icon={faTimes} /> Clear Filters
+						<FontAwesomeIcon icon={faTimes} /> {t("subjects.clearFilters")}
 					</button>
 				</div>
 			)}

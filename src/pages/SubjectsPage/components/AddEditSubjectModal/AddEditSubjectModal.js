@@ -7,8 +7,10 @@ import {
 	faBook,
 	faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import { useLanguage } from "../../../../contexts";
 
 const AddEditSubjectModal = ({ isOpen, onClose, onSave, initialData }) => {
+	const { t } = useLanguage();
 	const [subjectName, setSubjectName] = useState(initialData?.name || "");
 	const [selectedGrades, setSelectedGrades] = useState(
 		initialData?.gradeLevels || []
@@ -69,7 +71,7 @@ const AddEditSubjectModal = ({ isOpen, onClose, onSave, initialData }) => {
 	const handleSave = () => {
 		// Validate inputs
 		if (!subjectName.trim()) {
-			setNameError("Subject name is required");
+			setNameError(t("subjectModal.subjectNameRequired"));
 			return;
 		}
 
@@ -98,7 +100,9 @@ const AddEditSubjectModal = ({ isOpen, onClose, onSave, initialData }) => {
 							icon={faBook}
 							className="subject-modal-header-icon"
 						/>
-						{initialData ? "Edit Subject" : "Add New Subject"}
+						{initialData
+							? t("subjectModal.editSubject")
+							: t("subjectModal.addNewSubject")}
 					</h2>
 					<button className="subject-modal-close-btn" onClick={onClose}>
 						<FontAwesomeIcon icon={faTimes} />
@@ -112,7 +116,7 @@ const AddEditSubjectModal = ({ isOpen, onClose, onSave, initialData }) => {
 								icon={faBook}
 								className="subject-modal-input-icon"
 							/>
-							Subject Name
+							{t("subjectModal.subjectName")}
 						</label>
 						<input
 							id="subject-name"
@@ -125,7 +129,7 @@ const AddEditSubjectModal = ({ isOpen, onClose, onSave, initialData }) => {
 									setNameError("");
 								}
 							}}
-							placeholder="Enter subject name"
+							placeholder={t("subjectModal.subjectNamePlaceholder")}
 							className={
 								nameError
 									? "subject-modal-text-input subject-modal-text-input-error"
@@ -147,7 +151,7 @@ const AddEditSubjectModal = ({ isOpen, onClose, onSave, initialData }) => {
 									icon={faGraduationCap}
 									className="subject-modal-input-icon"
 								/>
-								Grade Levels
+								{t("subjectModal.gradeLevels")}
 							</label>
 							<div className="subject-modal-grade-actions">
 								<button
@@ -155,14 +159,14 @@ const AddEditSubjectModal = ({ isOpen, onClose, onSave, initialData }) => {
 									className="subject-modal-text-btn"
 									onClick={selectAllGrades}
 								>
-									Select All
+									{t("subjectModal.selectAll")}
 								</button>
 								<button
 									type="button"
 									className="subject-modal-text-btn"
 									onClick={clearAllGrades}
 								>
-									Clear All
+									{t("subjectModal.clearAll")}
 								</button>
 							</div>
 						</div>
@@ -188,11 +192,13 @@ const AddEditSubjectModal = ({ isOpen, onClose, onSave, initialData }) => {
 						<div className="subject-modal-selected-info">
 							{selectedGrades.length > 0 ? (
 								<p>
-									<strong>{selectedGrades.length}</strong> grade
-									{selectedGrades.length !== 1 ? "s" : ""} selected
+									<strong>{selectedGrades.length}</strong>{" "}
+									{t("subjectModal.gradesSelected")}
 								</p>
 							) : (
-								<p className="subject-modal-no-selection">No grades selected</p>
+								<p className="subject-modal-no-selection">
+									{t("subjectModal.noGradesSelected")}
+								</p>
 							)}
 						</div>
 					</div>
@@ -200,7 +206,7 @@ const AddEditSubjectModal = ({ isOpen, onClose, onSave, initialData }) => {
 
 				<div className="subject-modal-footer">
 					<button className="subject-modal-cancel-btn" onClick={onClose}>
-						Cancel
+						{t("subjectModal.cancel")}
 					</button>
 					<button
 						className={`subject-modal-save-btn ${
@@ -209,7 +215,9 @@ const AddEditSubjectModal = ({ isOpen, onClose, onSave, initialData }) => {
 						onClick={handleSave}
 						disabled={!subjectName.trim()}
 					>
-						{initialData ? "Update Subject" : "Add Subject"}
+						{initialData
+							? t("subjectModal.updateSubject")
+							: t("subjectModal.addSubject")}
 					</button>
 				</div>
 			</div>
