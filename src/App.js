@@ -9,6 +9,7 @@ import {
 	AuthProvider,
 	ClassLogsProvider,
 	NotificationProvider,
+	LanguageProvider,
 } from "./contexts";
 import PrivateRoute from "./components/PrivateRoute";
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -120,9 +121,11 @@ const App = () => (
 	<Router>
 		<NotificationProvider>
 			<AuthProvider>
-				<ClassLogsProvider>
-					<AppContent />
-				</ClassLogsProvider>
+				<LanguageProvider>
+					<ClassLogsProvider>
+						<AppContent />
+					</ClassLogsProvider>
+				</LanguageProvider>
 			</AuthProvider>
 		</NotificationProvider>
 	</Router>

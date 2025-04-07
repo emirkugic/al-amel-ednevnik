@@ -16,10 +16,12 @@ import {
 	faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import useAuth from "../../hooks/useAuth";
+import { useLanguage } from "../../contexts";
 import "./SettingsPage.css";
 
 const SettingsPage = () => {
-	const { user, updateUserSettings } = useAuth();
+	const { user } = useAuth();
+	const { language, changeLanguage, t } = useLanguage();
 	const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [activeTab, setActiveTab] = useState("preferences");
@@ -31,7 +33,7 @@ const SettingsPage = () => {
 		email: "",
 		loginPassword: "",
 		gradePassword: "",
-		language: "en",
+		language: language, // Use the current language from context
 	});
 
 	// Languages
@@ -50,10 +52,10 @@ const SettingsPage = () => {
 				email: user.email || "",
 				loginPassword: "",
 				gradePassword: "",
-				language: user.language || "en",
+				language: language, // Use the current language from context
 			});
 		}
-	}, [user]);
+	}, [user, language]);
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
@@ -64,10 +66,18 @@ const SettingsPage = () => {
 	};
 
 	const handleLanguageChange = (code) => {
+		// Update form data
 		setFormData((prev) => ({
 			...prev,
 			language: code,
 		}));
+
+		// Actually change the language in the context
+		changeLanguage(code);
+
+		// Show success message
+		setShowSuccessMessage(true);
+		setTimeout(() => setShowSuccessMessage(false), 3000);
 	};
 
 	const handleSubmit = async (e) => {
@@ -110,11 +120,9 @@ const SettingsPage = () => {
 				<div className="settings-title">
 					<h1>
 						<FontAwesomeIcon icon={faUserCog} className="settings-title-icon" />
-						Account Settings
+						{t("accountSettings")}
 					</h1>
-					<p className="settings-subtitle">
-						Manage your account information and preferences
-					</p>
+					<p className="settings-subtitle">{t("manageAccount")}</p>
 				</div>
 			</div>
 
@@ -128,7 +136,7 @@ const SettingsPage = () => {
 						onClick={() => setActiveTab("preferences")}
 					>
 						<FontAwesomeIcon icon={faLanguage} className="settings-nav-icon" />
-						<span className="settings-nav-text">Preferences</span>
+						<span className="settings-nav-text">{t("preferences")}</span>
 					</button>
 				</div>
 
@@ -137,7 +145,7 @@ const SettingsPage = () => {
 						{activeTab === "preferences" && (
 							<div className="settings-form-section">
 								<h3 className="settings-section-title">
-									Language & Regional Settings
+									{t("languageRegionalSettings")}
 								</h3>
 								<div className="settings-language-container">
 									<div className="settings-language-options">
@@ -189,7 +197,7 @@ const SettingsPage = () => {
 											<div className="settings-language-details">
 												<span className="settings-language-name">English</span>
 												<span className="settings-language-info">
-													Default system language
+													{t("defaultSystemLanguage")}
 												</span>
 											</div>
 											{formData.language === "en" && (
@@ -362,6 +370,13 @@ const SettingsPage = () => {
 					</form>
 				</div>
 			</div>
+
+			{/* Success message */}
+			{showSuccessMessage && (
+				<div className="settings-success-message">
+					<FontAwesomeIcon icon={faCheckCircle} /> {t("languageChangedSuccess")}
+				</div>
+			)}
 		</div>
 	);
 };

@@ -18,9 +18,11 @@ import useAuth from "../../../../hooks/useAuth";
 import useParents from "../../../../hooks/useParents";
 import parentApi from "../../../../api/parentApi";
 import studentApi from "../../../../api/studentApi";
+import { useLanguage } from "../../../../contexts";
 
 const ParentManagement = () => {
 	const { user } = useAuth();
+	const { t, language } = useLanguage();
 	const { parents, loading, error, addParent, updateParent, deleteParent } =
 		useParents(user?.token);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -91,7 +93,7 @@ const ParentManagement = () => {
 	};
 
 	const handleDeleteParent = async (id) => {
-		if (window.confirm("Are you sure you want to delete this parent?")) {
+		if (window.confirm(t("areYouSureDeleteParent"))) {
 			try {
 				await parentApi.deleteParent(id, user.token);
 				deleteParent(id);
@@ -243,7 +245,7 @@ const ParentManagement = () => {
 		return (
 			<div className="parent-mgmt-dashboard-card parent-mgmt-loading-card">
 				<div className="parent-mgmt-loading-spinner"></div>
-				<p>Loading parent data...</p>
+				<p>{t("loadingParentData")}</p>
 			</div>
 		);
 	}
@@ -257,7 +259,8 @@ const ParentManagement = () => {
 				<div className="parent-mgmt-title">
 					<div className="parent-mgmt-search-filter-row">
 						<span className="parent-mgmt-stat-pill">
-							<FontAwesomeIcon icon={faUserFriends} /> {parents.length} parents
+							<FontAwesomeIcon icon={faUserFriends} /> {parents.length}{" "}
+							{t("parents")}
 						</span>
 
 						<div className="parent-mgmt-search-bar">
@@ -267,7 +270,7 @@ const ParentManagement = () => {
 							/>
 							<input
 								type="text"
-								placeholder="Search parents..."
+								placeholder={t("searchParents")}
 								value={searchTerm}
 								onChange={(e) => setSearchTerm(e.target.value)}
 							/>
@@ -286,7 +289,7 @@ const ParentManagement = () => {
 					className="parent-mgmt-add-btn"
 					onClick={() => handleOpenModal()}
 				>
-					<FontAwesomeIcon icon={faPlus} /> Add New Parent
+					<FontAwesomeIcon icon={faPlus} /> {t("addNewParent")}
 				</button>
 			</div>
 
@@ -296,10 +299,10 @@ const ParentManagement = () => {
 					<table className="parent-mgmt-table">
 						<thead>
 							<tr>
-								<th>Parent</th>
-								<th>Email</th>
-								<th>Phone</th>
-								<th>Actions</th>
+								<th>{t("parent")}</th>
+								<th>{t("email")}</th>
+								<th>{t("phone")}</th>
+								<th>{t("actions")}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -352,8 +355,8 @@ const ParentManagement = () => {
 											<div className="parent-mgmt-action-buttons">
 												<button
 													className="parent-mgmt-edit-btn"
-													aria-label="Edit Parent"
-													title="Edit Parent"
+													aria-label={t("editParent")}
+													title={t("editParent")}
 													onClick={(e) => {
 														e.stopPropagation();
 														handleOpenModal(parent);
@@ -363,8 +366,8 @@ const ParentManagement = () => {
 												</button>
 												<button
 													className="parent-mgmt-delete-btn"
-													aria-label="Delete Parent"
-													title="Delete Parent"
+													aria-label={t("deleteParent")}
+													title={t("deleteParent")}
 													onClick={(e) => {
 														e.stopPropagation();
 														handleDeleteParent(parent.id);
@@ -386,21 +389,21 @@ const ParentManagement = () => {
 															icon={faChild}
 															className="parent-mgmt-child-icon"
 														/>
-														Children
+														{t("children")}
 													</h4>
 													{loadingStudents ? (
 														<div className="parent-mgmt-loading-children">
 															<div className="parent-mgmt-mini-spinner"></div>
-															<span>Loading children...</span>
+															<span>{t("loadingChildren")}</span>
 														</div>
 													) : childrenByParent[parent.id]?.length > 0 ? (
 														<table className="parent-mgmt-children-table">
 															<thead>
 																<tr>
-																	<th>Name</th>
-																	<th>Date of Birth</th>
-																	<th>Place of Birth</th>
-																	<th>Citizenship</th>
+																	<th>{t("name")}</th>
+																	<th>{t("dateOfBirth")}</th>
+																	<th>{t("placeOfBirth")}</th>
+																	<th>{t("citizenship")}</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -418,7 +421,13 @@ const ParentManagement = () => {
 																		<td>
 																			{new Date(
 																				child.dateOfBirth
-																			).toLocaleDateString()}
+																			).toLocaleDateString(
+																				language === "en"
+																					? "en-US"
+																					: language === "bs"
+																					? "bs-BA"
+																					: "ar-SA"
+																			)}
 																		</td>
 																		<td>{child.placeOfBirth}</td>
 																		<td>{child.citizenship}</td>
@@ -428,7 +437,7 @@ const ParentManagement = () => {
 														</table>
 													) : (
 														<div className="parent-mgmt-no-children">
-															No children found
+															{t("noChildrenFound")}
 														</div>
 													)}
 												</div>
@@ -442,9 +451,9 @@ const ParentManagement = () => {
 				</div>
 			) : (
 				<div className="parent-mgmt-no-results">
-					<p>No parents match your search criteria.</p>
+					<p>{t("noParentsMatch")}</p>
 					<button onClick={clearFilters}>
-						<FontAwesomeIcon icon={faTimes} /> Clear Filters
+						<FontAwesomeIcon icon={faTimes} /> {t("clearFilters")}
 					</button>
 				</div>
 			)}
@@ -456,8 +465,10 @@ const ParentManagement = () => {
 						<header className="parent-mgmt-modal-header">
 							<h2>
 								{selectedParent
-									? `Edit ${selectedParent.firstName} ${selectedParent.lastName}`
-									: "Add New Parent"}
+									? `${t("editParent")} ${selectedParent.firstName} ${
+											selectedParent.lastName
+									  }`
+									: t("addNewParent")}
 							</h2>
 							<button
 								className="parent-mgmt-close-button"
@@ -470,10 +481,10 @@ const ParentManagement = () => {
 						<div className="parent-mgmt-modal-body">
 							<div className="parent-mgmt-content-area">
 								<div className="parent-mgmt-form-section">
-									<h3>Parent Information</h3>
+									<h3>{t("parentInformation")}</h3>
 									<div className="parent-mgmt-form-grid">
 										<div className="parent-mgmt-form-field">
-											<label htmlFor="firstName">First Name</label>
+											<label htmlFor="firstName">{t("firstName")}</label>
 											<input
 												type="text"
 												id="firstName"
@@ -481,12 +492,12 @@ const ParentManagement = () => {
 												onChange={(e) =>
 													handleInputChange("name", e.target.value)
 												}
-												placeholder="First Name"
+												placeholder={t("firstName")}
 											/>
 										</div>
 
 										<div className="parent-mgmt-form-field">
-											<label htmlFor="lastName">Last Name</label>
+											<label htmlFor="lastName">{t("lastName")}</label>
 											<input
 												type="text"
 												id="lastName"
@@ -494,12 +505,12 @@ const ParentManagement = () => {
 												onChange={(e) =>
 													handleInputChange("surname", e.target.value)
 												}
-												placeholder="Last Name"
+												placeholder={t("lastName")}
 											/>
 										</div>
 
 										<div className="parent-mgmt-form-field">
-											<label htmlFor="phoneNumber">Phone Number</label>
+											<label htmlFor="phoneNumber">{t("phoneNumber")}</label>
 											<input
 												type="text"
 												id="phoneNumber"
@@ -507,29 +518,29 @@ const ParentManagement = () => {
 												onChange={(e) =>
 													handleInputChange("phoneNumber", e.target.value)
 												}
-												placeholder="Phone Number"
+												placeholder={t("phoneNumber")}
 											/>
 										</div>
 
 										<div className="parent-mgmt-form-field">
-											<label htmlFor="email">Email Address</label>
+											<label htmlFor="email">{t("emailAddress")}</label>
 											<input
 												type="email"
 												id="email"
 												value={`${formData.name.toLowerCase()}.${formData.surname.toLowerCase()}@example.com`}
 												readOnly
 												className="parent-mgmt-readonly-input"
-												placeholder="Email will be auto-generated"
+												placeholder={t("emailAutoGenerated")}
 											/>
 										</div>
 									</div>
 								</div>
 
 								<div className="parent-mgmt-form-section">
-									<h3>Security</h3>
+									<h3>{t("security")}</h3>
 									<div className="parent-mgmt-form-grid">
 										<div className="parent-mgmt-form-field">
-											<label htmlFor="password">Password</label>
+											<label htmlFor="password">{t("password")}</label>
 											<div className="parent-mgmt-password-input">
 												<input
 													type="password"
@@ -540,8 +551,8 @@ const ParentManagement = () => {
 													}
 													placeholder={
 														selectedParent
-															? "Leave blank to keep current"
-															: "New password"
+															? t("leaveBlankToKeepCurrent")
+															: t("newPassword")
 													}
 												/>
 											</div>
@@ -556,13 +567,13 @@ const ParentManagement = () => {
 								className="parent-mgmt-cancel-button"
 								onClick={handleCloseModal}
 							>
-								Cancel
+								{t("cancel")}
 							</button>
 							<button
 								className="parent-mgmt-save-button"
 								onClick={handleSaveParent}
 							>
-								Save Changes
+								{t("saveChanges")}
 							</button>
 						</footer>
 					</div>
