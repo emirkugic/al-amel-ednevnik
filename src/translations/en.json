@@ -118,5 +118,82 @@
         "no": "No",
         "confirmDelete": "Are you sure you want to delete this item?",
         "noResults": "No results found."
+    },
+    "teacherModal": {
+        "addNewTeacher": "Add New Teacher",
+        "personalInformation": "Personal Information",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "emailAddress": "Email Address",
+        "phoneNumber": "Phone Number",
+        "administratorAccess": "Administrator Access",
+        "admin": "Admin",
+        "teacher": "Teacher",
+        "security": "Security",
+        "loginPassword": "Login Password",
+        "gradeAccessPassword": "Grade Access Password",
+        "leaveBlankToKeepCurrent": "Leave blank to keep current",
+        "deleteConfirmation": "Are you sure you want to delete this teacher? This action cannot be undone.",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "saveChanges": "Save Changes",
+        "profile": "Profile",
+        "subjectsAndClasses": "Subject & Classes",
+        "assignedSubjects": "Assigned Subjects",
+        "assignClasses": "Assign Classes",
+        "addSubject": "Add Subject",
+        "noSubjectsAssigned": "No subjects assigned yet",
+        "classes": "classes",
+        "selectSubjectToAssign": "Select a subject to assign classes",
+        "noSubjectSelected": "Select a subject to assign classes"
+    },
+    "teacherManagement": {
+        "title": "Teacher Management",
+        "teachers": "teachers",
+        "admins": "admins",
+        "addNewTeacher": "Add New Teacher",
+        "searchTeachers": "Search teachers...",
+        "department": "Department",
+        "allDepartments": "All Departments",
+        "role": "Role",
+        "allRoles": "All Roles",
+        "administrators": "Administrators",
+        "teachersOnly": "Teachers Only",
+        "sortBy": "Sort By",
+        "name": "Name",
+        "subjects": "Subjects",
+        "classes": "Classes",
+        "teacher": "Teacher",
+        "email": "Email",
+        "actions": "Actions",
+        "noTeachersMatch": "No teachers match your search criteria.",
+        "clearFilters": "Clear Filters",
+        "loadingTeachers": "Loading teacher data..."
+    },
+    "logs": {
+        "classLogs": "Class Logs",
+        "today": "Today",
+        "period": "Period",
+        "loading": "Loading timetable...",
+        "errorLoading": "Error Loading Data",
+        "retry": "Retry",
+        "add": "Add",
+        "currentWeek": "Current Week"
+    },
+    "days": {
+        "fullNames": {
+            "monday": "Monday",
+            "tuesday": "Tuesday",
+            "wednesday": "Wednesday",
+            "thursday": "Thursday",
+            "friday": "Friday"
+        },
+        "shortNames": {
+            "monday": "Mon",
+            "tuesday": "Tue",
+            "wednesday": "Wed",
+            "thursday": "Thu",
+            "friday": "Fri"
+        }
     }
 }

@@ -118,5 +118,82 @@
         "no": "Ne",
         "confirmDelete": "Jeste li sigurni da želite izbrisati ovu stavku?",
         "noResults": "Nisu pronađeni rezultati."
+    },
+    "teacherModal": {
+        "addNewTeacher": "Dodaj Novog Nastavnika",
+        "personalInformation": "Lične Informacije",
+        "firstName": "Ime",
+        "lastName": "Prezime",
+        "emailAddress": "Email Adresa",
+        "phoneNumber": "Broj Telefona",
+        "administratorAccess": "Administratorski Pristup",
+        "admin": "Admin",
+        "teacher": "Nastavnik",
+        "security": "Sigurnost",
+        "loginPassword": "Lozinka za Prijavu",
+        "gradeAccessPassword": "Lozinka za Pristup Ocjenama",
+        "leaveBlankToKeepCurrent": "Ostavite prazno da zadržite trenutno",
+        "deleteConfirmation": "Jeste li sigurni da želite izbrisati ovog nastavnika? Ova radnja se ne može poništiti.",
+        "delete": "Izbriši",
+        "cancel": "Otkaži",
+        "saveChanges": "Sačuvaj Promjene",
+        "profile": "Profil",
+        "subjectsAndClasses": "Predmeti i Razredi",
+        "assignedSubjects": "Dodijeljeni Predmeti",
+        "assignClasses": "Dodjela Razreda",
+        "addSubject": "Dodaj Predmet",
+        "noSubjectsAssigned": "Još nema dodijeljenih predmeta",
+        "classes": "razreda",
+        "selectSubjectToAssign": "Odaberite predmet za dodjelu razreda",
+        "noSubjectSelected": "Odaberite predmet za dodjelu razreda"
+    },
+    "teacherManagement": {
+        "title": "Upravljanje Nastavnicima",
+        "teachers": "nastavnika",
+        "admins": "admina",
+        "addNewTeacher": "Dodaj Novog Nastavnika",
+        "searchTeachers": "Pretraži nastavnike...",
+        "department": "Odjeljenje",
+        "allDepartments": "Sva Odjeljenja",
+        "role": "Uloga",
+        "allRoles": "Sve Uloge",
+        "administrators": "Administratori",
+        "teachersOnly": "Samo Nastavnici",
+        "sortBy": "Sortiraj Po",
+        "name": "Imenu",
+        "subjects": "Predmetima",
+        "classes": "Razredima",
+        "teacher": "Nastavnik",
+        "email": "Email",
+        "actions": "Akcije",
+        "noTeachersMatch": "Nijedan nastavnik ne odgovara vašim kriterijima pretrage.",
+        "clearFilters": "Očisti filtere",
+        "loadingTeachers": "Učitavanje podataka o nastavnicima..."
+    },
+    "logs": {
+        "classLogs": "Zapisnici Nastave",
+        "today": "Danas",
+        "period": "Čas",
+        "loading": "Učitavanje rasporeda...",
+        "errorLoading": "Greška Pri Učitavanju Podataka",
+        "retry": "Pokušaj Ponovo",
+        "add": "Dodaj",
+        "currentWeek": "Tekuća Sedmica"
+    },
+    "days": {
+        "fullNames": {
+            "monday": "Ponedjeljak",
+            "tuesday": "Utorak",
+            "wednesday": "Srijeda",
+            "thursday": "Četvrtak",
+            "friday": "Petak"
+        },
+        "shortNames": {
+            "monday": "Pon",
+            "tuesday": "Uto",
+            "wednesday": "Sri",
+            "thursday": "Čet",
+            "friday": "Pet"
+        }
     }
 }

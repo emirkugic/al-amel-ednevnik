@@ -118,5 +118,82 @@
         "no": "لا",
         "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا العنصر؟",
         "noResults": "لم يتم العثور على نتائج."
+    },
+    "teacherModal": {
+        "addNewTeacher": "إضافة مدرس جديد",
+        "personalInformation": "المعلومات الشخصية",
+        "firstName": "الاسم الأول",
+        "lastName": "اسم العائلة",
+        "emailAddress": "عنوان البريد الإلكتروني",
+        "phoneNumber": "رقم الهاتف",
+        "administratorAccess": "صلاحيات المسؤول",
+        "admin": "مسؤول",
+        "teacher": "مدرس",
+        "security": "الأمان",
+        "loginPassword": "كلمة مرور الدخول",
+        "gradeAccessPassword": "كلمة مرور الوصول للدرجات",
+        "leaveBlankToKeepCurrent": "اتركه فارغًا للاحتفاظ بالحالي",
+        "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا المدرس؟ لا يمكن التراجع عن هذا الإجراء.",
+        "delete": "حذف",
+        "cancel": "إلغاء",
+        "saveChanges": "حفظ التغييرات",
+        "profile": "الملف الشخصي",
+        "subjectsAndClasses": "المواد والفصول",
+        "assignedSubjects": "المواد المخصصة",
+        "assignClasses": "تخصيص الفصول",
+        "addSubject": "إضافة مادة",
+        "noSubjectsAssigned": "لم يتم تخصيص مواد بعد",
+        "classes": "فصول",
+        "selectSubjectToAssign": "اختر مادة لتخصيص الفصول",
+        "noSubjectSelected": "اختر مادة لتخصيص الفصول"
+    },
+    "teacherManagement": {
+        "title": "إدارة المدرسين",
+        "teachers": "مدرس",
+        "admins": "مسؤول",
+        "addNewTeacher": "إضافة مدرس جديد",
+        "searchTeachers": "البحث عن المدرسين...",
+        "department": "القسم",
+        "allDepartments": "جميع الأقسام",
+        "role": "الدور",
+        "allRoles": "جميع الأدوار",
+        "administrators": "المسؤولون",
+        "teachersOnly": "المدرسون فقط",
+        "sortBy": "ترتيب حسب",
+        "name": "الاسم",
+        "subjects": "المواد",
+        "classes": "الفصول",
+        "teacher": "المدرس",
+        "email": "البريد الإلكتروني",
+        "actions": "الإجراءات",
+        "noTeachersMatch": "لا يوجد مدرسون يطابقون معايير البحث الخاصة بك.",
+        "clearFilters": "مسح المرشحات",
+        "loadingTeachers": "جاري تحميل بيانات المدرسين..."
+    },
+    "logs": {
+        "classLogs": "سجلات الحصص",
+        "today": "اليوم",
+        "period": "الحصة",
+        "loading": "جاري تحميل الجدول الزمني...",
+        "errorLoading": "خطأ في تحميل البيانات",
+        "retry": "إعادة المحاولة",
+        "add": "إضافة",
+        "currentWeek": "الأسبوع الحالي"
+    },
+    "days": {
+        "fullNames": {
+            "monday": "الإثنين",
+            "tuesday": "الثلاثاء",
+            "wednesday": "الأربعاء",
+            "thursday": "الخميس",
+            "friday": "الجمعة"
+        },
+        "shortNames": {
+            "monday": "إثن",
+            "tuesday": "ثلا",
+            "wednesday": "أرب",
+            "thursday": "خمي",
+            "friday": "جمع"
+        }
     }
 }

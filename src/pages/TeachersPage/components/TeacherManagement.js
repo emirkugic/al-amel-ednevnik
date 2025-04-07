@@ -17,9 +17,11 @@ import useAuth from "../../../hooks/useAuth";
 import teacherApi from "../../../api/teacherApi";
 import subjectApi from "../../../api/subjectApi";
 import departmentApi from "../../../api/departmentApi";
+import { useLanguage } from "../../../contexts/LanguageContext";
 
 const TeacherManagement = () => {
 	const { user } = useAuth();
+	const { t } = useLanguage();
 	const token = user?.token;
 
 	// State management
@@ -198,7 +200,6 @@ const TeacherManagement = () => {
 		filterAdmin,
 		sortBy,
 		sortDirection,
-		transformTeacherData,
 	]);
 
 	// Count total classes for a teacher
@@ -359,7 +360,7 @@ const TeacherManagement = () => {
 		return (
 			<div className="dashboard-card loading-card">
 				<div className="loading-spinner"></div>
-				<p>Loading teacher data...</p>
+				<p>{t("teacherManagement.loadingTeachers")}</p>
 			</div>
 		);
 	}
@@ -368,31 +369,34 @@ const TeacherManagement = () => {
 		<div className="dashboard-card">
 			<div className="teacher-header">
 				<div className="teacher-title">
-					<h1>Teacher Management</h1>
+					<h1>{t("teacherManagement.title")}</h1>
 					<p>
 						<span className="stat-pill">
-							<FontAwesomeIcon icon={faUser} /> {teachers.length} teachers
+							<FontAwesomeIcon icon={faUser} /> {teachers.length}{" "}
+							{t("teacherManagement.teachers")}
 						</span>
 						<span className="stat-pill admin">
 							<FontAwesomeIcon icon={faShieldAlt} />{" "}
-							{teachers.filter((t) => t.isAdmin).length} admins
+							{teachers.filter((t) => t.isAdmin).length}{" "}
+							{t("teacherManagement.admins")}
 						</span>
 					</p>
 				</div>
 				<button className="add-teacher-btn" onClick={handleAddTeacher}>
-					<FontAwesomeIcon icon={faUserPlus} /> Add New Teacher
+					<FontAwesomeIcon icon={faUserPlus} />{" "}
+					{t("teacherManagement.addNewTeacher")}
 				</button>
 			</div>
 
 			{showFilters && (
 				<div className="advanced-filters">
 					<div className="filter-group">
-						<label>Department</label>
+						<label>{t("teacherManagement.department")}</label>
 						<select
 							value={filterDepartment}
 							onChange={(e) => setFilterDepartment(e.target.value)}
 						>
-							<option value="">All Departments</option>
+							<option value="">{t("teacherManagement.allDepartments")}</option>
 							{uniqueDepartments().map((dept) => (
 								<option key={dept.id} value={dept.departmentName}>
 									{dept.departmentName}
@@ -402,25 +406,29 @@ const TeacherManagement = () => {
 					</div>
 
 					<div className="filter-group">
-						<label>Role</label>
+						<label>{t("teacherManagement.role")}</label>
 						<select
 							value={filterAdmin}
 							onChange={(e) => setFilterAdmin(e.target.value)}
 						>
-							<option value="all">All Roles</option>
-							<option value="admin">Administrators</option>
-							<option value="teacher">Teachers Only</option>
+							<option value="all">{t("teacherManagement.allRoles")}</option>
+							<option value="admin">
+								{t("teacherManagement.administrators")}
+							</option>
+							<option value="teacher">
+								{t("teacherManagement.teachersOnly")}
+							</option>
 						</select>
 					</div>
 
 					<div className="filter-group">
-						<label>Sort By</label>
+						<label>{t("teacherManagement.sortBy")}</label>
 						<div className="sort-options">
 							<button
 								className={`sort-btn ${sortBy === "name" ? "active" : ""}`}
 								onClick={() => handleSort("name")}
 							>
-								Name
+								{t("teacherManagement.name")}
 								{sortBy === "name" && (
 									<FontAwesomeIcon
 										icon={sortDirection === "asc" ? faArrowUp : faArrowDown}
@@ -433,7 +441,7 @@ const TeacherManagement = () => {
 								}`}
 								onClick={() => handleSort("subjectCount")}
 							>
-								Subjects
+								{t("teacherManagement.subjects")}
 								{sortBy === "subjectCount" && (
 									<FontAwesomeIcon
 										icon={sortDirection === "asc" ? faArrowUp : faArrowDown}
@@ -446,7 +454,7 @@ const TeacherManagement = () => {
 								}`}
 								onClick={() => handleSort("classCount")}
 							>
-								Classes
+								{t("teacherManagement.classes")}
 								{sortBy === "classCount" && (
 									<FontAwesomeIcon
 										icon={sortDirection === "asc" ? faArrowUp : faArrowDown}
@@ -463,12 +471,12 @@ const TeacherManagement = () => {
 					<table className="teacher-table">
 						<thead>
 							<tr>
-								<th>Teacher</th>
-								<th>Email</th>
-								<th>Subjects</th>
-								<th>Classes</th>
-								<th>Role</th>
-								<th>Actions</th>
+								<th>{t("teacherManagement.teacher")}</th>
+								<th>{t("teacherManagement.email")}</th>
+								<th>{t("teacherManagement.subjects")}</th>
+								<th>{t("teacherManagement.classes")}</th>
+								<th>{t("teacherManagement.role")}</th>
+								<th>{t("teacherManagement.actions")}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -497,11 +505,13 @@ const TeacherManagement = () => {
 										<td>
 											{teacher.isAdmin ? (
 												<span className="admin-badge">
-													<FontAwesomeIcon icon={faShieldAlt} /> Admin
+													<FontAwesomeIcon icon={faShieldAlt} />{" "}
+													{t("teacherModal.admin")}
 												</span>
 											) : (
 												<span className="teacher-badge">
-													<FontAwesomeIcon icon={faUser} /> Teacher
+													<FontAwesomeIcon icon={faUser} />{" "}
+													{t("teacherModal.teacher")}
 												</span>
 											)}
 										</td>
@@ -525,8 +535,8 @@ const TeacherManagement = () => {
 													<table className="subjects-table">
 														<thead>
 															<tr>
-																<th>Subject</th>
-																<th>Classes</th>
+																<th>{t("subjects.subject")}</th>
+																<th>{t("teacherManagement.classes")}</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -557,9 +567,10 @@ const TeacherManagement = () => {
 				</div>
 			) : (
 				<div className="no-results">
-					<p>No teachers match your search criteria.</p>
+					<p>{t("teacherManagement.noTeachersMatch")}</p>
 					<button onClick={clearFilters}>
-						<FontAwesomeIcon icon={faTimes} /> Clear Filters
+						<FontAwesomeIcon icon={faTimes} />{" "}
+						{t("teacherManagement.clearFilters")}
 					</button>
 				</div>
 			)}

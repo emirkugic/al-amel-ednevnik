@@ -17,6 +17,7 @@ import useSubjects from "../../../hooks/useSubjects";
 import useAuth from "../../../hooks/useAuth";
 import useClassLogDetails from "../../../hooks/useClassLogDetails";
 import classLogApi from "../../../api/classLogApi";
+import { useLanguage } from "../../../contexts/LanguageContext";
 
 // Import modal components
 import ClassLogFormModal from "../../../components/ClassLogFormModal/ClassLogFormModal";
@@ -27,6 +28,7 @@ import EditLogModal from "../../../components/EditLogModal/EditLogModal";
 import "./WeeklyLogs.css";
 
 const WeeklyLogs = () => {
+	const { t } = useLanguage();
 	const { user, assignedSubjects } = useAuth();
 	const token = user?.token;
 
@@ -136,8 +138,21 @@ const WeeklyLogs = () => {
 
 	// Generate weekdays array
 	const weekdays = [];
-	const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-	const shortDayNames = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+	const dayNames = [
+		t("days.fullNames.monday"),
+		t("days.fullNames.tuesday"),
+		t("days.fullNames.wednesday"),
+		t("days.fullNames.thursday"),
+		t("days.fullNames.friday"),
+	];
+
+	const shortDayNames = [
+		t("days.shortNames.monday"),
+		t("days.shortNames.tuesday"),
+		t("days.shortNames.wednesday"),
+		t("days.shortNames.thursday"),
+		t("days.shortNames.friday"),
+	];
 
 	for (let i = 0; i < 5; i++) {
 		const dayDate = new Date(mondayOffset);
@@ -349,7 +364,7 @@ const WeeklyLogs = () => {
 			"en-US",
 			options
 		)} - ${endDate.toLocaleDateString("en-US", options)}${
-			weekOffset === 0 ? " (Current Week)" : ""
+			weekOffset === 0 ? ` (${t("logs.currentWeek")})` : ""
 		}`;
 	};
 
@@ -371,7 +386,7 @@ const WeeklyLogs = () => {
 			<div className="timetable-container">
 				<div className="timetable-loading">
 					<div className="loading-spinner"></div>
-					<p>Loading timetable...</p>
+					<p>{t("logs.loading")}</p>
 				</div>
 			</div>
 		);
@@ -383,13 +398,13 @@ const WeeklyLogs = () => {
 			<div className="timetable-container">
 				<div className="timetable-error">
 					<FontAwesomeIcon icon={faExclamationCircle} className="error-icon" />
-					<h3>Error Loading Data</h3>
+					<h3>{t("logs.errorLoading")}</h3>
 					<p>{errorMessage}</p>
 					<button
 						className="btn-retry"
 						onClick={() => window.location.reload()}
 					>
-						<FontAwesomeIcon icon={faSync} /> Retry
+						<FontAwesomeIcon icon={faSync} /> {t("logs.retry")}
 					</button>
 				</div>
 			</div>
@@ -400,7 +415,7 @@ const WeeklyLogs = () => {
 		<div className="timetable-container">
 			<div className="timetable-header">
 				<div className="header-left">
-					<h2>Class Logs</h2>
+					<h2>{t("logs.classLogs")}</h2>
 					<div className="week-selector">
 						<button className="btn-nav" onClick={handlePrevWeek}>
 							<FontAwesomeIcon icon={faChevronLeft} />
@@ -418,7 +433,7 @@ const WeeklyLogs = () => {
 
 						{weekOffset !== 0 && (
 							<button className="btn-today" onClick={handleCurrentWeek}>
-								Today
+								{t("logs.today")}
 							</button>
 						)}
 					</div>
@@ -443,7 +458,7 @@ const WeeklyLogs = () => {
 							<select value={selectedDayIndex} onChange={handleDaySelection}>
 								{weekdays.map((day, idx) => (
 									<option key={day.dateFormatted} value={idx}>
-										{day.name} {day.isToday ? "(Today)" : ""}
+										{day.name} {day.isToday ? `(${t("logs.today")})` : ""}
 									</option>
 								))}
 							</select>
@@ -456,7 +471,7 @@ const WeeklyLogs = () => {
 				{/* Days Headers */}
 				{!isMobile && (
 					<div className="timetable-days-header">
-						<div className="period-label">Period</div>
+						<div className="period-label">{t("logs.period")}</div>
 						{weekdays.map((day) => (
 							<div
 								key={day.dateFormatted}
@@ -485,7 +500,7 @@ const WeeklyLogs = () => {
 									day: "numeric",
 								})}
 								{daysToRender[0].isToday && (
-									<span className="today-badge">Today</span>
+									<span className="today-badge">{t("logs.today")}</span>
 								)}
 							</div>
 						</div>
@@ -527,7 +542,7 @@ const WeeklyLogs = () => {
 															}
 														>
 															<span className="add-icon">+</span>
-															<span>Add</span>
+															<span>{t("logs.add")}</span>
 														</div>
 													) : (
 														<div
