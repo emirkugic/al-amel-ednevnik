@@ -1,19 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-	faUser,
-	faEnvelope,
-	faLock,
-	faGlobe,
-	faSave,
-	faTimes,
-	faEye,
-	faEyeSlash,
 	faCheck,
 	faUserCog,
-	faShieldAlt,
 	faLanguage,
-	faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import useAuth from "../../hooks/useAuth";
 import { useLanguage } from "../../contexts";
@@ -111,9 +101,9 @@ const SettingsPage = () => {
 				<div className="settings-title">
 					<h1>
 						<FontAwesomeIcon icon={faUserCog} className="settings-title-icon" />
-						{t("accountSettings")}
+						{t("settings.accountSettings")}
 					</h1>
-					<p className="settings-subtitle">{t("manageAccount")}</p>
+					<p className="settings-subtitle">{t("settings.manageAccount")}</p>
 				</div>
 			</div>
 
@@ -127,7 +117,9 @@ const SettingsPage = () => {
 						onClick={() => setActiveTab("preferences")}
 					>
 						<FontAwesomeIcon icon={faLanguage} className="settings-nav-icon" />
-						<span className="settings-nav-text">{t("preferences")}</span>
+						<span className="settings-nav-text">
+							{t("settings.preferences")}
+						</span>
 					</button>
 				</div>
 
@@ -136,7 +128,7 @@ const SettingsPage = () => {
 						{activeTab === "preferences" && (
 							<div className="settings-form-section">
 								<h3 className="settings-section-title">
-									{t("languageRegionalSettings")}
+									{t("settings.languageRegionalSettings")}
 								</h3>
 								<div className="settings-language-container">
 									<div className="settings-language-options">
@@ -188,7 +180,7 @@ const SettingsPage = () => {
 											<div className="settings-language-details">
 												<span className="settings-language-name">English</span>
 												<span className="settings-language-info">
-													{t("defaultSystemLanguage")}
+													{t("settings.defaultSystemLanguage")}
 												</span>
 											</div>
 											{formData.language === "en" && (

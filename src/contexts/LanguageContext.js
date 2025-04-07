@@ -4,6 +4,40 @@ import translations from "../translations";
 
 export const LanguageContext = createContext();
 
+const getTranslation = (translations, key, language) => {
+	// Default to English if the language doesn't exist
+	const langTranslations = translations[language] || translations.en;
+
+	if (!key) return "";
+
+	// Split the key by dots to navigate the nested structure
+	const parts = key.split(".");
+	let value = langTranslations;
+
+	// Navigate through the nested structure
+	for (const part of parts) {
+		if (!value || typeof value !== "object") {
+			// Fallback to English if the key path doesn't exist in the current language
+			value = translations.en;
+			for (const p of parts) {
+				if (!value || typeof value !== "object" || !(p in value)) {
+					return key; // Key not found, return the key itself
+				}
+				value = value[p];
+			}
+			return value;
+		}
+
+		if (!(part in value)) {
+			return key; // Key not found, return the key itself
+		}
+
+		value = value[part];
+	}
+
+	return value;
+};
+
 export const LanguageProvider = ({ children }) => {
 	const { user } = useAuth();
 	const [language, setLanguage] = useState("en");
@@ -43,16 +77,9 @@ export const LanguageProvider = ({ children }) => {
 		}
 	};
 
-	// Get text in current language
+	// Get text in current language with support for nested keys
 	const t = (key) => {
-		if (translations[language] && translations[language][key]) {
-			return translations[language][key];
-		}
-		// Fallback to English
-		if (translations.en[key]) {
-			return translations.en[key];
-		}
-		return key;
+		return getTranslation(translations, key, language);
 	};
 
 	return (
