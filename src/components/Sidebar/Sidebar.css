@@ -24,6 +24,10 @@
 .logout-container {
 	margin-top: auto;
 	padding-top: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	border-top: 1px solid #f0f0f0;
 }
 
 @media (max-width: 768px) {

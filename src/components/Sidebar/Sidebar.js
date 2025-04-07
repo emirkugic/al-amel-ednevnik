@@ -11,6 +11,7 @@ import {
 	faCalendarAlt,
 	faBook,
 	faChalkboardTeacher,
+	faCog,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SidebarButton from "../ui/SidebarButton/SidebarButton";
@@ -87,6 +88,7 @@ const DesktopSidebar = () => {
 				setLoadingCourses(false);
 			}
 		};
+
 		if (user) {
 			fetchMyCourses();
 		}
@@ -133,11 +135,11 @@ const DesktopSidebar = () => {
 		// Additional admin-only items
 		if (user?.role === "Admin") {
 			items.push(
-				{
-					title: "Schedule",
-					icon: faCalendarAlt,
-					route: "/schedule",
-				},
+				// {
+				// 	title: "Schedule",
+				// 	icon: faCalendarAlt,
+				// 	route: "/schedule",
+				// },
 				{
 					title: "Teachers",
 					icon: faChalkboardTeacher,
@@ -218,6 +220,13 @@ const DesktopSidebar = () => {
 					))}
 				</div>
 				<div className="logout-container">
+					<SidebarButton
+						title="Settings"
+						icon={faCog}
+						route="/settings"
+						isActive={activeItem === "Settings"}
+						onClick={() => handleButtonClick("Settings", "/settings")}
+					/>
 					<SidebarButton
 						title="Logout"
 						icon={faSignOutAlt}

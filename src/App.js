@@ -14,6 +14,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Sidebar from "./components/Sidebar/Sidebar";
 import RightSidebar from "./components/RightSidebar/RightSidebar";
 import MaintenancePage from "./pages/MaintenancePage/MaintenancePage";
+import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import useAuth from "./hooks/useAuth";
 
 // temp
@@ -72,6 +73,7 @@ const AppContent = () => {
 			"/grades",
 			"/teachers",
 			"/classes",
+			"/settings",
 		].includes(location.pathname) &&
 		!location.pathname.startsWith("/lectures/") &&
 		!location.pathname.startsWith("/courses/");
@@ -102,9 +104,10 @@ const AppContent = () => {
 						<Route path="/lectures/:departmentId" element={<LecturesPage />} />
 						<Route path="/department" element={<DepartmentPage />} />
 						<Route path="/grades" element={<ClassGradesPage />} />
-						<Route path="/teachers" element={<TeachersPage />} />{" "}
+						<Route path="/teachers" element={<TeachersPage />} />
 						<Route path="/classes" element={<ClassManagement />} />
 						<Route path="/courses/:subject" element={<AssessmentPage />} />
+						<Route path="/settings" element={<SettingsPage />} />
 					</Route>
 				</Routes>
 			</div>
