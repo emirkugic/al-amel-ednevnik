@@ -22,7 +22,6 @@ import "./SettingsPage.css";
 const SettingsPage = () => {
 	const { user } = useAuth();
 	const { language, changeLanguage, t } = useLanguage();
-	const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [activeTab, setActiveTab] = useState("preferences");
 
@@ -74,10 +73,6 @@ const SettingsPage = () => {
 
 		// Actually change the language in the context
 		changeLanguage(code);
-
-		// Show success message
-		setShowSuccessMessage(true);
-		setTimeout(() => setShowSuccessMessage(false), 3000);
 	};
 
 	const handleSubmit = async (e) => {
@@ -102,10 +97,6 @@ const SettingsPage = () => {
 
 			// For demonstration, simulate API call
 			await new Promise((resolve) => setTimeout(resolve, 800));
-
-			// Show success message
-			setShowSuccessMessage(true);
-			setTimeout(() => setShowSuccessMessage(false), 3000);
 		} catch (error) {
 			console.error("Error updating settings:", error);
 		} finally {
@@ -370,13 +361,6 @@ const SettingsPage = () => {
 					</form>
 				</div>
 			</div>
-
-			{/* Success message */}
-			{showSuccessMessage && (
-				<div className="settings-success-message">
-					<FontAwesomeIcon icon={faCheckCircle} /> {t("languageChangedSuccess")}
-				</div>
-			)}
 		</div>
 	);
 };

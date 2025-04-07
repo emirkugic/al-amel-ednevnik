@@ -26,17 +26,14 @@ export const LanguageProvider = ({ children }) => {
 		}
 	}, [language, user]);
 
-	// Add RTL support for Arabic
+	// Set language attribute but DON'T change document direction for Arabic
 	useEffect(() => {
-		document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+		// Only set the language attribute, don't change the direction
 		document.documentElement.lang = language;
 
-		// Apply special CSS class to body for RTL styling
-		if (language === "ar") {
-			document.body.classList.add("rtl");
-		} else {
-			document.body.classList.remove("rtl");
-		}
+		// Remove any RTL settings that might have been applied
+		document.documentElement.dir = "ltr";
+		document.body.classList.remove("rtl");
 	}, [language]);
 
 	// Function to change language
@@ -55,7 +52,6 @@ export const LanguageProvider = ({ children }) => {
 		if (translations.en[key]) {
 			return translations.en[key];
 		}
-		// If key doesn't exist, return the key itself
 		return key;
 	};
 
