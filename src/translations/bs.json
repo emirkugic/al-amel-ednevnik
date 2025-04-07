@@ -171,13 +171,13 @@
         "loadingTeachers": "Učitavanje podataka o nastavnicima..."
     },
     "logs": {
-        "classLogs": "Zapisnici Nastave",
+        "classLogs": "Upisani Časovi",
         "today": "Danas",
         "period": "Čas",
         "loading": "Učitavanje rasporeda...",
         "errorLoading": "Greška Pri Učitavanju Podataka",
         "retry": "Pokušaj Ponovo",
-        "add": "Dodaj",
+        "add": "Upiši",
         "currentWeek": "Tekuća Sedmica"
     },
     "days": {
@@ -262,5 +262,57 @@
         "noLogsFound": "Nisu pronađeni zapisnici časova",
         "startTracking": "Počnite pratiti svoje časove dodavanjem prvog zapisnika.",
         "logFirstClass": "Evidentiraj prvi čas"
+    },
+    "assessment": {
+        "loading": "Učitavanje...",
+        "assessmentManagement": "Upravljanje Ocjenjivanjem",
+        "semester": "Semestar",
+        "firstSemester": "Prvi Semestar",
+        "secondSemester": "Drugi Semestar",
+        "department": "Odjeljenje",
+        "loadingDepartments": "Učitavanje odjeljenja...",
+        "selectDepartment": "-- Odaberite Odjeljenje --",
+        "addNewAssessment": "Dodaj Novo Ocjenjivanje",
+        "assessmentTitle": "Naziv Ocjenjivanja",
+        "enterTitle": "Unesite naziv ocjenjivanja",
+        "assessmentType": "Tip Ocjenjivanja",
+        "points": "Bodovi",
+        "month": "Mjesec",
+        "addAssessment": "Dodaj Ocjenjivanje",
+        "hideForm": "Sakrij Formu",
+        "monthlyAssessments": "Mjesečna Ocjenjivanja",
+        "pts": "bod",
+        "loadingAssessments": "Učitavanje ocjenjivanja...",
+        "pointsTotal": "ukupno bodova",
+        "assessments": "ocjenjivanja",
+        "deleteAssessment": "Izbriši ocjenjivanje",
+        "gradeAssessments": "Ocijeni učenike",
+        "noAssessmentsForMonth": "Nema zakazanih ocjenjivanja za {month}",
+        "confirmDeleteAssessment": "Jeste li sigurni da želite izbrisati ovo ocjenjivanje?",
+        "pointsLabel": "bodova",
+        "fillAllFields": "Molimo popunite sva polja",
+        "types": {
+            "exam": "Ispit",
+            "quiz": "Kviz",
+            "project": "Projekat",
+            "homework": "Domaća zadaća",
+            "activity": "Aktivnost",
+            "bookReport": "Izvještaj o knjizi",
+            "other": "Ostalo"
+        },
+        "months": {
+            "january": "Januar",
+            "february": "Februar",
+            "march": "Mart",
+            "april": "April",
+            "may": "Maj",
+            "june": "Juni",
+            "july": "Juli",
+            "august": "August",
+            "september": "Septembar",
+            "october": "Oktobar",
+            "november": "Novembar",
+            "december": "Decembar"
+        }
     }
 }

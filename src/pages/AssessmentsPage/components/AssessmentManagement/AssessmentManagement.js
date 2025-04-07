@@ -23,6 +23,7 @@ import {
 import useAuth from "../../../../hooks/useAuth";
 import useAssessments from "../../../../hooks/useAssessments";
 import departmentApi from "../../../../api/departmentApi";
+import { useLanguage } from "../../../../contexts/LanguageContext";
 import "./AssessmentManagement.css";
 import AssessmentGradesModal from "../AssessmentGradesModal/AssessmentGradesModal";
 
@@ -72,6 +73,9 @@ const getAssessmentTypeIcon = (type) => {
 };
 
 const AssessmentManagement = () => {
+	// Get translation function
+	const { t } = useLanguage();
+
 	// Get subject ID from URL params
 	const { subject } = useParams();
 
@@ -351,7 +355,7 @@ const AssessmentManagement = () => {
 	const handleDeleteAssessment = (e, assessmentId) => {
 		e.stopPropagation();
 		e.preventDefault();
-		if (window.confirm("Are you sure you want to delete this assessment?")) {
+		if (window.confirm(t("assessment.confirmDeleteAssessment"))) {
 			deleteAssessment(assessmentId);
 		}
 	};
@@ -373,7 +377,7 @@ const AssessmentManagement = () => {
 			<div className="asmnt-page">
 				<div className="asmnt-dashboard-card asmnt-loading-container">
 					<div className="asmnt-loading-spinner"></div>
-					<p>Loading...</p>
+					<p>{t("assessment.loading")}</p>
 				</div>
 			</div>
 		);
@@ -394,7 +398,7 @@ const AssessmentManagement = () => {
 								icon={faGraduationCap}
 								className="asmnt-title-icon"
 							/>
-							Assessment Management
+							{t("assessment.assessmentManagement")}
 						</h1>
 					</div>
 				</header>
@@ -410,7 +414,9 @@ const AssessmentManagement = () => {
 						<aside className="asmnt-sidebar">
 							{/* Semester switch */}
 							<div className="asmnt-semester-switch">
-								<label className="asmnt-semester-switch-label">Semester</label>
+								<label className="asmnt-semester-switch-label">
+									{t("assessment.semester")}
+								</label>
 								<div className="asmnt-semester-tabs">
 									<div
 										className={`asmnt-semester-tab ${
@@ -418,7 +424,7 @@ const AssessmentManagement = () => {
 										}`}
 										onClick={() => setSelectedSemester("First Semester")}
 									>
-										First Semester
+										{t("assessment.firstSemester")}
 									</div>
 									<div
 										className={`asmnt-semester-tab ${
@@ -426,14 +432,16 @@ const AssessmentManagement = () => {
 										}`}
 										onClick={() => setSelectedSemester("Second Semester")}
 									>
-										Second Semester
+										{t("assessment.secondSemester")}
 									</div>
 								</div>
 							</div>
 
 							{/* Department selector */}
 							<div className="asmnt-department-selector">
-								<label className="asmnt-selector-label">Department</label>
+								<label className="asmnt-selector-label">
+									{t("assessment.department")}
+								</label>
 								<select
 									className="asmnt-selector-control"
 									value={selectedDepartment || ""}
@@ -442,8 +450,8 @@ const AssessmentManagement = () => {
 								>
 									<option value="" disabled>
 										{loading
-											? "Loading departments..."
-											: "-- Select Department --"}
+											? t("assessment.loadingDepartments")
+											: t("assessment.selectDepartment")}
 									</option>
 									{departmentNames.map((dept) => (
 										<option key={dept.id} value={dept.id}>
@@ -460,18 +468,18 @@ const AssessmentManagement = () => {
 										icon={faPlus}
 										className="asmnt-section-title-icon"
 									/>
-									Add New Assessment
+									{t("assessment.addNewAssessment")}
 								</h2>
 
 								<div className="asmnt-form-group">
 									<label className="asmnt-form-label" htmlFor="title">
-										Assessment Title
+										{t("assessment.assessmentTitle")}
 									</label>
 									<input
 										id="title"
 										type="text"
 										className="asmnt-form-control"
-										placeholder="Enter assessment title"
+										placeholder={t("assessment.enterTitle")}
 										value={title}
 										onChange={(e) => setTitle(e.target.value)}
 									/>
@@ -479,7 +487,7 @@ const AssessmentManagement = () => {
 
 								<div className="asmnt-form-group">
 									<label className="asmnt-form-label" htmlFor="type">
-										Assessment Type
+										{t("assessment.assessmentType")}
 									</label>
 									<select
 										id="type"
@@ -498,13 +506,13 @@ const AssessmentManagement = () => {
 								<div className="asmnt-form-row">
 									<div className="asmnt-form-group">
 										<label className="asmnt-form-label" htmlFor="points">
-											Points
+											{t("assessment.points")}
 										</label>
 										<input
 											id="points"
 											type="number"
 											className="asmnt-form-control"
-											placeholder="Points"
+											placeholder={t("assessment.points")}
 											min="0"
 											max="100"
 											value={points}
@@ -514,7 +522,7 @@ const AssessmentManagement = () => {
 
 									<div className="asmnt-form-group">
 										<label className="asmnt-form-label" htmlFor="month">
-											Month
+											{t("assessment.month")}
 										</label>
 										<select
 											id="month"
@@ -536,7 +544,8 @@ const AssessmentManagement = () => {
 									onClick={handleAddAssessment}
 									disabled={!selectedDepartment}
 								>
-									<FontAwesomeIcon icon={faPlus} /> Add Assessment
+									<FontAwesomeIcon icon={faPlus} />{" "}
+									{t("assessment.addAssessment")}
 								</button>
 							</div>
 						</aside>
@@ -556,7 +565,7 @@ const AssessmentManagement = () => {
 											}`}
 											onClick={() => setSelectedSemester("First Semester")}
 										>
-											First Semester
+											{t("assessment.firstSemester")}
 										</div>
 										<div
 											className={`asmnt-semester-tab ${
@@ -564,7 +573,7 @@ const AssessmentManagement = () => {
 											}`}
 											onClick={() => setSelectedSemester("Second Semester")}
 										>
-											Second Semester
+											{t("assessment.secondSemester")}
 										</div>
 									</div>
 								</div>
@@ -579,8 +588,8 @@ const AssessmentManagement = () => {
 									>
 										<option value="" disabled>
 											{loading
-												? "Loading departments..."
-												: "-- Select Department --"}
+												? t("assessment.loadingDepartments")
+												: t("assessment.selectDepartment")}
 										</option>
 										{departmentNames.map((dept) => (
 											<option key={dept.id} value={dept.id}>
@@ -599,7 +608,9 @@ const AssessmentManagement = () => {
 									<FontAwesomeIcon
 										icon={formVisible ? faChevronUp : faChevronDown}
 									/>
-									{formVisible ? "Hide Form" : "Add Assessment"}
+									{formVisible
+										? t("assessment.hideForm")
+										: t("assessment.addAssessment")}
 								</button>
 							</div>
 						)}
@@ -609,13 +620,13 @@ const AssessmentManagement = () => {
 							<div className="asmnt-mobile-form">
 								<div className="asmnt-form-group">
 									<label className="asmnt-form-label" htmlFor="mobile-title">
-										Assessment Title
+										{t("assessment.assessmentTitle")}
 									</label>
 									<input
 										id="mobile-title"
 										type="text"
 										className="asmnt-form-control"
-										placeholder="Enter assessment title"
+										placeholder={t("assessment.enterTitle")}
 										value={title}
 										onChange={(e) => setTitle(e.target.value)}
 									/>
@@ -623,7 +634,7 @@ const AssessmentManagement = () => {
 
 								<div className="asmnt-form-group">
 									<label className="asmnt-form-label" htmlFor="mobile-type">
-										Assessment Type
+										{t("assessment.assessmentType")}
 									</label>
 									<select
 										id="mobile-type"
@@ -641,13 +652,13 @@ const AssessmentManagement = () => {
 
 								<div className="asmnt-form-group">
 									<label className="asmnt-form-label" htmlFor="mobile-points">
-										Points
+										{t("assessment.points")}
 									</label>
 									<input
 										id="mobile-points"
 										type="number"
 										className="asmnt-form-control"
-										placeholder="Points"
+										placeholder={t("assessment.points")}
 										min="0"
 										max="100"
 										value={points}
@@ -657,7 +668,7 @@ const AssessmentManagement = () => {
 
 								<div className="asmnt-form-group">
 									<label className="asmnt-form-label" htmlFor="mobile-month">
-										Month
+										{t("assessment.month")}
 									</label>
 									<select
 										id="mobile-month"
@@ -679,7 +690,8 @@ const AssessmentManagement = () => {
 										onClick={handleAddAssessment}
 										disabled={!selectedDepartment}
 									>
-										<FontAwesomeIcon icon={faPlus} /> Add Assessment
+										<FontAwesomeIcon icon={faPlus} />{" "}
+										{t("assessment.addAssessment")}
 									</button>
 								</div>
 							</div>
@@ -689,7 +701,8 @@ const AssessmentManagement = () => {
 						<div className="asmnt-month-nav">
 							<div className="asmnt-month-nav-header">
 								<h3 className="asmnt-month-nav-title">
-									<FontAwesomeIcon icon={faCalendarAlt} /> Monthly Assessments
+									<FontAwesomeIcon icon={faCalendarAlt} />{" "}
+									{t("assessment.monthlyAssessments")}
 								</h3>
 							</div>
 
@@ -712,7 +725,7 @@ const AssessmentManagement = () => {
 											<span className="asmnt-month-name">{month}</span>
 											<span className="asmnt-month-points">
 												<FontAwesomeIcon icon={faCalculator} />
-												{monthPoints} pts
+												{monthPoints} {t("assessment.pts")}
 											</span>
 										</div>
 									);
@@ -725,18 +738,19 @@ const AssessmentManagement = () => {
 							{assessmentsLoading ? (
 								<div className="asmnt-assessment-empty">
 									<div className="asmnt-loading-spinner"></div>
-									<p>Loading assessments...</p>
+									<p>{t("assessment.loadingAssessments")}</p>
 								</div>
 							) : currentMonthAssessments.length > 0 ? (
 								<>
 									<div className="asmnt-month-summary">
 										<div className="asmnt-month-total">
 											<FontAwesomeIcon icon={faCalculator} />
-											{totalMonthPoints} points total
+											{totalMonthPoints} {t("assessment.pointsTotal")}
 										</div>
 										<div className="asmnt-month-count">
 											<FontAwesomeIcon icon={faChartBar} />
-											{currentMonthAssessments.length} assessments
+											{currentMonthAssessments.length}{" "}
+											{t("assessment.assessments")}
 										</div>
 									</div>
 
@@ -766,7 +780,7 @@ const AssessmentManagement = () => {
 														<div className="asmnt-assessment-points">
 															{assessment.points}
 															<span className="asmnt-assessment-points-label">
-																points
+																{t("assessment.pointsLabel")}
 															</span>
 														</div>
 
@@ -776,7 +790,7 @@ const AssessmentManagement = () => {
 																onClick={(e) =>
 																	handleDeleteAssessment(e, assessment.id)
 																}
-																title="Delete assessment"
+																title={t("assessment.deleteAssessment")}
 															>
 																<FontAwesomeIcon icon={faTrashAlt} />
 															</button>
@@ -787,7 +801,7 @@ const AssessmentManagement = () => {
 																	e.stopPropagation();
 																	openGradesModal(assessment);
 																}}
-																title="Grade assessments"
+																title={t("assessment.gradeAssessments")}
 															>
 																<FontAwesomeIcon icon={faChevronRight} />
 															</button>
@@ -800,7 +814,10 @@ const AssessmentManagement = () => {
 								</>
 							) : (
 								<div className="asmnt-assessment-empty">
-									No assessments scheduled for {selectedMonth}
+									{t("assessment.noAssessmentsForMonth").replace(
+										"{month}",
+										selectedMonth
+									)}
 								</div>
 							)}
 						</div>

@@ -516,7 +516,7 @@ const WeeklyLogs = () => {
 
 							return (
 								<div key={`period-${period}`} className="period-row">
-									<div className="period-label">P{period}</div>
+									<div className="period-label">{period}</div>
 
 									<div className="day-cells">
 										{(isMobile ? daysToRender : weekdays).map((day) => {
