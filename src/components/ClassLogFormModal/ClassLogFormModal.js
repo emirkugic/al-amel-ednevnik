@@ -11,6 +11,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CLASS_PERIODS } from "../../constants";
 import { useClassLogForm } from "./hooks/useClassLogForm";
+import { useLanguage } from "../../contexts/LanguageContext";
 import "./ClassLogFormModal.css";
 
 const ClassLogFormModal = ({
@@ -23,6 +24,7 @@ const ClassLogFormModal = ({
 	subjects = [],
 	onSuccess,
 }) => {
+	const { t } = useLanguage();
 	const {
 		isNewUiMode,
 		weekDays,
@@ -87,7 +89,7 @@ const ClassLogFormModal = ({
 				<div className="clm-modal-content">
 					{/* Header with title and close button */}
 					<div className="clm-modal-header">
-						<h2>Log a Class</h2>
+						<h2>{t("classLogForm.logClass")}</h2>
 						<button className="clm-close-button" onClick={onClose}>
 							<FontAwesomeIcon icon={faTimes} />
 						</button>
@@ -119,7 +121,7 @@ const ClassLogFormModal = ({
 						{/* Left column - Class Information */}
 						<div className="clm-class-info-column">
 							<div className="clm-section-header">
-								<h3>Class Information</h3>
+								<h3>{t("classLogForm.classInfo")}</h3>
 							</div>
 
 							<div className="clm-form-fields">
@@ -131,14 +133,14 @@ const ClassLogFormModal = ({
 													icon={faCalendar}
 													className="clm-field-icon"
 												/>
-												Day of the Week
+												{t("classLogForm.dayOfWeek")}
 											</label>
 											<select
 												className="clm-select"
 												value={selectedDay}
 												onChange={(e) => setSelectedDay(e.target.value)}
 											>
-												<option value="">Select a day</option>
+												<option value="">{t("classLogForm.selectDay")}</option>
 												{weekDays.map((day) => (
 													<option key={day.value} value={day.value}>
 														{day.label}
@@ -153,14 +155,16 @@ const ClassLogFormModal = ({
 													icon={faClock}
 													className="clm-field-icon"
 												/>
-												Period
+												{t("classLogForm.period")}
 											</label>
 											<select
 												className="clm-select"
 												value={classHour}
 												onChange={(e) => setClassHour(e.target.value)}
 											>
-												<option value="">Select a period</option>
+												<option value="">
+													{t("classLogForm.selectPeriod")}
+												</option>
 												{CLASS_PERIODS.map((period) => (
 													<option key={period.value} value={period.value}>
 														{period.label}
@@ -178,14 +182,16 @@ const ClassLogFormModal = ({
 												icon={faBook}
 												className="clm-field-icon"
 											/>
-											Subject
+											{t("classLogForm.subject")}
 										</label>
 										<select
 											className="clm-select"
 											value={selectedSubject}
 											onChange={(e) => setSelectedSubject(e.target.value)}
 										>
-											<option value="">Select a subject</option>
+											<option value="">
+												{t("classLogForm.selectSubject")}
+											</option>
 											{teacherSubjects.map((subject) => (
 												<option key={subject.value} value={subject.value}>
 													{subject.label}
@@ -201,12 +207,12 @@ const ClassLogFormModal = ({
 											icon={faChalkboardTeacher}
 											className="clm-field-icon"
 										/>
-										Lecture Title
+										{t("classLogForm.lectureTitle")}
 									</label>
 									<input
 										type="text"
 										className="clm-text-input"
-										placeholder="Enter today's lecture title"
+										placeholder={t("classLogForm.lecturePlaceholder")}
 										value={lectureTitle}
 										onChange={(e) => setLectureTitle(e.target.value)}
 									/>
@@ -214,22 +220,28 @@ const ClassLogFormModal = ({
 
 								<div className="clm-summary">
 									<div className="clm-attendance-summary">
-										<h4>Attendance Summary</h4>
+										<h4>{t("classLogForm.attendanceSummary")}</h4>
 										<div className="clm-summary-stats">
 											<div className="clm-stat">
-												<span className="clm-stat-label">Present:</span>
+												<span className="clm-stat-label">
+													{t("classLogForm.present")}
+												</span>
 												<span className="clm-stat-value">
 													{studentOptions.length - absentStudents.length}
 												</span>
 											</div>
 											<div className="clm-stat">
-												<span className="clm-stat-label">Absent:</span>
+												<span className="clm-stat-label">
+													{t("classLogForm.absent")}
+												</span>
 												<span className="clm-stat-value clm-absent-count">
 													{absentStudents.length}
 												</span>
 											</div>
 											<div className="clm-stat">
-												<span className="clm-stat-label">Total:</span>
+												<span className="clm-stat-label">
+													{t("classLogForm.total")}
+												</span>
 												<span className="clm-stat-value">
 													{studentOptions.length}
 												</span>
@@ -243,7 +255,7 @@ const ClassLogFormModal = ({
 						{/* Right column - Student Attendance */}
 						<div className="clm-attendance-column">
 							<div className="clm-section-header">
-								<h3>Student Attendance</h3>
+								<h3>{t("classLogForm.studentAttendance")}</h3>
 							</div>
 
 							<div className="clm-student-search">
@@ -251,7 +263,7 @@ const ClassLogFormModal = ({
 								<input
 									type="text"
 									className="clm-search-input"
-									placeholder="Search students..."
+									placeholder={t("classLogForm.searchStudents")}
 									value={searchTerm}
 									onChange={(e) => setSearchTerm(e.target.value)}
 								/>
@@ -278,15 +290,15 @@ const ClassLogFormModal = ({
 												<span className="clm-toggle-slider"></span>
 												<span className="clm-status-label">
 													{isStudentAbsent(student.value)
-														? "Absent"
-														: "Present"}
+														? t("classLogForm.absentStatus")
+														: t("classLogForm.presentStatus")}
 												</span>
 											</label>
 										</div>
 									))
 								) : (
 									<div className="clm-no-results">
-										<p>No students found matching your search criteria.</p>
+										<p>{t("classLogForm.noStudentsFound")}</p>
 									</div>
 								)}
 							</div>
@@ -300,14 +312,16 @@ const ClassLogFormModal = ({
 							onClick={onClose}
 							disabled={isLoading}
 						>
-							Cancel
+							{t("classLogForm.cancel")}
 						</button>
 						<button
 							className="clm-submit-button"
 							onClick={handleSubmit}
 							disabled={isLoading}
 						>
-							{isLoading ? "Saving..." : "Log Class"}
+							{isLoading
+								? t("classLogForm.saving")
+								: t("classLogForm.logClass")}
 						</button>
 					</div>
 				</div>

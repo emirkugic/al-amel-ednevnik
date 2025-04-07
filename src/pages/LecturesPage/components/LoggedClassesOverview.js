@@ -37,9 +37,11 @@ import departmentApi from "../../../api/departmentApi";
 import useAuth from "../../../hooks/useAuth";
 import { ClassLogsContext } from "../../../contexts/ClassLogsContext";
 import classLogApi from "../../../api/classLogApi";
+import { useLanguage } from "../../../contexts/LanguageContext";
 
 const LoggedClassesOverview = ({ departmentId }) => {
 	const { user } = useAuth();
+	const { t } = useLanguage();
 	const { classLogs, loading, error, setClassLogs } =
 		useContext(ClassLogsContext);
 
@@ -221,7 +223,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 	};
 
 	const handleDeleteLog = async (logId) => {
-		if (!window.confirm("Are you sure you want to delete this log?")) return;
+		if (!window.confirm(t("common.confirmDelete"))) return;
 
 		try {
 			await classLogApi.deleteClassLog(logId, user.token);
@@ -329,7 +331,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 	// Get tooltip content for absent students
 	const getAbsentTooltip = (absentStudents) => {
 		if (!absentStudents || absentStudents.length === 0) {
-			return "All students present";
+			return t("classLogs.allPresent");
 		}
 		return absentStudents.map((student) => student.name).join("\n");
 	};
@@ -346,7 +348,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 				<div className="lco-logged-classes-overview">
 					<div className="lco-loading-container">
 						<div className="lco-loading-spinner"></div>
-						<p>Loading your class logs...</p>
+						<p>{t("classLogs.loading")}</p>
 					</div>
 				</div>
 			</div>
@@ -363,13 +365,13 @@ const LoggedClassesOverview = ({ departmentId }) => {
 							icon={faExclamationTriangle}
 							className="lco-error-icon"
 						/>
-						<h3 className="lco-error-title">Unable to load class logs</h3>
+						<h3 className="lco-error-title">{t("classLogs.unableToLoad")}</h3>
 						<p className="lco-error-message">{error}</p>
 						<button
 							className="lco-retry-button"
 							onClick={() => window.location.reload()}
 						>
-							Try again
+							{t("classLogs.tryAgain")}
 						</button>
 					</div>
 				</div>
@@ -388,11 +390,11 @@ const LoggedClassesOverview = ({ departmentId }) => {
 								{selectedSubjectName || "Loading..."}
 							</span>
 							<span className="lco-department-name">
-								{departmentName || "Loading..."} Class
+								{departmentName || "Loading..."} {t("classLogs.class")}
 							</span>
 						</h2>
 						<div className="lco-header-subtitle">
-							Class Log Management Dashboard
+							{t("classLogs.managementDashboard")}
 						</div>
 					</div>
 
@@ -404,7 +406,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 							</div>
 							<div className="lco-stat-content">
 								<div className="lco-stat-value">{summaryStats.totalLogs}</div>
-								<div className="lco-stat-label">Total Logs</div>
+								<div className="lco-stat-label">{t("classLogs.totalLogs")}</div>
 							</div>
 						</div>
 
@@ -414,7 +416,9 @@ const LoggedClassesOverview = ({ departmentId }) => {
 							</div>
 							<div className="lco-stat-content">
 								<div className="lco-stat-value">{summaryStats.recentLogs}</div>
-								<div className="lco-stat-label">Last 30 Days</div>
+								<div className="lco-stat-label">
+									{t("classLogs.last30Days")}
+								</div>
 							</div>
 						</div>
 
@@ -426,7 +430,9 @@ const LoggedClassesOverview = ({ departmentId }) => {
 								<div className="lco-stat-value">
 									{summaryStats.totalAbsences}
 								</div>
-								<div className="lco-stat-label">Total Absences</div>
+								<div className="lco-stat-label">
+									{t("classLogs.totalAbsences")}
+								</div>
 							</div>
 						</div>
 
@@ -438,7 +444,9 @@ const LoggedClassesOverview = ({ departmentId }) => {
 								<div className="lco-stat-value">
 									{summaryStats.editableLogs}
 								</div>
-								<div className="lco-stat-label">Editable Logs</div>
+								<div className="lco-stat-label">
+									{t("classLogs.editableLogs")}
+								</div>
 							</div>
 						</div>
 					</div>
@@ -447,7 +455,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 				{/* Control Panel */}
 				<div className="lco-control-panel">
 					<div className="lco-control-group lco-subject-selector">
-						<label htmlFor="subject-select">Subject</label>
+						<label htmlFor="subject-select">{t("classLogs.subject")}</label>
 						<select
 							id="subject-select"
 							className="lco-subject-dropdown"
@@ -464,14 +472,14 @@ const LoggedClassesOverview = ({ departmentId }) => {
 					</div>
 
 					<div className="lco-control-group lco-view-selector">
-						<label>View Mode</label>
+						<label>{t("classLogs.viewMode")}</label>
 						<div className="lco-view-buttons">
 							<button
 								className={`lco-view-button ${
 									viewMode === "table" ? "active" : ""
 								}`}
 								onClick={() => setViewMode("table")}
-								title="Table View"
+								title={t("classLogs.tableView")}
 							>
 								<FontAwesomeIcon icon={faListOl} />
 							</button>
@@ -480,7 +488,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 									viewMode === "card" ? "active" : ""
 								}`}
 								onClick={() => setViewMode("card")}
-								title="Card View"
+								title={t("classLogs.cardView")}
 							>
 								<FontAwesomeIcon icon={faClipboardList} />
 							</button>
@@ -490,7 +498,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 									viewMode === "calendar" ? "active" : ""
 								}`}
 								onClick={() => setViewMode("calendar")}
-								title="Calendar View"
+								title={t("classLogs.calendarView")}
 							>
 								<FontAwesomeIcon icon={faCalendarAlt} />
 							</button> */}
@@ -498,14 +506,14 @@ const LoggedClassesOverview = ({ departmentId }) => {
 					</div>
 
 					<div className="lco-control-group lco-search-container">
-						<label htmlFor="search-input">Search</label>
+						<label htmlFor="search-input">{t("classLogs.search")}</label>
 						<div className="lco-search-input-wrapper">
 							<FontAwesomeIcon icon={faSearch} className="lco-search-icon" />
 							<input
 								id="search-input"
 								type="text"
 								className="lco-search-input"
-								placeholder="Search by title, subject or student..."
+								placeholder={t("classLogs.searchPlaceholder")}
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
 							/>
@@ -513,7 +521,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 								<button
 									className="lco-clear-search"
 									onClick={() => setSearchQuery("")}
-									title="Clear search"
+									title={t("classLogs.clearSearch")}
 								>
 									<FontAwesomeIcon icon={faTimes} />
 								</button>
@@ -524,7 +532,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 					<div className="lco-control-group lco-button-container">
 						<label>&nbsp;</label>
 						<button className="lco-log-class-button" onClick={handleLogClass}>
-							<FontAwesomeIcon icon={faPlus} /> Log Class
+							<FontAwesomeIcon icon={faPlus} /> {t("classLogForm.logClass")}
 						</button>
 					</div>
 				</div>
@@ -539,12 +547,20 @@ const LoggedClassesOverview = ({ departmentId }) => {
 									<table className="lco-logs-table">
 										<thead>
 											<tr>
-												<th className="lco-date-header">Date</th>
-												<th>Period</th>
-												<th>Lecture Title</th>
-												<th className="lco-sequence-header">Sequence</th>
-												<th className="lco-absent-header">Absent</th>
-												<th className="lco-actions-header">Actions</th>
+												<th className="lco-date-header">
+													{t("classLogs.date")}
+												</th>
+												<th>{t("classLogs.period")}</th>
+												<th>{t("classLogs.lectureTitle")}</th>
+												<th className="lco-sequence-header">
+													{t("classLogs.sequence")}
+												</th>
+												<th className="lco-absent-header">
+													{t("classLogs.absent")}
+												</th>
+												<th className="lco-actions-header">
+													{t("classLogs.actions")}
+												</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -591,7 +607,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 															<button
 																className="lco-edit-button"
 																onClick={() => handleEditLog(log)}
-																title="Edit log"
+																title={t("classLogs.editLog")}
 																disabled={!isEditable(log)}
 															>
 																<FontAwesomeIcon icon={faEdit} />
@@ -599,7 +615,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 															<button
 																className="lco-delete-button"
 																onClick={() => handleDeleteLog(log.classLogId)}
-																title="Delete log"
+																title={t("classLogs.deleteLog")}
 															>
 																<FontAwesomeIcon icon={faTrash} />
 															</button>
@@ -639,7 +655,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 																{formatDate(log.classDate)}
 															</span>
 															<span className="lco-card-period">
-																Period {log.period}
+																{t("classLogs.period")} {log.period}
 															</span>
 														</div>
 													</div>
@@ -658,17 +674,20 @@ const LoggedClassesOverview = ({ departmentId }) => {
 											<div className="lco-card-body">
 												<div className="lco-card-info-group">
 													<div className="lco-card-info-item">
-														<span className="lco-info-label">Attendance</span>
+														<span className="lco-info-label">
+															{t("classLogs.attendance")}
+														</span>
 														<span className="lco-info-value lco-attendance-value">
 															{log.absentStudents?.length ? (
 																<span className="lco-absent-indicator">
 																	<FontAwesomeIcon icon={faTimesCircle} />
-																	{log.absentStudents.length} absent
+																	{log.absentStudents.length}{" "}
+																	{t("classLogs.absents")}
 																</span>
 															) : (
 																<span className="lco-present-indicator">
 																	<FontAwesomeIcon icon={faCheckCircle} />
-																	All present
+																	{t("classLogs.allPresent")}
 																</span>
 															)}
 														</span>
@@ -677,7 +696,7 @@ const LoggedClassesOverview = ({ departmentId }) => {
 													{log.absentStudents?.length > 0 && (
 														<div className="lco-card-info-item lco-absent-list">
 															<span className="lco-info-label">
-																Absent Students
+																{t("classLogs.absentStudents")}
 															</span>
 															<span className="lco-info-value">
 																{log.absentStudents
@@ -693,7 +712,8 @@ const LoggedClassesOverview = ({ departmentId }) => {
 														className="lco-card-action lco-view-btn"
 														onClick={() => handleLogClick(log)}
 													>
-														<FontAwesomeIcon icon={faInfoCircle} /> View
+														<FontAwesomeIcon icon={faInfoCircle} />{" "}
+														{t("classLogs.view")}
 													</button>
 
 													<button
@@ -701,14 +721,16 @@ const LoggedClassesOverview = ({ departmentId }) => {
 														onClick={() => handleEditLog(log)}
 														disabled={!isEditable(log)}
 													>
-														<FontAwesomeIcon icon={faEdit} /> Edit
+														<FontAwesomeIcon icon={faEdit} />{" "}
+														{t("classLogs.edit")}
 													</button>
 
 													<button
 														className="lco-card-action lco-delete-btn"
 														onClick={() => handleDeleteLog(log.classLogId)}
 													>
-														<FontAwesomeIcon icon={faTrash} /> Delete
+														<FontAwesomeIcon icon={faTrash} />{" "}
+														{t("classLogs.delete")}
 													</button>
 												</div>
 											</div>
@@ -725,8 +747,8 @@ const LoggedClassesOverview = ({ departmentId }) => {
 											icon={faCalendarAlt}
 											className="lco-calendar-icon"
 										/>
-										<p>Calendar view is in development.</p>
-										<p>Please use table or card view for now.</p>
+										<p>{t("classLogs.calendarInDevelopment")}</p>
+										<p>{t("classLogs.useOtherViews")}</p>
 									</div>
 								</div>
 							)}
@@ -734,9 +756,11 @@ const LoggedClassesOverview = ({ departmentId }) => {
 							{/* Pagination */}
 							<div className="lco-pagination-container">
 								<div className="lco-pagination-info">
-									Showing {indexOfFirstLog + 1} to{" "}
-									{Math.min(indexOfLastLog, filteredLogs.length)} of{" "}
-									{filteredLogs.length} entries
+									{t("classLogs.showing")} {indexOfFirstLog + 1}{" "}
+									{t("classLogs.to")}{" "}
+									{Math.min(indexOfLastLog, filteredLogs.length)}{" "}
+									{t("classLogs.of")} {filteredLogs.length}{" "}
+									{t("classLogs.entries")}
 								</div>
 								<div className="lco-pagination-controls">
 									<button
@@ -783,16 +807,15 @@ const LoggedClassesOverview = ({ departmentId }) => {
 					) : (
 						<div className="lco-empty-state">
 							<FontAwesomeIcon icon={faBookOpen} className="lco-empty-icon" />
-							<h3 className="lco-empty-title">No class logs found</h3>
-							<p className="lco-empty-text">
-								"Start tracking your classes by adding your first log."
-							</p>
+							<h3 className="lco-empty-title">{t("classLogs.noLogsFound")}</h3>
+							<p className="lco-empty-text">{t("classLogs.startTracking")}</p>
 							{!searchQuery === "all" && (
 								<button
 									className="lco-log-class-button"
 									onClick={handleLogClass}
 								>
-									<FontAwesomeIcon icon={faPlus} /> Log your first class
+									<FontAwesomeIcon icon={faPlus} />{" "}
+									{t("classLogs.logFirstClass")}
 								</button>
 							)}
 							{searchQuery && (
@@ -802,7 +825,8 @@ const LoggedClassesOverview = ({ departmentId }) => {
 										setSearchQuery("");
 									}}
 								>
-									<FontAwesomeIcon icon={faTimes} /> Clear search
+									<FontAwesomeIcon icon={faTimes} />{" "}
+									{t("classLogs.clearSearch")}
 								</button>
 							)}
 						</div>
