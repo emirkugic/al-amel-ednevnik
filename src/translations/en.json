@@ -381,5 +381,19 @@
             "november": "November",
             "december": "December"
         }
+    },
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "grades": "Grades",
+        "lectures": "Lectures",
+        "weeklyReport": "Weekly Report",
+        "myDepartment": "My Department",
+        "schedule": "Schedule",
+        "teachers": "Teachers",
+        "subjects": "Subjects",
+        "classes": "Classes",
+        "parents": "Parents",
+        "settings": "Settings",
+        "logout": "Logout"
     }
 }

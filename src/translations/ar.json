@@ -314,5 +314,19 @@
             "november": "نوفمبر",
             "december": "ديسمبر"
         }
+    },
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "grades": "الدرجات",
+        "lectures": "المحاضرات",
+        "weeklyReport": "التقرير الأسبوعي",
+        "myDepartment": "قسمي",
+        "schedule": "الجدول",
+        "teachers": "المدرسون",
+        "subjects": "المواد",
+        "classes": "الفصول",
+        "parents": "أولياء الأمور",
+        "settings": "الإعدادات",
+        "logout": "تسجيل الخروج"
     }
 }

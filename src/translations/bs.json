@@ -17,10 +17,10 @@
         "saveChanges": "Sačuvaj promjene"
     },
     "parents": {
-        "pageTitle": "Roditelji",
+        "pageTitle": "Roditelja",
         "searchParents": "Pretraži roditelje...",
         "addNewParent": "Dodaj novog roditelja",
-        "parent": "Roditelj",
+        "parent": "Ime roditelja",
         "email": "Email",
         "phone": "Telefon",
         "actions": "Akcije",
@@ -197,7 +197,7 @@
         }
     },
     "classLogForm": {
-        "logClass": "Evidentiraj Čas",
+        "logClass": "Upiši Čas",
         "classInfo": "Informacije o Času",
         "dayOfWeek": "Dan u Sedmici",
         "selectDay": "Odaberite dan",
@@ -218,7 +218,7 @@
         "presentStatus": "Prisutan",
         "cancel": "Otkaži",
         "saving": "Spremanje...",
-        "logClass": "Evidentiraj Čas"
+        "logClass": "Upiši Čas"
     },
     "classLogs": {
         "loading": "Učitavanje vaših upisanih časova...",
@@ -241,7 +241,7 @@
         "date": "Datum",
         "period": "Čas",
         "lectureTitle": "Naslov Lekcije",
-        "sequence": "Redoslijed",
+        "sequence": "Redni broj",
         "absent": "Odsutni",
         "actions": "Akcije",
         "editLog": "Uredi zapisnik",
@@ -280,7 +280,7 @@
         "month": "Mjesec",
         "addAssessment": "Dodaj Ocjenjivanje",
         "hideForm": "Sakrij Formu",
-        "monthlyAssessments": "Mjesečna Ocjenjivanja",
+        "monthlyAssessments": "Mjesečne ocjene",
         "pts": "bod",
         "loadingAssessments": "Učitavanje ocjenjivanja...",
         "pointsTotal": "ukupno bodova",
@@ -314,5 +314,19 @@
             "november": "Novembar",
             "december": "Decembar"
         }
+    },
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "grades": "Ocjene",
+        "lectures": "Predavanja",
+        "weeklyReport": "Sedmični Izvještaj",
+        "myDepartment": "Moje Odjeljenje",
+        "schedule": "Raspored",
+        "teachers": "Nastavnici",
+        "subjects": "Predmeti",
+        "classes": "Razredi",
+        "parents": "Roditelji",
+        "settings": "Postavke",
+        "logout": "Odjava"
     }
 }

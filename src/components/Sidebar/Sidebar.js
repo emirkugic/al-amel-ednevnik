@@ -19,12 +19,14 @@ import useAuth from "../../hooks/useAuth";
 import teacherApi from "../../api/teacherApi";
 import subjectApi from "../../api/subjectApi";
 import departmentApi from "../../api/departmentApi";
+import { useLanguage } from "../../contexts/LanguageContext";
 import "./Sidebar.css";
 import { useClassTeacher } from "../../hooks";
 
 const DesktopSidebar = () => {
 	const location = useLocation();
 	const { user, logout } = useAuth();
+	const { t } = useLanguage();
 	const [activeItem, setActiveItem] = useState("");
 	const [myCourses, setMyCourses] = useState([]);
 	const [myDepartments, setMyDepartments] = useState([]);
@@ -100,7 +102,7 @@ const DesktopSidebar = () => {
 		// Only include the Dashboard button if we're in mobile view.
 		if (isMobile) {
 			items.push({
-				title: "Dashboard",
+				title: t("sidebar.dashboard"),
 				icon: faHouse,
 				route: "/",
 			});
@@ -108,17 +110,17 @@ const DesktopSidebar = () => {
 		// Common items
 		items.push(
 			{
-				title: "Grades",
+				title: t("sidebar.grades"),
 				icon: faBook,
 				route: myCourses,
 			},
 			{
-				title: "Lectures",
+				title: t("sidebar.lectures"),
 				icon: faBookOpen,
 				route: myDepartments,
 			},
 			{
-				title: "Weekly Report",
+				title: t("sidebar.weeklyReport"),
 				icon: faChartLine,
 				route: "/logs",
 			}
@@ -126,7 +128,7 @@ const DesktopSidebar = () => {
 
 		if (user?.role === "Admin" || classTeacherDeptId) {
 			items.push({
-				title: "My Department",
+				title: t("sidebar.myDepartment"),
 				icon: faChalkboardTeacher,
 				route: "/department",
 			});
@@ -136,27 +138,27 @@ const DesktopSidebar = () => {
 		if (user?.role === "Admin") {
 			items.push(
 				// {
-				// 	title: "Schedule",
+				// 	title: t("sidebar.schedule"),
 				// 	icon: faCalendarAlt,
 				// 	route: "/schedule",
 				// },
 				{
-					title: "Teachers",
+					title: t("sidebar.teachers"),
 					icon: faChalkboardTeacher,
 					route: "/teachers",
 				},
 				{
-					title: "Subjects",
+					title: t("sidebar.subjects"),
 					icon: faBook,
 					route: "/subjects",
 				},
 				{
-					title: "Classes",
+					title: t("sidebar.classes"),
 					icon: faPeopleGroup,
 					route: "/classes",
 				},
 				{
-					title: "Parents",
+					title: t("sidebar.parents"),
 					icon: faPeopleGroup,
 					route: "/parents",
 				}
@@ -164,7 +166,7 @@ const DesktopSidebar = () => {
 		}
 
 		return items;
-	}, [user, myCourses, myDepartments, classTeacherDeptId, isMobile]);
+	}, [user, myCourses, myDepartments, classTeacherDeptId, isMobile, t]);
 
 	useEffect(() => {
 		const activeMenuItem = menuItems.find((item) =>
@@ -204,7 +206,7 @@ const DesktopSidebar = () => {
 					className="hamburger-icon"
 					onClick={toggleSidebar}
 				/>
-				<span className="topbar-title">Dashboard</span>
+				<span className="topbar-title">{t("sidebar.dashboard")}</span>
 			</div>
 			<div className={`desktop-sidebar ${isSidebarOpen ? "open" : ""}`}>
 				<div className="sidebar-menu">
@@ -221,14 +223,16 @@ const DesktopSidebar = () => {
 				</div>
 				<div className="logout-container">
 					<SidebarButton
-						title="Settings"
+						title={t("sidebar.settings")}
 						icon={faCog}
 						route="/settings"
-						isActive={activeItem === "Settings"}
-						onClick={() => handleButtonClick("Settings", "/settings")}
+						isActive={activeItem === t("sidebar.settings")}
+						onClick={() =>
+							handleButtonClick(t("sidebar.settings"), "/settings")
+						}
 					/>
 					<SidebarButton
-						title="Logout"
+						title={t("sidebar.logout")}
 						icon={faSignOutAlt}
 						route="/login"
 						isActive={false}
