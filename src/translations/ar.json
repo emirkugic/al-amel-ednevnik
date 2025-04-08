@@ -316,7 +316,7 @@
         }
     },
     "sidebar": {
-        "dashboard": "Dashboard",
+        "dashboard": "لوحة القيادة",
         "grades": "الدرجات",
         "lectures": "المحاضرات",
         "weeklyReport": "التقرير الأسبوعي",
@@ -327,6 +327,21 @@
         "classes": "الفصول",
         "parents": "أولياء الأمور",
         "settings": "الإعدادات",
-        "logout": "تسجيل الخروج"
+        "logout": "تسجيل الخروج",
+        "grade": "صف",
+        "formatGrade": {
+            "first": "الأول",
+            "second": "الثاني",
+            "third": "الثالث",
+            "fourth": "الرابع",
+            "fifth": "الخامس",
+            "sixth": "السادس",
+            "seventh": "السابع",
+            "eighth": "الثامن",
+            "ninth": "التاسع",
+            "tenth": "العاشر",
+            "eleventh": "الحادي عشر",
+            "twelfth": "الثاني عشر"
+        }
     }
 }

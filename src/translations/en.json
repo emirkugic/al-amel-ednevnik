@@ -394,6 +394,21 @@
         "classes": "Classes",
         "parents": "Parents",
         "settings": "Settings",
-        "logout": "Logout"
+        "logout": "Logout",
+        "grade": "grade",
+        "formatGrade": {
+            "first": "1st",
+            "second": "2nd",
+            "third": "3rd",
+            "fourth": "4th",
+            "fifth": "5th",
+            "sixth": "6th",
+            "seventh": "7th",
+            "eighth": "8th",
+            "ninth": "9th",
+            "tenth": "10th",
+            "eleventh": "11th",
+            "twelfth": "12th"
+        }
     }
 }
