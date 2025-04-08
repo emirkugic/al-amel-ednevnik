@@ -157,11 +157,17 @@ const WeeklyLogs = () => {
 	for (let i = 0; i < 5; i++) {
 		const dayDate = new Date(mondayOffset);
 		dayDate.setDate(mondayOffset.getDate() + i);
+
+		// Use local date format instead of ISO string to avoid timezone issues
+		const localDateFormatted = `${dayDate.getFullYear()}-${String(
+			dayDate.getMonth() + 1
+		).padStart(2, "0")}-${String(dayDate.getDate()).padStart(2, "0")}`;
+
 		weekdays.push({
 			name: dayNames[i],
 			shortName: shortDayNames[i],
 			date: dayDate,
-			dateFormatted: dayDate.toISOString().split("T")[0],
+			dateFormatted: localDateFormatted,
 			periodCount: i === 4 ? 5 : 7, // Friday has 5 periods, other days have 7
 			isToday: dayDate.toDateString() === today.toDateString(),
 		});
@@ -191,7 +197,13 @@ const WeeklyLogs = () => {
 	// Helper functions
 	const getLogsFor = (dateFormatted, period) => {
 		return allLogs.filter((log) => {
-			const logDate = new Date(log.classDate).toISOString().split("T")[0];
+			// Create a date object from log.classDate
+			const logDateObj = new Date(log.classDate);
+			// Format in local timezone consistently
+			const logDate = `${logDateObj.getFullYear()}-${String(
+				logDateObj.getMonth() + 1
+			).padStart(2, "0")}-${String(logDateObj.getDate()).padStart(2, "0")}`;
+
 			return (
 				logDate === dateFormatted &&
 				Number(log.period) === period &&
