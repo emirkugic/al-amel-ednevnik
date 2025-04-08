@@ -343,5 +343,68 @@
             "eleventh": "11.",
             "twelfth": "12."
         }
+    },
+    "calendar": {
+        "daysOfWeek": {
+            "monday": "Pon",
+            "tuesday": "Uto",
+            "wednesday": "Sri",
+            "thursday": "Čet",
+            "friday": "Pet",
+            "saturday": "Sub",
+            "sunday": "Ned"
+        },
+        "months": {
+            "january": "Januar",
+            "february": "Februar",
+            "march": "Mart",
+            "april": "April",
+            "may": "Maj",
+            "june": "Juni",
+            "july": "Juli",
+            "august": "August",
+            "september": "Septembar",
+            "october": "Oktobar",
+            "november": "Novembar",
+            "december": "Decembar"
+        }
+    },
+    "timetable": {
+        "mondayToThursday": "Ponedjeljak do Četvrtak",
+        "friday": "Petak",
+        "periods": {
+            "first": "1. Čas",
+            "second": "2. Čas",
+            "third": "3. Čas",
+            "fourth": "4. Čas",
+            "fifth": "5. Čas",
+            "sixth": "6. Čas",
+            "seventh": "7. Čas"
+        },
+        "breaks": {
+            "main": "Odmor",
+            "second": "Odmor 2"
+        }
+    },
+    "logDetails": {
+        "error": "Greška",
+        "closeModal": "Zatvori prozor",
+        "loadingDetails": "Učitavanje detalja...",
+        "loadingLogDetails": "Učitavanje detalja zapisa...",
+        "close": "Zatvori",
+        "date": "Datum",
+        "subject": "Predmet",
+        "period": "Čas",
+        "periodNumber": "Čas {number}",
+        "sequence": "Redoslijed",
+        "sequenceNumber": "#{number}",
+        "teacher": "Nastavnik",
+        "class": "Razred",
+        "studentAttendance": "Prisustvo Učenika",
+        "studentsAbsent": "{count} učenika odsutno",
+        "allPresent": "Svi učenici prisutni",
+        "edit": "Uredi",
+        "delete": "Izbriši",
+        "deleteConfirmation": "Jeste li sigurni da želite izbrisati ovaj zapis?"
     }
 }

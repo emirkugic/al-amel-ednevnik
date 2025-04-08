@@ -343,5 +343,68 @@
             "eleventh": "الحادي عشر",
             "twelfth": "الثاني عشر"
         }
+    },
+    "calendar": {
+        "daysOfWeek": {
+            "monday": "إثن",
+            "tuesday": "ثلا",
+            "wednesday": "أرب",
+            "thursday": "خمي",
+            "friday": "جمع",
+            "saturday": "سبت",
+            "sunday": "أحد"
+        },
+        "months": {
+            "january": "يناير",
+            "february": "فبراير",
+            "march": "مارس",
+            "april": "أبريل",
+            "may": "مايو",
+            "june": "يونيو",
+            "july": "يوليو",
+            "august": "أغسطس",
+            "september": "سبتمبر",
+            "october": "أكتوبر",
+            "november": "نوفمبر",
+            "december": "ديسمبر"
+        }
+    },
+    "timetable": {
+        "mondayToThursday": "الإثنين إلى الخميس",
+        "friday": "الجمعة",
+        "periods": {
+            "first": "الحصة الأولى",
+            "second": "الحصة الثانية",
+            "third": "الحصة الثالثة",
+            "fourth": "الحصة الرابعة",
+            "fifth": "الحصة الخامسة",
+            "sixth": "الحصة السادسة",
+            "seventh": "الحصة السابعة"
+        },
+        "breaks": {
+            "main": "استراحة",
+            "second": "استراحة 2"
+        }
+    },
+    "logDetails": {
+        "error": "خطأ",
+        "closeModal": "إغلاق النافذة",
+        "loadingDetails": "جاري تحميل التفاصيل...",
+        "loadingLogDetails": "جاري تحميل تفاصيل السجل...",
+        "close": "إغلاق",
+        "date": "التاريخ",
+        "subject": "المادة",
+        "period": "الحصة",
+        "periodNumber": "الحصة {number}",
+        "sequence": "التسلسل",
+        "sequenceNumber": "#{number}",
+        "teacher": "المدرس",
+        "class": "الصف",
+        "studentAttendance": "حضور الطلاب",
+        "studentsAbsent": "{count} طالب غائب",
+        "allPresent": "جميع الطلاب حاضرون",
+        "edit": "تعديل",
+        "delete": "حذف",
+        "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا السجل؟"
     }
 }

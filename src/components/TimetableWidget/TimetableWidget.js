@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useLanguage } from "../../contexts/LanguageContext";
 import "./TimetableWidget.css";
 
 const TimetableWidget = () => {
+	const { t } = useLanguage();
 	const today = new Date();
 	const isWinter = false; // Summer timetable is active starting April 7
 	const isFriday = today.getDay() === 5;
@@ -16,6 +18,32 @@ const TimetableWidget = () => {
 		}, 60000);
 		return () => clearInterval(timer);
 	}, []);
+
+	// Get translated label for each timetable entry
+	const getTranslatedLabel = (labelKey) => {
+		switch (labelKey) {
+			case "1st Period":
+				return t("timetable.periods.first");
+			case "2nd Period":
+				return t("timetable.periods.second");
+			case "3rd Period":
+				return t("timetable.periods.third");
+			case "4th Period":
+				return t("timetable.periods.fourth");
+			case "5th Period":
+				return t("timetable.periods.fifth");
+			case "6th Period":
+				return t("timetable.periods.sixth");
+			case "7th Period":
+				return t("timetable.periods.seventh");
+			case "Break":
+				return t("timetable.breaks.main");
+			case "Break 2":
+				return t("timetable.breaks.second");
+			default:
+				return labelKey;
+		}
+	};
 
 	const timetableData = {
 		Summer: {
@@ -66,7 +94,7 @@ const TimetableWidget = () => {
 						<div className="mtt-time">
 							{item.start} - {item.end}
 						</div>
-						<div className="mtt-label">{item.label}</div>
+						<div className="mtt-label">{getTranslatedLabel(item.label)}</div>
 					</div>
 				))}
 			</div>

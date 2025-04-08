@@ -1,23 +1,36 @@
 import React, { useState } from "react";
+import { useLanguage } from "../../contexts/LanguageContext";
 import "./CalendarWidget.css";
 
 const CalendarWidget = () => {
+	const { t } = useLanguage();
 	const [currentDate, setCurrentDate] = useState(new Date());
 
-	const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-	const monthNames = [
-		"January",
-		"February",
-		"March",
-		"April",
-		"May",
-		"June",
-		"July",
-		"August",
-		"September",
-		"October",
-		"November",
-		"December",
+	// Use translated day names
+	const daysOfWeek = [
+		t("calendar.daysOfWeek.monday"),
+		t("calendar.daysOfWeek.tuesday"),
+		t("calendar.daysOfWeek.wednesday"),
+		t("calendar.daysOfWeek.thursday"),
+		t("calendar.daysOfWeek.friday"),
+		t("calendar.daysOfWeek.saturday"),
+		t("calendar.daysOfWeek.sunday"),
+	];
+
+	// Array of month keys for translation
+	const monthKeys = [
+		"january",
+		"february",
+		"march",
+		"april",
+		"may",
+		"june",
+		"july",
+		"august",
+		"september",
+		"october",
+		"november",
+		"december",
 	];
 
 	const getDaysInMonth = (date) => {
@@ -75,6 +88,11 @@ const CalendarWidget = () => {
 		return days;
 	};
 
+	// Get translated month name
+	const getTranslatedMonth = (monthIndex) => {
+		return t(`calendar.months.${monthKeys[monthIndex]}`);
+	};
+
 	return (
 		<div className="mtc-calendar-widget">
 			<div className="mtc-calendar-header">
@@ -96,7 +114,8 @@ const CalendarWidget = () => {
 					</svg>
 				</button>
 				<span>
-					{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+					{getTranslatedMonth(currentDate.getMonth())}{" "}
+					{currentDate.getFullYear()}
 				</span>
 				<button onClick={handleNextMonth} className="mtc-arrow-button">
 					<svg

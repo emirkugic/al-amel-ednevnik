@@ -55,6 +55,9 @@ const DesktopSidebar = () => {
 			7: "seventh",
 			8: "eighth",
 			9: "ninth",
+			10: "tenth",
+			11: "eleventh",
+			12: "twelfth",
 		};
 
 		// If it's a digit, format it
