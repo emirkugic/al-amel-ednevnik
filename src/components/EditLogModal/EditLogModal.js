@@ -13,10 +13,12 @@ import studentApi from "../../api/studentApi";
 import classLogApi from "../../api/classLogApi";
 import useAuth from "../../hooks/useAuth";
 import { CLASS_PERIODS } from "../../constants";
+import { useLanguage } from "../../contexts/LanguageContext";
 import "./EditLogModal.css";
 
 const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 	const { user } = useAuth();
+	const { t, language } = useLanguage();
 	const [lectureTitle, setLectureTitle] = useState(log.lectureTitle || "");
 	const [sequence, setSequence] = useState(
 		log.sequence ? log.sequence.toString() : "1"
@@ -33,7 +35,13 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 
 	// Generate weekdays based on the log's date
 	const weekDays = useMemo(() => {
-		const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+		const dayNames = [
+			t("days.fullNames.monday"),
+			t("days.fullNames.tuesday"),
+			t("days.fullNames.wednesday"),
+			t("days.fullNames.thursday"),
+			t("days.fullNames.friday"),
+		];
 
 		// Use the log's date to find the Monday of that week
 		const logDate = new Date(log.classDate);
@@ -50,16 +58,21 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 		return dayNames.map((name, index) => {
 			const date = new Date(mondayDate);
 			date.setDate(mondayDate.getDate() + index);
+
+			// Use appropriate locale based on current language
+			const locale =
+				language === "ar" ? "ar-SA" : language === "bs" ? "bs-BA" : "en-US";
+
 			return {
 				value: date.toISOString().split("T")[0], // Format as YYYY-MM-DD
-				label: `${name} (${date.toLocaleDateString("en-US", {
+				label: `${name} (${date.toLocaleDateString(locale, {
 					month: "short",
 					day: "numeric",
 				})})`,
 				date: date,
 			};
 		});
-	}, [log.classDate]);
+	}, [log.classDate, t, language]);
 
 	// Initialize day based on classDate from log
 	useEffect(() => {
@@ -100,26 +113,26 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 				setAbsentStudents(formattedAbsent);
 			} catch (error) {
 				console.error("Error fetching students:", error);
-				setNotification("Error fetching students. Please try again.");
+				setNotification(t("editLogModal.errorFetchingStudents"));
 			}
 		};
 
 		fetchStudents();
-	}, [log.departmentId, user.token, log.absentStudents]);
+	}, [log.departmentId, user.token, log.absentStudents, t]);
 
 	const handleSubmit = async () => {
 		if (!lectureTitle.trim()) {
-			setNotification("Please enter a lecture title.");
+			setNotification(t("editLogModal.pleaseEnterTitle"));
 			return;
 		}
 
 		if (!selectedDay) {
-			setNotification("Please select a day of the week.");
+			setNotification(t("editLogModal.pleaseSelectDay"));
 			return;
 		}
 
 		if (!period) {
-			setNotification("Please select a period.");
+			setNotification(t("editLogModal.pleaseSelectPeriod"));
 			return;
 		}
 
@@ -150,7 +163,7 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 			onClose();
 		} catch (error) {
 			console.error("Error updating log:", error);
-			setNotification("Error updating log. Please try again.");
+			setNotification(t("editLogModal.errorUpdatingLog"));
 		} finally {
 			setIsLoading(false);
 		}
@@ -183,7 +196,7 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 				<div className="elm-modal-content">
 					{/* Header with title and close button */}
 					<div className="elm-modal-header">
-						<h2>Edit Class Log</h2>
+						<h2>{t("editLogModal.title")}</h2>
 						<button className="elm-close-button" onClick={onClose}>
 							<FontAwesomeIcon icon={faTimes} />
 						</button>
@@ -210,7 +223,7 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 						{/* Left column - Log Information */}
 						<div className="elm-class-info-column">
 							<div className="elm-section-header">
-								<h3>Class Information</h3>
+								<h3>{t("editLogModal.classInfo")}</h3>
 							</div>
 
 							<div className="elm-form-fields">
@@ -221,14 +234,14 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 											icon={faCalendar}
 											className="elm-field-icon"
 										/>
-										Day of the Week
+										{t("editLogModal.dayOfWeek")}
 									</label>
 									<select
 										className="elm-select"
 										value={selectedDay}
 										onChange={(e) => setSelectedDay(e.target.value)}
 									>
-										<option value="">Select a day</option>
+										<option value="">{t("editLogModal.selectDay")}</option>
 										{weekDays.map((day) => (
 											<option key={day.value} value={day.value}>
 												{day.label}
@@ -244,19 +257,38 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 											icon={faClock}
 											className="elm-field-icon"
 										/>
-										Period
+										{t("editLogModal.period")}
 									</label>
 									<select
 										className="elm-select"
 										value={period}
 										onChange={(e) => setPeriod(e.target.value)}
 									>
-										<option value="">Select a period</option>
-										{CLASS_PERIODS.map((period) => (
-											<option key={period.value} value={period.value}>
-												{period.label}
-											</option>
-										))}
+										<option value="">{t("editLogModal.selectPeriod")}</option>
+										{CLASS_PERIODS.map((period) => {
+											// Map numeric values to their ordinal names for translation
+											const periodNameMap = {
+												1: "first",
+												2: "second",
+												3: "third",
+												4: "fourth",
+												5: "fifth",
+												6: "sixth",
+												7: "seventh",
+											};
+
+											// Use the mapping or fallback to the original value
+											const translationKey =
+												periodNameMap[period.value] ||
+												period.translationKey ||
+												"first";
+
+											return (
+												<option key={period.value} value={period.value}>
+													{t(`timetable.periods.${translationKey}`)}
+												</option>
+											);
+										})}
 									</select>
 								</div>
 
@@ -266,12 +298,12 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 											icon={faChalkboardTeacher}
 											className="elm-field-icon"
 										/>
-										Lecture Title
+										{t("editLogModal.lectureTitle")}
 									</label>
 									<input
 										type="text"
 										className="elm-text-input"
-										placeholder="Enter lecture title"
+										placeholder={t("editLogModal.lecturePlaceholder")}
 										value={lectureTitle}
 										onChange={(e) => setLectureTitle(e.target.value)}
 									/>
@@ -283,12 +315,12 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 											icon={faLayerGroup}
 											className="elm-field-icon"
 										/>
-										Sequence Number
+										{t("editLogModal.sequenceNumber")}
 									</label>
 									<input
 										type="text"
 										className="elm-text-input"
-										placeholder="Enter sequence number"
+										placeholder={t("editLogModal.sequencePlaceholder")}
 										value={sequence}
 										onChange={(e) => setSequence(e.target.value)}
 									/>
@@ -298,22 +330,28 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 								<div className="elm-mobile-only">
 									<div className="elm-summary">
 										<div className="elm-attendance-summary">
-											<h4>Attendance Summary</h4>
+											<h4>{t("editLogModal.attendanceSummary")}</h4>
 											<div className="elm-summary-stats">
 												<div className="elm-stat">
-													<span className="elm-stat-label">Present:</span>
+													<span className="elm-stat-label">
+														{t("editLogModal.present")}
+													</span>
 													<span className="elm-stat-value">
 														{studentOptions.length - absentStudents.length}
 													</span>
 												</div>
 												<div className="elm-stat">
-													<span className="elm-stat-label">Absent:</span>
+													<span className="elm-stat-label">
+														{t("editLogModal.absent")}
+													</span>
 													<span className="elm-stat-value elm-absent-count">
 														{absentStudents.length}
 													</span>
 												</div>
 												<div className="elm-stat">
-													<span className="elm-stat-label">Total:</span>
+													<span className="elm-stat-label">
+														{t("editLogModal.total")}
+													</span>
 													<span className="elm-stat-value">
 														{studentOptions.length}
 													</span>
@@ -328,7 +366,7 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 						{/* Right column - Student Attendance */}
 						<div className="elm-attendance-column">
 							<div className="elm-section-header">
-								<h3>Student Attendance</h3>
+								<h3>{t("editLogModal.studentAttendance")}</h3>
 							</div>
 
 							<div className="elm-student-search">
@@ -336,7 +374,7 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 								<input
 									type="text"
 									className="elm-search-input"
-									placeholder="Search students..."
+									placeholder={t("editLogModal.searchStudents")}
 									value={searchTerm}
 									onChange={(e) => setSearchTerm(e.target.value)}
 								/>
@@ -363,15 +401,15 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 												<span className="elm-toggle-slider"></span>
 												<span className="elm-status-label">
 													{isStudentAbsent(student.value)
-														? "Absent"
-														: "Present"}
+														? t("editLogModal.absentStatus")
+														: t("editLogModal.presentStatus")}
 												</span>
 											</label>
 										</div>
 									))
 								) : (
 									<div className="elm-no-results">
-										<p>No students found matching your search criteria.</p>
+										<p>{t("editLogModal.noStudentsFound")}</p>
 									</div>
 								)}
 							</div>
@@ -384,19 +422,25 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 							<div className="elm-attendance-summary">
 								<div className="elm-summary-stats">
 									<div className="elm-stat">
-										<span className="elm-stat-label">Present:</span>
+										<span className="elm-stat-label">
+											{t("editLogModal.present")}
+										</span>
 										<span className="elm-stat-value">
 											{studentOptions.length - absentStudents.length}
 										</span>
 									</div>
 									<div className="elm-stat">
-										<span className="elm-stat-label">Absent:</span>
+										<span className="elm-stat-label">
+											{t("editLogModal.absent")}
+										</span>
 										<span className="elm-stat-value elm-absent-count">
 											{absentStudents.length}
 										</span>
 									</div>
 									<div className="elm-stat">
-										<span className="elm-stat-label">Total:</span>
+										<span className="elm-stat-label">
+											{t("editLogModal.total")}
+										</span>
 										<span className="elm-stat-value">
 											{studentOptions.length}
 										</span>
@@ -410,14 +454,16 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 								onClick={onClose}
 								disabled={isLoading}
 							>
-								Cancel
+								{t("editLogModal.cancel")}
 							</button>
 							<button
 								className="elm-submit-button"
 								onClick={handleSubmit}
 								disabled={isLoading}
 							>
-								{isLoading ? "Saving..." : "Save Changes"}
+								{isLoading
+									? t("editLogModal.saving")
+									: t("editLogModal.saveChanges")}
 							</button>
 						</div>
 					</div>
