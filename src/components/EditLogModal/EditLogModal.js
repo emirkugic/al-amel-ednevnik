@@ -59,16 +59,94 @@ const EditLogModal = ({ log, onClose, handleUpdateLog }) => {
 			const date = new Date(mondayDate);
 			date.setDate(mondayDate.getDate() + index);
 
-			// Use appropriate locale based on current language
-			const locale =
-				language === "ar" ? "ar-SA" : language === "bs" ? "bs-BA" : "en-US";
+			// Format date based on language
+			let formattedDate = "";
+			const day = date.getDate();
+			const month = date.getMonth() + 1; // getMonth() is 0-indexed
+
+			// Get month name according to language
+			const getMonthName = (monthIndex) => {
+				const months = {
+					ar: [
+						"يناير",
+						"فبراير",
+						"مارس",
+						"أبريل",
+						"مايو",
+						"يونيو",
+						"يوليو",
+						"أغسطس",
+						"سبتمبر",
+						"أكتوبر",
+						"نوفمبر",
+						"ديسمبر",
+					],
+					bs: [
+						"jan",
+						"feb",
+						"mar",
+						"apr",
+						"maj",
+						"jun",
+						"jul",
+						"aug",
+						"sep",
+						"okt",
+						"nov",
+						"dec",
+					],
+					en: [
+						"Jan",
+						"Feb",
+						"Mar",
+						"Apr",
+						"May",
+						"Jun",
+						"Jul",
+						"Aug",
+						"Sep",
+						"Oct",
+						"Nov",
+						"Dec",
+					],
+				};
+
+				return months[language]
+					? months[language][monthIndex]
+					: months.en[monthIndex];
+			};
+
+			if (language === "ar") {
+				// Arabic format: day month (٣ أبريل)
+				const arabicNumerals = [
+					"٠",
+					"١",
+					"٢",
+					"٣",
+					"٤",
+					"٥",
+					"٦",
+					"٧",
+					"٨",
+					"٩",
+				];
+				const dayInArabic = day
+					.toString()
+					.split("")
+					.map((d) => arabicNumerals[parseInt(d)])
+					.join("");
+				formattedDate = `${dayInArabic} ${getMonthName(date.getMonth())}`;
+			} else if (language === "bs") {
+				// Bosnian format: day. month (3. apr)
+				formattedDate = `${day}. ${getMonthName(date.getMonth())}`;
+			} else {
+				// English format: month day (Apr 3)
+				formattedDate = `${getMonthName(date.getMonth())} ${day}`;
+			}
 
 			return {
 				value: date.toISOString().split("T")[0], // Format as YYYY-MM-DD
-				label: `${name} (${date.toLocaleDateString(locale, {
-					month: "short",
-					day: "numeric",
-				})})`,
+				label: `${name} (${formattedDate})`,
 				date: date,
 			};
 		});
