@@ -4,6 +4,7 @@ import { faCheck, faTimes, faEdit } from "@fortawesome/free-solid-svg-icons";
 import "./Absences.css";
 import ExcuseModal from "./Absences/ExcuseModal";
 import { useAbsences, useAuth, useClassTeacher } from "../../../hooks";
+import { useLanguage } from "../../../contexts/LanguageContext"; // Added language context
 
 const tempDepartmentId = "673b94896d216a12b56d0c17";
 
@@ -38,6 +39,8 @@ const getWeekNumber = (dateString) => {
 const Absences = () => {
 	const { user } = useAuth();
 	const token = user?.token;
+	const { t, language } = useLanguage(); // Added language hook
+
 	// Get the department id for class teachers using our custom hook.
 	const classTeacherDeptId = useClassTeacher();
 	const departmentId = classTeacherDeptId || tempDepartmentId;
@@ -65,7 +68,35 @@ const Absences = () => {
 			const dateObj = new Date(rawDate);
 			const dateStr = dateObj.toISOString().split("T")[0];
 
-			const weekLabel = `Week ${getWeekNumber(dateStr)}`;
+			// Formatted week label based on language
+			const weekNumber = getWeekNumber(dateStr);
+			let weekLabel;
+
+			// Format week label with explicit number formatting for Arabic
+			if (language === "ar") {
+				// Convert number to Arabic numerals
+				const arabicNumerals = [
+					"٠",
+					"١",
+					"٢",
+					"٣",
+					"٤",
+					"٥",
+					"٦",
+					"٧",
+					"٨",
+					"٩",
+				];
+				const weekNumberStr = weekNumber
+					.toString()
+					.split("")
+					.map((digit) => arabicNumerals[parseInt(digit)])
+					.join("");
+				weekLabel = `الأسبوع ${weekNumberStr}`;
+			} else {
+				weekLabel = t("absences.weekLabel", { number: weekNumber });
+			}
+
 			const studentId = student.id;
 			const studentName = `${student.firstName} ${student.lastName}`.trim();
 			const periodNumber = parseInt(classLog.period, 10) || 1;
@@ -84,7 +115,7 @@ const Absences = () => {
 			});
 		}
 		return grouped;
-	}, [localAbsences]);
+	}, [localAbsences, t, language]); // Added t as dependency
 
 	const [periodModal, setPeriodModal] = useState({
 		open: false,
@@ -193,13 +224,62 @@ const Absences = () => {
 		setPeriodModal({ ...periodModal, open: false });
 	};
 
-	if (loading) return <div className="loading">Loading absences...</div>;
-	if (error) return <div className="error">Error: {error}</div>;
+	// Format date string according to locale
+	const formatDate = (dateStr) => {
+		const dateObj = new Date(dateStr);
+
+		if (language === "ar") {
+			// For Arabic, use the appropriate locale but without Hijri calendar
+			// This prevents getting dates like "٢٨‏/٧‏/١٤٤٦ هـ"
+			try {
+				// Use a simpler format for Arabic with Gregorian calendar
+				return dateObj.toLocaleDateString("ar", {
+					year: "numeric",
+					month: "numeric",
+					day: "numeric",
+				});
+			} catch (error) {
+				// Fallback for compatibility
+				return dateStr;
+			}
+		} else if (language === "bs") {
+			// For Bosnian, use the appropriate format
+			return dateObj.toLocaleDateString("bs-BA", {
+				year: "numeric",
+				month: "numeric",
+				day: "numeric",
+			});
+		} else {
+			// Default to ISO format
+			return dateStr;
+		}
+	};
+
+	// Format period number according to language
+	const formatPeriodNumber = (number) => {
+		if (language === "ar") {
+			// Convert to Arabic numerals
+			const arabicNumerals = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+			return "ح" + arabicNumerals[number];
+		} else if (language === "bs") {
+			return "Č" + number;
+		} else {
+			return "P" + number;
+		}
+	};
+
+	if (loading) return <div className="loading">{t("absences.loading")}</div>;
+	if (error)
+		return (
+			<div className="error">
+				{t("absences.error")}: {error}
+			</div>
+		);
 
 	return (
 		<div className="absences-container">
 			{Object.keys(absencesByWeek).length === 0 ? (
-				<p className="no-data">No absences to display.</p>
+				<p className="no-data">{t("absences.noData")}</p>
 			) : (
 				Object.entries(absencesByWeek).map(([week, days]) => (
 					<div key={week} className="week-group">
@@ -208,20 +288,21 @@ const Absences = () => {
 							const dateObj = new Date(dateStr);
 							const isFriday = dateObj.getDay() === 5;
 							const totalPeriods = isFriday ? 5 : 7;
+							const displayDate = formatDate(dateStr);
 
 							return (
 								<div key={dateStr} className="day-card">
 									<div className="day-card-header">
-										<h4>{dateStr}</h4>
+										<h4>{displayDate}</h4>
 									</div>
 									<table className="absences-table">
 										<thead>
 											<tr>
-												<th>Student</th>
+												<th>{t("absences.student")}</th>
 												{Array.from({ length: totalPeriods }, (_, i) => (
-													<th key={i}>P{i + 1}</th>
+													<th key={i}>{formatPeriodNumber(i + 1)}</th>
 												))}
-												<th>Actions</th>
+												<th>{t("absences.actions")}</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -266,8 +347,8 @@ const Absences = () => {
 																		}
 																		title={
 																			reason
-																				? `Reason: ${reason}`
-																				: "Click to excuse (provide a reason)"
+																				? t("absences.reasonTitle", { reason })
+																				: t("absences.clickToExcuse")
 																		}
 																	>
 																		{resolved ? (
@@ -287,7 +368,7 @@ const Absences = () => {
 																}
 															>
 																<FontAwesomeIcon icon={faEdit} />
-																<span>Excuse Day</span>
+																<span>{t("absences.excuseDay")}</span>
 															</button>
 														</td>
 													</tr>
@@ -305,8 +386,10 @@ const Absences = () => {
 				open={periodModal.open}
 				title={
 					periodModal.periodNumber !== null
-						? "Excuse This Absence"
-						: `Excuse All Absences for ${periodModal.date}`
+						? t("absences.excuseThisAbsence")
+						: t("absences.excuseAllAbsences", {
+								date: formatDate(periodModal.date),
+						  })
 				}
 				reason={periodModal.currentReason}
 				onChange={(e) =>

@@ -7,10 +7,12 @@ import React, {
 } from "react";
 import "./Grades.css";
 import { useAuth, useGrades, useClassTeacher } from "../../../hooks";
+import { useLanguage } from "../../../contexts/LanguageContext"; // Added language context
 
 const Grades = () => {
 	const { user } = useAuth();
 	const token = user?.token;
+	const { t, language } = useLanguage(); // Added language hook
 
 	// Use class teacher department ID
 	const departmentId = useClassTeacher();
@@ -81,10 +83,18 @@ const Grades = () => {
 					const monthKey = `${date.getFullYear()}-${date.getMonth() + 1}`;
 
 					if (!monthlyAssessments[monthKey]) {
+						// Get month display name with proper localization
+						const monthLocale =
+							language === "ar"
+								? "ar-SA"
+								: language === "bs"
+								? "bs-BA"
+								: "en-US";
+
 						monthlyAssessments[monthKey] = {
 							year: date.getFullYear(),
 							month: date.getMonth() + 1,
-							displayName: date.toLocaleString("default", {
+							displayName: date.toLocaleString(monthLocale, {
 								month: "long",
 								year: "numeric",
 							}),
@@ -197,7 +207,7 @@ const Grades = () => {
 			.filter(Boolean); // Remove null entries (subjects with no grades)
 
 		return subjectsWithGrades;
-	}, [grades]);
+	}, [grades, language]); // Added language dependency
 
 	// Filter students based on search term - memoized to avoid recalculation
 	const filteredStudents = useMemo(() => {
@@ -244,6 +254,42 @@ const Grades = () => {
 		},
 		[processedData]
 	);
+
+	// Format numbers according to locale
+	const formatNumber = (num, precision = 1) => {
+		if (num === null || num === undefined) return "";
+
+		// Arabic uses different numerals
+		if (language === "ar") {
+			const arabicNumerals = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+			return num
+				.toFixed(precision)
+				.toString()
+				.split("")
+				.map((char) => {
+					return char === "."
+						? "٫" // Arabic decimal separator
+						: !isNaN(parseInt(char))
+						? arabicNumerals[parseInt(char)]
+						: char;
+				})
+				.join("");
+		}
+
+		// For other languages use standard formatting
+		return num.toFixed(precision);
+	};
+
+	// Format percentage according to locale
+	const formatPercentage = (percent, precision = 1) => {
+		if (percent === null || percent === undefined) return "";
+
+		// Format the number
+		const formattedNumber = formatNumber(percent, precision);
+
+		// Add appropriate percentage symbol and direction
+		return language === "ar" ? `٪${formattedNumber}` : `${formattedNumber}%`;
+	};
 
 	// Print all grades for a student
 	const printStudentGrades = useCallback(
@@ -327,7 +373,7 @@ const Grades = () => {
 		return (
 			<div className="grade-sys-loading">
 				<div className="grade-sys-spinner"></div>
-				<p>Loading grades...</p>
+				<p>{t("grades.loading")}</p>
 			</div>
 		);
 	}
@@ -335,7 +381,9 @@ const Grades = () => {
 	if (error) {
 		return (
 			<div className="grade-sys-error">
-				<p>Error: {error.message || error.toString()}</p>
+				<p>
+					{t("grades.error")}: {error.message || error.toString()}
+				</p>
 			</div>
 		);
 	}
@@ -343,7 +391,7 @@ const Grades = () => {
 	if (!processedData.length) {
 		return (
 			<div className="grade-sys-empty">
-				<p>No grades available for this department.</p>
+				<p>{t("grades.noGradesAvailable")}</p>
 			</div>
 		);
 	}
@@ -354,16 +402,21 @@ const Grades = () => {
 		let totalEarnedAll = 0;
 		let totalPossibleAll = 0;
 
+		// Use appropriate date locale
+		const dateLocale =
+			language === "ar" ? "ar-SA" : language === "bs" ? "bs-BA" : "en-US";
+
 		return (
 			<div className="grade-sys-print-container" ref={printContainerRef}>
 				<div className="grade-sys-print-header">
-					<h1>Student Grade Report</h1>
+					<h1>{t("grades.studentGradeReport")}</h1>
 					<h2>
 						{studentToPrint.firstName} {studentToPrint.lastName}
 					</h2>
 					<div className="grade-sys-print-meta">
 						<p>
-							<strong>Report Date:</strong> {new Date().toLocaleDateString()}
+							<strong>{t("grades.reportDate")}:</strong>{" "}
+							{new Date().toLocaleDateString(dateLocale)}
 						</p>
 					</div>
 				</div>
@@ -420,10 +473,10 @@ const Grades = () => {
 										<table className="grade-sys-print-table">
 											<thead>
 												<tr>
-													<th>Assessment</th>
-													<th>Score</th>
-													<th>Possible</th>
-													<th>Percentage</th>
+													<th>{t("grades.assessment")}</th>
+													<th>{t("grades.score")}</th>
+													<th>{t("grades.possible")}</th>
+													<th>{t("grades.percentage")}</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -442,12 +495,18 @@ const Grades = () => {
 
 														return (
 															<tr key={type}>
-																<td>{type}</td>
-																<td>{typeGrade.toFixed(1)}</td>
-																<td>{typeGroup.pointsPossible.toFixed(1)}</td>
+																<td>
+																	{t(
+																		`grades.assessmentTypes.${type.toLowerCase()}`
+																	) || type}
+																</td>
+																<td>{formatNumber(typeGrade)}</td>
+																<td>
+																	{formatNumber(typeGroup.pointsPossible)}
+																</td>
 																<td>
 																	{typePercentage !== null
-																		? `${typePercentage.toFixed(1)}%`
+																		? formatPercentage(typePercentage)
 																		: "-"}
 																</td>
 															</tr>
@@ -471,11 +530,15 @@ const Grades = () => {
 														return (
 															<tr key={assess.assessmentId}>
 																<td>
-																	{assess.title} ({assess.type})
+																	{assess.title} (
+																	{t(
+																		`grades.assessmentTypes.${assess.type.toLowerCase()}`
+																	) || assess.type}
+																	)
 																</td>
-																<td>{grade.toFixed(1)}</td>
-																<td>{assess.pointsPossible.toFixed(1)}</td>
-																<td>{assessPercentage.toFixed(1)}%</td>
+																<td>{formatNumber(grade)}</td>
+																<td>{formatNumber(assess.pointsPossible)}</td>
+																<td>{formatPercentage(assessPercentage)}</td>
 															</tr>
 														);
 													}
@@ -487,20 +550,19 @@ const Grades = () => {
 												{monthPossible > 0 && (
 													<tr className="grade-sys-print-total">
 														<td>
-															<strong>Month Total</strong>
+															<strong>{t("grades.monthTotal")}</strong>
 														</td>
 														<td>
-															<strong>{monthEarned.toFixed(1)}</strong>
+															<strong>{formatNumber(monthEarned)}</strong>
 														</td>
 														<td>
-															<strong>{monthPossible.toFixed(1)}</strong>
+															<strong>{formatNumber(monthPossible)}</strong>
 														</td>
 														<td>
 															<strong>
-																{((monthEarned / monthPossible) * 100).toFixed(
-																	1
+																{formatPercentage(
+																	(monthEarned / monthPossible) * 100
 																)}
-																%
 															</strong>
 														</td>
 													</tr>
@@ -518,20 +580,21 @@ const Grades = () => {
 										<thead>
 											<tr>
 												<th colSpan="3">
-													{subject.subjectName} - Overall Performance
+													{subject.subjectName} -{" "}
+													{t("grades.overallPerformance")}
 												</th>
 											</tr>
 											<tr>
-												<th>Total Earned</th>
-												<th>Total Possible</th>
-												<th>Final Percentage</th>
+												<th>{t("grades.totalEarned")}</th>
+												<th>{t("grades.totalPossible")}</th>
+												<th>{t("grades.finalPercentage")}</th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr className="grade-sys-print-subject-final">
-												<td>{subjectOverall.earned.toFixed(1)}</td>
-												<td>{subjectOverall.possible.toFixed(1)}</td>
-												<td>{subjectOverall.percentage.toFixed(1)}%</td>
+												<td>{formatNumber(subjectOverall.earned)}</td>
+												<td>{formatNumber(subjectOverall.possible)}</td>
+												<td>{formatPercentage(subjectOverall.percentage)}</td>
 											</tr>
 										</tbody>
 									</table>
@@ -544,26 +607,28 @@ const Grades = () => {
 				{/* Final summary across all subjects */}
 				{totalPossibleAll > 0 && (
 					<div className="grade-sys-print-summary">
-						<h2>Overall Academic Performance</h2>
+						<h2>{t("grades.overallAcademicPerformance")}</h2>
 						<table className="grade-sys-print-table">
 							<thead>
 								<tr>
-									<th>Total Earned (All Subjects)</th>
-									<th>Total Possible (All Subjects)</th>
-									<th>Final Average</th>
+									<th>{t("grades.totalEarnedAllSubjects")}</th>
+									<th>{t("grades.totalPossibleAllSubjects")}</th>
+									<th>{t("grades.finalAverage")}</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr className="grade-sys-print-final">
 									<td>
-										<strong>{totalEarnedAll.toFixed(1)}</strong>
+										<strong>{formatNumber(totalEarnedAll)}</strong>
 									</td>
 									<td>
-										<strong>{totalPossibleAll.toFixed(1)}</strong>
+										<strong>{formatNumber(totalPossibleAll)}</strong>
 									</td>
 									<td>
 										<strong>
-											{((totalEarnedAll / totalPossibleAll) * 100).toFixed(1)}%
+											{formatPercentage(
+												(totalEarnedAll / totalPossibleAll) * 100
+											)}
 										</strong>
 									</td>
 								</tr>
@@ -573,7 +638,7 @@ const Grades = () => {
 				)}
 
 				<div className="grade-sys-print-footer">
-					<p>End of report</p>
+					<p>{t("grades.endOfReport")}</p>
 				</div>
 			</div>
 		);
@@ -602,13 +667,15 @@ const Grades = () => {
 
 				<div className="grade-sys-info">
 					<div className="grade-sys-stat">
-						<span className="grade-sys-stat-label">Students:</span>
+						<span className="grade-sys-stat-label">
+							{t("grades.students")}:
+						</span>
 						<span className="grade-sys-stat-value">
 							{currentSubject.students.length}
 						</span>
 					</div>
 					<div className="grade-sys-stat">
-						<span className="grade-sys-stat-label">Months:</span>
+						<span className="grade-sys-stat-label">{t("grades.months")}:</span>
 						<span className="grade-sys-stat-value">
 							{currentSubject.monthlyData.length}
 						</span>
@@ -618,7 +685,7 @@ const Grades = () => {
 				<div className="grade-sys-search">
 					<input
 						type="text"
-						placeholder="Search students..."
+						placeholder={t("grades.searchStudents")}
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}
 					/>
@@ -639,17 +706,22 @@ const Grades = () => {
 						<table className="grade-sys-table">
 							<thead>
 								<tr>
-									<th className="grade-sys-student-col">Student</th>
+									<th className="grade-sys-student-col">
+										{t("grades.student")}
+									</th>
 
 									{/* Small assessments grouped by type */}
 									{Object.values(monthData.smallAssessmentsByType).map(
 										(typeGroup) => (
 											<th key={typeGroup.type} className="grade-sys-type-col">
 												<div className="grade-sys-type-name">
-													{typeGroup.type}
+													{t(
+														`grades.assessmentTypes.${typeGroup.type.toLowerCase()}`
+													) || typeGroup.type}
 												</div>
 												<div className="grade-sys-type-points">
-													{typeGroup.pointsPossible.toFixed(1)} pts
+													{formatNumber(typeGroup.pointsPossible)}{" "}
+													{t("grades.pts")}
 												</div>
 											</th>
 										)
@@ -665,13 +737,19 @@ const Grades = () => {
 												{assess.title}
 											</div>
 											<div className="grade-sys-assess-points">
-												{assess.pointsPossible} pts
+												{formatNumber(assess.pointsPossible)} {t("grades.pts")}
 											</div>
-											<div className="grade-sys-assess-type">{assess.type}</div>
+											<div className="grade-sys-assess-type">
+												{t(
+													`grades.assessmentTypes.${assess.type.toLowerCase()}`
+												) || assess.type}
+											</div>
 										</th>
 									))}
 
-									<th className="grade-sys-month-total-col">Month Total</th>
+									<th className="grade-sys-month-total-col">
+										{t("grades.monthTotal")}
+									</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -729,7 +807,7 @@ const Grades = () => {
 																!hasGrade ? "grade-sys-missing" : ""
 															}`}
 														>
-															{hasGrade ? typeGrade.toFixed(1) : "—"}
+															{hasGrade ? formatNumber(typeGrade) : "—"}
 														</td>
 													);
 												}
@@ -748,7 +826,7 @@ const Grades = () => {
 															!hasGrade ? "grade-sys-missing" : ""
 														}`}
 													>
-														{hasGrade ? grade.toFixed(1) : "—"}
+														{hasGrade ? formatNumber(grade) : "—"}
 													</td>
 												);
 											})}
@@ -757,12 +835,12 @@ const Grades = () => {
 												{monthPossible > 0 ? (
 													<>
 														<div className="grade-sys-month-score">
-															{monthEarned.toFixed(1)}/
-															{monthPossible.toFixed(1)}
+															{formatNumber(monthEarned)}/
+															{formatNumber(monthPossible)}
 														</div>
 														{monthPercentage !== null && (
 															<div className="grade-sys-month-percent">
-																{monthPercentage.toFixed(1)}%
+																{formatPercentage(monthPercentage)}
 															</div>
 														)}
 													</>
@@ -782,26 +860,37 @@ const Grades = () => {
 			{/* Overall summary section with print option */}
 			<div className="grade-sys-summary-card">
 				<div className="grade-sys-summary-header">
-					<h3>Overall Performance</h3>
+					<h3>{t("grades.overallPerformance")}</h3>
 				</div>
 				<div className="grade-sys-table-container">
 					<table className="grade-sys-table">
 						<thead>
 							<tr>
-								<th className="grade-sys-student-col">Student</th>
-								{currentSubject.monthlyData.map((monthData) => (
-									<th
-										key={`${monthData.year}-${monthData.month}`}
-										className="grade-sys-month-col"
-									>
-										{new Date(
-											monthData.year,
-											monthData.month - 1
-										).toLocaleString("default", { month: "short" })}
-									</th>
-								))}
-								<th className="grade-sys-final-col">Final</th>
-								<th className="grade-sys-export-col">Report</th>
+								<th className="grade-sys-student-col">{t("grades.student")}</th>
+								{currentSubject.monthlyData.map((monthData) => {
+									// Get appropriate month name based on locale
+									const monthLocale =
+										language === "ar"
+											? "ar-SA"
+											: language === "bs"
+											? "bs-BA"
+											: "en-US";
+									const monthName = new Date(
+										monthData.year,
+										monthData.month - 1
+									).toLocaleString(monthLocale, { month: "short" });
+
+									return (
+										<th
+											key={`${monthData.year}-${monthData.month}`}
+											className="grade-sys-month-col"
+										>
+											{monthName}
+										</th>
+									);
+								})}
+								<th className="grade-sys-final-col">{t("grades.final")}</th>
+								<th className="grade-sys-export-col">{t("grades.report")}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -877,7 +966,8 @@ const Grades = () => {
 																),
 															}}
 														>
-															{score.percentage.toFixed(0)}%
+															{formatNumber(score.percentage, 0)}
+															{language === "ar" ? "٪" : "%"}
 														</div>
 													) : (
 														<span className="grade-sys-no-data">—</span>
@@ -890,15 +980,17 @@ const Grades = () => {
 											{studentOverall.percentage !== null ? (
 												<div className="grade-sys-final-score">
 													<div className="grade-sys-final-percent">
-														{studentOverall.percentage.toFixed(1)}%
+														{formatPercentage(studentOverall.percentage)}
 													</div>
 													<div className="grade-sys-final-raw">
-														{studentOverall.earned.toFixed(1)}/
-														{studentOverall.possible.toFixed(1)}
+														{formatNumber(studentOverall.earned)}/
+														{formatNumber(studentOverall.possible)}
 													</div>
 												</div>
 											) : (
-												<span className="grade-sys-no-data">No Data</span>
+												<span className="grade-sys-no-data">
+													{t("grades.noData")}
+												</span>
 											)}
 										</td>
 
@@ -907,10 +999,10 @@ const Grades = () => {
 											<button
 												className="grade-sys-export-btn"
 												onClick={() => printStudentGrades(student)}
-												title="Print Complete Report"
+												title={t("grades.printCompleteReport")}
 											>
 												<span className="grade-sys-export-icon">🖨️</span>
-												Print
+												{t("grades.print")}
 											</button>
 										</td>
 									</tr>
