@@ -196,6 +196,11 @@ const DesktopSidebar = () => {
 				title: t("sidebar.weeklyReport"),
 				icon: faChartLine,
 				route: "/logs",
+			},
+			{
+				title: "Att",
+				icon: faCalendarAlt,
+				route: "/attendance",
 			}
 		);
 

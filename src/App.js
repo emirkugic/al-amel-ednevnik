@@ -34,6 +34,7 @@ import {
 	ClassManagement,
 	Dashboard,
 	NotFoundPage,
+	AttendancePage,
 } from "./pages";
 
 import "./App.css";
@@ -75,6 +76,7 @@ const AppContent = () => {
 			"/teachers",
 			"/classes",
 			"/settings",
+			"/attendance",
 		].includes(location.pathname) &&
 		!location.pathname.startsWith("/lectures/") &&
 		!location.pathname.startsWith("/courses/");
@@ -109,6 +111,7 @@ const AppContent = () => {
 						<Route path="/classes" element={<ClassManagement />} />
 						<Route path="/courses/:subject" element={<AssessmentPage />} />
 						<Route path="/settings" element={<SettingsPage />} />
+						<Route path="/attendance" element={<AttendancePage />} />
 					</Route>
 				</Routes>
 			</div>

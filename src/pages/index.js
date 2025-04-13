@@ -11,3 +11,5 @@ export { default as "ClassManagement" } from "./ClassManagementPage/ClassManagem
 export { default as "Dashboard" } from "./DashboardPage/Dashboard.js";
 export { default as "NotFoundPage" } from "./NotFoundPage/NotFoundPage.js";
 export { default as "MaintenancePage" } from "./MaintenancePage/MaintenancePage.js";
+// att page
+export { default as "AttendancePage" } from "./AttendancePage/AttendancePage.js";
