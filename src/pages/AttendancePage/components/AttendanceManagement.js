@@ -3,9 +3,6 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faSearch,
-	faTimes,
-	faExclamationCircle,
-	faSync,
 	faCalendarAlt,
 	faUserGraduate,
 	faCheckCircle,
@@ -13,12 +10,20 @@ import {
 	faEdit,
 	faBook,
 	faClock,
-	faCalendarDay,
 	faChevronLeft,
 	faChevronRight,
 	faExclamationTriangle,
 	faChalkboardTeacher,
+	faSync,
+	faExclamationCircle,
+	faCalendarDay,
+	faFilter,
+	faUsers,
+	faCheck,
+	faInfoCircle,
+	faTags,
 } from "@fortawesome/free-solid-svg-icons";
+
 import useAuth from "../../../hooks/useAuth";
 import useClassTeacher from "../../../hooks/useClassTeacher";
 import useAbsences from "../../../hooks/useAbsences";
@@ -44,71 +49,125 @@ const AttendanceManagement = () => {
 
 	// State management
 	const [searchTerm, setSearchTerm] = useState("");
-	const [filteredAbsences, setFilteredAbsences] = useState([]);
+	const [selectedFilter, setSelectedFilter] = useState("all");
+	const [currentMonth, setCurrentMonth] = useState(new Date());
+	const [selectedDate, setSelectedDate] = useState(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedAbsence, setSelectedAbsence] = useState(null);
-	const [filterExcused, setFilterExcused] = useState("all"); // 'all', 'excused', 'unexcused'
-	const [selectedDate, setSelectedDate] = useState(null);
-	const [currentMonth, setCurrentMonth] = useState(new Date());
+	const [isSelectMode, setIsSelectMode] = useState(false);
+	const [selectedStudents, setSelectedStudents] = useState({});
+
+	// Processed data
 	const [absencesByDate, setAbsencesByDate] = useState({});
 	const [attendanceData, setAttendanceData] = useState({});
+	const [absenceCounts, setAbsenceCounts] = useState({
+		total: 0,
+		unhandled: 0,
+		excused: 0,
+		unexcused: 0,
+	});
 
 	// Process and organize absences data
 	useEffect(() => {
-		if (!absences || !absences.length) return;
+		if (!absences || !students) return;
 
-		let filtered = [...absences];
-
-		// Apply excused filter
-		if (filterExcused !== "all") {
-			filtered = filtered.filter((item) =>
-				filterExcused === "excused"
-					? item.absence.isExcused
-					: !item.absence.isExcused
-			);
-		}
-
-		// Apply search term
-		if (searchTerm) {
-			const term = searchTerm.toLowerCase();
-			filtered = filtered.filter((item) => {
-				const studentName = item.student
-					? `${item.student.firstName} ${item.student.lastName}`.toLowerCase()
-					: "";
-				const subjectName = item.classLog.subjectName
-					? item.classLog.subjectName.toLowerCase()
-					: "";
-				const reason = item.absence.reason
-					? item.absence.reason.toLowerCase()
-					: "";
-
-				return (
-					studentName.includes(term) ||
-					subjectName.includes(term) ||
-					reason.includes(term)
-				);
-			});
-		}
-
-		setFilteredAbsences(filtered);
-
-		// Organize by date
+		// Organize absences by date and count by status
 		const byDate = {};
-		filtered.forEach((absence) => {
-			const date = absence.classLog.classDate.split("T")[0];
+		let totalCount = 0;
+		let unhandledCount = 0;
+		let excusedCount = 0;
+		let unexcusedCount = 0;
+
+		// Process each absence and organize by date
+		absences.forEach((absence) => {
+			// Convert the date to avoid timezone issues
+			const dateObj = new Date(absence.classLog.classDate);
+			const date = dateObj.toISOString().split("T")[0];
+
+			// Filter by status if needed
+			if (selectedFilter !== "all") {
+				if (
+					selectedFilter === "unhandled" &&
+					absence.absence.isExcused !== null
+				)
+					return;
+				if (selectedFilter === "excused" && absence.absence.isExcused !== true)
+					return;
+				if (
+					selectedFilter === "unexcused" &&
+					absence.absence.isExcused !== false
+				)
+					return;
+			}
+
+			// Filter by search term if needed
+			if (searchTerm) {
+				const term = searchTerm.toLowerCase();
+				const studentName = absence.student
+					? `${absence.student.firstName} ${absence.student.lastName}`.toLowerCase()
+					: "";
+				const subjectName = absence.classLog.subjectName
+					? absence.classLog.subjectName.toLowerCase()
+					: "";
+				const reason = absence.absence.reason
+					? absence.absence.reason.toLowerCase()
+					: "";
+
+				if (
+					!studentName.includes(term) &&
+					!subjectName.includes(term) &&
+					!reason.includes(term)
+				) {
+					return;
+				}
+			}
+
+			// Add to date collections
 			if (!byDate[date]) {
 				byDate[date] = [];
 			}
 			byDate[date].push(absence);
-		});
-		setAbsencesByDate(byDate);
-	}, [absences, searchTerm, filterExcused]);
 
-	// Generate attendance data for a selected date
+			// Update counts
+			totalCount++;
+			if (absence.absence.isExcused === null) {
+				unhandledCount++;
+			} else if (absence.absence.isExcused) {
+				excusedCount++;
+			} else {
+				unexcusedCount++;
+			}
+		});
+
+		setAbsencesByDate(byDate);
+		setAbsenceCounts({
+			total: totalCount,
+			unhandled: unhandledCount,
+			excused: excusedCount,
+			unexcused: unexcusedCount,
+		});
+
+		// Set default selected date if not already set
+		if (!selectedDate && Object.keys(byDate).length > 0) {
+			const today = new Date().toISOString().split("T")[0];
+
+			if (byDate[today]) {
+				setSelectedDate(today);
+			} else {
+				// Find the most recent date with absences
+				const dates = Object.keys(byDate).sort();
+				const mostRecent = dates[dates.length - 1];
+				setSelectedDate(mostRecent);
+			}
+		}
+	}, [absences, selectedFilter, searchTerm, students, selectedDate]);
+
+	// Generate attendance data for selected date
 	useEffect(() => {
 		if (!selectedDate || !students || studentsLoading) return;
 
 		const data = {};
+
 		// Define periods based on day of week (Mon-Thu: 7 periods, Fri: 5 periods)
 		const date = new Date(selectedDate);
 		const dayOfWeek = date.getDay(); // 0 = Sunday, 1 = Monday, etc.
@@ -118,12 +177,17 @@ const AttendanceManagement = () => {
 		// Initialize data structure for all periods
 		for (let period = 1; period <= periodsCount; period++) {
 			data[period] = {
-				logs: [], // Class logs for this period
-				students: {}, // Student attendance status for this period
+				logs: [],
+				students: {},
+				hasClass: false,
+				stats: {
+					present: 0,
+					absent: 0,
+				},
 			};
 		}
 
-		// If we have absences for this date, process them
+		// Process absences for this date
 		if (absencesByDate[selectedDate]) {
 			// Group absences by period and class log
 			absencesByDate[selectedDate].forEach((absence) => {
@@ -134,6 +198,7 @@ const AttendanceManagement = () => {
 				const logExists = data[period].logs.some(
 					(log) => log.id === absence.classLog.id
 				);
+
 				if (!logExists) {
 					data[period].logs.push({
 						id: absence.classLog.id,
@@ -143,29 +208,31 @@ const AttendanceManagement = () => {
 						teacherId: absence.classLog.teacherId,
 						teacherName: absence.classLog.teacherName || "Unknown Teacher",
 					});
+					data[period].hasClass = true;
 				}
 
 				// Add student absence
 				if (absence.student) {
-					if (!data[period].students[absence.student.id]) {
-						data[period].students[absence.student.id] = {
-							id: absence.student.id,
-							firstName: absence.student.firstName,
-							lastName: absence.student.lastName,
-							absenceId: absence.absence.id,
-							isExcused: absence.absence.isExcused,
-							reason: absence.absence.reason || "",
-							isPresent: false,
-						};
-					}
+					data[period].students[absence.student.id] = {
+						id: absence.student.id,
+						firstName: absence.student.firstName,
+						lastName: absence.student.lastName,
+						absenceId: absence.absence.id,
+						isExcused: absence.absence.isExcused,
+						reason: absence.absence.reason || "",
+						isPresent: false,
+					};
+
+					// Update stats
+					data[period].stats.absent++;
 				}
 			});
 		}
 
-		// Add all students to each period with default present status
+		// Add all students to periods with classes
 		for (let period = 1; period <= periodsCount; period++) {
 			// Skip periods with no class logged
-			if (data[period].logs.length === 0) continue;
+			if (!data[period].hasClass) continue;
 
 			students.forEach((student) => {
 				// If student is not already marked absent, mark as present
@@ -175,9 +242,10 @@ const AttendanceManagement = () => {
 						firstName: student.firstName,
 						lastName: student.lastName,
 						isPresent: true,
-						isExcused: false,
-						reason: "",
 					};
+
+					// Update present count
+					data[period].stats.present++;
 				}
 			});
 		}
@@ -192,26 +260,79 @@ const AttendanceManagement = () => {
 		return department ? department.departmentName : "";
 	};
 
-	// Handle opening the excuse modal
-	const handleExcuseAbsence = (absence) => {
-		setSelectedAbsence(absence);
-		setIsModalOpen(true);
+	// Calendar generation
+	const getDaysInMonth = (year, month) => {
+		return new Date(year, month + 1, 0).getDate();
 	};
 
-	// Handle saving excused absence
-	const handleSaveExcuse = async (isExcused, reason) => {
-		if (!selectedAbsence) return;
+	const generateCalendarDays = () => {
+		const year = currentMonth.getFullYear();
+		const month = currentMonth.getMonth();
+		const daysInMonth = getDaysInMonth(year, month);
 
-		try {
-			await updateAbsence(selectedAbsence.absence.id, isExcused, reason);
-			setIsModalOpen(false);
-			// No need to refresh data as the useAbsences hook will handle updating the state
-		} catch (err) {
-			console.error("Error updating absence:", err);
+		// Get the correct first day of month (adjusting for week starting Monday)
+		const firstDayOfMonth = new Date(year, month, 1).getDay();
+		const offset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
+
+		const days = [];
+
+		// Add empty cells for days before the 1st of month
+		for (let i = 0; i < offset; i++) {
+			days.push({ day: null, date: null });
+		}
+
+		// Add days of the month
+		for (let day = 1; day <= daysInMonth; day++) {
+			const date = new Date(year, month, day);
+			const dateString = date.toISOString().split("T")[0];
+
+			// Check if date has absences
+			const hasAbsences =
+				absencesByDate[dateString] && absencesByDate[dateString].length > 0;
+
+			// Check for unhandled absences
+			const hasUnhandled =
+				hasAbsences &&
+				absencesByDate[dateString].some(
+					(absence) => absence.absence.isExcused === null
+				);
+
+			const isSelected = dateString === selectedDate;
+			const isToday = new Date().toISOString().split("T")[0] === dateString;
+
+			days.push({
+				day,
+				date: dateString,
+				hasAbsences,
+				hasUnhandled,
+				isSelected,
+				isToday,
+			});
+		}
+
+		return days;
+	};
+
+	// Month navigation
+	const goToPreviousMonth = () => {
+		setCurrentMonth(
+			new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
+		);
+	};
+
+	const goToNextMonth = () => {
+		// Don't allow navigating past the current month
+		const nextMonth = new Date(
+			currentMonth.getFullYear(),
+			currentMonth.getMonth() + 1,
+			1
+		);
+		if (nextMonth <= new Date()) {
+			setCurrentMonth(nextMonth);
 		}
 	};
 
-	// Format date for display
+	// Format functions
 	const formatDate = (dateString) => {
 		if (!dateString) return "";
 		const date = new Date(dateString);
@@ -223,77 +344,140 @@ const AttendanceManagement = () => {
 		});
 	};
 
-	// Get days in a month
-	const getDaysInMonth = (year, month) => {
-		return new Date(year, month + 1, 0).getDate();
-	};
-
-	// Generate calendar days
-	const generateCalendarDays = () => {
-		const year = currentMonth.getFullYear();
-		const month = currentMonth.getMonth();
-		const daysInMonth = getDaysInMonth(year, month);
-
-		const firstDayOfMonth = new Date(year, month, 1).getDay();
-		const offset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1; // Adjust for Monday start
-
-		const days = [];
-		// Add empty cells for days before the 1st of the month
-		for (let i = 0; i < offset; i++) {
-			days.push({ day: null, date: null });
-		}
-
-		// Add days of the month
-		for (let day = 1; day <= daysInMonth; day++) {
-			const date = new Date(year, month, day);
-			const dateString = date.toISOString().split("T")[0];
-			const hasAbsences =
-				absencesByDate[dateString] && absencesByDate[dateString].length > 0;
-			const isSelected = dateString === selectedDate;
-
-			days.push({
-				day,
-				date: dateString,
-				hasAbsences,
-				absenceCount: hasAbsences ? absencesByDate[dateString].length : 0,
-				isSelected,
-			});
-		}
-
-		return days;
-	};
-
-	// Navigate to previous month
-	const goToPreviousMonth = () => {
-		setCurrentMonth(
-			new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
-		);
-	};
-
-	// Navigate to next month
-	const goToNextMonth = () => {
-		const nextMonth = new Date(
-			currentMonth.getFullYear(),
-			currentMonth.getMonth() + 1,
-			1
-		);
-		// Don't allow navigating past the current month
-		if (nextMonth <= new Date()) {
-			setCurrentMonth(nextMonth);
-		}
-	};
-
-	// Get current month name
-	const getCurrentMonthName = () => {
+	const formatMonthYear = () => {
 		return currentMonth.toLocaleDateString("en-US", {
 			month: "long",
 			year: "numeric",
 		});
 	};
 
-	// Handle selecting a date
-	const handleSelectDate = (date) => {
-		setSelectedDate(date);
+	// Handle opening excuse modal
+	const handleExcuseAbsence = (absence) => {
+		setSelectedAbsence(absence);
+		setIsModalOpen(true);
+	};
+
+	// Handle saving excuse
+	const handleSaveExcuse = async (isExcused, reason) => {
+		if (!selectedAbsence) return;
+
+		try {
+			await updateAbsence(selectedAbsence.absence.id, isExcused, reason);
+			setIsModalOpen(false);
+		} catch (err) {
+			console.error("Error updating absence:", err);
+		}
+	};
+
+	// Toggle selection mode
+	const toggleSelectMode = () => {
+		setIsSelectMode(!isSelectMode);
+		setSelectedStudents({});
+	};
+
+	// Handle student selection
+	const handleStudentSelect = (studentId, periodId) => {
+		const key = `${studentId}-${periodId}`;
+		setSelectedStudents((prev) => ({
+			...prev,
+			[key]: !prev[key],
+		}));
+	};
+
+	// Handle filter selection
+	const handleFilterSelect = (filter) => {
+		setSelectedFilter(filter);
+	};
+
+	// Handle batch excuse operations
+	const handleBatchExcuse = async (isExcused) => {
+		const selectedKeys = Object.keys(selectedStudents).filter(
+			(key) => selectedStudents[key]
+		);
+
+		if (selectedKeys.length === 0) {
+			alert("Please select at least one absence to update.");
+			return;
+		}
+
+		const reason = isExcused
+			? prompt("Enter reason for excusing these absences:")
+			: "";
+
+		if (isExcused && !reason) {
+			alert("A reason is required for excused absences.");
+			return;
+		}
+
+		// Process each selected absence
+		for (const key of selectedKeys) {
+			const [studentId, periodId] = key.split("-");
+			const student = attendanceData[periodId].students[studentId];
+
+			if (student && student.absenceId) {
+				try {
+					await updateAbsence(student.absenceId, isExcused, reason);
+				} catch (err) {
+					console.error(
+						`Error updating absence for ${student.firstName} ${student.lastName}:`,
+						err
+					);
+				}
+			}
+		}
+
+		// Exit select mode after batch operation
+		setIsSelectMode(false);
+		setSelectedStudents({});
+	};
+
+	// Handle excuse all unhandled absences
+	const handleExcuseAllUnhandled = async (isExcused) => {
+		// Count unhandled absences for the selected date
+		let unhandledCount = 0;
+		Object.values(attendanceData).forEach((periodData) => {
+			Object.values(periodData.students).forEach((student) => {
+				if (!student.isPresent && student.isExcused === null) {
+					unhandledCount++;
+				}
+			});
+		});
+
+		if (unhandledCount === 0) {
+			alert("There are no unhandled absences to update.");
+			return;
+		}
+
+		const reason = isExcused
+			? prompt(`Enter reason for excusing ${unhandledCount} absences:`)
+			: "";
+
+		if (isExcused && !reason) {
+			alert("A reason is required for excused absences.");
+			return;
+		}
+
+		// Process all unhandled absences for this date
+		for (const periodId in attendanceData) {
+			const periodData = attendanceData[periodId];
+			for (const studentId in periodData.students) {
+				const student = periodData.students[studentId];
+				if (
+					!student.isPresent &&
+					student.isExcused === null &&
+					student.absenceId
+				) {
+					try {
+						await updateAbsence(student.absenceId, isExcused, reason);
+					} catch (err) {
+						console.error(
+							`Error updating absence for ${student.firstName} ${student.lastName}:`,
+							err
+						);
+					}
+				}
+			}
+		}
 	};
 
 	// Sort students alphabetically by last name
@@ -306,34 +490,23 @@ const AttendanceManagement = () => {
 		});
 	};
 
-	// Get the number of periods for a given date
-	const getPeriodsCountForDate = (dateString) => {
-		if (!dateString) return 7;
-		const date = new Date(dateString);
-		const dayOfWeek = date.getDay(); // 0 = Sunday, 1 = Monday, etc.
-		return dayOfWeek === 5 ? 5 : 7; // Friday has 5 periods, other days have 7
-	};
-
-	// Generate empty periods array for the selected date
-	const generatePeriods = () => {
-		if (!selectedDate) return [];
-
-		const periodsCount = getPeriodsCountForDate(selectedDate);
-		const periods = [];
-
-		for (let i = 1; i <= periodsCount; i++) {
-			periods.push(i);
-		}
-
-		return periods;
+	// Count selected students
+	const countSelectedStudents = () => {
+		return Object.values(selectedStudents).filter((selected) => selected)
+			.length;
 	};
 
 	// Loading state
 	if (loading || studentsLoading) {
 		return (
-			<div className="attendance-dashboard-card attendance-loading-card">
-				<div className="attendance-loading-spinner"></div>
-				<p>Loading attendance data...</p>
+			<div className="attendance-container">
+				<div className="empty-state">
+					<div className="loading-spinner"></div>
+					<h3 className="empty-title">Loading Attendance Data</h3>
+					<p className="empty-text">
+						Please wait while we fetch the attendance records...
+					</p>
+				</div>
 			</div>
 		);
 	}
@@ -341,343 +514,427 @@ const AttendanceManagement = () => {
 	// Error state
 	if (error) {
 		return (
-			<div className="attendance-dashboard-card attendance-error-card">
-				<FontAwesomeIcon
-					icon={faExclamationCircle}
-					className="attendance-error-icon"
-				/>
-				<h3>Error Loading Attendance</h3>
-				<p>{error}</p>
-				<button
-					className="attendance-retry-btn"
-					onClick={() => window.location.reload()}
-				>
-					<FontAwesomeIcon icon={faSync} /> Retry
-				</button>
+			<div className="attendance-container">
+				<div className="empty-state">
+					<FontAwesomeIcon icon={faExclamationCircle} className="empty-icon" />
+					<h3 className="empty-title">Error Loading Attendance</h3>
+					<p className="empty-text">{error}</p>
+					<button
+						className="action-button primary-button"
+						onClick={() => window.location.reload()}
+					>
+						<FontAwesomeIcon icon={faSync} /> Retry
+					</button>
+				</div>
 			</div>
 		);
 	}
 
 	const departmentName = getDepartmentName();
 	const calendarDays = generateCalendarDays();
-	const periods = generatePeriods();
 
 	return (
-		<div className="attendance-dashboard-card">
-			{/* Header */}
-			<div className="attendance-header">
-				<div className="attendance-title">
-					<h1>Class Attendance</h1>
-					<p>{departmentName}</p>
-					<div className="attendance-stats">
-						<span className="attendance-stat-pill">
-							<FontAwesomeIcon icon={faUserGraduate} /> {students.length}{" "}
-							Students
-						</span>
-						<span className="attendance-stat-pill total">
-							<FontAwesomeIcon icon={faCalendarAlt} />{" "}
-							{Object.keys(absencesByDate).length} Days with Absences
-						</span>
-						<span className="attendance-stat-pill excused">
-							<FontAwesomeIcon icon={faCheckCircle} />{" "}
-							{filteredAbsences.filter((a) => a.absence.isExcused).length}{" "}
-							Excused
-						</span>
-						<span className="attendance-stat-pill unexcused">
-							<FontAwesomeIcon icon={faTimesCircle} />{" "}
-							{filteredAbsences.filter((a) => !a.absence.isExcused).length}{" "}
-							Unexcused
-						</span>
+		<div className="attendance-container">
+			{/* Left Sidebar */}
+			<div className="attendance-sidebar">
+				{/* Header with department name and counts */}
+				<div className="sidebar-header">
+					<h2 className="sidebar-title">Attendance</h2>
+					<div className="department-name">{departmentName}</div>
+
+					<div className="absence-counts">
+						<div className="absence-count">
+							<div className="count-value">{absenceCounts.total}</div>
+							<div className="count-label">Total</div>
+						</div>
+						<div className="absence-count">
+							<div className="count-value count-unhandled">
+								{absenceCounts.unhandled}
+							</div>
+							<div className="count-label">Unhandled</div>
+						</div>
+						<div className="absence-count">
+							<div className="count-value count-excused">
+								{absenceCounts.excused}
+							</div>
+							<div className="count-label">Excused</div>
+						</div>
+						<div className="absence-count">
+							<div className="count-value count-unexcused">
+								{absenceCounts.unexcused}
+							</div>
+							<div className="count-label">Unexcused</div>
+						</div>
 					</div>
 				</div>
 
-				<div className="attendance-search-filter-row">
-					<div className="attendance-search-bar">
-						<FontAwesomeIcon
-							icon={faSearch}
-							className="attendance-search-icon"
-						/>
-						<input
-							type="text"
-							placeholder="Search students, subjects, or reasons..."
-							value={searchTerm}
-							onChange={(e) => setSearchTerm(e.target.value)}
-						/>
-						{searchTerm && (
-							<button
-								className="attendance-clear-search"
-								onClick={() => setSearchTerm("")}
-							>
-								<FontAwesomeIcon icon={faTimes} />
+				{/* Calendar */}
+				<div className="calendar-container">
+					<div className="calendar-header">
+						<span className="month-name">{formatMonthYear()}</span>
+						<div className="month-nav">
+							<button className="month-nav-btn" onClick={goToPreviousMonth}>
+								<FontAwesomeIcon icon={faChevronLeft} />
 							</button>
-						)}
-					</div>
-
-					<select
-						className="attendance-filter-select"
-						value={filterExcused}
-						onChange={(e) => setFilterExcused(e.target.value)}
-					>
-						<option value="all">All Absences</option>
-						<option value="excused">Excused Only</option>
-						<option value="unexcused">Unexcused Only</option>
-					</select>
-				</div>
-			</div>
-
-			{/* Calendar View */}
-			<div className="attendance-calendar-container">
-				<div className="attendance-calendar-section">
-					<div className="attendance-calendar-header">
-						<button
-							className="attendance-month-nav-btn"
-							onClick={goToPreviousMonth}
-						>
-							<FontAwesomeIcon icon={faChevronLeft} />
-						</button>
-						<h3>{getCurrentMonthName()}</h3>
-						<button
-							className="attendance-month-nav-btn"
-							onClick={goToNextMonth}
-							disabled={
-								new Date(
-									currentMonth.getFullYear(),
-									currentMonth.getMonth() + 1,
-									1
-								) > new Date()
-							}
-						>
-							<FontAwesomeIcon icon={faChevronRight} />
-						</button>
-					</div>
-
-					<div className="attendance-calendar-grid">
-						{/* Weekday headers */}
-						<div className="attendance-calendar-weekday">Mon</div>
-						<div className="attendance-calendar-weekday">Tue</div>
-						<div className="attendance-calendar-weekday">Wed</div>
-						<div className="attendance-calendar-weekday">Thu</div>
-						<div className="attendance-calendar-weekday">Fri</div>
-						<div className="attendance-calendar-weekday">Sat</div>
-						<div className="attendance-calendar-weekday">Sun</div>
-
-						{/* Calendar days */}
-						{calendarDays.map((dayInfo, index) => (
-							<div
-								key={index}
-								className={`attendance-calendar-day 
-                  ${!dayInfo.day ? "empty" : ""} 
-                  ${dayInfo.hasAbsences ? "has-absences" : ""} 
-                  ${dayInfo.isSelected ? "selected" : ""}`}
-								onClick={() =>
-									dayInfo.day ? handleSelectDate(dayInfo.date) : null
+							<button
+								className="month-nav-btn"
+								onClick={goToNextMonth}
+								disabled={
+									new Date(
+										currentMonth.getFullYear(),
+										currentMonth.getMonth() + 1,
+										1
+									) > new Date()
 								}
 							>
-								{dayInfo.day && (
-									<>
-										<span className="attendance-day-number">{dayInfo.day}</span>
-										{dayInfo.hasAbsences && (
-											<span className="attendance-absence-count">
-												{dayInfo.absenceCount}
-											</span>
-										)}
-									</>
-								)}
+								<FontAwesomeIcon icon={faChevronRight} />
+							</button>
+						</div>
+					</div>
+
+					<div className="calendar">
+						{/* Weekday headers */}
+						<div className="weekday-header">Mo</div>
+						<div className="weekday-header">Tu</div>
+						<div className="weekday-header">We</div>
+						<div className="weekday-header">Th</div>
+						<div className="weekday-header">Fr</div>
+						<div className="weekday-header">Sa</div>
+						<div className="weekday-header">Su</div>
+
+						{/* Calendar days */}
+						{calendarDays.map((day, index) => (
+							<div
+								key={index}
+								className={`calendar-day 
+                  ${!day.day ? "empty" : ""} 
+                  ${day.isToday ? "today" : ""} 
+                  ${day.isSelected ? "selected" : ""} 
+                  ${day.hasAbsences ? "has-absences" : ""}
+                  ${day.hasUnhandled ? "has-unhandled" : ""}`}
+								onClick={() => day.day && setSelectedDate(day.date)}
+							>
+								{day.day && day.day}
 							</div>
 						))}
 					</div>
 				</div>
 
-				{/* Day Attendance View */}
-				<div className="attendance-day-section">
-					{selectedDate ? (
-						<>
-							<div className="attendance-day-header">
-								<h2>
-									<FontAwesomeIcon icon={faCalendarDay} />{" "}
-									{formatDate(selectedDate)}
-								</h2>
-								<div className="attendance-day-actions">
-									<select
-										className="attendance-filter-day-select"
-										onChange={(e) => setSelectedDate(e.target.value)}
-										value={selectedDate}
-									>
-										<option value="">Select a day</option>
-										{Object.keys(absencesByDate)
-											.sort()
-											.map((date) => (
-												<option key={date} value={date}>
-													{formatDate(date)} ({absencesByDate[date].length}{" "}
-													absences)
-												</option>
-											))}
-									</select>
-								</div>
-							</div>
+				{/* Filters */}
+				<div className="filter-section">
+					<div className="filter-label">Filter Absences</div>
 
-							<div className="attendance-periods-container">
-								{periods.map((period) => {
-									const periodData = attendanceData[period] || {
-										logs: [],
-										students: {},
-									};
-									const hasClass = periodData.logs.length > 0;
-									const sortedStudents = hasClass
-										? sortStudents(periodData.students)
-										: [];
-									const absentCount = hasClass
-										? sortedStudents.filter((s) => !s.isPresent).length
-										: 0;
+					<div
+						className={`filter-option ${
+							selectedFilter === "all" ? "active" : ""
+						}`}
+						onClick={() => handleFilterSelect("all")}
+					>
+						<FontAwesomeIcon icon={faFilter} className="filter-icon" />
+						<span className="filter-text">All Absences</span>
+						<span className="filter-count">{absenceCounts.total}</span>
+					</div>
 
-									return (
-										<div
-											key={period}
-											className={`attendance-period-block ${
-												!hasClass ? "no-class" : ""
-											}`}
-										>
-											<div className="attendance-period-header">
-												<h3>
-													<FontAwesomeIcon icon={faClock} /> Period {period}
-												</h3>
-												{hasClass ? (
-													<div className="attendance-period-meta">
-														<div className="attendance-subject-info">
-															<span className="attendance-subject-name">
-																<FontAwesomeIcon icon={faBook} />{" "}
-																{periodData.logs[0].subjectName}
-															</span>
-															<span className="attendance-lecture-title">
-																<FontAwesomeIcon icon={faChalkboardTeacher} />{" "}
-																{periodData.logs[0].lectureTitle}
-															</span>
-														</div>
-														<div className="attendance-period-stats">
-															<span className="attendance-present-count">
-																<FontAwesomeIcon icon={faCheckCircle} />{" "}
-																{sortedStudents.length - absentCount} Present
-															</span>
-															<span className="attendance-absent-count">
-																<FontAwesomeIcon icon={faTimesCircle} />{" "}
-																{absentCount} Absent
-															</span>
-														</div>
-													</div>
-												) : (
-													<span className="attendance-no-class-text">
-														No class recorded
-													</span>
-												)}
-											</div>
+					<div
+						className={`filter-option ${
+							selectedFilter === "unhandled" ? "active" : ""
+						}`}
+						onClick={() => handleFilterSelect("unhandled")}
+					>
+						<FontAwesomeIcon
+							icon={faExclamationTriangle}
+							className="filter-icon"
+						/>
+						<span className="filter-text">Unhandled</span>
+						<span className="filter-count">{absenceCounts.unhandled}</span>
+					</div>
 
-											{hasClass && (
-												<div className="attendance-student-grid">
-													{sortedStudents.map((student) => {
-														// Determine if this student is absent or present
-														const isAbsent = !student.isPresent;
+					<div
+						className={`filter-option ${
+							selectedFilter === "excused" ? "active" : ""
+						}`}
+						onClick={() => handleFilterSelect("excused")}
+					>
+						<FontAwesomeIcon icon={faCheckCircle} className="filter-icon" />
+						<span className="filter-text">Excused</span>
+						<span className="filter-count">{absenceCounts.excused}</span>
+					</div>
 
-														return (
-															<div
-																key={student.id}
-																className={`attendance-student-card ${
-																	isAbsent ? "absent" : "present"
-																} ${
-																	isAbsent && student.isExcused ? "excused" : ""
-																}`}
-															>
-																<div className="attendance-student-info">
-																	<span className="attendance-student-name">
-																		{student.lastName}, {student.firstName}
-																	</span>
-																	{isAbsent && (
-																		<span
-																			className={`attendance-status-badge ${
-																				student.isExcused
-																					? "excused"
-																					: "unexcused"
-																			}`}
-																		>
-																			{student.isExcused
-																				? "Excused"
-																				: "Unexcused"}
-																		</span>
-																	)}
-																</div>
+					<div
+						className={`filter-option ${
+							selectedFilter === "unexcused" ? "active" : ""
+						}`}
+						onClick={() => handleFilterSelect("unexcused")}
+					>
+						<FontAwesomeIcon icon={faTimesCircle} className="filter-icon" />
+						<span className="filter-text">Unexcused</span>
+						<span className="filter-count">{absenceCounts.unexcused}</span>
+					</div>
 
-																{isAbsent && (
-																	<div className="attendance-student-actions">
-																		{student.isExcused && student.reason && (
-																			<span
-																				className="attendance-reason-text"
-																				title={student.reason}
-																			>
-																				{student.reason.length > 25
-																					? student.reason.substring(0, 25) +
-																					  "..."
-																					: student.reason}
-																			</span>
-																		)}
-																		<button
-																			className="attendance-excuse-btn"
-																			onClick={() => {
-																				// Create a full absence object to pass to the modal
-																				const absenceObject = {
-																					student: {
-																						id: student.id,
-																						firstName: student.firstName,
-																						lastName: student.lastName,
-																					},
-																					absence: {
-																						id: student.absenceId,
-																						isExcused: student.isExcused,
-																						reason: student.reason || "",
-																					},
-																					classLog: {
-																						id: periodData.logs[0].id,
-																						classDate: selectedDate,
-																						period: period.toString(),
-																						subjectId:
-																							periodData.logs[0].subjectId,
-																						subjectName:
-																							periodData.logs[0].subjectName,
-																						lectureTitle:
-																							periodData.logs[0].lectureTitle,
-																					},
-																				};
-																				handleExcuseAbsence(absenceObject);
-																			}}
-																		>
-																			<FontAwesomeIcon icon={faEdit} />{" "}
-																			{student.isExcused ? "Edit" : "Excuse"}
-																		</button>
-																	</div>
-																)}
-															</div>
-														);
-													})}
-												</div>
-											)}
-										</div>
-									);
-								})}
-							</div>
-						</>
-					) : (
-						<div className="attendance-no-selection">
-							<div className="attendance-no-selection-icon">
-								<FontAwesomeIcon icon={faCalendarAlt} />
-							</div>
-							<h3>Select a Day</h3>
-							<p>
-								Click on a day in the calendar to view class attendance details
-							</p>
-						</div>
-					)}
+					<div className="search-container">
+						<FontAwesomeIcon icon={faSearch} className="search-icon" />
+						<input
+							type="text"
+							className="search-input"
+							placeholder="Search students or subjects..."
+							value={searchTerm}
+							onChange={(e) => setSearchTerm(e.target.value)}
+						/>
+					</div>
 				</div>
 			</div>
 
-			{/* Excuse modal */}
+			{/* Main Content */}
+			<div className="attendance-main">
+				{selectedDate ? (
+					<>
+						{/* Header with selected date and actions */}
+						<div className="main-header">
+							<div className="selected-date">
+								<FontAwesomeIcon icon={faCalendarDay} className="date-icon" />
+								{formatDate(selectedDate)}
+							</div>
+
+							<div className="action-buttons">
+								{absenceCounts.unhandled > 0 && (
+									<>
+										<button
+											className="action-button primary-button"
+											onClick={() => handleExcuseAllUnhandled(true)}
+										>
+											<FontAwesomeIcon icon={faCheckCircle} /> Excuse All
+											Unhandled
+										</button>
+										<button
+											className="action-button warning-button"
+											onClick={() => handleExcuseAllUnhandled(false)}
+										>
+											<FontAwesomeIcon icon={faTimesCircle} /> Mark All as
+											Unexcused
+										</button>
+									</>
+								)}
+
+								<button
+									className="action-button secondary-button"
+									onClick={toggleSelectMode}
+								>
+									<FontAwesomeIcon icon={faUsers} />
+									{isSelectMode ? "Cancel Selection" : "Select Multiple"}
+								</button>
+							</div>
+						</div>
+
+						{/* Absences content */}
+						<div className="absences-container">
+							{/* If there are periods with classes */}
+							{Object.entries(attendanceData).some(
+								([_, data]) => data.hasClass
+							) ? (
+								<div className="period-list">
+									{Object.entries(attendanceData)
+										.filter(([_, data]) => data.hasClass)
+										.map(([period, data]) => {
+											const sortedStudents = sortStudents(data.students);
+											const absentStudents = sortedStudents.filter(
+												(s) => !s.isPresent
+											);
+
+											return (
+												<div key={period} className="period-card">
+													<div className="period-header">
+														<div className="period-info">
+															<div className="period-number">{period}</div>
+															<div className="period-details">
+																<div className="subject-name">
+																	{data.logs[0]?.subjectName ||
+																		"Unknown Subject"}
+																</div>
+																<div className="lecture-title">
+																	{data.logs[0]?.lectureTitle ||
+																		"No lecture title"}
+																</div>
+															</div>
+														</div>
+
+														<div className="period-stats">
+															<div className="period-stat stat-present">
+																<FontAwesomeIcon icon={faCheckCircle} />{" "}
+																{data.stats.present} Present
+															</div>
+															<div className="period-stat stat-absent">
+																<FontAwesomeIcon icon={faTimesCircle} />{" "}
+																{data.stats.absent} Absent
+															</div>
+														</div>
+													</div>
+
+													{isSelectMode && absentStudents.length > 0 && (
+														<div className="period-actions">
+															<button
+																className="action-button secondary-button"
+																onClick={() => {
+																	// Select/deselect all absent students in this period
+																	const newSelected = { ...selectedStudents };
+																	const allSelected = absentStudents.every(
+																		(s) => selectedStudents[`${s.id}-${period}`]
+																	);
+
+																	absentStudents.forEach((s) => {
+																		newSelected[`${s.id}-${period}`] =
+																			!allSelected;
+																	});
+
+																	setSelectedStudents(newSelected);
+																}}
+															>
+																<FontAwesomeIcon icon={faCheck} />
+																{absentStudents.every(
+																	(s) => selectedStudents[`${s.id}-${period}`]
+																)
+																	? "Deselect All"
+																	: "Select All Absent"}
+															</button>
+
+															{countSelectedStudents() > 0 && (
+																<>
+																	<button
+																		className="action-button primary-button"
+																		onClick={() => handleBatchExcuse(true)}
+																	>
+																		<FontAwesomeIcon icon={faCheckCircle} />
+																		Excuse Selected ({countSelectedStudents()})
+																	</button>
+																	<button
+																		className="action-button warning-button"
+																		onClick={() => handleBatchExcuse(false)}
+																	>
+																		<FontAwesomeIcon icon={faTimesCircle} />
+																		Mark Selected as Unexcused
+																	</button>
+																</>
+															)}
+														</div>
+													)}
+
+													<div className="student-list">
+														{absentStudents.map((student) => {
+															const key = `${student.id}-${period}`;
+															const isSelected = selectedStudents[key];
+
+															let statusText = "";
+															let statusClass = "";
+
+															if (student.isExcused === null) {
+																statusText = "Unhandled";
+																statusClass = "status-unhandled";
+															} else if (student.isExcused) {
+																statusText = "Excused";
+																statusClass = "status-excused";
+															} else {
+																statusText = "Unexcused";
+																statusClass = "status-unexcused";
+															}
+
+															return (
+																<div key={student.id} className="student-row">
+																	<div className="student-info">
+																		{isSelectMode && (
+																			<input
+																				type="checkbox"
+																				className="student-checkbox"
+																				checked={!!isSelected}
+																				onChange={() =>
+																					handleStudentSelect(
+																						student.id,
+																						period
+																					)
+																				}
+																			/>
+																		)}
+																		{student.firstName} {student.lastName}
+																	</div>
+
+																	<div className="student-controls">
+																		<span
+																			className={`status-indicator ${statusClass}`}
+																		>
+																			{statusText}
+																		</span>
+
+																		{student.isExcused && student.reason && (
+																			<span
+																				className="reason-text"
+																				title={student.reason}
+																			>
+																				{student.reason}
+																			</span>
+																		)}
+
+																		{!isSelectMode && (
+																			<button
+																				className="handle-button"
+																				onClick={() => {
+																					handleExcuseAbsence({
+																						student,
+																						absence: {
+																							id: student.absenceId,
+																							isExcused: student.isExcused,
+																							reason: student.reason || "",
+																						},
+																						classLog: {
+																							id: data.logs[0]?.id,
+																							classDate: selectedDate,
+																							period: period.toString(),
+																							subjectId:
+																								data.logs[0]?.subjectId,
+																							subjectName:
+																								data.logs[0]?.subjectName,
+																							lectureTitle:
+																								data.logs[0]?.lectureTitle,
+																						},
+																					});
+																				}}
+																			>
+																				<FontAwesomeIcon icon={faEdit} />
+																				{student.isExcused === null
+																					? "Handle"
+																					: "Edit"}
+																			</button>
+																		)}
+																	</div>
+																</div>
+															);
+														})}
+													</div>
+												</div>
+											);
+										})}
+								</div>
+							) : (
+								<div className="empty-state">
+									<FontAwesomeIcon icon={faInfoCircle} className="empty-icon" />
+									<h3 className="empty-title">No Classes Found</h3>
+									<p className="empty-text">
+										There are no classes logged for this date or matching your
+										filters.
+									</p>
+								</div>
+							)}
+						</div>
+					</>
+				) : (
+					<div className="empty-state">
+						<FontAwesomeIcon icon={faCalendarAlt} className="empty-icon" />
+						<h3 className="empty-title">Select a Date</h3>
+						<p className="empty-text">
+							Please select a date from the calendar to view absences.
+						</p>
+					</div>
+				)}
+			</div>
+
+			{/* Excuse Modal */}
 			{isModalOpen && selectedAbsence && (
 				<AttendanceExcuseModal
 					absence={selectedAbsence}
