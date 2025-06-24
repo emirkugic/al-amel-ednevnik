@@ -556,5 +556,12 @@
         "reasonTitle": "Reason: {{reason}}",
         "clickToExcuse": "Click to excuse (provide a reason)",
         "weekLabel": "Week {{number}}"
+    },
+    "department": {
+        "details": "Department Details",
+        "grades": "Grades",
+        "attendance": "Attendance",
+        "allDepartments": "All Departments",
+        "selectDepartment": "Please select a department from the sidebar"
     }
 }

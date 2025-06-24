@@ -518,5 +518,12 @@
         "reasonTitle": "Razlog: {{reason}}",
         "clickToExcuse": "Kliknite da opravdate (navedite razlog)",
         "weekLabel": "Sedmica {{number}}"
+    },
+    "department": {
+        "details": "Detalji Odjeljenja",
+        "grades": "Ocjene",
+        "attendance": "Prisustvo",
+        "allDepartments": "Sva Odjeljenja",
+        "selectDepartment": "Molimo odaberite odjeljenje iz bočne trake"
     }
 }

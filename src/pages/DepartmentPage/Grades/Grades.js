@@ -7,15 +7,16 @@ import React, {
 } from "react";
 import "./Grades.css";
 import { useAuth, useGrades, useClassTeacher } from "../../../hooks";
-import { useLanguage } from "../../../contexts/LanguageContext"; // Added language context
+import { useLanguage } from "../../../contexts/LanguageContext";
 
-const Grades = () => {
+const Grades = ({ departmentId: propDepartmentId }) => {
 	const { user } = useAuth();
 	const token = user?.token;
-	const { t, language } = useLanguage(); // Added language hook
+	const { t, language } = useLanguage();
 
-	// Use class teacher department ID
-	const departmentId = useClassTeacher();
+	// Use prop departmentId if provided, otherwise fall back to class teacher department
+	const classTeacherDeptId = useClassTeacher();
+	const departmentId = propDepartmentId || classTeacherDeptId;
 
 	// Hook to fetch grades
 	const { grades, loading, error, fetchGradesByDepartment } = useGrades(token);
@@ -42,7 +43,12 @@ const Grades = () => {
 			fetchGradesByDepartment(departmentId);
 			setInitialLoadDone(true);
 		}
-	}, [token, departmentId, initialLoadDone]); // Intentionally exclude fetchGradesByDepartment
+	}, [token, departmentId, initialLoadDone, fetchGradesByDepartment]);
+
+	// Reset initialLoadDone when departmentId changes
+	useEffect(() => {
+		setInitialLoadDone(false);
+	}, [departmentId]);
 
 	// Process data, correctly grouping by month and aggregating small assessments by type
 	const processedData = useMemo(() => {

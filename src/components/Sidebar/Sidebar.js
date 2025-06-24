@@ -22,6 +22,7 @@ import departmentApi from "../../api/departmentApi";
 import { useLanguage } from "../../contexts/LanguageContext";
 import "./Sidebar.css";
 import { useClassTeacher } from "../../hooks";
+import useDepartments from "../../hooks/useDepartments"; // Import the useDepartments hook
 
 const DesktopSidebar = () => {
 	const location = useLocation();
@@ -33,15 +34,18 @@ const DesktopSidebar = () => {
 	const [loadingCourses, setLoadingCourses] = useState(true);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+	// Get all departments if the user is an admin
+	const { departments } = useDepartments(user?.token);
+
+	// Get the class teacher department id (if applicable)
+	const classTeacherDeptId = useClassTeacher();
+
 	const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 	useEffect(() => {
 		const handleResize = () => setIsMobile(window.innerWidth <= 768);
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
-
-	// Get the class teacher department id (if applicable)
-	const classTeacherDeptId = useClassTeacher();
 
 	// Helper function to get the formatted grade number based on language
 	const getFormattedGradeNumber = (num) => {
@@ -168,6 +172,16 @@ const DesktopSidebar = () => {
 		}
 	}, [user, t, language]); // Add language dependency to refresh when language changes
 
+	// Create formatted department list for admin view
+	const allDepartmentsList = useMemo(() => {
+		if (!departments || !user?.role === "Admin") return [];
+
+		return departments.map((dept) => ({
+			title: formatGradeTitle(dept.departmentName),
+			path: `/department/${dept.id}`,
+		}));
+	}, [departments, user?.role, formatGradeTitle]);
+
 	// Build menu items conditionally
 	const menuItems = useMemo(() => {
 		const items = [];
@@ -196,30 +210,32 @@ const DesktopSidebar = () => {
 				title: t("sidebar.weeklyReport"),
 				icon: faChartLine,
 				route: "/logs",
-			},
-			{
-				title: "Att",
-				icon: faCalendarAlt,
-				route: "/attendance",
 			}
 		);
 
-		if (user?.role === "Admin" || classTeacherDeptId) {
+		// Department access button with different behavior for admin vs class teacher
+		if (user?.role === "Admin") {
+			// For admin, provide access to all departments
 			items.push({
 				title: t("sidebar.myDepartment"),
 				icon: faChalkboardTeacher,
-				route: "/department",
+				route:
+					user?.role === "Admin" && allDepartmentsList.length > 0
+						? allDepartmentsList // Show list of all departments for admin
+						: "/department", // Fallback to default if no departments
+			});
+		} else if (classTeacherDeptId) {
+			// For class teacher, provide access only to their department
+			items.push({
+				title: t("sidebar.myDepartment"),
+				icon: faChalkboardTeacher,
+				route: `/department/${classTeacherDeptId}`,
 			});
 		}
 
 		// Additional admin-only items
 		if (user?.role === "Admin") {
 			items.push(
-				// {
-				// 	title: t("sidebar.schedule"),
-				// 	icon: faCalendarAlt,
-				// 	route: "/schedule",
-				// },
 				{
 					title: t("sidebar.teachers"),
 					icon: faChalkboardTeacher,
@@ -244,7 +260,15 @@ const DesktopSidebar = () => {
 		}
 
 		return items;
-	}, [user, myCourses, myDepartments, classTeacherDeptId, isMobile, t]);
+	}, [
+		user,
+		myCourses,
+		myDepartments,
+		classTeacherDeptId,
+		isMobile,
+		t,
+		allDepartmentsList,
+	]);
 
 	useEffect(() => {
 		const activeMenuItem = menuItems.find((item) =>

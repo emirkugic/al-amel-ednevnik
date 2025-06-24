@@ -4,7 +4,7 @@ import { faCheck, faTimes, faEdit } from "@fortawesome/free-solid-svg-icons";
 import "./Absences.css";
 import ExcuseModal from "./Absences/ExcuseModal";
 import { useAbsences, useAuth, useClassTeacher } from "../../../hooks";
-import { useLanguage } from "../../../contexts/LanguageContext"; // Added language context
+import { useLanguage } from "../../../contexts/LanguageContext";
 
 const tempDepartmentId = "673b94896d216a12b56d0c17";
 
@@ -36,14 +36,15 @@ const getWeekNumber = (dateString) => {
 	return Math.floor(effectiveDays / 7) + 1;
 };
 
-const Absences = () => {
+const Absences = ({ departmentId: propDepartmentId }) => {
 	const { user } = useAuth();
 	const token = user?.token;
-	const { t, language } = useLanguage(); // Added language hook
+	const { t, language } = useLanguage();
 
 	// Get the department id for class teachers using our custom hook.
 	const classTeacherDeptId = useClassTeacher();
-	const departmentId = classTeacherDeptId || tempDepartmentId;
+	const departmentId =
+		propDepartmentId || classTeacherDeptId || tempDepartmentId;
 
 	// Use the departmentId in our absences hook.
 	const { absences, loading, error, updateAbsence } = useAbsences(
@@ -53,6 +54,11 @@ const Absences = () => {
 
 	// Local state for UI updates.
 	const [localAbsences, setLocalAbsences] = useState([]);
+
+	// Reset localAbsences when departmentId changes
+	useEffect(() => {
+		setLocalAbsences([]);
+	}, [departmentId]);
 
 	useEffect(() => {
 		if (!loading && absences) {

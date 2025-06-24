@@ -79,7 +79,8 @@ const AppContent = () => {
 			"/attendance",
 		].includes(location.pathname) &&
 		!location.pathname.startsWith("/lectures/") &&
-		!location.pathname.startsWith("/courses/");
+		!location.pathname.startsWith("/courses/") &&
+		!location.pathname.startsWith("/department/"); // Add this to prevent 404 for department/:id routes
 
 	const isAdmin = user?.role === "Admin";
 
@@ -106,6 +107,11 @@ const AppContent = () => {
 						<Route path="/logs" element={<LogsPage />} />
 						<Route path="/lectures/:departmentId" element={<LecturesPage />} />
 						<Route path="/department" element={<DepartmentPage />} />
+						{/* Add the route for specific department access */}
+						<Route
+							path="/department/:departmentId"
+							element={<DepartmentPage />}
+						/>
 						<Route path="/grades" element={<ClassGradesPage />} />
 						<Route path="/teachers" element={<TeachersPage />} />
 						<Route path="/classes" element={<ClassManagement />} />
